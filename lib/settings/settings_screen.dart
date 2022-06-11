@@ -2,12 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:funky_new/settings/privacy_setting_screen.dart';
 import 'package:funky_new/settings/report_problem.dart';
 import 'package:funky_new/settings/security_login/security_login.dart';
+
 // import 'package:funky_project/settings/privacy_setting_screen.dart';
 // import 'package:funky_project/settings/report_problem.dart';
 // import 'package:funky_project/settings/security_login/security_login.dart';
 import 'package:get/get.dart';
 
+import '../Authentication/authentication_screen.dart';
+import '../Utils/App_utils.dart';
 import '../Utils/asset_utils.dart';
+import '../Utils/toaster_widget.dart';
+import '../sharePreference.dart';
 import 'blockList_screen.dart';
 import 'community_guide.dart';
 import 'help_center.dart';
@@ -134,7 +139,10 @@ class _SettingScreenState extends State<SettingScreen> {
                                                         : (index == 12
                                                             ? Get.to(
                                                                 BlockListScreen())
-                                                            : null))))))))));
+                                                            : (index == 13
+                                                                ? Get.to(
+                                                                    logOut_function())
+                                                                : null)))))))))));
                   },
                   child: ListTile(
                     leading: IconButton(
@@ -166,5 +174,13 @@ class _SettingScreenState extends State<SettingScreen> {
         ],
       ),
     );
+  }
+
+  logOut_function() async {
+    await PreferenceManager().setPref(URLConstants.id, ' ');
+    await PreferenceManager().setPref(URLConstants.type, '');
+    await Get.to(AuthenticationScreen());
+    setState(() {});
+    CommonWidget().showToaster(msg: 'User LoggedOut');
   }
 }

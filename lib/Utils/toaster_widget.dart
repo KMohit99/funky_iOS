@@ -11,6 +11,7 @@ class CommonWidget {
   );
 
   showErrorToaster({required String msg}) => Fluttertoast.showToast(
+
     msg: msg.toString(),
     textColor: Colors.white,
     backgroundColor: Colors.red,

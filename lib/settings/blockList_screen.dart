@@ -34,7 +34,7 @@ class _BlockListScreenState extends State<BlockListScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         title: Text(
-          'Settings',
+          'Block List',
           style: TextStyle(fontSize: 16, color: Colors.white, fontFamily: 'PB'),
         ),
         centerTitle: true,

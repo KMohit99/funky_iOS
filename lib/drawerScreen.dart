@@ -41,7 +41,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
     screenHeight = MediaQuery.of(context).size.height;
     final screenSize = MediaQuery.of(context).size;
     return Container(
-      width: screenSize.width / 1.2,
+      width: screenSize.width / 1.35,
       margin: const EdgeInsets.only(top: 0, left: 0, bottom: 0),
       child: ClipRRect(
         borderRadius: const BorderRadius.only(
@@ -71,6 +71,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                   HexColor("#000000"),
                   HexColor("#000000"),
                   HexColor("#C12265").withOpacity(0.4),
+                  HexColor("#C12265").withOpacity(0.4),
                   HexColor("#C12265").withOpacity(0.5),
                   HexColor("#C12265").withOpacity(0.7),
                   HexColor("#C12265").withOpacity(0.8),
@@ -89,7 +90,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                     Row(
                       children: [
                         Container(
-                          margin: EdgeInsets.only(left: 10, top: 30),
+                          margin: EdgeInsets.only(left: 10, top: 40),
                           child: IconButton(
                             icon: Icon(Icons.arrow_back),
                             color: Colors.white,
@@ -102,17 +103,18 @@ class _DrawerScreenState extends State<DrawerScreen> {
                           flex: 1,
                           child: Container(
                             alignment: Alignment.centerLeft,
-                            margin: EdgeInsets.only(left: 10, top: 30),
+                            margin: EdgeInsets.only(left: 20, top: 40),
                             child: Image.asset(
                               AssetUtils.logo,
-                              height: 101,
-                              width: 115,
+                              height: 120,
+                              width: 150,
                               fit: BoxFit.cover,
                             ),
                           ),
                         ),
                       ],
                     ),
+                    SizedBox(height: 20,),
                     drawerItem(
                       itemIcon: AssetUtils.photosIcons,
                       itemName: TxtUtils.photos,
@@ -314,8 +316,8 @@ class _DrawerScreenState extends State<DrawerScreen> {
         onTap: onTap!,
         child: ListTile(
           contentPadding: const EdgeInsets.only(
-              left: 20.0, right: 0.0, top: 0.0, bottom: 0.0),
-          visualDensity: const VisualDensity(vertical: -2.0, horizontal: -4.0),
+              left: 40.0, right: 0.0, top: 0.0, bottom: 0.0),
+          visualDensity: const VisualDensity(vertical: 0.0, horizontal: -4.0),
           leading: SizedBox(
             height: 15.0,
             width: 15.0,

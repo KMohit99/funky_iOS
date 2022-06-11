@@ -224,13 +224,14 @@ class Search_screen_controller extends GetxController {
     }
   }
 
-  RxBool isuserinfoLoading = false.obs;
+  RxBool isuserinfoLoading = true.obs;
   UserInfoModel? userInfoModel_email;
   var getUSerModelList = UserInfoModel().obs;
 
   Future<dynamic> CreatorgetUserInfo_Email(
      {required String UserId}) async {
     print('inside searche userinfo email----------');
+    isuserinfoLoading(true);
     String url = (URLConstants.base_url +
         URLConstants.user_info_email_Api +
         "?id=${UserId}");
@@ -361,6 +362,7 @@ class Search_screen_controller extends GetxController {
       print(_followUnfolloemodel);
       // print("loginModel!.user![0].id! ${_followUnfolloemodel!.user![0].id!}");
       if (_followUnfolloemodel!.error == false) {
+        print("user -socail -- $user_social");
         (user_social == ""
             ? await CreatorgetUserInfo_Email(
             UserId: user_id)

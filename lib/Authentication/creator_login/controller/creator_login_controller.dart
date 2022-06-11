@@ -96,7 +96,7 @@ class Creator_Login_screen_controller extends GetxController {
     }
   }
 
-  RxBool isuserinfoLoading = false.obs;
+  RxBool isuserinfoLoading = true.obs;
   UserInfoModel? userInfoModel_email;
   var getUSerModelList = UserInfoModel().obs;
 
