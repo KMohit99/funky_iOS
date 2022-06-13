@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get.dart';
+import 'package:firebase_core/firebase_core.dart';
+
 import 'package:funky_new/splash_screen.dart';
 
 import 'getx_pagination/Bindings_class.dart';
 import 'getx_pagination/binding_utils.dart';
 import 'getx_pagination/page_route.dart';
 Future<void> main() async{
-  // WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   // FirebaseAppCheck.getInstance().installAppCheckProviderFactory(
   //     PlayIntegrityAppCheckProviderFactory.getInstance())
   runApp(MyApp());

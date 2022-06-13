@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>93561184698-2cakom2vul2q7g372bbqq0ihv131b2od.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.93561184698-2cakom2vul2q7g372bbqq0ihv131b2od</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>93561184698-3tbdh1906442u44u657spk660dqt7un5.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDQOa3JyPtRNKY-4qVABVQpQNtq-KC2k6A</string>
+	<key>GCM_SENDER_ID</key>
+	<string>93561184698</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.foxy.funkyNew</string>
+	<key>PROJECT_ID</key>
+	<string>funkydesign-d6177</string>
+	<key>STORAGE_BUCKET</key>
+	<string>funkydesign-d6177.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:93561184698:ios:5e36101308f82f631ffd83</string>
+</dict>
+</plist>

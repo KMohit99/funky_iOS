@@ -1,4 +1,5 @@
 // import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -246,8 +247,8 @@ class _CreatorLoginScreenState extends State<CreatorLoginScreen> {
                                       width: 32,
                                     ),
                                     onPressed: () {
-                                      // _loginScreenController.signInWithFacebook(
-                                      //     login_type: 'creator', context: context);
+                                      _loginScreenController.signInWithFacebook(
+                                          login_type: 'creator', context: context);
                                     },
                                   ),
                                 ),
@@ -272,7 +273,7 @@ class _CreatorLoginScreenState extends State<CreatorLoginScreen> {
                                     ),
                                     onPressed: () {
                                       // _loginAndGetData();
-                                      // Get.to(InstagramView(context: context,login_type: 'Creator',));
+                                      Get.to(InstagramView(context: context,login_type: 'Creator',));
                                     },
                                   ),
                                 ),
@@ -296,21 +297,21 @@ class _CreatorLoginScreenState extends State<CreatorLoginScreen> {
                                       width: 32,
                                     ),
                                     onPressed: () async {
-                                      // try {
-                                      //   await _loginScreenController.signInwithGoogle(
-                                      //       context: context, login_type: 'Creator');
-                                      //   // Get.to(Dashboard());
-                                      // } catch (e) {
-                                      //   if (e is FirebaseAuthException) {
-                                      //     Fluttertoast.showToast(
-                                      //       msg: "login usuccessfull",
-                                      //       textColor: Colors.white,
-                                      //       backgroundColor: Colors.black,
-                                      //       toastLength: Toast.LENGTH_LONG,
-                                      //       gravity: ToastGravity.BOTTOM,
-                                      //     );
-                                      //   }
-                                      // }
+                                      try {
+                                        await _loginScreenController.signInwithGoogle(
+                                            context: context, login_type: 'Creator');
+                                        // Get.to(Dashboard());
+                                      } catch (e) {
+                                        if (e is FirebaseAuthException) {
+                                          Fluttertoast.showToast(
+                                            msg: "login usuccessfull",
+                                            textColor: Colors.white,
+                                            backgroundColor: Colors.black,
+                                            toastLength: Toast.LENGTH_LONG,
+                                            gravity: ToastGravity.BOTTOM,
+                                          );
+                                        }
+                                      }
                                     },
                                   ),
                                 ),
@@ -334,7 +335,7 @@ class _CreatorLoginScreenState extends State<CreatorLoginScreen> {
                                       width: 32,
                                     ),
                                     onPressed: () {
-                                      // _loginScreenController.signInWithTwitter(context: context, login_type: 'Creator');
+                                      _loginScreenController.signInWithTwitter(context: context, login_type: 'Creator');
                                     },
                                   ),
                                 ),

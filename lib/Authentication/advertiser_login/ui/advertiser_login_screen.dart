@@ -1,11 +1,15 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
 // import 'package:funky_project/Authentication/advertiser_login/controller/advertiser_login_Controller.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+
 // import 'package:funky_project/dashboard/dashboard_screen.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -18,8 +22,8 @@ import '../../../controller/controllers_class.dart';
 import '../../../custom_widget/common_buttons.dart';
 import '../../../getx_pagination/binding_utils.dart';
 
-
 import '../../creator_login/controller/creator_login_controller.dart';
+import '../../instagram/instagram_view.dart';
 import '../controller/advertiser_login_Controller.dart';
 
 class AdvertiserLoginScreen extends StatefulWidget {
@@ -31,9 +35,11 @@ class AdvertiserLoginScreen extends StatefulWidget {
 
 class _AdvertiserLoginScreenState extends State<AdvertiserLoginScreen> {
   final Advertiser_Login_screen_controller _advertiser_login_screen_controller =
-  Get.put(Advertiser_Login_screen_controller(), tag: Advertiser_Login_screen_controller().toString());
- final Creator_Login_screen_controller _creator_login_screen_controller =
-  Get.put(Creator_Login_screen_controller(), tag: Creator_Login_screen_controller().toString());
+      Get.put(Advertiser_Login_screen_controller(),
+          tag: Advertiser_Login_screen_controller().toString());
+  final Creator_Login_screen_controller _creator_login_screen_controller =
+      Get.put(Creator_Login_screen_controller(),
+          tag: Creator_Login_screen_controller().toString());
 
   bool _obscureText = true;
 
@@ -92,9 +98,8 @@ class _AdvertiserLoginScreenState extends State<AdvertiserLoginScreen> {
               ),
             ),
             GestureDetector(
-              onTap: (){
+              onTap: () {
                 FocusScope.of(context).requestFocus(FocusNode());
-
               },
               child: Scaffold(
                 resizeToAvoidBottomInset: false,
@@ -129,7 +134,8 @@ class _AdvertiserLoginScreenState extends State<AdvertiserLoginScreen> {
                           height: 41,
                         ),
                         CommonTextFormField(
-                          controller: _advertiser_login_screen_controller.usernameController,
+                          controller: _advertiser_login_screen_controller
+                              .usernameController,
                           title: 'Username',
                           labelText: 'Username',
                           image_path: AssetUtils.msg_icon,
@@ -138,9 +144,10 @@ class _AdvertiserLoginScreenState extends State<AdvertiserLoginScreen> {
                           height: 21,
                         ),
                         CommonTextFormField(
-                          controller: _advertiser_login_screen_controller.passwordController,
-                          title: 'Password',
-                          labelText: 'Password',
+                            controller: _advertiser_login_screen_controller
+                                .passwordController,
+                            title: 'Password',
+                            labelText: 'Password',
                             isObscure: _obscureText,
                             maxLines: 1,
                             image_path: (_obscureText
@@ -148,8 +155,7 @@ class _AdvertiserLoginScreenState extends State<AdvertiserLoginScreen> {
                                 : AssetUtils.eye_close_icon),
                             onpasswordTap: () {
                               _toggle();
-                            }
-                        ),
+                            }),
                         SizedBox(
                           height: 22,
                         ),
@@ -188,7 +194,8 @@ class _AdvertiserLoginScreenState extends State<AdvertiserLoginScreen> {
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(24)),
                           child: Container(
-                            margin: EdgeInsets.symmetric(vertical: 2,horizontal: 7),
+                            margin: EdgeInsets.symmetric(
+                                vertical: 2, horizontal: 7),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
@@ -198,7 +205,8 @@ class _AdvertiserLoginScreenState extends State<AdvertiserLoginScreen> {
                                   ),
                                   child: IconButton(
                                     padding: EdgeInsets.zero,
-                                    visualDensity:VisualDensity(vertical: -4,horizontal: -4),
+                                    visualDensity: VisualDensity(
+                                        vertical: -4, horizontal: -4),
                                     icon: Image.asset(
                                       AssetUtils.facebook_icon,
                                       height: 32,
@@ -222,51 +230,15 @@ class _AdvertiserLoginScreenState extends State<AdvertiserLoginScreen> {
                                   ),
                                   child: IconButton(
                                     padding: EdgeInsets.zero,
-
-                                    visualDensity:VisualDensity(vertical: -4,horizontal: -4),
+                                    visualDensity: VisualDensity(
+                                        vertical: -4, horizontal: -4),
                                     icon: Image.asset(
                                       AssetUtils.instagram_icon,
                                       height: 32,
                                       width: 32,
                                     ),
-                                    onPressed: () {},
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.symmetric(vertical: 10),
-                                  color: Colors.grey,
-                                  height: 18,
-                                  width: 1,
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  child: IconButton(
-                                    padding: EdgeInsets.zero,
-
-                                    visualDensity:VisualDensity(vertical: -4,horizontal: -4),
-                                    icon: Image.asset(
-                                      AssetUtils.email_icon,
-                                      height: 32,
-                                      width: 32,
-                                    ),
-                                    onPressed: () async {
-                                      // try {
-                                      //   await _creator_login_screen_controller.signInwithGoogle(
-                                      //       context: context, login_type: 'advertiser');
-                                      //   // Get.to(Dashboard());
-                                      // } catch (e) {
-                                      //   if (e is FirebaseAuthException) {
-                                      //     Fluttertoast.showToast(
-                                      //       msg: "login usuccessfull",
-                                      //       textColor: Colors.white,
-                                      //       backgroundColor: Colors.black,
-                                      //       toastLength: Toast.LENGTH_LONG,
-                                      //       gravity: ToastGravity.BOTTOM,
-                                      //     );
-                                      //   }
-                                      // }
+                                    onPressed: () {
+                                      Get.to(InstagramView(context: context,login_type: 'Advertiser',));
                                     },
                                   ),
                                 ),
@@ -282,16 +254,58 @@ class _AdvertiserLoginScreenState extends State<AdvertiserLoginScreen> {
                                   ),
                                   child: IconButton(
                                     padding: EdgeInsets.zero,
-
-                                    visualDensity:VisualDensity(vertical: -4,horizontal: -4),
+                                    visualDensity: VisualDensity(
+                                        vertical: -4, horizontal: -4),
+                                    icon: Image.asset(
+                                      AssetUtils.email_icon,
+                                      height: 32,
+                                      width: 32,
+                                    ),
+                                    onPressed: () async {
+                                      try {
+                                        await _creator_login_screen_controller
+                                            .signInwithGoogle(
+                                                context: context,
+                                                login_type: 'Advertiser');
+                                        // Get.to(Dashboard());
+                                      } catch (e) {
+                                        if (e is FirebaseAuthException) {
+                                          Fluttertoast.showToast(
+                                            msg: "login usuccessfull",
+                                            textColor: Colors.white,
+                                            backgroundColor: Colors.black,
+                                            toastLength: Toast.LENGTH_LONG,
+                                            gravity: ToastGravity.BOTTOM,
+                                          );
+                                        }
+                                      }
+                                    },
+                                  ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.symmetric(vertical: 10),
+                                  color: Colors.grey,
+                                  height: 18,
+                                  width: 1,
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  child: IconButton(
+                                    padding: EdgeInsets.zero,
+                                    visualDensity: VisualDensity(
+                                        vertical: -4, horizontal: -4),
                                     icon: Image.asset(
                                       AssetUtils.twitter_icon,
                                       height: 32,
                                       width: 32,
                                     ),
                                     onPressed: () {
-                                      print('error');
-                                      // _creator_login_screen_controller.signInWithTwitter(context: context, login_type: 'advertiser');
+                                      _creator_login_screen_controller
+                                          .signInWithTwitter(
+                                              context: context,
+                                              login_type: 'advertiser');
                                     },
                                   ),
                                 ),
@@ -299,7 +313,6 @@ class _AdvertiserLoginScreenState extends State<AdvertiserLoginScreen> {
                             ),
                           ),
                         ),
-
                         GestureDetector(
                           onTap: () {
                             Get.toNamed(BindingUtils.ageVerification);

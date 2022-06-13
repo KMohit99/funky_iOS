@@ -53,7 +53,7 @@ class URLConstants{
   static const CountryListApi = "getCountry.php";
   static const searchListApi = "search_users.php";
   static const blockListApi = "user-block-list.php";
-  static const postListApi = "postList.php";
+  static const NewsFeedApi = "news-feeds.php";
   static String id = "id";
   static String type = "type";
 

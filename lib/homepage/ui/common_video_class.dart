@@ -61,62 +61,6 @@ class _VideoWidgetState extends State<VideoWidget> {
 
   int _currentPage = 0;
 
-  AlertBox() {
-    return showDialog(
-      context: context,
-      builder: (ctx) => BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-        child: AlertDialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(35)),
-          backgroundColor: Colors.black,
-          title: Container(
-            // margin: EdgeInsets.symmetric(vertical: 25),
-            child: Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(50)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Image.asset(AssetUtils.lock_icon,
-                        height: 27,
-                        width: 027,
-                        fit: BoxFit.fill,
-                        color: Colors.black),
-                  ),
-                ),
-                SizedBox(
-                  height: 25,
-                ),
-                Text(
-                  "Sign up for more videos",
-                  style: TextStyle(
-                      color: Colors.white, fontFamily: "PR", fontSize: 14),
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            Container(
-              margin: EdgeInsets.only(bottom: 10, right: 35, left: 35),
-              child: common_button(
-                onTap: () {
-                  // openCamera();
-                  // Get.toNamed(BindingUtils.signupOption);
-                },
-                backgroud_color: Colors.white,
-                lable_text: 'Sign up',
-                lable_text_color: Colors.black,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -163,8 +107,8 @@ class _VideoWidgetState extends State<VideoWidget> {
                     // ),
                     Center(
                       child: ButtonTheme(
-                          height: 100.0,
-                          minWidth: 200.0,
+                          height: 50.0,
+                          minWidth: 50.0,
                           child: AnimatedOpacity(
                             opacity: isClicked ? 0.0 : 1.0,
                             duration: Duration(milliseconds: 100),
@@ -187,7 +131,7 @@ class _VideoWidgetState extends State<VideoWidget> {
                                 _controller!.value.isPlaying
                                     ? Icons.pause
                                     : Icons.play_arrow,
-                                size: 120.0,
+                                size: 30.0,
                               ),
                             ),
                           )),

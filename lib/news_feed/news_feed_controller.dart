@@ -10,14 +10,15 @@ import 'news_feedModel.dart';
 
 class NewsFeed_screen_controller extends GetxController {
 
-  RxBool isVideoLoading = false.obs;
+  RxBool isVideoLoading = true.obs;
   NewsFeedModel? newsfeedModel;
   var getVideoModelList = NewsFeedModel().obs;
+
   Future<dynamic> getAllNewsFeedList() async {
     String id_user = await PreferenceManager().getPref(URLConstants.id);
 
     isVideoLoading(true);
-    String url = (URLConstants.base_url + URLConstants.postListApi + "?id=${id_user}");
+    String url = (URLConstants.base_url + URLConstants.NewsFeedApi );
 
     // debugPrint('Get Sales Token ${tokens.toString()}');
     // try {

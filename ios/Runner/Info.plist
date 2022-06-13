@@ -49,5 +49,31 @@
     <string>Allow access to photo library</string>
     <key>NSCameraUsageDescription</key>
     <string>My description about why I need this capability</string>
+    <key>CFBundleURLTypes</key>
+    <array>
+    	<dict>
+    		<key>CFBundleTypeRole</key>
+    		<string>Editor</string>
+    		<key>CFBundleURLSchemes</key>
+    		<array>
+    			<string>com.googleusercontent.apps.93561184698-2cakom2vul2q7g372bbqq0ihv131b2od</string>
+    		</array>
+    	</dict>
+    </array>
+
+    <key>CFBundleURLTypes</key>
+    <array>
+      <dict>
+        <key>CFBundleTypeRole</key>
+        <string>Editor</string>
+        <key>CFBundleURLName</key>
+        <string></string>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>flutter-twitter-practice://</string>
+        </array>
+      </dict>
+    </array>
+
 </dict>
 </plist>

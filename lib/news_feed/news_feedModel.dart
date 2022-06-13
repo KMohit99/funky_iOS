@@ -31,140 +31,77 @@ class NewsFeedModel {
 }
 
 class Data {
-  String? id;
-  String? fullName;
+  String? newsID;
+  String? logo;
   String? userName;
+  String? fullName;
+  String? title;
   String? image;
   String? tagLine;
-  String? description;
   String? address;
   String? postImage;
+  String? uploadVideo;
   String? isVideo;
-  String? likes;
-  String? commentCount;
+  String? feedlikeStatus;
+  String? feedLikeCount;
+  String? feedCount;
+  String? description;
   String? createdDate;
-  User? user;
 
   Data(
-      {this.id,
-        this.fullName,
+      {this.newsID,
+        this.logo,
         this.userName,
+        this.fullName,
+        this.title,
         this.image,
         this.tagLine,
-        this.description,
         this.address,
         this.postImage,
+        this.uploadVideo,
         this.isVideo,
-        this.likes,
-        this.commentCount,
-        this.createdDate,
-        this.user});
-
-  Data.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    fullName = json['fullName'];
-    userName = json['userName'];
-    image = json['image'];
-    tagLine = json['tagLine'];
-    description = json['description'];
-    address = json['address'];
-    postImage = json['postImage'];
-    isVideo = json['isVideo'];
-    likes = json['likes'];
-    commentCount = json['commentCount'];
-    createdDate = json['createdDate'];
-    user = json['user'] != null ? new User.fromJson(json['user']) : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['fullName'] = this.fullName;
-    data['userName'] = this.userName;
-    data['image'] = this.image;
-    data['tagLine'] = this.tagLine;
-    data['description'] = this.description;
-    data['address'] = this.address;
-    data['postImage'] = this.postImage;
-    data['isVideo'] = this.isVideo;
-    data['likes'] = this.likes;
-    data['commentCount'] = this.commentCount;
-    data['createdDate'] = this.createdDate;
-    if (this.user != null) {
-      data['user'] = this.user!.toJson();
-    }
-    return data;
-  }
-}
-
-class User {
-  String? fullName;
-  String? userName;
-  String? email;
-  String? parentEmail;
-  String? gender;
-  String? location;
-  String? referralCode;
-  String? image;
-  String? about;
-  String? userFollowUnfollow;
-  String? userBlockUnblock;
-  String? followerNumber;
-  String? followingNumber;
-  String? socialType;
-  String? createdDate;
-
-  User(
-      {this.fullName,
-        this.userName,
-        this.email,
-        this.parentEmail,
-        this.gender,
-        this.location,
-        this.referralCode,
-        this.image,
-        this.about,
-        this.userFollowUnfollow,
-        this.userBlockUnblock,
-        this.followerNumber,
-        this.followingNumber,
-        this.socialType,
+        this.feedlikeStatus,
+        this.feedLikeCount,
+        this.feedCount,
+        this.description,
         this.createdDate});
 
-  User.fromJson(Map<String, dynamic> json) {
-    fullName = json['fullName'];
+  Data.fromJson(Map<String, dynamic> json) {
+    newsID = json['newsID'];
+    logo = json['logo'];
     userName = json['userName'];
-    email = json['email'];
-    parentEmail = json['parent_email'];
-    gender = json['gender'];
-    location = json['location'];
-    referralCode = json['referral_code'];
+    fullName = json['fullName'];
+    title = json['title'];
     image = json['image'];
-    about = json['about'];
-    userFollowUnfollow = json['user_followUnfollow'];
-    userBlockUnblock = json['user_blockUnblock'];
-    followerNumber = json['follower_number'];
-    followingNumber = json['following_number'];
-    socialType = json['social_type'];
+    tagLine = json['tagLine'];
+    address = json['address'];
+    postImage = json['postImage'];
+    uploadVideo = json['uploadVideo'];
+    isVideo = json['isVideo'];
+    feedlikeStatus = json['feedlikeStatus'];
+    feedLikeCount = json['feedLike_count'];
+    feedCount = json['feedCount'];
+    description = json['description'];
     createdDate = json['createdDate'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['fullName'] = this.fullName;
+    data['newsID'] = this.newsID;
+    data['logo'] = this.logo;
     data['userName'] = this.userName;
-    data['email'] = this.email;
-    data['parent_email'] = this.parentEmail;
-    data['gender'] = this.gender;
-    data['location'] = this.location;
-    data['referral_code'] = this.referralCode;
+    data['fullName'] = this.fullName;
+    data['title'] = this.title;
     data['image'] = this.image;
-    data['about'] = this.about;
-    data['user_followUnfollow'] = this.userFollowUnfollow;
-    data['user_blockUnblock'] = this.userBlockUnblock;
-    data['follower_number'] = this.followerNumber;
-    data['following_number'] = this.followingNumber;
-    data['social_type'] = this.socialType;
+    data['tagLine'] = this.tagLine;
+    data['address'] = this.address;
+    data['postImage'] = this.postImage;
+    data['uploadVideo'] = this.uploadVideo;
+    data['isVideo'] = this.isVideo;
+    data['feedlikeStatus'] = this.feedlikeStatus;
+    data['feedLike_count'] = this.feedLikeCount;
+    data['feedCount'] = this.feedCount;
+    data['description'] = this.description;
     data['createdDate'] = this.createdDate;
     return data;
   }

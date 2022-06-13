@@ -35,18 +35,18 @@ dependencies:
   fluttertoast: ^8.0.8
   #  firebase_auth: ^1.2.0
   #  firebase_core: ^1.2.0
-  #  firebase_auth: ^3.1.4
-  #  firebase_core: ^1.8.0
-  #  flutter_facebook_auth: ^4.3.3
+  firebase_auth: ^3.1.4
+  firebase_core: ^1.8.0
+#  flutter_facebook_auth: ^4.3.3
   #  google_sign_in: ^5.2.4
 
   #  firebase_auth: ^3.3.12
   #  firebase_core: ^1.14.0
-  #  flutter_facebook_auth: ^4.1.2
-  #  google_sign_in: ^5.2.0
-  #  twitter_login: ^4.0.1
-  #  webview_flutter: ^3.0.0
-  #  flutter_webview_plugin: ^0.4.0
+  flutter_facebook_auth: ^4.1.2
+  google_sign_in: ^5.2.0
+  twitter_login: ^4.0.1
+#  webview_flutter: ^3.0.0
+  flutter_webview_plugin: ^0.4.0
 
   get_storage: ^2.0.3
   #  simple_auth_flutter: ^2.0.11
