@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:funky_new/custom_widget/page_loader.dart';
@@ -53,6 +54,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
 
   init() async {
     String id_user = await PreferenceManager().getPref(URLConstants.id);
+    print("id----- ${id_user}");
     (_creator_login_screen_controller
                 .userInfoModel_email!.data![0].socialType ==
             ""
@@ -81,10 +83,11 @@ class _Profile_ScreenState extends State<Profile_Screen>
   TabController? _tabController;
   List<Tab> _tabs = [
     Tab(
+      height: 60,
       icon: Container(
         margin: EdgeInsets.only(bottom: 0),
-        height: 50,
-        width: 50,
+        height: 45,
+        width: 45,
         decoration: BoxDecoration(
             color: Colors.black,
             borderRadius: BorderRadius.circular(50),
@@ -119,10 +122,11 @@ class _Profile_ScreenState extends State<Profile_Screen>
       ),
     ),
     Tab(
+      height: 60,
       icon: Container(
-        margin: EdgeInsets.all(0),
-        height: 50,
-        width: 50,
+        margin: EdgeInsets.only(bottom: 0),
+        height: 45,
+        width: 45,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(50),
             boxShadow: [
@@ -156,10 +160,11 @@ class _Profile_ScreenState extends State<Profile_Screen>
       ),
     ),
     Tab(
+      height: 60,
       icon: Container(
-        margin: EdgeInsets.all(0),
-        height: 50,
-        width: 50,
+        margin: EdgeInsets.only(bottom: 0),
+        height: 45,
+        width: 45,
         decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
@@ -193,10 +198,11 @@ class _Profile_ScreenState extends State<Profile_Screen>
       ),
     ),
     Tab(
+      height: 60,
       icon: Container(
-        margin: EdgeInsets.all(0),
-        height: 50,
-        width: 50,
+        margin: EdgeInsets.only(bottom: 0),
+        height: 45,
+        width: 45,
         decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
@@ -231,10 +237,11 @@ class _Profile_ScreenState extends State<Profile_Screen>
       ),
     ),
     Tab(
+      height: 60,
       icon: Container(
-        margin: EdgeInsets.all(0),
-        height: 50,
-        width: 50,
+        margin: EdgeInsets.only(bottom: 0),
+        height: 45,
+        width: 45,
         decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
@@ -690,7 +697,15 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                                 width: 20,
                                               ),
                                               onPressed: () {
-                                                Get.to(FollowingScreen());
+                                                Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (_) =>
+                                                                FollowingScreen()))
+                                                    .then(
+                                                        (_) => setState(() {}));
+
+                                                // Get.to(FollowingScreen());
                                               }),
                                           Text(
                                             '${_creator_login_screen_controller.userInfoModel_email!.data![0].followingNumber}',
@@ -1216,11 +1231,32 @@ class _Profile_ScreenState extends State<Profile_Screen>
                               ? CircularProgressIndicator(
                                   color: HexColor(CommonColor.pinkFont),
                                 )
-                              : (_galleryModelList!.data![index].image!.isEmpty
-                                  ? Image.asset(AssetUtils.logo)
-                                  : Image.network(
-                                      'http://foxyserver.com/funky/images/${_galleryModelList!.data![index].postImage}',
-                                    ))),
+                              : Container(
+                            color: Colors.white,
+                                child: (_galleryModelList!
+                                        .data![index].postImage!.isEmpty
+                                    ? Image.asset(AssetUtils.logo)
+                                    : Image.network(
+                                        'http://foxyserver.com/funky/images/${_galleryModelList!.data![index].postImage}',
+                            fit: BoxFit.fill,
+                            loadingBuilder:
+                                            (context, child, loadingProgress) {
+                                          if (loadingProgress == null)
+                                            return child;
+
+                                          return Center(
+                                              child: SizedBox(
+                                                  height: 30,
+                                                  width: 30,
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    color: HexColor(
+                                                        CommonColor.pinkFont),
+                                                  )));
+                                          // You can use LinearProgressIndicator, CircularProgressIndicator, or a GIF instead
+                                        },
+                                      )),
+                              )),
                         ),
                       ),
                       staggeredTileBuilder: (int index) =>
@@ -1231,11 +1267,14 @@ class _Profile_ScreenState extends State<Profile_Screen>
                   : Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Center(
-                        child: Text("${_galleryModelList!.message}",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontFamily: 'PR')),
+                        child: Container(
+                          margin: EdgeInsets.only(top: 50),
+                          child: Text("${_galleryModelList!.message}",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontFamily: 'PR')),
+                        ),
                       ),
                     )))),
     );
@@ -1282,7 +1321,8 @@ class _Profile_ScreenState extends State<Profile_Screen>
         setState(() {
           ispostLoading = false;
         });
-        print(_galleryModelList!.data![index].image!.length);
+        print(_galleryModelList!.data![0].postImage);
+        print(_galleryModelList!.data![1].postImage);
 
         // hideLoader(context);
         // Get.to(Dashboard());
@@ -1423,7 +1463,10 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                   : GestureDetector(
                                       onTap: () {
                                         print('data');
-                                        Get.to(VideoViewer(url: _videoModelList!.data![index].uploadVideo!,));
+                                        Get.to(VideoViewer(
+                                          url: _videoModelList!
+                                              .data![index].uploadVideo!,
+                                        ));
                                       },
                                       child: Image.network(
                                         'http://foxyserver.com/funky/images/${_videoModelList!.data![index].image}',
@@ -1439,11 +1482,14 @@ class _Profile_ScreenState extends State<Profile_Screen>
                   : Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Center(
-                        child: Text("${_videoModelList!.message}",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontFamily: 'PR')),
+                        child: Container(
+                          margin: EdgeInsets.only(top: 50),
+                          child: Text("${_videoModelList!.message}",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontFamily: 'PR')),
+                        ),
                       ),
                     )))),
     );

@@ -95,7 +95,7 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
                               //     )),
                               title: Text(
                                 news_feed_controller
-                                    .newsfeedModel!.data![index].fullName!,
+                                    .newsfeedModel!.data![index].title!,
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 16,
@@ -124,7 +124,7 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
                                             .data![index].postImage!.isNotEmpty
                                     ? Image.network(
                                         "http://foxyserver.com/funky/images/${news_feed_controller.newsfeedModel!.data![index].postImage}",
-                                        fit: BoxFit.cover,
+                                        fit: BoxFit.contain,
                                       )
                                     : (news_feed_controller.newsfeedModel!
                                                 .data![index].uploadVideo!.isNotEmpty
@@ -133,33 +133,33 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
                                                 .newsfeedModel!
                                                 .data![index]
                                                 .uploadVideo!)
-                                        : Container())),
+                                        : Container(color: Colors.red,))),
                               ),
-                              Positioned.fill(
-                                child: Align(
-                                  alignment: Alignment.bottomRight,
-                                  child: Container(
-                                    width: 100,
-                                    height: 38,
-                                    decoration: BoxDecoration(
-                                        color: HexColor(CommonColor.pinkFont),
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(13),
-                                          bottomLeft: Radius.circular(13),
-                                        )),
-                                    child: Container(
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        'I am here',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 16,
-                                            fontFamily: 'PR'),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              )
+                              // Positioned.fill(
+                              //   child: Align(
+                              //     alignment: Alignment.bottomRight,
+                              //     child: Container(
+                              //       width: 100,
+                              //       height: 38,
+                              //       decoration: BoxDecoration(
+                              //           color: HexColor(CommonColor.pinkFont),
+                              //           borderRadius: BorderRadius.only(
+                              //             topLeft: Radius.circular(13),
+                              //             bottomLeft: Radius.circular(13),
+                              //           )),
+                              //       child: Container(
+                              //         alignment: Alignment.center,
+                              //         child: Text(
+                              //           'I am here',
+                              //           style: TextStyle(
+                              //               color: Colors.white,
+                              //               fontSize: 16,
+                              //               fontFamily: 'PR'),
+                              //         ),
+                              //       ),
+                              //     ),
+                              //   ),
+                              // )
                             ],
                           ),
                           Container(

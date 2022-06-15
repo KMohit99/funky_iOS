@@ -54,8 +54,10 @@ class URLConstants{
   static const searchListApi = "search_users.php";
   static const blockListApi = "user-block-list.php";
   static const NewsFeedApi = "news-feeds.php";
+  static const postApi = "post.php";
   static String id = "id";
   static String type = "type";
+  static String social_type = "type";
 
 
 }

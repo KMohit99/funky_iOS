@@ -211,8 +211,8 @@ class _KidsLoginScreenState extends State<KidsLoginScreen> {
                                     width: 32,
                                   ),
                                   onPressed: () {
-                                    // _creator_login_screen_controller.signInWithFacebook(
-                                    //     login_type: 'creator', context: context);
+                                    _creator_login_screen_controller.signInWithFacebook(
+                                        login_type: 'creator', context: context);
                                   },
                                 ),
                               ),

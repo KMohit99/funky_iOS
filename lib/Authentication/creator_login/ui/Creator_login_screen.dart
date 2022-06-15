@@ -247,6 +247,9 @@ class _CreatorLoginScreenState extends State<CreatorLoginScreen> {
                                       width: 32,
                                     ),
                                     onPressed: () {
+                                      // _loginScreenController.signInWithFacebook(
+                                      //     login_type: 'creator', context: context);
+                                      //
                                       _loginScreenController.signInWithFacebook(
                                           login_type: 'creator', context: context);
                                     },

@@ -1,14 +1,22 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:io' as Io;
 import 'dart:math';
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:funky_new/dashboard/post_preview.dart';
+import 'package:funky_new/dashboard/post_screen.dart';
 import 'package:funky_new/global_key.dart';
 // import 'package:funky_project/Authentication/creator_login/controller/creator_login_controller.dart';
 // import 'package:funky_project/homepage/ui/homepage_screen.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:image_editor_plus/image_editor_plus.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../Utils/asset_utils.dart';
 import '../Utils/colorUtils.dart';
@@ -18,6 +26,7 @@ import '../Utils/colorUtils.dart';
 // import '../search_screen/search_screen.dart';
 import 'dart:math' as math;
 
+import '../custom_widget/common_buttons.dart';
 import '../drawerScreen.dart';
 import '../homepage/ui/homepage_screen.dart';
 import '../news_feed/new_feed_screen.dart';
@@ -69,6 +78,124 @@ class _DashboardState extends State<Dashboard> {
     } else if (_page == 3) {
       return const Profile_Screen();
     }
+  }
+
+
+  File? imgFile;
+  Uint8List? imageData;
+
+  final imgPicker = ImagePicker();
+
+  void openGallery() async {
+    var imgGallery = await imgPicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      imgFile = File(imgGallery!.path);
+      imageData = imgFile!.readAsBytesSync();
+      print(imageData);
+    });
+    // editedImage();
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ImageEditor(
+          image: imageData,
+        ),
+      ),
+    ).then((editedImage) async {
+      if (editedImage != null) {
+        setState(() {
+          // imgFile = editedImage;
+          String base64String = base64Encode(editedImage);
+          final decodedBytes = base64Decode(base64String);
+          var file = Io.File(imgFile!.path);
+          file.writeAsBytesSync(decodedBytes);
+          print(file.path.split('/').last);
+          imgFile = file;
+          Get.to(PostPreviewScreen(ImageFile:imgFile! ,));
+        });
+      }
+    }).catchError((er) {
+      print(er);
+    });
+  }
+
+  void openCamera() async {
+    var imgCamera = await imgPicker.getImage(source: ImageSource.camera);
+    setState(() {
+      imgFile = File(imgCamera!.path);
+      // _creator_signup_controller.photoBase64 =
+      //     base64Encode(imgFile!.readAsBytesSync());
+      // print(_creator_signup_controller.photoBase64);
+      imageData = imgFile!.readAsBytesSync();
+      print(imageData);
+    });
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ImageEditor(
+          image: imageData,
+        ),
+      ),
+    ).then((editedImage) {
+      if (editedImage != null) {
+        setState(() {
+          // imgFile = editedImage;
+          String base64String = base64Encode(editedImage);
+          final decodedBytes = base64Decode(base64String);
+          var file = Io.File(imgFile!.path);
+          file.writeAsBytesSync(decodedBytes);
+          print(file.path.split('/').last);
+          imgFile = file;
+          Get.to(PostPreviewScreen(ImageFile:imgFile! ,));
+          Navigator.pop(context);
+        });
+      }
+    }).catchError((er) {
+      print(er);
+    });
+  }
+
+  void Pickvideo() async {
+    var imgCamera = await imgPicker.pickVideo(source: ImageSource.gallery);
+    setState(() {
+      imgFile = File(imgCamera!.path);
+      // _creator_signup_controller.photoBase64 =
+      //     base64Encode(imgFile!.readAsBytesSync());
+      // print(_creator_signup_controller.photoBase64);
+      imageData = imgFile!.readAsBytesSync();
+      print(imageData);
+    });
+    if (mounted && imgFile != null) {
+      // Navigator.push(
+      //     context,
+      //     MaterialPageRoute<void>(
+      //         builder: (BuildContext context) =>
+      //             VideoEditor(file: File(imgFile!.path))));
+    }
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (context) => ImageEditor(
+    //       image: imageData,
+    //     ),
+    //   ),
+    // ).then((editedImage) {
+    //   if (editedImage != null) {
+    //     setState(() {
+    //       // imgFile = editedImage;
+    //       String base64String = base64Encode(editedImage);
+    //       final decodedBytes = base64Decode(base64String);
+    //       var file = Io.File(imgFile!.path);
+    //       file.writeAsBytesSync(decodedBytes);
+    //       print(file.path.split('/').last);
+    //       imgFile = file;
+    //       Get.to(PostPreviewScreen(ImageFile:imgFile! ,));
+    //       Navigator.pop(context);
+    //     });
+    //   }
+    // }).catchError((er) {
+    //   print(er);
+    // });
   }
 
   GlobalKey<ScaffoldState>? _globalKey = GlobalKey<ScaffoldState>();
@@ -328,7 +455,7 @@ class _DashboardState extends State<Dashboard> {
                                           Container(
                                             margin: EdgeInsets.symmetric(
                                                 vertical: 110, horizontal: 70),
-                                            height: 122,
+                                            height: 115,
                                             // width: 133,
                                             // padding: const EdgeInsets.all(8.0),
                                             decoration: BoxDecoration(
@@ -353,28 +480,64 @@ class _DashboardState extends State<Dashboard> {
                                             child: Column(
                                               mainAxisAlignment: MainAxisAlignment.center,
                                               children: [
-                                                Text(
-                                                  'Post',
-                                                  style: TextStyle(
-                                                      fontSize: 15,
-                                                      fontFamily: 'PR',
-                                                      color: Colors.white),
-                                                ),
-                                                Container(
-                                                  margin: EdgeInsets.symmetric(
-                                                      horizontal: 20),
-                                                  child: Divider(
-                                                    color: Colors.black,
-                                                    height: 20,
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    print('name');
+                                                    // Get.to(PostScreen());
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (ctx) => AlertDialog(
+                                                        title: Text("Pick Image from"),
+                                                        actions: <Widget>[
+                                                          Container(
+                                                            margin:
+                                                            EdgeInsets.only(bottom: 10),
+                                                            child: common_button(
+                                                              onTap: () {
+                                                                openCamera();
+                                                                // Get.toNamed(BindingUtils.signupOption);
+                                                              },
+                                                              backgroud_color: Colors.black,
+                                                              lable_text: 'Camera',
+                                                              lable_text_color:
+                                                              Colors.white,
+                                                            ),
+                                                          ),
+                                                          common_button(
+                                                            onTap: () {
+                                                              openGallery();
+                                                              // Get.toNamed(BindingUtils.signupOption);
+                                                            },
+                                                            backgroud_color: Colors.black,
+                                                            lable_text: 'Gallery',
+                                                            lable_text_color: Colors.white,
+                                                          ),
+                                                          SizedBox(
+                                                            height: 10,
+                                                          ),
+                                                          common_button(
+                                                            onTap: () {
+                                                              Pickvideo();
+                                                              // Get.toNamed(BindingUtils.signupOption);
+                                                            },
+                                                            backgroud_color: Colors.black,
+                                                            lable_text: 'Video',
+                                                            lable_text_color: Colors.white,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    );
+                                                  },
+                                                  child: Text(
+                                                    'Post',
+                                                    style: TextStyle(
+                                                        fontSize: 15,
+                                                        fontFamily: 'PR',
+                                                        color: Colors.white),
                                                   ),
                                                 ),
-                                                Text(
-                                                  'Videos',
-                                                  style: TextStyle(
-                                                      fontSize: 15,
-                                                      fontFamily: 'PR',
-                                                      color: Colors.white),
-                                                ),
+
+
                                                 Container(
                                                   margin: EdgeInsets.symmetric(
                                                       horizontal: 20),

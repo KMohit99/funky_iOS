@@ -167,7 +167,6 @@ class _DrawerScreenState extends State<DrawerScreen> {
                     drawerItem(
                       itemIcon: AssetUtils.termsIcons,
                       itemName: TxtUtils.t_c,
-                      text_color: HexColor(CommonColor.pinkFont_light),
                       onTap: () {
                         Navigator.pop(context);
                         // gotoSalesListScreen(context);
@@ -176,7 +175,6 @@ class _DrawerScreenState extends State<DrawerScreen> {
                     drawerItem(
                       itemIcon: AssetUtils.helpIcons,
                       itemName: TxtUtils.help,
-                      text_color: HexColor(CommonColor.pinkFont_light),
                       onTap: () {
                         Navigator.pop(context);
                         // gotoSalesListScreen(context);
@@ -185,7 +183,6 @@ class _DrawerScreenState extends State<DrawerScreen> {
                     drawerItem(
                       itemIcon: AssetUtils.logout_icon,
                       itemName: 'Logout',
-                      text_color: HexColor(CommonColor.pinkFont_light),
                       onTap: () {
                         logOut_function();
                         // gotoSalesListScreen(context);

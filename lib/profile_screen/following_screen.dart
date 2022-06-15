@@ -2,6 +2,8 @@ import 'dart:convert' as convert;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:funky_new/profile_screen/profile_screen.dart';
+
 // import 'package:funky_project/Utils/colorUtils.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -57,7 +59,7 @@ class _FollowingScreenState extends State<FollowingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _globalKey,
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.black,
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -74,7 +76,7 @@ class _FollowingScreenState extends State<FollowingScreen> {
               InkWell(
                 child: Padding(
                   padding:
-                      const EdgeInsets.only(right: 20.0, top: 0.0, bottom: 5.0),
+                  const EdgeInsets.only(right: 20.0, top: 0.0, bottom: 5.0),
                   child: ClipRRect(
                     child: Image.asset(
                       AssetUtils.noti_icon,
@@ -88,7 +90,7 @@ class _FollowingScreenState extends State<FollowingScreen> {
               InkWell(
                 child: Padding(
                   padding:
-                      const EdgeInsets.only(right: 20.0, top: 0.0, bottom: 5.0),
+                  const EdgeInsets.only(right: 20.0, top: 0.0, bottom: 5.0),
                   child: ClipRRect(
                     child: Image.asset(
                       AssetUtils.chat_icon,
@@ -102,13 +104,17 @@ class _FollowingScreenState extends State<FollowingScreen> {
             ],
           )
         ],
-        leadingWidth: 100,
+        // leadingWidth: 100,
         leading: Container(
-          margin: const EdgeInsets.only(left: 18, top: 0, bottom: 0),
+          margin: const EdgeInsets.only(left: 15, top: 0, bottom: 0),
           child: IconButton(
               padding: EdgeInsets.zero,
               onPressed: () {
+                // Get.to(Profile_Screen());
                 Navigator.pop(context);
+                setState((){
+
+                });
               },
               icon: Icon(
                 Icons.arrow_back,
@@ -196,7 +202,53 @@ class _FollowingScreenState extends State<FollowingScreen> {
             //         );
             //       }),
             // )),
-            Expanded(
+            (isFollowingLoading == true
+                ? Material(
+              color: Color(0x66DD4D4),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                      color: Colors.transparent,
+                      height: 80,
+                      width: 200,
+                      child: Container(
+                        color: Colors.black,
+                        child: Row(
+                          mainAxisAlignment:
+                          MainAxisAlignment.spaceAround,
+                          children: [
+                            CircularProgressIndicator(
+                              color: HexColor(CommonColor.pinkFont),
+                            ),
+                            Text(
+                              'Loading...',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontFamily: 'PR'),
+                            )
+                          ],
+                        ),
+                      )
+                    // Material(
+                    //   color: Colors.transparent,
+                    //   child: LoadingIndicator(
+                    //     backgroundColor: Colors.transparent,
+                    //     indicatorType: Indicator.ballScale,
+                    //     colors: _kDefaultRainbowColors,
+                    //     strokeWidth: 4.0,
+                    //     pathBackgroundColor: Colors.yellow,
+                    //     // showPathBackground ? Colors.black45 : null,
+                    //   ),
+                    // ),
+                  ),
+                ],
+              ),
+            )
+                : (FollowingData.length > 0
+                ? Expanded(
               child: ListView.builder(
                 padding: const EdgeInsets.symmetric(vertical: 20),
                 shrinkWrap: true,
@@ -206,8 +258,8 @@ class _FollowingScreenState extends State<FollowingScreen> {
                     children: [
                       ListTile(
                         onTap: () {},
-                        visualDensity:
-                            VisualDensity(vertical: 0, horizontal: -4),
+                        visualDensity: VisualDensity(
+                            vertical: 0, horizontal: -4),
                         leading: Container(
                             height: 50,
                             width: 50,
@@ -227,24 +279,39 @@ class _FollowingScreenState extends State<FollowingScreen> {
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 0),
-                              height: 34,
-                              // width:(width ?? 300) ,
-                              decoration: BoxDecoration(
-                                  color: HexColor(CommonColor.pinkFont),
-                                  borderRadius: BorderRadius.circular(17)),
+                            GestureDetector(
+                              onTap: () async {
+                                print('${FollowingData[index].id}');
+                                await _search_screen_controller.Follow_unfollow_api(
+                                    follow_unfollow: 'unfollow',
+                                    user_id: FollowingData[index].id,
+                                    user_social: FollowingData[index].socialType,
+                                    context: context
+                                );
+                                await getAllFollowingList();
+                              },
                               child: Container(
-                                  alignment: Alignment.center,
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: 0, horizontal: 8),
-                                  child: Text(
-                                    'Remove',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: 'PR',
-                                        fontSize: 14),
-                                  )),
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 0),
+                                height: 34,
+                                // width:(width ?? 300) ,
+                                decoration: BoxDecoration(
+                                    color: HexColor(
+                                        CommonColor.pinkFont),
+                                    borderRadius:
+                                    BorderRadius.circular(17)),
+                                child: Container(
+                                    alignment: Alignment.center,
+                                    margin: EdgeInsets.symmetric(
+                                        vertical: 0, horizontal: 8),
+                                    child: Text(
+                                      'Unfollow',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontFamily: 'PR',
+                                          fontSize: 14),
+                                    )),
+                              ),
                             ),
                           ],
                         ),
@@ -253,29 +320,47 @@ class _FollowingScreenState extends State<FollowingScreen> {
                         margin: EdgeInsets.symmetric(vertical: 5),
                         color: HexColor(CommonColor.borderColor),
                         height: 0.5,
-                        width: MediaQuery.of(context).size.width,
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width,
                       ),
                     ],
                   );
                 },
               ),
             )
+                : Container(
+                margin: EdgeInsets.symmetric(vertical: 40),
+                child: Text(
+                  'No Data Found',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'PR',
+                      fontSize: 16),
+                ))))
           ],
         ),
       ),
     );
   }
 
-  RxBool isFollowingLoading = false.obs;
+  bool isFollowingLoading = true;
   String query_following = '';
   List<Data_followers> FollowingData = [];
 
   Future<dynamic> getAllFollowingList() async {
     print('inside following api');
+    setState(() {
+      isFollowingLoading = true;
+    });
     final books = await getFollowingList(query_following);
 
     setState(() => this.FollowingData = books);
     print(FollowingData.length);
+    setState(() {
+      isFollowingLoading = false;
+    });
   }
 
   Future Following_list_search_API(String query) async {

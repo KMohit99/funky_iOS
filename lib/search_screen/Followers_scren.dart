@@ -65,7 +65,7 @@ class _SearchUserFollowrsState extends State<SearchUserFollowrs> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _globalKey,
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.black,
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -110,9 +110,9 @@ class _SearchUserFollowrsState extends State<SearchUserFollowrs> {
             ],
           )
         ],
-        leadingWidth: 100,
+        // leadingWidth: 100,
         leading: Container(
-          margin: const EdgeInsets.only(left: 18, top: 0, bottom: 0),
+          margin: const EdgeInsets.only(left: 15, top: 0, bottom: 0),
           child: IconButton(
               padding: EdgeInsets.zero,
               onPressed: () {

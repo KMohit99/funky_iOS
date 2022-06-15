@@ -187,27 +187,32 @@ class Search_screen_controller extends GetxController {
   Data_followers? is_follower;
   Data_followers? is_following;
 
-  RxBool comapre_loading = false.obs;
+  RxBool comapre_loading = true.obs;
 
-  compare_data() {
+  compare_data() async {
+    await getAllFollowersList();
+    await getAllFollowingList();
     comapre_loading(true);
     print("widget.search_user_data.id ${userInfoModel_email!.data![0].id}");
     print(
         "widget.search_user_data.id ${userInfoModel_email!.data![0].followerNumber}");
     // print("widget.search_user_data.id ${FollowersData[0].id}");
+    String id_user = await PreferenceManager().getPref(URLConstants.id);
 
     String id = userInfoModel_email!.data![0].id!;
+    print("----${id}");
+    print(id_user);
 
     Data_followers? last_out = FollowersData!.firstWhereOrNull(
       (element) => element.id == id,
     );
     if (last_out == null) {
+      is_follower = last_out;
       print('no data found');
-      print('Followers list data $is_follower');
-
+      comapre_loading(false);
     } else {
       is_follower = last_out;
-      print('Followers list data $is_follower');
+      print('Followers true $is_follower');
       comapre_loading(false);
     }
 
@@ -215,21 +220,34 @@ class Search_screen_controller extends GetxController {
       (element) => element.id == id,
     );
     if (first_out == null) {
+      is_following = first_out;
       print('no data found');
-      print('Following list data $is_following');
+      comapre_loading(false);
     } else {
       is_following = first_out;
-      print('Following list data $is_following');
+      print('Following true $is_following');
       comapre_loading(false);
     }
+  }
+
+  Future<dynamic> getAllFollowersList() async {
+    final books = await getFollowersList();
+
+    FollowersData = RxList(books);
+    print(FollowersData!.length);
+  }
+
+  Future<dynamic> getAllFollowingList() async {
+    final books = await getFollowingList();
+    FollowingData = RxList(books);
+    print(FollowingData!.length);
   }
 
   RxBool isuserinfoLoading = true.obs;
   UserInfoModel? userInfoModel_email;
   var getUSerModelList = UserInfoModel().obs;
 
-  Future<dynamic> CreatorgetUserInfo_Email(
-     {required String UserId}) async {
+  Future<dynamic> CreatorgetUserInfo_Email({required String UserId}) async {
     print('inside searche userinfo email----------');
     isuserinfoLoading(true);
     String url = (URLConstants.base_url +
@@ -270,8 +288,7 @@ class Search_screen_controller extends GetxController {
     }
   }
 
-  Future<dynamic> getUserInfo_social(
-      { required String UserId}) async {
+  Future<dynamic> getUserInfo_social({required String UserId}) async {
     print('inside searche userinfo social----------');
     // showLoader(context);
     isuserinfoLoading(true);
@@ -322,24 +339,28 @@ class Search_screen_controller extends GetxController {
   followUnfollowModel? _followUnfolloemodel;
 
   Future<dynamic> Follow_unfollow_api(
-      {required BuildContext context, required String follow_unfollow ,required user_social,required user_id }) async {
+      {required BuildContext context,
+      required String follow_unfollow,
+      required user_social,
+      required user_id}) async {
     debugPrint('0-0-0-0-0-0-0 username');
     showLoader(context);
 
-      apiLoading;
+    apiLoading;
     String id_user = await PreferenceManager().getPref(URLConstants.id);
     String type_user = await PreferenceManager().getPref(URLConstants.type);
-    // print("second_id ${widget.search_user_data.id}");
+    String type_social =
+        await PreferenceManager().getPref(URLConstants.social_type);
+    print("second_id ${type_social}");
 
     Map data = {
       'follower_id': id_user,
-      'followed_user_id': userInfoModel_email!.data![0].id,
+      'followed_user_id': user_id,
       'user_followUnfollow': follow_unfollow,
-      'id': userInfoModel_email!.data![0].id,
+      'id': user_id,
       'type': type_user,
-    };
-    print(data);
-    // String body = json.encode(data);
+      'social_type': type_social,
+    }; // String body = json.encode(data);
 
     var url = ("http://foxyserver.com/funky/api/followUnfollow.php");
     print("url : $url");
@@ -364,10 +385,8 @@ class Search_screen_controller extends GetxController {
       if (_followUnfolloemodel!.error == false) {
         print("user -socail -- $user_social");
         (user_social == ""
-            ? await CreatorgetUserInfo_Email(
-            UserId: user_id)
-            : await getUserInfo_social(
-            UserId:user_id));
+            ? await CreatorgetUserInfo_Email(UserId: user_id)
+            : await getUserInfo_social(UserId: user_id));
         await compare_data();
         hideLoader(context);
         // await PreferenceManager()
@@ -383,5 +402,4 @@ class Search_screen_controller extends GetxController {
       print('Please try again');
     }
   }
-
 }

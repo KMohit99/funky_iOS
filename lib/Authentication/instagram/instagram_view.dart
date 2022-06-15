@@ -110,6 +110,7 @@ class InstagramView extends StatelessWidget {
         );
         await PreferenceManager()
             .setPref(URLConstants.id, loginModel!.user![0].id!);
+
         await getUserInfo_social();
         await Get.to(Dashboard());
       } else {
@@ -125,11 +126,11 @@ class InstagramView extends StatelessWidget {
       tag: Creator_Login_screen_controller().toString());
   Future<dynamic> getUserInfo_social() async {
     _loginScreenController.isuserinfoLoading(true);
-    String userId = CommonService().getStoreValue(keys:'id');
-    print("UserID $userId");
+    String id_user = await PreferenceManager().getPref(URLConstants.id);
+    print("UserID $id_user");
     String url = (URLConstants.base_url +
         URLConstants.user_info_social_Api +
-        "?id=$userId");
+        "?id=$id_user");
     // debugPrint('Get Sales Token ${tokens.toString()}');
     // try {
     // } catch (e) {

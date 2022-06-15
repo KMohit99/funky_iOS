@@ -23,6 +23,8 @@ class _VideonewsState extends State<Videonews> {
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
         setState(() {});
       });
+    _controller!.play();
+
   }
 
   @override
@@ -49,6 +51,7 @@ class _VideonewsState extends State<Videonews> {
   }
 
   _playPause() {
+    print('video Tapped');
     if (_controller!.value.isPlaying) {
       _controller!.pause();
     } else {

@@ -3,10 +3,15 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+
+// import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+// import 'package:flutter_login_facebook/flutter_login_facebook.dart';
+
 // import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:funky_new/Utils/toaster_widget.dart';
 import 'package:funky_new/custom_widget/page_loader.dart';
+
 // import 'package:funky_project/dashboard/dashboard_screen.dart';
 // import 'package:funky_project/getx_pagination/binding_utils.dart';
 import 'package:get/get.dart';
@@ -84,7 +89,7 @@ class Creator_Login_screen_controller extends GetxController {
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.BOTTOM,
         );
-         hideLoader(context);
+        hideLoader(context);
         await Get.to(Dashboard());
       } else {
         hideLoader(context);
@@ -92,9 +97,7 @@ class Creator_Login_screen_controller extends GetxController {
         print('Please try again');
         print('Please try again');
       }
-    } else {
-
-    }
+    } else {}
   }
 
   RxBool isuserinfoLoading = true.obs;
@@ -148,7 +151,7 @@ class Creator_Login_screen_controller extends GetxController {
 
   Future<dynamic> getUserInfo_social() async {
     isuserinfoLoading(true);
-    String userId = CommonService().getStoreValue(keys:'id');
+    String userId = CommonService().getStoreValue(keys: 'id');
     String id_user = await PreferenceManager().getPref(URLConstants.id);
 
     print("UserID $id_user");
@@ -191,11 +194,17 @@ class Creator_Login_screen_controller extends GetxController {
   }
 
   UserCredential? userCredential;
-  //
+
+
+
   Future<Resource?> signInWithFacebook(
       {required BuildContext context, required String login_type}) async {
-    try {
-      final LoginResult result = await FacebookAuth.instance.login();
+    // try {
+    // showLoader(context);
+      final LoginResult result = await FacebookAuth.instance.login(
+          permissions: ["public_profile", "email"]
+      );
+
       switch (result.status) {
         case LoginStatus.success:
           final AuthCredential facebookCredential =
@@ -226,10 +235,73 @@ class Creator_Login_screen_controller extends GetxController {
         default:
           return null;
       }
-    } on FirebaseAuthException catch (e) {
-      throw e;
-    }
+
+    // on FirebaseAuthException catch (e) {
+    //   throw e;
+    // }
   }
+
+//   final fb = FacebookLogin();
+//
+//   Future SignInFacebook(
+//       {required BuildContext context, required String login_type}) async {
+// // Create an instance of FacebookLogin
+//
+// // Log in
+//     final res = await fb.logIn(permissions: [
+//       FacebookPermission.publicProfile,
+//       FacebookPermission.email,
+//     ]);
+//
+// // Check result status
+//     switch (res.status) {
+//       case FacebookLoginStatus.success:
+//         // Logged in
+//
+//         // Send access token to server for validation and auth
+//         final FacebookAccessToken? accessToken = res.accessToken;
+//         print('Access token: ${accessToken!.token}');
+//
+//         // Get profile data
+//         final profile = await fb.getUserProfile();
+//         print('Hello, ${profile!.name}! You ID: ${profile.userId}');
+//         // Get user profile image url
+//         final imageUrl = await fb.getProfileImageUrl(width: 100);
+//         print('Your profile image: $imageUrl');
+//
+//         // Get email (since we request email permission)
+//         final email = await fb.getUserEmail();
+//         // But user can decline permission
+//         if (email != null) print('And your email is $email');
+//
+//         // print(
+//         //     "userCredential!.user!.displayName ${userCredential!.user!.displayName}");
+//
+//         await social_fb_login(
+//             login_type: login_type,
+//             context: context,
+//             socail_type: 'facebook',
+//             profileUrl: imageUrl!,
+//             socialId: '',
+//             username: profile.name!);
+//
+//         Fluttertoast.showToast(
+//           msg: "login successfully",
+//           textColor: Colors.white,
+//           backgroundColor: Colors.black,
+//           toastLength: Toast.LENGTH_LONG,
+//           gravity: ToastGravity.BOTTOM,
+//         );
+//         break;
+//       case FacebookLoginStatus.cancel:
+//         // User cancel log in
+//         break;
+//       case FacebookLoginStatus.error:
+//         // Log in failed
+//         print('Error while log in: ${res.error}');
+//         break;
+//     }
+//   }
 
   // fullName,userName,email,phone,parent_email,password,gender,location,referral_code,image,type,profileUrl,socialId,social_type
   Future social_group_login(
@@ -285,13 +357,14 @@ class Creator_Login_screen_controller extends GetxController {
         loginModel = LoginModel.fromJson(data);
         print("loginModel");
         if (loginModel!.error == false) {
-
           CommonService().setStoreKey(
               setKey: 'id', setValue: loginModel!.user![0].id!.toString());
           await PreferenceManager()
               .setPref(URLConstants.id, loginModel!.user![0].id!);
           await PreferenceManager()
               .setPref(URLConstants.type, loginModel!.user![0].type!);
+          await PreferenceManager()
+              .setPref(URLConstants.social_type, socail_type);
           await getUserInfo_social();
 
           Fluttertoast.showToast(
@@ -303,7 +376,6 @@ class Creator_Login_screen_controller extends GetxController {
           );
           hideLoader(context);
           await Get.to(Dashboard());
-
         } else {
           print('Please try again');
         }
@@ -311,12 +383,99 @@ class Creator_Login_screen_controller extends GetxController {
         print('Please try again');
       }
     } on Exception catch (e) {
-        print('0-0-0-0-0-0- SignIn Error :- ${e.toString()}');
+      print('0-0-0-0-0-0- SignIn Error :- ${e.toString()}');
+    }
+  }
+
+  Future social_fb_login(
+      {required BuildContext context,
+      required String username,
+      required String profileUrl,
+      required String socialId,
+      required String login_type,
+      required String socail_type}) async {
+    debugPrint('0-0-0-0-0-0-0 username');
+    showLoader(context);
+    // try {
+    //
+    // } catch (e) {
+    //   print('0-0-0-0-0-0- SignIn Error :- ${e.toString()}');
+    // }
+    try {
+      isLoading(true);
+      Map data = {
+        'fullName': username,
+        'userName': username,
+        'email': "",
+        'phone': "",
+        'parent_email': "",
+        'password': "",
+        'gender': "",
+        'location': "",
+        'referral_code': "",
+        'image': "",
+        'profileUrl': profileUrl,
+        'socialId': socialId,
+        'social_type': socail_type,
+        'type': login_type,
+      };
+      print(data);
+      // String body = json.encode(data);
+
+      var url = (URLConstants.base_url + URLConstants.socailsignUpApi);
+      print("url : $url");
+      print("body : $data");
+
+      var response = await http.post(
+        Uri.parse(url),
+        body: data,
+      );
+      print("response.body ${response.body}");
+      print("response.request ${response.request}");
+      print("response.statusCode ${response.statusCode}");
+      // var final_data = jsonDecode(response.body);
+
+      // print('final data $final_data');
+
+      if (response.statusCode == 200) {
+        isLoading(false);
+        var data = jsonDecode(response.body);
+        loginModel = LoginModel.fromJson(data);
+        print("loginModel");
+        if (loginModel!.error == false) {
+          CommonService().setStoreKey(
+              setKey: 'id', setValue: loginModel!.user![0].id!.toString());
+          await PreferenceManager()
+              .setPref(URLConstants.id, loginModel!.user![0].id!);
+          await PreferenceManager()
+              .setPref(URLConstants.type, loginModel!.user![0].type!);
+          await PreferenceManager()
+              .setPref(URLConstants.social_type, socail_type);
+          await getUserInfo_social();
+
+          Fluttertoast.showToast(
+            msg: "login successfully",
+            textColor: Colors.white,
+            backgroundColor: Colors.black,
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM,
+          );
+          hideLoader(context);
+          await Get.to(Dashboard());
+        } else {
+          print('Please try again');
+        }
+      } else {
+        print('Please try again');
+      }
+    } on Exception catch (e) {
+      print('0-0-0-0-0-0- SignIn Error :- ${e.toString()}');
     }
   }
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
+
   //
   Future<String?> signInwithGoogle(
       {required BuildContext context, required String login_type}) async {
@@ -344,6 +503,7 @@ class Creator_Login_screen_controller extends GetxController {
       throw e;
     }
   }
+
   //
   RxBool twitterloading = false.obs;
 

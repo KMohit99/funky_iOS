@@ -113,25 +113,32 @@ class _VideoWidgetState extends State<VideoWidget> {
                             opacity: isClicked ? 0.0 : 1.0,
                             duration: Duration(milliseconds: 100),
                             // how much you want the animation to be long)
-                            child: RaisedButton(
-                              padding: EdgeInsets.all(60.0),
-                              color: Colors.transparent,
-                              textColor: Colors.white,
-                              onPressed: () {
-                                setState(() {
-                                  isClicked = true;
-                                  if (_controller!.value.isPlaying) {
-                                    _controller!.pause();
-                                  } else {
-                                    _controller!.play();
-                                  }
-                                });
+                            child: GestureDetector(
+                              onTap: (){
+                                  setState(() {
+                                    isClicked = true;
+                                    if (_controller!.value.isPlaying) {
+                                      _controller!.pause();
+                                    } else {
+                                      _controller!.play();
+                                    }
+                                  });
                               },
-                              child: Icon(
-                                _controller!.value.isPlaying
-                                    ? Icons.pause
-                                    : Icons.play_arrow,
-                                size: 30.0,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.black.withOpacity(0.5),
+                                    borderRadius: BorderRadius.circular(50)
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Icon(
+                                    _controller!.value.isPlaying
+                                        ? Icons.pause
+                                        : Icons.play_arrow,
+                                    size: 30.0,
+                                    color: HexColor(CommonColor.pinkFont),
+                                  ),
+                                ),
                               ),
                             ),
                           )),

@@ -43,12 +43,12 @@ class AddPromptPageState extends State<LoaderPage> {
               height: 80,
               width: 200,
               child: Container(
-                color: Colors.black,
+                color: HexColor(CommonColor.pinkFont),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     CircularProgressIndicator(
-                      color: HexColor(CommonColor.pinkFont),
+                      color: Colors.white,
                     ),
                     Text('Loading...',style: TextStyle(color: Colors.white,fontSize: 18,fontFamily: 'PR'),)
                   ],
