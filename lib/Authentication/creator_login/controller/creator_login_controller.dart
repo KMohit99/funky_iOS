@@ -109,9 +109,7 @@ class Creator_Login_screen_controller extends GetxController {
     isuserinfoLoading(true);
     String id_user = await PreferenceManager().getPref(URLConstants.id);
     print("UserID $id_user");
-    String url = (URLConstants.base_url +
-        URLConstants.user_info_email_Api +
-        "?id=${id_user}");
+    String url = ("${URLConstants.base_url}${URLConstants.user_info_email_Api}?id=$id_user");
     // debugPrint('Get Sales Token ${tokens.toString()}');
     // try {
     // } catch (e) {

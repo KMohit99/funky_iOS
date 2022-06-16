@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:funky_new/Authentication/authentication_screen.dart';
 import 'package:funky_new/Utils/toaster_widget.dart';
+import 'package:funky_new/myQrScreen/MyQrScreen.dart';
 // import 'package:funky_project/Utils/App_utils.dart';
 // import 'package:funky_project/Utils/asset_utils.dart';
 import 'package:funky_new/settings/settings_screen.dart';
@@ -128,7 +129,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                       itemName: TxtUtils.settings,
                       onTap: () {
                         // Navigator.pop(context);
-                        Navigator.of(context).push(_createRoute());
+                        Navigator.of(context).push(_createSettingsRoute());
                         // gotoSalesListScreen(context);
                       },
                     ),
@@ -136,7 +137,8 @@ class _DrawerScreenState extends State<DrawerScreen> {
                       itemIcon: AssetUtils.qrcodeIcons,
                       itemName: TxtUtils.qr_code,
                       onTap: () {
-                        Navigator.pop(context);
+                        Navigator.of(context).push(_createQrRoute());
+                        // Navigator.pop(context);
                         // gotoSalesListScreen(context);
                       },
                     ),
@@ -314,7 +316,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
         child: ListTile(
           contentPadding: const EdgeInsets.only(
               left: 40.0, right: 0.0, top: 0.0, bottom: 0.0),
-          visualDensity: const VisualDensity(vertical: 0.0, horizontal: -4.0),
+          visualDensity: const VisualDensity(vertical: -2.0, horizontal: -4.0),
           leading: SizedBox(
             height: 15.0,
             width: 15.0,
@@ -339,7 +341,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
       );
 
 
-  Route _createRoute() {
+  Route _createSettingsRoute() {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => const SettingScreen(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -356,6 +358,24 @@ class _DrawerScreenState extends State<DrawerScreen> {
       },
     );
   }
+  Route _createQrRoute() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => const MyQrScreen(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(1.0,0.0);
+        const end = Offset.zero;
+        const curve = Curves.ease;
+
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
+    );
+  }
+
   logOut_function() async {
 
     await PreferenceManager()
