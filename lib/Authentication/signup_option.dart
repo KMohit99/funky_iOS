@@ -72,51 +72,53 @@ class _SignupOptionState extends State<SignupOption> {
               backgroundColor: Colors.transparent, // <-- SCAFFOLD WITH TRANSPARENT BG
               body: Container(
                 width: screenwidth,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 86),
-                      child: Image.asset(AssetUtils.logo,fit: BoxFit.cover,),
-                    ),
-                    SizedBox(
-                      height: 42,
-                    ),
-                    Container(
-                      child: Text(
-                        'Signup as',
-                        style: TextStyle(fontSize: 16, fontFamily: 'PB',color: Colors.white),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 86),
+                        child: Image.asset(AssetUtils.logo,fit: BoxFit.cover,),
                       ),
-                    ),
-                    SizedBox(
-                      height: 41,
-                    ),
+                      SizedBox(
+                        height: 42,
+                      ),
+                      Container(
+                        child: Text(
+                          'Signup as',
+                          style: TextStyle(fontSize: 16, fontFamily: 'PB',color: Colors.white),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 41,
+                      ),
 
-                    common_button(
-                      onTap: (){
-                        Get.toNamed(BindingUtils.creator_signup);
-                      },
-                      backgroud_color: Colors.black,
-                      lable_text: 'Creator',
-                      lable_text_color: Colors.white,
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    common_button(
-                      onTap: (){
-                        Get.toNamed(BindingUtils.advertiser_signup);
-                      },
-                      backgroud_color: Colors.white,
-                      lable_text: 'Advertiser',
-                      lable_text_color: Colors.black,
-                    ),
+                      common_button(
+                        onTap: (){
+                          Get.toNamed(BindingUtils.creator_signup);
+                        },
+                        backgroud_color: Colors.black,
+                        lable_text: 'Creator',
+                        lable_text_color: Colors.white,
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      common_button(
+                        onTap: (){
+                          Get.toNamed(BindingUtils.advertiser_signup);
+                        },
+                        backgroud_color: Colors.white,
+                        lable_text: 'Advertiser',
+                        lable_text_color: Colors.black,
+                      ),
 
-                    SizedBox(
-                      height:20,
-                    ),
-                  ],
+                      SizedBox(
+                        height:20,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

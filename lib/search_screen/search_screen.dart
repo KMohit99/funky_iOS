@@ -64,12 +64,12 @@ class _SearchScreenState extends State<SearchScreen> {
 
         // resizeToAvoidBottomInset: false,'
         drawer: DrawerScreen(),
-        appBar: CustomAppbar(
-          lable_tex: 'Discover',
-          ondrawertap: (){
-            _globalKey!.currentState!.openDrawer();
-          },
-        ),
+        // appBar: CustomAppbar(
+        //   lable_tex: 'Discover',
+        //   // ondrawertap: (){
+        //   //   _globalKey!.currentState!.openDrawer();
+        //   // },
+        // ),
         body: Container(
           margin: const EdgeInsets.only(top: 100, left: 23, right: 23),
           child: Column(

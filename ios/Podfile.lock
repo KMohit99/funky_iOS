@@ -16,16 +16,23 @@ PODS:
   - FBSDKCoreKit_Basics (13.2.0)
   - FBSDKLoginKit (13.2.0):
     - FBSDKCoreKit (= 13.2.0)
+  - ffmpeg-kit-ios-min-gpl (4.5.1)
+  - ffmpeg_kit_flutter_min_gpl (4.5.1):
+    - ffmpeg_kit_flutter_min_gpl/min-gpl (= 4.5.1)
+    - Flutter
+  - ffmpeg_kit_flutter_min_gpl/min-gpl (4.5.1):
+    - ffmpeg-kit-ios-min-gpl (= 4.5.1)
+    - Flutter
   - Firebase/Auth (8.15.0):
     - Firebase/CoreOnly
     - FirebaseAuth (~> 8.15.0)
   - Firebase/CoreOnly (8.15.0):
     - FirebaseCore (= 8.15.0)
-  - firebase_auth (3.3.19):
+  - firebase_auth (3.3.20):
     - Firebase/Auth (= 8.15.0)
     - firebase_core
     - Flutter
-  - firebase_core (1.17.1):
+  - firebase_core (1.18.0):
     - Firebase/CoreOnly (= 8.15.0)
     - Flutter
   - FirebaseAuth (8.15.0):
@@ -90,6 +97,15 @@ PODS:
     - Flutter
   - image_picker_ios (0.0.1):
     - Flutter
+  - libwebp (1.2.1):
+    - libwebp/demux (= 1.2.1)
+    - libwebp/mux (= 1.2.1)
+    - libwebp/webp (= 1.2.1)
+  - libwebp/demux (1.2.1):
+    - libwebp/webp
+  - libwebp/mux (1.2.1):
+    - libwebp/demux
+  - libwebp/webp (1.2.1)
   - nanopb (2.30908.0):
     - nanopb/decode (= 2.30908.0)
     - nanopb/encode (= 2.30908.0)
@@ -116,9 +132,13 @@ PODS:
     - Flutter
   - video_player_avfoundation (0.0.1):
     - Flutter
+  - video_thumbnail (0.0.1):
+    - Flutter
+    - libwebp
 
 DEPENDENCIES:
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
+  - ffmpeg_kit_flutter_min_gpl (from `.symlinks/plugins/ffmpeg_kit_flutter_min_gpl/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - Flutter (from `Flutter`)
@@ -137,6 +157,7 @@ DEPENDENCIES:
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - twitter_login (from `.symlinks/plugins/twitter_login/ios`)
   - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/ios`)
+  - video_thumbnail (from `.symlinks/plugins/video_thumbnail/ios`)
 
 SPEC REPOS:
   trunk:
@@ -145,6 +166,7 @@ SPEC REPOS:
     - FBSDKCoreKit
     - FBSDKCoreKit_Basics
     - FBSDKLoginKit
+    - ffmpeg-kit-ios-min-gpl
     - Firebase
     - FirebaseAuth
     - FirebaseCore
@@ -155,6 +177,7 @@ SPEC REPOS:
     - GoogleUtilities
     - GTMAppAuth
     - GTMSessionFetcher
+    - libwebp
     - nanopb
     - PromisesObjC
     - ReachabilitySwift
@@ -163,6 +186,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   connectivity_plus:
     :path: ".symlinks/plugins/connectivity_plus/ios"
+  ffmpeg_kit_flutter_min_gpl:
+    :path: ".symlinks/plugins/ffmpeg_kit_flutter_min_gpl/ios"
   firebase_auth:
     :path: ".symlinks/plugins/firebase_auth/ios"
   firebase_core:
@@ -199,6 +224,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/twitter_login/ios"
   video_player_avfoundation:
     :path: ".symlinks/plugins/video_player_avfoundation/ios"
+  video_thumbnail:
+    :path: ".symlinks/plugins/video_thumbnail/ios"
 
 SPEC CHECKSUMS:
   AppAuth: 80317d99ac7ff2801a2f18ff86b48cd315ed465d
@@ -207,9 +234,11 @@ SPEC CHECKSUMS:
   FBSDKCoreKit: 58139803d861e72c7661dc875611a759352a55ac
   FBSDKCoreKit_Basics: 1ffc68326a5ece051d85574f02a0adcf27c2a5f2
   FBSDKLoginKit: 19e2a878556c2ee4f20486dc406e582783cd7578
+  ffmpeg-kit-ios-min-gpl: da951b00628916702be2a90918181ebdcdd569ff
+  ffmpeg_kit_flutter_min_gpl: 3c3266c6284c29340ac8bea41613efcdd7aea3e4
   Firebase: 5f8193dff4b5b7c5d5ef72ae54bb76c08e2b841d
-  firebase_auth: a6470a6974d42f83117932c913aecb926182f907
-  firebase_core: 318de541b0e61d3f24262982a3f0b54afe72439b
+  firebase_auth: 0c31e02a522f6ece632f9f6d623441898c4dd679
+  firebase_core: b14c1cfa29b9eb316345f74d1489328283825d6d
   FirebaseAuth: 3e73bf8abf4fbb40f8b421f361f4cc48ee57388c
   FirebaseCore: 5743c5785c074a794d35f2fff7ecc254a91e08b1
   FirebaseCoreDiagnostics: 92e07a649aeb66352b319d43bdd2ee3942af84cb
@@ -227,6 +256,7 @@ SPEC CHECKSUMS:
   hexcolor: fdfb9c4258ad96e949c2dbcdf790a62194b8aa89
   image_editor: c1d038630eedea60d2dee9c14f36aa66c7f9cfab
   image_picker_ios: b786a5dcf033a8336a657191401bfdf12017dabb
+  libwebp: 98a37e597e40bfdb4c911fc98f2c53d0b12d05fc
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   nb_utils: ada4338858d8827ec92fdab2a545206b4ba4cfb1
   path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
@@ -239,7 +269,8 @@ SPEC CHECKSUMS:
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   twitter_login: 2794db69b7640681171b17b3c2c84ad9dfb4a57f
   video_player_avfoundation: e489aac24ef5cf7af82702979ed16f2a5ef84cff
+  video_thumbnail: c4e2a3c539e247d4de13cd545344fd2d26ffafd1
 
-PODFILE CHECKSUM: 05d11d361b0ba2a0918bf764c5312b8b26f9bcec
+PODFILE CHECKSUM: 295e0b369b52b29d74d09024ff2d60ea7683bd68
 
 COCOAPODS: 1.11.3

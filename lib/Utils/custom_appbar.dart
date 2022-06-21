@@ -4,8 +4,11 @@ import 'asset_utils.dart';
 
 class CustomAppbar extends StatelessWidget with PreferredSizeWidget {
   final String lable_tex;
-  final VoidCallback ondrawertap;
-  const CustomAppbar({Key? key, required this.lable_tex, required this.ondrawertap}) : super(key: key);
+
+  // final VoidCallback ondrawertap;
+  const CustomAppbar(
+      {Key? key, required this.lable_tex,})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +18,7 @@ class CustomAppbar extends StatelessWidget with PreferredSizeWidget {
         backgroundColor: Colors.transparent,
         title: Text(
           lable_tex,
-          style:
-          TextStyle(fontSize: 16, color: Colors.white, fontFamily: 'PB'),
+          style: TextStyle(fontSize: 16, color: Colors.white, fontFamily: 'PB'),
         ),
         centerTitle: true,
         actions: [
@@ -24,8 +26,8 @@ class CustomAppbar extends StatelessWidget with PreferredSizeWidget {
             children: [
               InkWell(
                 child: Padding(
-                  padding: const EdgeInsets.only(
-                      right: 20.0, top: 0.0, bottom: 5.0),
+                  padding:
+                      const EdgeInsets.only(right: 20.0, top: 0.0, bottom: 5.0),
                   child: ClipRRect(
                     child: Image.asset(
                       AssetUtils.noti_icon,
@@ -38,8 +40,8 @@ class CustomAppbar extends StatelessWidget with PreferredSizeWidget {
               ),
               InkWell(
                 child: Padding(
-                  padding: const EdgeInsets.only(
-                      right: 20.0, top: 0.0, bottom: 5.0),
+                  padding:
+                      const EdgeInsets.only(right: 20.0, top: 0.0, bottom: 5.0),
                   child: ClipRRect(
                     child: Image.asset(
                       AssetUtils.chat_icon,
@@ -60,7 +62,9 @@ class CustomAppbar extends StatelessWidget with PreferredSizeWidget {
               margin: EdgeInsets.only(left: 16, top: 0, bottom: 0),
               child: IconButton(
                   padding: EdgeInsets.zero,
-                  onPressed: ondrawertap,
+                  onPressed: () {
+                    Scaffold.of(context).openDrawer();
+                  },
                   icon: (Image.asset(
                     AssetUtils.drawer_icon,
                     color: Colors.white,

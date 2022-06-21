@@ -31,13 +31,14 @@ class Advertiser_signup_controller extends GetxController {
   TextEditingController parentEmail_controller = new TextEditingController();
   TextEditingController password_controller = new TextEditingController();
   TextEditingController location_controller = new TextEditingController();
+  TextEditingController gender_controller = new TextEditingController();
   TextEditingController reffralCode_controller = new TextEditingController();
   TextEditingController countryCode_controller = new TextEditingController();
   TextEditingController aboutMe_controller = new TextEditingController();
 
   RxBool isLoading = false.obs;
   LoginModel? loginModel;
-  String selected_gender = 'male';
+  String? selected_gender ;
 
   final Creator_Login_screen_controller _creator_login_screen_controller =
   Get.put(Creator_Login_screen_controller(),
@@ -56,7 +57,8 @@ class Advertiser_signup_controller extends GetxController {
       'email': email_controller.text,
       'phone': phone_controller.text,
       'password': password_controller.text,
-      'gender': selected_gender,
+      'gender': gender_controller.text,
+      'location' : location_controller.text,
       'referral_code': reffralCode_controller.text,
       // 'image': photoBase64!,
       'image': img64!.substring(0, 100),

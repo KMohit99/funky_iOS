@@ -38,12 +38,12 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
       backgroundColor: Colors.transparent,
       extendBodyBehindAppBar: true,
       drawer: DrawerScreen(),
-      appBar: CustomAppbar(
-        lable_tex: 'News Feed',
-        ondrawertap: () {
-          _scaffoldKey.currentState!.openDrawer();
-        },
-      ),
+      // appBar: CustomAppbar(
+      //   lable_tex: 'News Feed',
+      //   // ondrawertap: () {
+      //   //   _scaffoldKey.currentState!.openDrawer();
+      //   // },
+      // ),
       body: Container(
         margin: EdgeInsets.only(
           top: 100,

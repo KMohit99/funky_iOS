@@ -2,8 +2,6 @@ import 'dart:convert';
 
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 // import 'package:funky_project/Authentication/kids_login/ui/otp_screen.dart';
 // import 'package:funky_project/Utils/toaster_widget.dart';
 // import 'package:funky_project/dashboard/dashboard_screen.dart';
@@ -11,6 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 // import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
+
 // import 'package:twitter_login/twitter_login.dart';
 
 import '../../../Utils/App_utils.dart';
@@ -25,8 +24,6 @@ import '../../creator_login/model/creator_loginModel.dart';
 import '../../creator_signup/model/otpVerifyModel.dart';
 import '../model/parents_otp_model.dart';
 import '../ui/kids_email_verification.dart';
-import 'dart:convert' as convert;
-
 import '../ui/otp_screen.dart';
 
 class Kids_Login_screen_controller extends GetxController {
@@ -84,13 +81,17 @@ class Kids_Login_screen_controller extends GetxController {
             .setPref(URLConstants.id, loginModel!.user![0].id!);
         await PreferenceManager()
             .setPref(URLConstants.type, loginModel!.user![0].type!);
+
+        await PreferenceManager()
+            .setPref(URLConstants.social_type, "");
         // CommonService().setStoreKey(
         //     setKey: 'type', setValue: loginModel!.user![0].type!.toString());
         String n = await PreferenceManager().getPref(URLConstants.id);
 
         print(n.toString());
         print('/////////////////////////////////////////');
-        Get.to(kids_Email_verification());
+        clear();
+       await  Get.to(kids_Email_verification());
       } else {
         hideLoader(context);
         CommonWidget().showErrorToaster(msg: "Invalid Details");
@@ -100,6 +101,10 @@ class Kids_Login_screen_controller extends GetxController {
     } else {
 
     }
+  }
+  clear() {
+    usernameController.clear();
+    passwordController.clear();
   }
 
   Future<dynamic> ParentEmailVerification(BuildContext context) async {

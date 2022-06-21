@@ -80,6 +80,8 @@ class Creator_Login_screen_controller extends GetxController {
             .setPref(URLConstants.id, loginModel!.user![0].id!);
         await PreferenceManager()
             .setPref(URLConstants.type, loginModel!.user![0].type!);
+
+        await PreferenceManager().setPref(URLConstants.social_type, "");
         await CreatorgetUserInfo_Email(UserId: loginModel!.user![0].id!);
 
         await Fluttertoast.showToast(
@@ -90,6 +92,7 @@ class Creator_Login_screen_controller extends GetxController {
           gravity: ToastGravity.BOTTOM,
         );
         hideLoader(context);
+        await clear();
         await Get.to(Dashboard());
       } else {
         hideLoader(context);
@@ -98,6 +101,11 @@ class Creator_Login_screen_controller extends GetxController {
         print('Please try again');
       }
     } else {}
+  }
+
+  clear() {
+    usernameController.clear();
+    passwordController.clear();
   }
 
   RxBool isuserinfoLoading = true.obs;
@@ -109,7 +117,8 @@ class Creator_Login_screen_controller extends GetxController {
     isuserinfoLoading(true);
     String id_user = await PreferenceManager().getPref(URLConstants.id);
     print("UserID $id_user");
-    String url = ("${URLConstants.base_url}${URLConstants.user_info_email_Api}?id=$id_user");
+    String url =
+        ("${URLConstants.base_url}${URLConstants.user_info_email_Api}?id=$id_user");
     // debugPrint('Get Sales Token ${tokens.toString()}');
     // try {
     // } catch (e) {
@@ -193,46 +202,41 @@ class Creator_Login_screen_controller extends GetxController {
 
   UserCredential? userCredential;
 
-
-
   Future<Resource?> signInWithFacebook(
       {required BuildContext context, required String login_type}) async {
     // try {
     // showLoader(context);
-      final LoginResult result = await FacebookAuth.instance.login(
-          permissions: ["public_profile", "email"]
-      );
+    final LoginResult result = await FacebookAuth.instance
+        .login(permissions: ["public_profile", "email"]);
 
-      switch (result.status) {
-        case LoginStatus.success:
-          final AuthCredential facebookCredential =
-              FacebookAuthProvider.credential(result.accessToken!.token);
-          userCredential = await FirebaseAuth.instance
-              .signInWithCredential(facebookCredential);
+    switch (result.status) {
+      case LoginStatus.success:
+        final AuthCredential facebookCredential =
+            FacebookAuthProvider.credential(result.accessToken!.token);
+        userCredential = await FirebaseAuth.instance
+            .signInWithCredential(facebookCredential);
 
-          await social_group_login(
-              login_type: login_type,
-              context: context,
-              socail_type: 'facebook');
+        await social_group_login(
+            login_type: login_type, context: context, socail_type: 'facebook');
 
-          Fluttertoast.showToast(
-            msg: "login successfully",
-            textColor: Colors.white,
-            backgroundColor: Colors.black,
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.BOTTOM,
-          );
-          // Get.to(Dashboard());
+        Fluttertoast.showToast(
+          msg: "login successfully",
+          textColor: Colors.white,
+          backgroundColor: Colors.black,
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+        );
+        // Get.to(Dashboard());
 
-          print(userCredential!.user!.displayName);
-          return Resource(status: Status.Success);
-        case LoginStatus.cancelled:
-          return Resource(status: Status.Cancelled);
-        case LoginStatus.failed:
-          return Resource(status: Status.Error);
-        default:
-          return null;
-      }
+        print(userCredential!.user!.displayName);
+        return Resource(status: Status.Success);
+      case LoginStatus.cancelled:
+        return Resource(status: Status.Cancelled);
+      case LoginStatus.failed:
+        return Resource(status: Status.Error);
+      default:
+        return null;
+    }
 
     // on FirebaseAuthException catch (e) {
     //   throw e;

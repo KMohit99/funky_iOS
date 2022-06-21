@@ -8,9 +8,12 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:funky_new/dashboard/post_preview.dart';
+import 'package:funky_new/custom_widget/page_loader.dart';
+import 'package:funky_new/dashboard/post_image_preview.dart';
 import 'package:funky_new/dashboard/post_screen.dart';
+import 'package:funky_new/dashboard/video_editor.dart';
 import 'package:funky_new/global_key.dart';
+
 // import 'package:funky_project/Authentication/creator_login/controller/creator_login_controller.dart';
 // import 'package:funky_project/homepage/ui/homepage_screen.dart';
 import 'package:get/get.dart';
@@ -20,6 +23,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../Utils/asset_utils.dart';
 import '../Utils/colorUtils.dart';
+
 // import '../drawerScreen.dart';
 // import '../news_feed/new_feed_screen.dart';
 // import '../profile_screen/profile_screen.dart';
@@ -41,6 +45,8 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  GlobalKey<ScaffoldState>? _globalKey = GlobalKey<ScaffoldState>();
+
   late double screenHeight, screenWidth;
   int _page = 0;
   String? appbar_name;
@@ -70,7 +76,7 @@ class _DashboardState extends State<Dashboard> {
 
   Widget? get getPage {
     if (_page == 0) {
-      return const HomePageScreen();
+      return HomePageScreen();
     } else if (_page == 1) {
       return const SearchScreen();
     } else if (_page == 2) {
@@ -79,7 +85,6 @@ class _DashboardState extends State<Dashboard> {
       return const Profile_Screen();
     }
   }
-
 
   File? imgFile;
   Uint8List? imageData;
@@ -94,6 +99,7 @@ class _DashboardState extends State<Dashboard> {
       print(imageData);
     });
     // editedImage();
+    // showLoader(context);
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -111,8 +117,10 @@ class _DashboardState extends State<Dashboard> {
           file.writeAsBytesSync(decodedBytes);
           print(file.path.split('/').last);
           imgFile = file;
-          Get.to(PostPreviewScreen(ImageFile:imgFile! ,));
         });
+        Get.to(PostImagePreviewScreen(
+          ImageFile: imgFile!,
+        ));
       }
     }).catchError((er) {
       print(er);
@@ -146,7 +154,9 @@ class _DashboardState extends State<Dashboard> {
           file.writeAsBytesSync(decodedBytes);
           print(file.path.split('/').last);
           imgFile = file;
-          Get.to(PostPreviewScreen(ImageFile:imgFile! ,));
+          Get.to(PostImagePreviewScreen(
+            ImageFile: imgFile!,
+          ));
           Navigator.pop(context);
         });
       }
@@ -166,11 +176,11 @@ class _DashboardState extends State<Dashboard> {
       print(imageData);
     });
     if (mounted && imgFile != null) {
-      // Navigator.push(
-      //     context,
-      //     MaterialPageRoute<void>(
-      //         builder: (BuildContext context) =>
-      //             VideoEditor(file: File(imgFile!.path))));
+      Navigator.push(
+          context,
+          MaterialPageRoute<void>(
+              builder: (BuildContext context) =>
+                  VideoEditor(file: File(imgFile!.path))));
     }
     // Navigator.push(
     //   context,
@@ -198,7 +208,6 @@ class _DashboardState extends State<Dashboard> {
     // });
   }
 
-  GlobalKey<ScaffoldState>? _globalKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     bool showFab = MediaQuery.of(context).viewInsets.bottom != 0;
@@ -207,89 +216,176 @@ class _DashboardState extends State<Dashboard> {
     screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       key: _globalKey,
-      // drawer: DrawerScreen(),
+      drawer: DrawerScreen(),
       backgroundColor: HexColor(CommonColor.appBackColor),
       extendBodyBehindAppBar: true,
-        // appBar: AppBar(
-        //   backgroundColor: Colors.transparent,
-        //   title: Text(
-        //     "appbar_name",
-        //     style:
-        //     TextStyle(fontSize: 16, color: Colors.white, fontFamily: 'PB'),
-        //   ),
-        //   centerTitle: true,
-        //   actions: [
-        //     Row(
-        //       children: [
-        //         InkWell(
-        //           child: Padding(
-        //             padding: const EdgeInsets.only(
-        //                 right: 20.0, top: 0.0, bottom: 5.0),
-        //             child: ClipRRect(
-        //               child: Image.asset(
-        //                 AssetUtils.noti_icon,
-        //                 height: 20.0,
-        //                 width: 20.0,
-        //                 fit: BoxFit.cover,
-        //               ),
-        //             ),
-        //           ),
-        //         ),
-        //         InkWell(
-        //           child: Padding(
-        //             padding: const EdgeInsets.only(
-        //                 right: 20.0, top: 0.0, bottom: 5.0),
-        //             child: ClipRRect(
-        //               child: Image.asset(
-        //                 AssetUtils.chat_icon,
-        //                 height: 20.0,
-        //                 width: 20.0,
-        //                 fit: BoxFit.contain,
-        //               ),
-        //             ),
-        //           ),
-        //         ),
-        //       ],
-        //     )
-        //   ],
-        //   leadingWidth: 100,
-        //   leading: Row(
-        //     children: [
-        //       Container(
-        //         margin: EdgeInsets.only(left: 16, top: 0, bottom: 0),
-        //         child: IconButton(
-        //             padding: EdgeInsets.zero,
-        //             onPressed: () {
-        //               print('oject');
-        //               _globalKey!.currentState!.openDrawer();
-        //             },
-        //             icon: (Image.asset(
-        //               AssetUtils.drawer_icon,
-        //               color: Colors.white,
-        //               height: 12.0,
-        //               width: 19.0,
-        //               fit: BoxFit.contain,
-        //             ))),
-        //       ),
-        //       Expanded(
-        //         child: Container(
-        //           margin: EdgeInsets.only(left: 18, top: 0, bottom: 0),
-        //           child: IconButton(
-        //               padding: EdgeInsets.zero,
-        //               onPressed: () {},
-        //               icon: (Image.asset(
-        //                 AssetUtils.user_icon,
-        //                 color: Colors.white,
-        //                 height: 20.0,
-        //                 width: 20.0,
-        //                 fit: BoxFit.contain,
-        //               ))),
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // )   ,
-        drawer: DrawerScreen(),
+      appBar: (_page == 0 || _page == 1 || _page == 2)
+          ? PreferredSize(
+              preferredSize: Size.fromHeight(50),
+              child: AppBar(
+                backgroundColor: Colors.transparent,
+                title: Text(
+                  (_page == 0
+                      ? 'Dashboard'
+                      : (_page == 1
+                          ? "Discover"
+                          : (_page == 2 ? "News Feed" : ''))),
+                  style: TextStyle(
+                      fontSize: 16, color: Colors.white, fontFamily: 'PB'),
+                ),
+                centerTitle: true,
+                actions: [
+                  Row(
+                    children: [
+                      InkWell(
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              right: 20.0, top: 0.0, bottom: 5.0),
+                          child: ClipRRect(
+                            child: Image.asset(
+                              AssetUtils.noti_icon,
+                              height: 20.0,
+                              width: 20.0,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      ),
+                      InkWell(
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              right: 20.0, top: 0.0, bottom: 5.0),
+                          child: ClipRRect(
+                            child: Image.asset(
+                              AssetUtils.chat_icon,
+                              height: 20.0,
+                              width: 20.0,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+                leadingWidth: 100,
+                leading: Row(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(left: 16, top: 0, bottom: 0),
+                      child: IconButton(
+                          padding: EdgeInsets.zero,
+                          onPressed: () {
+                            _globalKey!.currentState!.openDrawer();
+                          },
+                          icon: (Image.asset(
+                            AssetUtils.drawer_icon,
+                            color: Colors.white,
+                            height: 12.0,
+                            width: 19.0,
+                            fit: BoxFit.contain,
+                          ))),
+                    ),
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.only(left: 18, top: 0, bottom: 0),
+                        child: IconButton(
+                            padding: EdgeInsets.zero,
+                            onPressed: () {},
+                            icon: (Image.asset(
+                              AssetUtils.user_icon,
+                              color: Colors.white,
+                              height: 20.0,
+                              width: 20.0,
+                              fit: BoxFit.contain,
+                            ))),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          : null,
+      // appBar: AppBar(
+      //   backgroundColor: Colors.transparent,
+      //   title: Text(
+      //     "appbar_name",
+      //     style:
+      //     TextStyle(fontSize: 16, color: Colors.white, fontFamily: 'PB'),
+      //   ),
+      //   centerTitle: true,
+      //   actions: [
+      //     Row(
+      //       children: [
+      //         InkWell(
+      //           child: Padding(
+      //             padding: const EdgeInsets.only(
+      //                 right: 20.0, top: 0.0, bottom: 5.0),
+      //             child: ClipRRect(
+      //               child: Image.asset(
+      //                 AssetUtils.noti_icon,
+      //                 height: 20.0,
+      //                 width: 20.0,
+      //                 fit: BoxFit.cover,
+      //               ),
+      //             ),
+      //           ),
+      //         ),
+      //         InkWell(
+      //           child: Padding(
+      //             padding: const EdgeInsets.only(
+      //                 right: 20.0, top: 0.0, bottom: 5.0),
+      //             child: ClipRRect(
+      //               child: Image.asset(
+      //                 AssetUtils.chat_icon,
+      //                 height: 20.0,
+      //                 width: 20.0,
+      //                 fit: BoxFit.contain,
+      //               ),
+      //             ),
+      //           ),
+      //         ),
+      //       ],
+      //     )
+      //   ],
+      //   leadingWidth: 100,
+      //   leading: Row(
+      //     children: [
+      //       Container(
+      //         margin: EdgeInsets.only(left: 16, top: 0, bottom: 0),
+      //         child: IconButton(
+      //             padding: EdgeInsets.zero,
+      //             onPressed: () {
+      //               print('oject');
+      //               _globalKey!.currentState!.openDrawer();
+      //             },
+      //             icon: (Image.asset(
+      //               AssetUtils.drawer_icon,
+      //               color: Colors.white,
+      //               height: 12.0,
+      //               width: 19.0,
+      //               fit: BoxFit.contain,
+      //             ))),
+      //       ),
+      //       Expanded(
+      //         child: Container(
+      //           margin: EdgeInsets.only(left: 18, top: 0, bottom: 0),
+      //           child: IconButton(
+      //               padding: EdgeInsets.zero,
+      //               onPressed: () {},
+      //               icon: (Image.asset(
+      //                 AssetUtils.user_icon,
+      //                 color: Colors.white,
+      //                 height: 20.0,
+      //                 width: 20.0,
+      //                 fit: BoxFit.contain,
+      //               ))),
+      //         ),
+      //       ),
+      //     ],
+      //   ),
+      // )   ,
+      // drawer: DrawerScreen(),
 
       bottomNavigationBar: SafeArea(
         child: SizedBox(
@@ -320,7 +416,8 @@ class _DashboardState extends State<Dashboard> {
                         color: (_page == 0 ? Colors.white : Colors.transparent),
                         borderRadius: BorderRadius.circular(50)),
                     child: IconButton(
-                      visualDensity: VisualDensity(vertical: -4, horizontal: -4),
+                      visualDensity:
+                          VisualDensity(vertical: -4, horizontal: -4),
                       iconSize: 25.0,
                       icon: Image.asset(
                         AssetUtils.home_icon,
@@ -342,7 +439,8 @@ class _DashboardState extends State<Dashboard> {
                         color: (_page == 1 ? Colors.white : Colors.transparent),
                         borderRadius: BorderRadius.circular(50)),
                     child: IconButton(
-                      visualDensity: VisualDensity(vertical: -4, horizontal: -4),
+                      visualDensity:
+                          VisualDensity(vertical: -4, horizontal: -4),
                       iconSize: 25.0,
                       icon: Image.asset(
                         AssetUtils.search_icon,
@@ -364,7 +462,8 @@ class _DashboardState extends State<Dashboard> {
                         color: (_page == 2 ? Colors.white : Colors.transparent),
                         borderRadius: BorderRadius.circular(50)),
                     child: IconButton(
-                      visualDensity: VisualDensity(vertical: -4, horizontal: -4),
+                      visualDensity:
+                          VisualDensity(vertical: -4, horizontal: -4),
                       iconSize: 25.0,
                       icon: Image.asset(
                         AssetUtils.news_icon,
@@ -386,7 +485,8 @@ class _DashboardState extends State<Dashboard> {
                         color: (_page == 3 ? Colors.white : Colors.transparent),
                         borderRadius: BorderRadius.circular(50)),
                     child: IconButton(
-                      visualDensity: VisualDensity(vertical: -4, horizontal: -4),
+                      visualDensity:
+                          VisualDensity(vertical: -4, horizontal: -4),
                       iconSize: 25.0,
                       icon: Image.asset(
                         AssetUtils.user_icon2,
@@ -413,20 +513,23 @@ class _DashboardState extends State<Dashboard> {
         visible: !showFab,
         child: Material(
           type: MaterialType.transparency,
-          borderOnForeground:true ,
+          borderOnForeground: true,
           child: Container(
             height: 80,
             width: 80,
             child: Stack(
               children: [
-                Container(child: MyArc(diameter: 80),),
+                Container(
+                  child: MyArc(diameter: 80),
+                ),
                 Align(
                   alignment: Alignment.center,
                   child: Container(
                     height: 50.79,
                     width: 50.79,
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.white.withOpacity(0.14), width: 5),
+                      border: Border.all(
+                          color: Colors.white.withOpacity(0.14), width: 5),
                       borderRadius: BorderRadius.circular(50),
                       // color: Colors.grey
                     ),
@@ -440,17 +543,21 @@ class _DashboardState extends State<Dashboard> {
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
-                                double width = MediaQuery.of(context).size.width;
-                                double height = MediaQuery.of(context).size.height;
+                                double width =
+                                    MediaQuery.of(context).size.width;
+                                double height =
+                                    MediaQuery.of(context).size.height;
                                 return BackdropFilter(
-                                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                                  filter:
+                                      ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                                   child: AlertDialog(
                                       backgroundColor: Colors.transparent,
                                       contentPadding: EdgeInsets.zero,
                                       elevation: 0.0,
                                       // title: Center(child: Text("Evaluation our APP")),
                                       content: Column(
-                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
                                         children: [
                                           Container(
                                             margin: EdgeInsets.symmetric(
@@ -462,7 +569,8 @@ class _DashboardState extends State<Dashboard> {
                                                 gradient: LinearGradient(
                                                   begin: Alignment(-1.0, 0.0),
                                                   end: Alignment(1.0, 0.0),
-                                                  transform: GradientRotation(0.7853982),
+                                                  transform: GradientRotation(
+                                                      0.7853982),
                                                   // stops: [0.1, 0.5, 0.7, 0.9],
                                                   colors: [
                                                     HexColor("#000000"),
@@ -474,11 +582,13 @@ class _DashboardState extends State<Dashboard> {
                                                 ),
                                                 color: Colors.white,
                                                 border: Border.all(
-                                                    color: Colors.white, width: 1),
+                                                    color: Colors.white,
+                                                    width: 1),
                                                 borderRadius: BorderRadius.all(
                                                     Radius.circular(26.0))),
                                             child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
                                               children: [
                                                 GestureDetector(
                                                   onTap: () {
@@ -486,31 +596,44 @@ class _DashboardState extends State<Dashboard> {
                                                     // Get.to(PostScreen());
                                                     showDialog(
                                                       context: context,
-                                                      builder: (ctx) => AlertDialog(
-                                                        title: Text("Pick Image from"),
+                                                      builder: (ctx) =>
+                                                          AlertDialog(
+                                                        title: Text(
+                                                            "Pick Image from"),
                                                         actions: <Widget>[
                                                           Container(
                                                             margin:
-                                                            EdgeInsets.only(bottom: 10),
-                                                            child: common_button(
+                                                                EdgeInsets.only(
+                                                                    bottom: 10),
+                                                            child:
+                                                                common_button(
                                                               onTap: () {
                                                                 openCamera();
+                                                                Navigator.pop(
+                                                                    context);
                                                                 // Get.toNamed(BindingUtils.signupOption);
                                                               },
-                                                              backgroud_color: Colors.black,
-                                                              lable_text: 'Camera',
+                                                              backgroud_color:
+                                                                  Colors.black,
+                                                              lable_text:
+                                                                  'Camera',
                                                               lable_text_color:
-                                                              Colors.white,
+                                                                  Colors.white,
                                                             ),
                                                           ),
                                                           common_button(
                                                             onTap: () {
                                                               openGallery();
+                                                              Navigator.pop(
+                                                                  context);
                                                               // Get.toNamed(BindingUtils.signupOption);
                                                             },
-                                                            backgroud_color: Colors.black,
-                                                            lable_text: 'Gallery',
-                                                            lable_text_color: Colors.white,
+                                                            backgroud_color:
+                                                                Colors.black,
+                                                            lable_text:
+                                                                'Gallery',
+                                                            lable_text_color:
+                                                                Colors.white,
                                                           ),
                                                           SizedBox(
                                                             height: 10,
@@ -520,9 +643,11 @@ class _DashboardState extends State<Dashboard> {
                                                               Pickvideo();
                                                               // Get.toNamed(BindingUtils.signupOption);
                                                             },
-                                                            backgroud_color: Colors.black,
+                                                            backgroud_color:
+                                                                Colors.black,
                                                             lable_text: 'Video',
-                                                            lable_text_color: Colors.white,
+                                                            lable_text_color:
+                                                                Colors.white,
                                                           ),
                                                         ],
                                                       ),
@@ -536,8 +661,6 @@ class _DashboardState extends State<Dashboard> {
                                                         color: Colors.white),
                                                   ),
                                                 ),
-
-
                                                 Container(
                                                   margin: EdgeInsets.symmetric(
                                                       horizontal: 20),
@@ -611,7 +734,6 @@ class MyArc extends StatelessWidget {
   }
 }
 
-
 // This is the Painter class
 class MyPainter extends CustomPainter {
   @override
@@ -625,6 +747,96 @@ class MyPainter extends CustomPainter {
       ),
       math.pi,
       math.pi,
+      false,
+      paint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
+}
+
+class MyArc2 extends StatelessWidget {
+  final double diameter;
+
+  const MyArc2({Key? key, this.diameter = 450}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomPaint(
+      painter: MyPainter2(),
+      size: Size(diameter, diameter),
+    );
+  }
+}
+
+// This is the Painter class
+class MyPainter2 extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint paint = Paint()..shader = RadialGradient(
+      colors: [
+        HexColor('#C12265').withOpacity(1),
+        HexColor('#C12265').withOpacity(0.5),
+        HexColor('#000000').withOpacity(0.5),
+        HexColor('#ffffff'),
+        HexColor('#ffffff'),
+      ],
+    ).createShader(Rect.fromCircle(
+      center: Offset(1,0),
+      radius:500,
+    ));
+    canvas.drawArc(
+      Rect.fromCenter(
+        center: Offset(size.height / 10, size.width / 2),
+        height: size.height,
+        width: size.width,
+      ),
+      math.pi * 1.5,
+      math.pi * 2.5,
+      false,
+      paint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
+}
+
+class MyArc3 extends StatelessWidget {
+  final double diameter;
+
+  const MyArc3({Key? key, this.diameter = 550}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomPaint(
+
+      painter: MyPainter3(),
+      size: Size(diameter, diameter),
+    );
+  }
+}
+class MyPainter3 extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint paint = Paint()..shader = RadialGradient(
+      colors: [
+        HexColor('#C12265').withOpacity(0.8),
+        HexColor('#000000').withOpacity(0.5),
+      ],
+    ).createShader(Rect.fromCircle(
+      center: Offset(1,0),
+      radius:100,
+    ));
+    canvas.drawArc(
+      Rect.fromCenter(
+        center: Offset(size.height / 10, size.width / 2),
+        height: size.height,
+        width: size.width,
+      ),
+      math.pi * 1.5,
+      math.pi * 2.5,
       false,
       paint,
     );

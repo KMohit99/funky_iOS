@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -12,6 +13,8 @@ import 'package:funky_new/profile_screen/video_viewer.dart';
 // import 'package:funky_project/profile_screen/edit_profile_screen.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 import '../Authentication/creator_login/controller/creator_login_controller.dart';
 import '../Utils/App_utils.dart';
@@ -43,20 +46,23 @@ class _Profile_ScreenState extends State<Profile_Screen>
       Get.put(Creator_Login_screen_controller(),
           tag: Creator_Login_screen_controller().toString());
 
+  var thumbnail;
+
   @override
   void initState() {
     init();
-    print(
-        "SOcial type------------ ${_creator_login_screen_controller.userInfoModel_email!.data![0].socialType}");
+    // print(
+    //     "SOcial type------------ ${_creator_login_screen_controller.userInfoModel_email!.data![0].socialType}");
     _tabController = TabController(length: 5, vsync: this);
     super.initState();
   }
 
   init() async {
     String id_user = await PreferenceManager().getPref(URLConstants.id);
-    print("id----- ${id_user}");
-    (_creator_login_screen_controller
-                .userInfoModel_email!.data![0].socialType ==
+    String social_type_user = await PreferenceManager().getPref(URLConstants.social_type);
+    print("id----- $id_user");
+    print("id----- $social_type_user");
+    (social_type_user ==
             ""
         ? await _creator_login_screen_controller.CreatorgetUserInfo_Email(
             UserId: id_user)
@@ -85,7 +91,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
     Tab(
       height: 60,
       icon: Container(
-        margin: EdgeInsets.only(bottom: 0),
+        margin: EdgeInsets.only(top: 10),
         height: 45,
         width: 45,
         decoration: BoxDecoration(
@@ -124,7 +130,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
     Tab(
       height: 60,
       icon: Container(
-        margin: EdgeInsets.only(bottom: 0),
+        margin: EdgeInsets.only(top: 10),
         height: 45,
         width: 45,
         decoration: BoxDecoration(
@@ -162,7 +168,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
     Tab(
       height: 60,
       icon: Container(
-        margin: EdgeInsets.only(bottom: 0),
+        margin: EdgeInsets.only(top: 10),
         height: 45,
         width: 45,
         decoration: BoxDecoration(
@@ -200,7 +206,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
     Tab(
       height: 60,
       icon: Container(
-        margin: EdgeInsets.only(bottom: 0),
+        margin: EdgeInsets.only(top: 10),
         height: 45,
         width: 45,
         decoration: BoxDecoration(
@@ -239,7 +245,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
     Tab(
       height: 60,
       icon: Container(
-        margin: EdgeInsets.only(bottom: 0),
+        margin: EdgeInsets.only(top: 10),
         height: 45,
         width: 45,
         decoration: BoxDecoration(
@@ -370,7 +376,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                     child: Container(
                                       alignment: Alignment.center,
                                       child: Text(
-                                        'My Profile',
+                                        '${_creator_login_screen_controller.userInfoModel_email!.data![0].fullName}',
                                         style: TextStyle(
                                             fontSize: 16,
                                             color: Colors.white,
@@ -587,7 +593,16 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                     width: 80,
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(50),
-                                      child: Image.asset(AssetUtils.image1),
+                                      child: (_creator_login_screen_controller
+                                              .userInfoModel_email!
+                                              .data![0]
+                                              .image!
+                                              .isNotEmpty
+                                          ? Image.network('http://foxyserver.com/funky/images/${_creator_login_screen_controller
+                                          .userInfoModel_email!
+                                          .data![0]
+                                          .image!}',fit: BoxFit.fitWidth,)
+                                          : Image.asset(AssetUtils.image1)),
                                     ),
                                   ),
                                   SizedBox(
@@ -1232,31 +1247,31 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                   color: HexColor(CommonColor.pinkFont),
                                 )
                               : Container(
-                            color: Colors.white,
-                                child: (_galleryModelList!
-                                        .data![index].postImage!.isEmpty
-                                    ? Image.asset(AssetUtils.logo)
-                                    : Image.network(
-                                        'http://foxyserver.com/funky/images/${_galleryModelList!.data![index].postImage}',
-                            fit: BoxFit.fill,
-                            loadingBuilder:
-                                            (context, child, loadingProgress) {
-                                          if (loadingProgress == null)
-                                            return child;
+                                  color: Colors.white,
+                                  child: (_galleryModelList!
+                                          .data![index].postImage!.isEmpty
+                                      ? Image.asset(AssetUtils.logo)
+                                      : Image.network(
+                                          'http://foxyserver.com/funky/images/${_galleryModelList!.data![index].postImage}',
+                                          fit: BoxFit.fill,
+                                          loadingBuilder: (context, child,
+                                              loadingProgress) {
+                                            if (loadingProgress == null)
+                                              return child;
 
-                                          return Center(
-                                              child: SizedBox(
-                                                  height: 30,
-                                                  width: 30,
-                                                  child:
-                                                      CircularProgressIndicator(
-                                                    color: HexColor(
-                                                        CommonColor.pinkFont),
-                                                  )));
-                                          // You can use LinearProgressIndicator, CircularProgressIndicator, or a GIF instead
-                                        },
-                                      )),
-                              )),
+                                            return Center(
+                                                child: SizedBox(
+                                                    height: 30,
+                                                    width: 30,
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                      color: HexColor(
+                                                          CommonColor.pinkFont),
+                                                    )));
+                                            // You can use LinearProgressIndicator, CircularProgressIndicator, or a GIF instead
+                                          },
+                                        )),
+                                )),
                         ),
                       ),
                       staggeredTileBuilder: (int index) =>
@@ -1340,6 +1355,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
   bool isvideoLoading = true;
   VideoModelList? _videoModelList;
 
+  var uint8list;
   Future<dynamic> get_video_list(BuildContext context) async {
     setState(() {
       isvideoLoading = true;
@@ -1378,7 +1394,33 @@ class _Profile_ScreenState extends State<Profile_Screen>
         setState(() {
           isvideoLoading = false;
         });
-        print(_videoModelList!.data![index].image!.length);
+        uint8list = await VideoThumbnail.thumbnailFile(
+          video: "https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4",
+          thumbnailPath: (await getTemporaryDirectory()).path,
+          imageFormat: ImageFormat.WEBP,
+          maxHeight: 64, // specify the height of the thumbnail, let the width auto-scaled to keep the source aspect ratio
+          quality: 75,
+        );
+
+        // for(var i = 0 ; i<= _videoModelList!.data!.length ; i++){
+        //   Directory tempDir = await getTemporaryDirectory();
+        //   String tempPath = tempDir.path;
+        //
+        //   try {
+        //     thumbnail = await VideoThumbnail.thumbnailFile(
+        //       video: 'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
+        //       imageFormat: ImageFormat.PNG,
+        //       maxWidth: 256,
+        //       maxHeight: 256,
+        //       thumbnailPath: tempPath,
+        //       quality: 50,
+        //     );
+        //     return thumbnail;
+        //   } catch (e) {
+        //     print(e);
+        //     return null;
+        //   }
+        // }
 
         // hideLoader(context);
         // Get.to(Dashboard());
@@ -1452,14 +1494,15 @@ class _Profile_ScreenState extends State<Profile_Screen>
                           ClipRRect(
                         borderRadius: BorderRadius.circular(30),
                         child: Container(
-                          height: 120.0,
+                          // height: 120.0,
+                          color: Colors.white,
                           // width: 120.0,
                           child: (isvideoLoading == true
                               ? CircularProgressIndicator(
                                   color: HexColor(CommonColor.pinkFont),
                                 )
-                              : (_videoModelList!.data![index].image!.isEmpty
-                                  ? Image.asset(AssetUtils.logo)
+                              : (_videoModelList!.data![index].uploadVideo!.isEmpty
+                                  ? Image.asset(AssetUtils.logo,)
                                   : GestureDetector(
                                       onTap: () {
                                         print('data');
@@ -1468,9 +1511,11 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                               .data![index].uploadVideo!,
                                         ));
                                       },
-                                      child: Image.network(
-                                        'http://foxyserver.com/funky/images/${_videoModelList!.data![index].image}',
-                                      ),
+                                      child:  Image.asset(AssetUtils.logo,)
+                                      // Image.network(
+                                      //   'http://foxyserver.com/funky/images/${_videoModelList!.data![index].uploadVideo}',
+                                      //   fit: BoxFit.cover,
+                                      // ),
                                     ))),
                         ),
                       ),

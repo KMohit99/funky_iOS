@@ -5,7 +5,7 @@ import 'dart:typed_data';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:funky_new/dashboard/post_preview.dart';
+import 'package:funky_new/dashboard/post_image_preview.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:image_editor_plus/image_editor_plus.dart';
@@ -239,7 +239,7 @@ class PostScreenState extends State<PostScreen> {
                             file.writeAsBytesSync(decodedBytes);
                             print(file.path.split('/').last);
                           });
-                          await Get.to(PostPreviewScreen(ImageFile: editedImage!,));
+                          await Get.to(PostImagePreviewScreen(ImageFile: editedImage!,));
                         }
                       }).catchError((er) {
                         print(er);

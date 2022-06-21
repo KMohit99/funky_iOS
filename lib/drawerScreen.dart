@@ -169,6 +169,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                     drawerItem(
                       itemIcon: AssetUtils.termsIcons,
                       itemName: TxtUtils.t_c,
+
                       onTap: () {
                         Navigator.pop(context);
                         // gotoSalesListScreen(context);
@@ -322,6 +323,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
             width: 15.0,
             child: Image.asset(
               itemIcon,
+              color: Colors.white,
               fit: BoxFit.fill,
             ),
           ),
@@ -379,7 +381,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
   logOut_function() async {
 
     await PreferenceManager()
-        .setPref(URLConstants.id, ' ');
+        .setPref(URLConstants.id, '');
     await PreferenceManager()
         .setPref(URLConstants.type, '');
     await Get.to(AuthenticationScreen());

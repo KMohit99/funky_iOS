@@ -44,6 +44,7 @@ class Kids_signup_controller extends GetxController {
   TextEditingController parentEmail_controller = new TextEditingController();
   TextEditingController password_controller = new TextEditingController();
   TextEditingController location_controller = new TextEditingController();
+  TextEditingController gender_controller = new TextEditingController();
   TextEditingController reffralCode_controller = new TextEditingController();
   TextEditingController countryCode_controller = new TextEditingController();
   TextEditingController aboutMe_controller = new TextEditingController();
@@ -68,7 +69,7 @@ class Kids_signup_controller extends GetxController {
       'parent_email': parentEmail_controller.text,
       'password': password_controller.text,
       'gender': selected_gender,
-      'location': selectedcountry!.location.toString(),
+      'location': location_controller.text,
       'referral_code': reffralCode_controller.text,
       'image': img64!.substring(0, 100),
       'countryCode': countryCode_controller.text,

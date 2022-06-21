@@ -19,6 +19,7 @@ import '../../../Utils/App_utils.dart';
 import '../../../custom_widget/common_buttons.dart';
 import '../Authentication/creator_login/controller/creator_login_controller.dart';
 import '../Authentication/creator_signup/controller/creator_signup_controller.dart';
+import '../Authentication/creator_signup/model/CountryModel.dart';
 import '../Authentication/creator_signup/model/countryModelclass.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -49,7 +50,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   init() async {
-    await _creator_signup_controller.getAllCountriesFromAPI();
+    // await _creator_signup_controller.getAllCountriesFromAPI();
     await user_info_setup();
   }
 
@@ -78,8 +79,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               .toString();
 
       if(_creator_login_screen_controller.userInfoModel_email!.data![0].location!.isNotEmpty){
-        Data_country get_country = _creator_signup_controller.data_country.firstWhere((element) =>
-        element.location == _creator_login_screen_controller.userInfoModel_email!.data![0].location);
+        CountryList get_country = _creator_signup_controller.data_country.firstWhere((element) =>
+        element.name == _creator_login_screen_controller.userInfoModel_email!.data![0].location);
         _creator_signup_controller
             .selectedcountry = get_country;
       }
@@ -404,17 +405,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                             ),
                                           ],
                                         ),
-                                        items: (_creator_signup_controller
-                                                        .iscountryLoading.value ==
-                                                    true
-                                                ? data2
-                                                : _creator_signup_controller
-                                                    .data_country)
-                                            .map((Data_country item) =>
-                                                DropdownMenuItem<Data_country>(
+                                        items:  _creator_signup_controller
+                                                    .data_country
+                                            .map((CountryList item) =>
+                                                DropdownMenuItem<CountryList>(
                                                   value: item,
                                                   child: Text(
-                                                    '${item.location}',
+                                                    '${item.name}',
                                                     style: TextStyle(
                                                       fontSize: 14,
                                                       fontFamily: 'PR',
@@ -430,7 +427,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                           setState(() {
                                             _creator_signup_controller
                                                     .selectedcountry =
-                                                value as Data_country?;
+                                                value as CountryList?;
                                           });
                                           // print(contactdetailsController
                                           //     .selectedValue);
