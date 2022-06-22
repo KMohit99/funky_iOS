@@ -72,120 +72,122 @@ class _AgeVerificationState extends State<AgeVerification> {
               ),
               backgroundColor: Colors.transparent,
               // <-- SCAFFOLD WITH TRANSPARENT BG
-              body: Container(
-                width: screenwidth,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 86),
-                      child: Image.asset(
-                        AssetUtils.logo,
-                        fit: BoxFit.cover,
+              body: SingleChildScrollView(
+                child: Container(
+                  width: screenwidth,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 86),
+                        child: Image.asset(
+                          AssetUtils.logo,
+                          fit: BoxFit.cover,
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      child: Text(
-                        'Creator Signup',
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontFamily: 'PB',
-                            color: Colors.white),
+                      SizedBox(
+                        height: 10,
                       ),
-                    ),
-                    SizedBox(
-                      height: 41,
-                    ),
-                    Container(
-                      // height: 45,
-                      width: 300,
-                      decoration: BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.circular(67)),
-                      child: Container(
-                          alignment: Alignment.center,
-                          margin: EdgeInsets.symmetric(
-                            vertical: 35,
-                          ),
-                          child: Text(
-                            "Are you 16 years old or above?",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'PR',
-                                fontSize: 16),
-                          )),
-                    ),
-                    SizedBox(
-                      height: 41,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            Get.toNamed(BindingUtils.signupOption);
-                          },
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 0),
-                            // height: 45,
-                            // width:(width ?? 300) ,
-                            decoration: BoxDecoration(
-                                border:
-                                    Border.all(color: Colors.black, width: 1),
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(25)),
+                      Container(
+                        child: Text(
+                          'Creator Signup',
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontFamily: 'PB',
+                              color: Colors.white),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 41,
+                      ),
+                      Container(
+                        // height: 45,
+                        width: 300,
+                        decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(67)),
+                        child: Container(
+                            alignment: Alignment.center,
+                            margin: EdgeInsets.symmetric(
+                              vertical: 35,
+                            ),
+                            child: Text(
+                              "Are you 16 years old or above?",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'PR',
+                                  fontSize: 16),
+                            )),
+                      ),
+                      SizedBox(
+                        height: 41,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Get.toNamed(BindingUtils.signupOption);
+                            },
                             child: Container(
-                                alignment: Alignment.center,
-                                margin: EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 30),
-                                child: Text(
-                                  'YES',
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontFamily: 'PR',
-                                      fontSize: 14),
-                                )),
+                              margin: const EdgeInsets.symmetric(horizontal: 0),
+                              // height: 45,
+                              // width:(width ?? 300) ,
+                              decoration: BoxDecoration(
+                                  border:
+                                      Border.all(color: Colors.black, width: 1),
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(25)),
+                              child: Container(
+                                  alignment: Alignment.center,
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 30),
+                                  child: Text(
+                                    'YES',
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: 'PR',
+                                        fontSize: 14),
+                                  )),
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          width: 15,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Get.toNamed(BindingUtils.kids_signup);
-                          },
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 0),
-                            // height: 45,
-                            // width:(width ?? 300) ,
-                            decoration: BoxDecoration(
-                                border:
-                                    Border.all(color: Colors.black, width: 1),
-                                color: Colors.black,
-                                borderRadius: BorderRadius.circular(25)),
+                          SizedBox(
+                            width: 15,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Get.toNamed(BindingUtils.kids_signup);
+                            },
                             child: Container(
-                                alignment: Alignment.center,
-                                margin: EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 30),
-                                child: Text(
-                                  'NO',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: 'PR',
-                                      fontSize: 14),
-                                )),
+                              margin: const EdgeInsets.symmetric(horizontal: 0),
+                              // height: 45,
+                              // width:(width ?? 300) ,
+                              decoration: BoxDecoration(
+                                  border:
+                                      Border.all(color: Colors.black, width: 1),
+                                  color: Colors.black,
+                                  borderRadius: BorderRadius.circular(25)),
+                              child: Container(
+                                  alignment: Alignment.center,
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 30),
+                                  child: Text(
+                                    'NO',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: 'PR',
+                                        fontSize: 14),
+                                  )),
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                  ],
+                        ],
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

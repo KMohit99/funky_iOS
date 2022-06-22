@@ -179,18 +179,115 @@ class _VideoWidgetState extends State<VideoWidget> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: SizedBox(
+                            child: Container(
+                              color: Colors.transparent,
+                              width: 50,
+                              margin: EdgeInsets.only(bottom: 0, right: 21),
+                              alignment: Alignment.bottomRight,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    child: IconButton(
+                                        padding: EdgeInsets.only(left: 28.0),
+                                        icon: Image.asset(
+                                          AssetUtils.like_icon,
+                                          color: Colors.white,
+                                          height: 30,
+                                          width: 30,
+                                        ),
+                                        onPressed: () {}),
+                                  ),
+                                  Container(
+                                    child: IconButton(
+                                      iconSize: 30.0,
+                                      padding: EdgeInsets.only(left: 28.0),
+                                      icon: Image.asset(
+                                        AssetUtils.comment_icon,
+                                        color: HexColor('#8AFC8D'),
+                                        height: 30,
+                                        width: 30,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          // _myPage.jumpToPage(0);
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                  Container(
+                                    child: IconButton(
+                                      iconSize: 30.0,
+                                      padding: EdgeInsets.only(left: 28.0),
+                                      icon: Image.asset(
+                                        AssetUtils.share_icon,
+                                        color: HexColor('#66E4F2'),
+                                        height: 30,
+                                        width: 30,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          // _myPage.jumpToPage(0);
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                  Container(
+                                    child: IconButton(
+                                      iconSize: 30.0,
+                                      padding: EdgeInsets.only(left: 28.0),
+                                      icon: Image.asset(
+                                        AssetUtils.reward_icon,
+                                        color: HexColor('#F32E82'),
+                                        height: 30,
+                                        width: 30,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          // _myPage.jumpToPage(0);
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                  Container(
+                                    child: IconButton(
+                                      iconSize: 30.0,
+                                      padding: EdgeInsets.only(left: 28.0),
+                                      icon: Image.asset(
+                                        AssetUtils.music_icon,
+                                        color: HexColor('#F5C93A'),
+                                        height: 30,
+                                        width: 30,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          // _myPage.jumpToPage(0);
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+
                         Container(
                           alignment: Alignment.centerLeft,
                           child: Container(
                               margin: const EdgeInsets.only(
-                                  left: 0.0, right: 60.0),
+                                  left: 15.0, right: 15.0),
                               child: Divider(
                                 color: HexColor('#F32E82'),
                                 height: 0,
                               )),
                         ),
                         SizedBox(
-                          height: 10,
+                          height: 5,
                         ),
                         ListTile(
                           visualDensity:
@@ -276,102 +373,6 @@ class _VideoWidgetState extends State<VideoWidget> {
                             ],
                           ),
                           trailing: SizedBox.shrink(),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: SizedBox(
-                  child: Container(
-                    color: Colors.transparent,
-                    width: 50,
-                    margin: EdgeInsets.only(bottom: 30, right: 21),
-                    alignment: Alignment.bottomRight,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          child: IconButton(
-                              padding: EdgeInsets.only(left: 28.0),
-                              icon: Image.asset(
-                                AssetUtils.like_icon,
-                                color: Colors.white,
-                                height: 30,
-                                width: 30,
-                              ),
-                              onPressed: () {}),
-                        ),
-                        Container(
-                          child: IconButton(
-                            iconSize: 30.0,
-                            padding: EdgeInsets.only(left: 28.0),
-                            icon: Image.asset(
-                              AssetUtils.comment_icon,
-                              color: HexColor('#8AFC8D'),
-                              height: 30,
-                              width: 30,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                // _myPage.jumpToPage(0);
-                              });
-                            },
-                          ),
-                        ),
-                        Container(
-                          child: IconButton(
-                            iconSize: 30.0,
-                            padding: EdgeInsets.only(left: 28.0),
-                            icon: Image.asset(
-                              AssetUtils.share_icon,
-                              color: HexColor('#66E4F2'),
-                              height: 30,
-                              width: 30,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                // _myPage.jumpToPage(0);
-                              });
-                            },
-                          ),
-                        ),
-                        Container(
-                          child: IconButton(
-                            iconSize: 30.0,
-                            padding: EdgeInsets.only(left: 28.0),
-                            icon: Image.asset(
-                              AssetUtils.reward_icon,
-                              color: HexColor('#F32E82'),
-                              height: 30,
-                              width: 30,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                // _myPage.jumpToPage(0);
-                              });
-                            },
-                          ),
-                        ),
-                        Container(
-                          child: IconButton(
-                            iconSize: 30.0,
-                            padding: EdgeInsets.only(left: 28.0),
-                            icon: Image.asset(
-                              AssetUtils.music_icon,
-                              color: HexColor('#F5C93A'),
-                              height: 30,
-                              width: 30,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                // _myPage.jumpToPage(0);
-                              });
-                            },
-                          ),
                         ),
                       ],
                     ),

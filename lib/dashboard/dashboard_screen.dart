@@ -774,18 +774,7 @@ class MyArc2 extends StatelessWidget {
 class MyPainter2 extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    Paint paint = Paint()..shader = RadialGradient(
-      colors: [
-        HexColor('#C12265').withOpacity(1),
-        HexColor('#C12265').withOpacity(0.5),
-        HexColor('#000000').withOpacity(0.5),
-        HexColor('#ffffff'),
-        HexColor('#ffffff'),
-      ],
-    ).createShader(Rect.fromCircle(
-      center: Offset(1,0),
-      radius:500,
-    ));
+    Paint paint = Paint()..color = Colors.transparent;
     canvas.drawArc(
       Rect.fromCenter(
         center: Offset(size.height / 10, size.width / 2),

@@ -41,6 +41,7 @@ class _AdvertiserSignUpScreenState extends State<AdvertiserSignUpScreen> {
     'female',
   ];
   List<Data_country> data2 = <Data_country>[];
+  bool gender_tap = false;
 
   @override
   void initState() {
@@ -49,8 +50,12 @@ class _AdvertiserSignUpScreenState extends State<AdvertiserSignUpScreen> {
     super.initState();
   }
 
+  bool location_tap = false;
+
   init() async {
-    await _creator_signup_controller.getAllCountriesFromAPI();
+    getAllFollowersList();
+
+    // await _creator_signup_controller.getAllCountriesFromAPI();
   }
 
   File? imgFile;
@@ -370,16 +375,571 @@ class _AdvertiserSignUpScreenState extends State<AdvertiserSignUpScreen> {
                       //     ),
                       //   ],
                       // ),
+                      // Container(
+                      //   margin: const EdgeInsets.symmetric(horizontal: 30),
+                      //   child: Column(
+                      //     crossAxisAlignment: CrossAxisAlignment.start,
+                      //     mainAxisAlignment: MainAxisAlignment.start,
+                      //     children: [
+                      //       Container(
+                      //         margin: EdgeInsets.only(left: 18),
+                      //         child: Text(
+                      //           "Location",
+                      //           style: TextStyle(
+                      //             fontSize: 14,
+                      //             fontFamily: 'PR',
+                      //             color: Colors.white,
+                      //           ),
+                      //         ),
+                      //       ),
+                      //       SizedBox(
+                      //         height: 11,
+                      //       ),
+                      //       Container(
+                      //         // height: 45,
+                      //         decoration: BoxDecoration(
+                      //           border:
+                      //               Border.all(color: Colors.white, width: 1),
+                      //           boxShadow: const [
+                      //             BoxShadow(
+                      //               color: Colors.black,
+                      //               blurRadius: 5,
+                      //               offset: Offset(0, 0),
+                      //               spreadRadius: -5,
+                      //             ),
+                      //           ],
+                      //           color: Colors.white,
+                      //           borderRadius: BorderRadius.circular(24.0),
+                      //         ),
+                      //         child: SearchField(
+                      //           autoCorrect: true,
+                      //           controller: _advertiser_signup_controller
+                      //               .location_controller,
+                      //           suggestions: _creator_signup_controller
+                      //               .data_country
+                      //               .map((e) => SearchFieldListItem(e.name!,
+                      //                   child: Text(
+                      //                     e.name!,
+                      //                     style: TextStyle(color: Colors.white),
+                      //                   )))
+                      //               .toList(),
+                      //
+                      //           suggestionState: Suggestion.expand,
+                      //           textInputAction: TextInputAction.next,
+                      //           // hint: 'SearchField Example 2',
+                      //
+                      //           hasOverlay: false,
+                      //           searchStyle: TextStyle(
+                      //             fontSize: 16,
+                      //             fontFamily: 'PR',
+                      //             color: Colors.black,
+                      //           ),
+                      //           // controller: ,
+                      //           validator: (x) {
+                      //             if (!_creator_signup_controller.data_country
+                      //                     .contains(x) ||
+                      //                 x!.isEmpty) {
+                      //               return 'Please Enter a valid State';
+                      //             }
+                      //             return null;
+                      //           },
+                      //           searchInputDecoration: InputDecoration(
+                      //             focusedBorder: InputBorder.none,
+                      //             hintText: 'Search Country',
+                      //             hintStyle: TextStyle(
+                      //               fontSize: 14,
+                      //               fontFamily: 'PR',
+                      //               color: Colors.grey,
+                      //             ),
+                      //             contentPadding: EdgeInsets.all(14),
+                      //             suffixIcon: Icon(
+                      //               Icons.keyboard_arrow_down,
+                      //               color: Colors.black,
+                      //             ),
+                      //             enabledBorder: InputBorder.none,
+                      //           ),
+                      //
+                      //           suggestionsDecoration: BoxDecoration(
+                      //             borderRadius: BorderRadius.only(
+                      //                 bottomLeft: Radius.circular(24),
+                      //                 bottomRight: Radius.circular(24)),
+                      //             color: Colors.white,
+                      //             gradient: LinearGradient(
+                      //               begin: Alignment.topLeft,
+                      //               end: Alignment.bottomRight,
+                      //               // stops: [0.1, 0.5, 0.7, 0.9],
+                      //               colors: [
+                      //                 HexColor("#000000"),
+                      //                 HexColor("#C12265"),
+                      //                 HexColor("#C12265"),
+                      //                 HexColor("#FFFFFF"),
+                      //               ],
+                      //             ),
+                      //           ),
+                      //           // maxSuggestionsInViewPort: 6,
+                      //           itemHeight: 45,
+                      //           onSuggestionTap: (x) {
+                      //             print(_advertiser_signup_controller
+                      //                 .location_controller.text);
+                      //           },
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                       Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 30),
                         child: Column(
+                          mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            // Container(
+                            //   margin: const EdgeInsets.symmetric(horizontal: 30),
+                            //   child: Text(
+                            //     "Location",
+                            //     style: TextStyle(
+                            //       fontSize: 14,
+                            //       fontFamily: 'PR',
+                            //       color: Colors.white,
+                            //     ),
+                            //   ),
+                            // ),
+                            // Container(
+                            //   height: 45,
+                            //   width: 300,
+                            //   decoration: BoxDecoration(
+                            //     boxShadow: const [
+                            //       BoxShadow(
+                            //         color: Colors.black,
+                            //         blurRadius: 5,
+                            //         offset: Offset(0, 0),
+                            //         spreadRadius: -5,
+                            //       ),
+                            //     ],
+                            //     color: Colors.white,
+                            //     borderRadius: BorderRadius.circular(24.0),
+                            //   ),
+                            //   child: FormField<String>(
+                            //     builder: (FormFieldState<String> state) {
+                            //       return DropdownButtonHideUnderline(
+                            //         child: DropdownButton2(
+                            //           isExpanded: true,
+                            //           hint: Row(
+                            //             children: [
+                            //               SizedBox(
+                            //                 width: 4,
+                            //               ),
+                            //               Expanded(
+                            //                 child: Text(
+                            //                   'Select location',
+                            //                   style: TextStyle(
+                            //                     fontSize: 14,
+                            //                     fontFamily: 'PR',
+                            //                     color: Colors.grey,
+                            //                   ),
+                            //                   overflow: TextOverflow.ellipsis,
+                            //                 ),
+                            //               ),
+                            //             ],
+                            //           ),
+                            //           items: _creator_signup_controller
+                            //               .data_country
+                            //               .map((CountryList item) =>
+                            //                   DropdownMenuItem<CountryList>(
+                            //                     value: item,
+                            //                     child: Text(
+                            //                       '${item.name}',
+                            //                       style: TextStyle(
+                            //                         fontSize: 16,
+                            //                         fontFamily: 'PR',
+                            //                         color: Colors.black,
+                            //                       ),
+                            //                       overflow:
+                            //                           TextOverflow.ellipsis,
+                            //                     ),
+                            //                   ))
+                            //               .toList(),
+                            //           value: _creator_signup_controller
+                            //               .selectedcountry,
+                            //           style: TextStyle(
+                            //             fontSize: 16,
+                            //             fontFamily: 'PR',
+                            //             color: Colors.white,
+                            //           ),
+                            //           onChanged: (value) {
+                            //             setState(() {
+                            //               _creator_signup_controller
+                            //                       .selectedcountry =
+                            //                   value as CountryList?;
+                            //             });
+                            //             // print(contactdetailsController
+                            //             //     .selectedValue);
+                            //           },
+                            //           iconSize: 25,
+                            //           icon: Image.asset(
+                            //             AssetUtils.downArrow_icon,
+                            //             height: 13,
+                            //             width: 13,
+                            //           ),
+                            //           iconEnabledColor: Color(0xff007DEF),
+                            //           iconDisabledColor: Color(0xff007DEF),
+                            //           buttonHeight: 50,
+                            //           buttonWidth: 160,
+                            //           buttonPadding: const EdgeInsets.only(
+                            //               left: 15, right: 15),
+                            //           buttonDecoration: BoxDecoration(
+                            //               borderRadius:
+                            //                   BorderRadius.circular(10),
+                            //               color: Colors.transparent),
+                            //           buttonElevation: 0,
+                            //           itemHeight: 40,
+                            //           itemPadding: const EdgeInsets.only(
+                            //               left: 14, right: 14),
+                            //           dropdownMaxHeight: 200,
+                            //           dropdownPadding: null,
+                            //           dropdownDecoration: BoxDecoration(
+                            //             borderRadius:
+                            //                 BorderRadius.circular(24),
+                            //             border: Border.all(
+                            //                 width: 1, color: Colors.white),
+                            //             gradient: LinearGradient(
+                            //               begin: Alignment.topLeft,
+                            //               end: Alignment.bottomRight,
+                            //               // stops: [0.1, 0.5, 0.7, 0.9],
+                            //               colors: [
+                            //                 HexColor("#000000"),
+                            //                 HexColor("#C12265"),
+                            //                 HexColor("#C12265"),
+                            //                 HexColor("#FFFFFF"),
+                            //               ],
+                            //             ),
+                            //           ),
+                            //           dropdownElevation: 8,
+                            //           scrollbarRadius:
+                            //               const Radius.circular(40),
+                            //           scrollbarThickness: 6,
+                            //           scrollbarAlwaysShow: true,
+                            //           offset: const Offset(0, -5),
+                            //         ),
+                            //       );
+                            //     },
+                            //   ),
+                            // ),
+                            // SizedBox(
+                            //   height: 11,
+                            // ),
+                            // Container(
+                            //   // height: 45,
+                            //   decoration: BoxDecoration(
+                            //     border:
+                            //         Border.all(color: Colors.white, width: 1),
+                            //     boxShadow: const [
+                            //       BoxShadow(
+                            //         color: Colors.black,
+                            //         blurRadius: 5,
+                            //         offset: Offset(0, 0),
+                            //         spreadRadius: -5,
+                            //       ),
+                            //     ],
+                            //     color: Colors.white,
+                            //     borderRadius: BorderRadius.circular(24.0),
+                            //   ),
+                            //   child: FormField<String>(
+                            //       builder: (FormFieldState<String> state) {
+                            //     return SearchField(
+                            //       controller: _creator_signup_controller
+                            //           .location_controller,
+                            //       suggestions: _creator_signup_controller
+                            //           .data_country
+                            //           .map((CountryList e) =>
+                            //               SearchFieldListItem<CountryList>(
+                            //                   e.name!,
+                            //                   item: e,
+                            //                   child: Text(
+                            //                     e.name!,
+                            //                     style: TextStyle(
+                            //                         color: Colors.white),
+                            //                   )))
+                            //           .toList(),
+                            //       // suggestionState: Suggestion.expand,
+                            //       textInputAction: TextInputAction.next,
+                            //       // hint: 'SearchField Example 2',
+                            //       // value: _creator_signup_controller
+                            //       //     .selectedcountry,
+                            //
+                            //       hasOverlay: false,
+                            //       searchStyle: TextStyle(
+                            //         fontSize: 16,
+                            //         fontFamily: 'PR',
+                            //         color: Colors.black,
+                            //       ),
+                            //       // controller: ,
+                            //       validator: (x) {
+                            //         if (!_creator_signup_controller
+                            //                 .data_country
+                            //                 .contains(x) ||
+                            //             x!.isEmpty) {
+                            //           return 'Please Enter a valid State';
+                            //         }
+                            //         print(x);
+                            //         return null;
+                            //       },
+                            //       searchInputDecoration: InputDecoration(
+                            //         focusedBorder: InputBorder.none,
+                            //         hintText: 'Search Country',
+                            //         hintStyle: TextStyle(
+                            //           fontSize: 14,
+                            //           fontFamily: 'PR',
+                            //           color: Colors.grey,
+                            //         ),
+                            //         contentPadding: EdgeInsets.all(14),
+                            //         suffixIcon: Icon(
+                            //           Icons.keyboard_arrow_down,
+                            //           color: Colors.black,
+                            //         ),
+                            //         enabledBorder: InputBorder.none,
+                            //       ),
+                            //       suggestionsDecoration: BoxDecoration(
+                            //         borderRadius: BorderRadius.only(
+                            //             bottomLeft: Radius.circular(24),
+                            //             bottomRight: Radius.circular(24)),
+                            //         color: Colors.white,
+                            //         gradient: LinearGradient(
+                            //           begin: Alignment.topLeft,
+                            //           end: Alignment.bottomRight,
+                            //           // stops: [0.1, 0.5, 0.7, 0.9],
+                            //           colors: [
+                            //             HexColor("#000000"),
+                            //             HexColor("#C12265"),
+                            //             HexColor("#C12265"),
+                            //             HexColor("#FFFFFF"),
+                            //           ],
+                            //         ),
+                            //       ),
+                            //       // maxSuggestionsInViewPort: 6,
+                            //       itemHeight: 45,
+                            //       onSuggestionTap: (value) {
+                            //         print(value.toString());
+                            //         print(_creator_signup_controller
+                            //             .location_controller.text);
+                            //       },
+                            //     );
+                            //   }),
+                            // ),
+                            // CommonTextFormField(
+                            //   height: 45,
+                            //   title: 'Location',
+                            //   controller:
+                            //       _creator_signup_controller.query_followers,
+                            //   labelText: "Enter Location",
+                            //   onChanged: (value) {
+                            //     getAllFollowersList();
+                            //   },
+                            //   tap: () {
+                            //     setState(() {
+                            //       location_tap = true;
+                            //     });
+                            //   },
+                            //   image_path: AssetUtils.downArrow_icon,
+                            // ),
+                            Container(
+                              // margin: EdgeInsets.only(left: 45,right: 45.93),
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 30),
+
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.only(left: 18),
+                                    child: Text(
+                                      'Location',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontFamily: 'PR',
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 11,
+                                  ),
+                                  Container(
+                                    // height: 45,
+                                    // width: 300,
+
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: Colors.black, width: 1),
+                                      boxShadow: const [
+                                        BoxShadow(
+                                          color: Colors.black,
+                                          blurRadius: 5,
+                                          offset: Offset(0, 0),
+                                          spreadRadius: -5,
+                                        ),
+                                      ],
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(24.0),
+                                    ),
+                                    child: TextFormField(
+                                      onTap: () {
+                                        setState(() {
+                                          location_tap = true;
+                                        });
+                                      },
+                                      onChanged: (value) {
+                                        getAllFollowersList();
+                                      },
+                                      decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.only(
+                                            left: 20, top: 14, bottom: 14),
+                                        alignLabelWithHint: false,
+                                        isDense: true,
+                                        hintText: 'Enter Location',
+                                        filled: true,
+                                        border: InputBorder.none,
+                                        enabledBorder: const OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors.transparent,
+                                              width: 1),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)),
+                                        ),
+                                        // focusedBorder: OutlineInputBorder(
+                                        //   borderSide:
+                                        //   BorderSide(color: ColorUtils.blueColor, width: 1),
+                                        //   borderRadius: BorderRadius.all(Radius.circular(10)),
+                                        // ),
+                                        hintStyle: TextStyle(
+                                          fontSize: 14,
+                                          fontFamily: 'PR',
+                                          color: Colors.grey,
+                                        ),
+                                        suffixIcon: Container(
+                                          child: IconButton(
+                                            icon: Image.asset(
+                                              AssetUtils.downArrow_icon,
+                                              color: Colors.black,
+                                              height: 10,
+                                              width: 10,
+                                            ),
+                                            onPressed: () {},
+                                          ),
+                                        ),
+                                      ),
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontFamily: 'PR',
+                                        color: Colors.black,
+                                      ),
+                                      controller: _creator_signup_controller
+                                          .query_followers,
+                                      keyboardType: TextInputType.text,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            (location_tap
+                                ? Container(
+                                    height: 100,
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 30),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(24),
+                                      border: Border.all(
+                                          width: 1, color: Colors.white),
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                        // stops: [0.1, 0.5, 0.7, 0.9],
+                                        colors: [
+                                          HexColor("#000000"),
+                                          HexColor("#C12265"),
+                                          HexColor("#C12265"),
+                                          HexColor("#FFFFFF"),
+                                        ],
+                                      ),
+                                    ),
+                                    child: ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: _creator_signup_controller
+                                          .data_country.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        return GestureDetector(
+                                          onTap: () {
+                                            _creator_signup_controller
+                                                    .selected_country =
+                                                _creator_signup_controller
+                                                    .data_country[index].name!;
+                                            _creator_signup_controller
+                                                    .selected_country_code =
+                                                _creator_signup_controller
+                                                    .data_country[index]
+                                                    .dialCode!;
+                                            print(_creator_signup_controller
+                                                .selected_country);
+                                            print(_creator_signup_controller
+                                                .selected_country_code);
+
+                                            _creator_signup_controller
+                                                    .query_followers.text =
+                                                _creator_signup_controller
+                                                    .data_country[index].name!;
+
+                                            _advertiser_signup_controller
+                                                    .countryCode_controller
+                                                    .text =
+                                                _creator_signup_controller
+                                                    .data_country[index]
+                                                    .dialCode!;
+                                            _advertiser_signup_controller
+                                                    .location_controller.text =
+                                                _creator_signup_controller
+                                                    .data_country[index].name!;
+
+                                            setState(() {
+                                              location_tap = false;
+                                            });
+                                          },
+                                          child: Container(
+                                            margin: EdgeInsets.symmetric(
+                                                vertical: 8),
+                                            child: Text(
+                                              '${_creator_signup_controller.data_country[index].name}',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontFamily: 'PR',
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  )
+                                : SizedBox.shrink()),
+                          ],
+                        ),
+                      ),
+
+                      SizedBox(
+                        height: 12,
+                      ),
+                      Container(
+                        // margin: EdgeInsets.only(left: 45,right: 45.93),
+                        margin: const EdgeInsets.symmetric(horizontal: 30),
+
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
                               margin: EdgeInsets.only(left: 18),
                               child: Text(
-                                "Location",
+                                TxtUtils.phone,
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontFamily: 'PR',
@@ -392,9 +952,10 @@ class _AdvertiserSignUpScreenState extends State<AdvertiserSignUpScreen> {
                             ),
                             Container(
                               // height: 45,
+                              // width: 300,
                               decoration: BoxDecoration(
                                 border:
-                                    Border.all(color: Colors.white, width: 1),
+                                    Border.all(color: Colors.black, width: 1),
                                 boxShadow: const [
                                   BoxShadow(
                                     color: Colors.black,
@@ -406,93 +967,64 @@ class _AdvertiserSignUpScreenState extends State<AdvertiserSignUpScreen> {
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(24.0),
                               ),
-                              child: SearchField(
-                                autoCorrect: true,
-                                controller: _advertiser_signup_controller
-                                    .location_controller,
-                                suggestions: _creator_signup_controller
-                                    .data_country
-                                    .map((e) => SearchFieldListItem(e.name!,
-                                        child: Text(
-                                          e.name!,
-                                          style: TextStyle(color: Colors.white),
-                                        )))
-                                    .toList(),
-
-                                suggestionState: Suggestion.expand,
-                                textInputAction: TextInputAction.next,
-                                // hint: 'SearchField Example 2',
-
-                                hasOverlay: false,
-                                searchStyle: TextStyle(
-                                  fontSize: 16,
-                                  fontFamily: 'PR',
-                                  color: Colors.black,
-                                ),
-                                // controller: ,
-                                validator: (x) {
-                                  if (!_creator_signup_controller.data_country
-                                          .contains(x) ||
-                                      x!.isEmpty) {
-                                    return 'Please Enter a valid State';
-                                  }
-                                  return null;
-                                },
-                                searchInputDecoration: InputDecoration(
-                                  focusedBorder: InputBorder.none,
-                                  hintText: 'Search Country',
+                              child: TextFormField(
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.only(
+                                      left: 20, top: 14, bottom: 14),
+                                  alignLabelWithHint: false,
+                                  isDense: true,
+                                  hintText: "Enter phone no",
+                                  filled: true,
+                                  border: InputBorder.none,
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.transparent, width: 1),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)),
+                                  ),
+                                  // focusedBorder: OutlineInputBorder(
+                                  //   borderSide:
+                                  //   BorderSide(color: ColorUtils.blueColor, width: 1),
+                                  //   borderRadius: BorderRadius.all(Radius.circular(10)),
+                                  // ),
                                   hintStyle: TextStyle(
                                     fontSize: 14,
                                     fontFamily: 'PR',
                                     color: Colors.grey,
                                   ),
-                                  contentPadding: EdgeInsets.all(14),
-                                  suffixIcon: Icon(
-                                    Icons.keyboard_arrow_down,
+                                  suffixIcon: Container(
+                                    child: IconButton(
+                                      icon: Image.asset(
+                                        AssetUtils.phone_icon,
+                                        color: Colors.black,
+                                        height: 20,
+                                        width: 20,
+                                      ),
+                                      onPressed: () {},
+                                    ),
+                                  ),
+                                  prefixText: _advertiser_signup_controller
+                                      .countryCode_controller.text,
+                                  prefixStyle: TextStyle(
+                                    fontSize: 16,
+                                    fontFamily: 'PR',
                                     color: Colors.black,
                                   ),
-                                  enabledBorder: InputBorder.none,
                                 ),
-
-                                suggestionsDecoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(
-                                      bottomLeft: Radius.circular(24),
-                                      bottomRight: Radius.circular(24)),
-                                  color: Colors.white,
-                                  gradient: LinearGradient(
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                    // stops: [0.1, 0.5, 0.7, 0.9],
-                                    colors: [
-                                      HexColor("#000000"),
-                                      HexColor("#C12265"),
-                                      HexColor("#C12265"),
-                                      HexColor("#FFFFFF"),
-                                    ],
-                                  ),
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: 'PR',
+                                  color: Colors.black,
                                 ),
-                                // maxSuggestionsInViewPort: 6,
-                                itemHeight: 45,
-                                onSuggestionTap: (x) {
-                                  print(_advertiser_signup_controller
-                                      .location_controller.text);
-                                },
+                                controller: _advertiser_signup_controller
+                                    .phone_controller,
+                                keyboardType: TextInputType.number,
                               ),
                             ),
                           ],
                         ),
                       ),
 
-                      SizedBox(
-                        height: 12,
-                      ),
-                      CommonTextFormField(
-                        title: TxtUtils.phone,
-                        controller:
-                            _advertiser_signup_controller.phone_controller,
-                        labelText: "Enter phone no",
-                        image_path: AssetUtils.phone_icon,
-                      ),
                       SizedBox(
                         height: 12,
                       ),
@@ -632,117 +1164,182 @@ class _AdvertiserSignUpScreenState extends State<AdvertiserSignUpScreen> {
                       //     ),
                       //   ],
                       // ),
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 30),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              margin: EdgeInsets.only(left: 18),
-                              child: Text(
-                                "Gender",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontFamily: 'PR',
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 12,
-                            ),
-                            Container(
-                              // height: 45,
-                              decoration: BoxDecoration(
-                                border:
-                                    Border.all(color: Colors.white, width: 1),
-                                boxShadow: const [
-                                  BoxShadow(
-                                    color: Colors.black,
-                                    blurRadius: 5,
-                                    offset: Offset(0, 0),
-                                    spreadRadius: -5,
-                                  ),
-                                ],
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(24.0),
-                              ),
-                              child: SearchField(
-                                autoCorrect: true,
-                                controller: _advertiser_signup_controller
-                                    .gender_controller,
-                                suggestions: data
-                                    .map((e) => SearchFieldListItem(e,
-                                        child: Text(
-                                          e,
-                                          style: TextStyle(color: Colors.white),
-                                        )))
-                                    .toList(),
-
-                                suggestionState: Suggestion.expand,
-                                textInputAction: TextInputAction.next,
-                                // hint: 'SearchField Example 2',
-
-                                hasOverlay: false,
-                                searchStyle: TextStyle(
-                                  fontSize: 16,
-                                  fontFamily: 'PR',
-                                  color: Colors.black,
-                                ),
-                                // controller: ,
-                                validator: (x) {
-                                  if (_advertiser_signup_controller
-                                      .selected_gender!.isEmpty) {
-                                    return 'Please Enter a valid State';
-                                  }
-                                  return null;
-                                },
-                                searchInputDecoration: InputDecoration(
-                                  focusedBorder: InputBorder.none,
-                                  hintText: 'Select gender',
-                                  hintStyle: TextStyle(
-                                    fontSize: 14,
-                                    fontFamily: 'PR',
-                                    color: Colors.grey,
-                                  ),
-                                  contentPadding: EdgeInsets.all(14),
-                                  suffixIcon: Icon(
-                                    Icons.keyboard_arrow_down,
-                                    color: Colors.black,
-                                  ),
-                                  enabledBorder: InputBorder.none,
-                                ),
-
-                                suggestionsDecoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(
-                                      bottomLeft: Radius.circular(24),
-                                      bottomRight: Radius.circular(24)),
-                                  color: Colors.white,
-                                  gradient: LinearGradient(
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                    // stops: [0.1, 0.5, 0.7, 0.9],
-                                    colors: [
-                                      HexColor("#000000"),
-                                      HexColor("#C12265"),
-                                      HexColor("#C12265"),
-                                      HexColor("#FFFFFF"),
-                                    ],
-                                  ),
-                                ),
-                                // maxSuggestionsInViewPort: 6,
-                                itemHeight: 45,
-                                onSuggestionTap: (x) {
-                                  print(_advertiser_signup_controller
-                                      .gender_controller.text);
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
+                      // Container(
+                      //   margin: const EdgeInsets.symmetric(horizontal: 30),
+                      //   child: Column(
+                      //     crossAxisAlignment: CrossAxisAlignment.start,
+                      //     mainAxisAlignment: MainAxisAlignment.start,
+                      //     children: [
+                      //       Container(
+                      //         margin: EdgeInsets.only(left: 18),
+                      //         child: Text(
+                      //           "Gender",
+                      //           style: TextStyle(
+                      //             fontSize: 14,
+                      //             fontFamily: 'PR',
+                      //             color: Colors.white,
+                      //           ),
+                      //         ),
+                      //       ),
+                      //       SizedBox(
+                      //         height: 12,
+                      //       ),
+                      //       Container(
+                      //         // height: 45,
+                      //         decoration: BoxDecoration(
+                      //           border:
+                      //               Border.all(color: Colors.white, width: 1),
+                      //           boxShadow: const [
+                      //             BoxShadow(
+                      //               color: Colors.black,
+                      //               blurRadius: 5,
+                      //               offset: Offset(0, 0),
+                      //               spreadRadius: -5,
+                      //             ),
+                      //           ],
+                      //           color: Colors.white,
+                      //           borderRadius: BorderRadius.circular(24.0),
+                      //         ),
+                      //         child: SearchField(
+                      //           autoCorrect: true,
+                      //           controller: _advertiser_signup_controller
+                      //               .gender_controller,
+                      //           suggestions: data
+                      //               .map((e) => SearchFieldListItem(e,
+                      //                   child: Text(
+                      //                     e,
+                      //                     style: TextStyle(color: Colors.white),
+                      //                   )))
+                      //               .toList(),
+                      //
+                      //           suggestionState: Suggestion.expand,
+                      //           textInputAction: TextInputAction.next,
+                      //           // hint: 'SearchField Example 2',
+                      //
+                      //           hasOverlay: false,
+                      //           searchStyle: TextStyle(
+                      //             fontSize: 16,
+                      //             fontFamily: 'PR',
+                      //             color: Colors.black,
+                      //           ),
+                      //           // controller: ,
+                      //           validator: (x) {
+                      //             if (_advertiser_signup_controller
+                      //                 .selected_gender!.isEmpty) {
+                      //               return 'Please Enter a valid State';
+                      //             }
+                      //             return null;
+                      //           },
+                      //           searchInputDecoration: InputDecoration(
+                      //             focusedBorder: InputBorder.none,
+                      //             hintText: 'Select gender',
+                      //             hintStyle: TextStyle(
+                      //               fontSize: 14,
+                      //               fontFamily: 'PR',
+                      //               color: Colors.grey,
+                      //             ),
+                      //             contentPadding: EdgeInsets.all(14),
+                      //             suffixIcon: Icon(
+                      //               Icons.keyboard_arrow_down,
+                      //               color: Colors.black,
+                      //             ),
+                      //             enabledBorder: InputBorder.none,
+                      //           ),
+                      //
+                      //           suggestionsDecoration: BoxDecoration(
+                      //             borderRadius: BorderRadius.only(
+                      //                 bottomLeft: Radius.circular(24),
+                      //                 bottomRight: Radius.circular(24)),
+                      //             color: Colors.white,
+                      //             gradient: LinearGradient(
+                      //               begin: Alignment.topLeft,
+                      //               end: Alignment.bottomRight,
+                      //               // stops: [0.1, 0.5, 0.7, 0.9],
+                      //               colors: [
+                      //                 HexColor("#000000"),
+                      //                 HexColor("#C12265"),
+                      //                 HexColor("#C12265"),
+                      //                 HexColor("#FFFFFF"),
+                      //               ],
+                      //             ),
+                      //           ),
+                      //           // maxSuggestionsInViewPort: 6,
+                      //           itemHeight: 45,
+                      //           onSuggestionTap: (x) {
+                      //             print(_advertiser_signup_controller
+                      //                 .gender_controller.text);
+                      //           },
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+                      CommonTextFormField(
+                        height: 45,
+                        title: "Gender",
+                        controller:
+                        _advertiser_signup_controller.gender_controller,
+                        labelText: 'Select Gender',
+                        image_path: AssetUtils.user_icon2,
+                        tap: (){
+                          setState(() {
+                            gender_tap = true;
+                          });
+                        },
                       ),
-
+                      SizedBox(
+                        height: 12,
+                      ),
+                      (gender_tap
+                          ? Container(
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 30),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(24),
+                          border: Border.all(
+                              width: 1, color: Colors.white),
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            // stops: [0.1, 0.5, 0.7, 0.9],
+                            colors: [
+                              HexColor("#000000"),
+                              HexColor("#C12265"),
+                              HexColor("#C12265"),
+                              HexColor("#FFFFFF"),
+                            ],
+                          ),
+                        ),
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: data.length,
+                          itemBuilder:
+                              (BuildContext context, int index) {
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  gender_tap = false;
+                                  _advertiser_signup_controller.gender_controller.text = data[index];
+                                });
+                              },
+                              child: Container(
+                                margin: EdgeInsets.symmetric(
+                                    vertical: 8),
+                                child: Text(
+                                  data[index],
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontFamily: 'PR',
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      )
+                          : SizedBox.shrink()),
                       SizedBox(
                         height: 12,
                       ),
@@ -821,5 +1418,14 @@ class _AdvertiserSignUpScreenState extends State<AdvertiserSignUpScreen> {
         );
       },
     );
+  }
+
+  Future<dynamic> getAllFollowersList() async {
+    final books = await _creator_signup_controller.getAllCountriesFromAPI(
+        _creator_signup_controller.query_followers.text);
+
+    setState(() => this._creator_signup_controller.data_country = books);
+    print(
+        '_creator_signup_controller.data_country.length ${_creator_signup_controller.data_country.length}');
   }
 }

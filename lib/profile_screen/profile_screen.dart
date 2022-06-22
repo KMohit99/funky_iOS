@@ -59,11 +59,11 @@ class _Profile_ScreenState extends State<Profile_Screen>
 
   init() async {
     String id_user = await PreferenceManager().getPref(URLConstants.id);
-    String social_type_user = await PreferenceManager().getPref(URLConstants.social_type);
+    String social_type_user =
+        await PreferenceManager().getPref(URLConstants.social_type);
     print("id----- $id_user");
     print("id----- $social_type_user");
-    (social_type_user ==
-            ""
+    (social_type_user == ""
         ? await _creator_login_screen_controller.CreatorgetUserInfo_Email(
             UserId: id_user)
         : await _creator_login_screen_controller.getUserInfo_social());
@@ -230,7 +230,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
             ),
             borderRadius: BorderRadius.circular(50),
             border:
-                Border.all(color: HexColor(CommonColor.orange), width: 1.5)),
+            Border.all(color: HexColor(CommonColor.orange), width: 1.5)),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Image.asset(
@@ -324,7 +324,51 @@ class _Profile_ScreenState extends State<Profile_Screen>
         //         ))),
         //   ),
         // ),
-        body: NestedScrollView(
+        body: Obx(() => (_creator_login_screen_controller.isuserinfoLoading.value == true ? Center(
+          child: Material(
+            color: Color(0x66DD4D4),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                    color: Colors.transparent,
+                    height: 80,
+                    width: 200,
+                    child: Container(
+                      color: Colors.black,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          CircularProgressIndicator(
+                            color: HexColor(CommonColor.pinkFont),
+                          ),
+                          Text(
+                            'Loading...',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontFamily: 'PR'),
+                          )
+                        ],
+                      ),
+                    )
+                  // Material(
+                  //   color: Colors.transparent,
+                  //   child: LoadingIndicator(
+                  //     backgroundColor: Colors.transparent,
+                  //     indicatorType: Indicator.ballScale,
+                  //     colors: _kDefaultRainbowColors,
+                  //     strokeWidth: 4.0,
+                  //     pathBackgroundColor: Colors.yellow,
+                  //     // showPathBackground ? Colors.black45 : null,
+                  //   ),
+                  // ),
+                ),
+              ],
+            ),
+          ),
+        ):NestedScrollView(
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return <Widget>[
               SliverAppBar(
@@ -360,16 +404,16 @@ class _Profile_ScreenState extends State<Profile_Screen>
                             // ),
                             Container(
                               margin:
-                                  EdgeInsets.only(top: 0, right: 16, left: 16),
+                              EdgeInsets.only(top: 0, right: 16, left: 16),
                               child: Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                MainAxisAlignment.spaceBetween,
                                 children: [
                                   Expanded(
                                     flex: 1,
                                     child: Container(
-                                        // color: Colors.white,
-                                        ),
+                                      // color: Colors.white,
+                                    ),
                                   ),
                                   Expanded(
                                     flex: 2,
@@ -412,97 +456,97 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                                     sigmaX: 10, sigmaY: 10),
                                                 child: AlertDialog(
                                                     insetPadding:
-                                                        EdgeInsets.only(
-                                                            bottom: 500,
-                                                            left: 100),
+                                                    EdgeInsets.only(
+                                                        bottom: 500,
+                                                        left: 100),
                                                     backgroundColor:
-                                                        Colors.transparent,
+                                                    Colors.transparent,
                                                     contentPadding:
-                                                        EdgeInsets.zero,
+                                                    EdgeInsets.zero,
                                                     elevation: 0.0,
                                                     // title: Center(child: Text("Evaluation our APP")),
                                                     content: Column(
                                                       mainAxisAlignment:
-                                                          MainAxisAlignment.end,
+                                                      MainAxisAlignment.end,
                                                       children: [
                                                         Container(
                                                           margin: EdgeInsets
                                                               .symmetric(
-                                                                  vertical: 0,
-                                                                  horizontal:
-                                                                      0),
+                                                              vertical: 0,
+                                                              horizontal:
+                                                              0),
                                                           // height: 122,
                                                           width: 150,
                                                           // padding: const EdgeInsets.all(8.0),
                                                           decoration:
-                                                              BoxDecoration(
-                                                                  gradient:
-                                                                      LinearGradient(
-                                                                    begin:
-                                                                        Alignment(
-                                                                            -1.0,
-                                                                            0.0),
-                                                                    end: Alignment(
-                                                                        1.0,
-                                                                        0.0),
-                                                                    transform:
-                                                                        GradientRotation(
-                                                                            0.7853982),
-                                                                    // stops: [0.1, 0.5, 0.7, 0.9],
-                                                                    colors: [
-                                                                      HexColor(
-                                                                          "#000000"),
-                                                                      HexColor(
-                                                                          "#000000"),
-                                                                      HexColor(
-                                                                          "##E84F90"),
-                                                                      // HexColor("#ffffff"),
-                                                                      // HexColor("#FFFFFF").withOpacity(0.67),
-                                                                    ],
-                                                                  ),
+                                                          BoxDecoration(
+                                                              gradient:
+                                                              LinearGradient(
+                                                                begin:
+                                                                Alignment(
+                                                                    -1.0,
+                                                                    0.0),
+                                                                end: Alignment(
+                                                                    1.0,
+                                                                    0.0),
+                                                                transform:
+                                                                GradientRotation(
+                                                                    0.7853982),
+                                                                // stops: [0.1, 0.5, 0.7, 0.9],
+                                                                colors: [
+                                                                  HexColor(
+                                                                      "#000000"),
+                                                                  HexColor(
+                                                                      "#000000"),
+                                                                  HexColor(
+                                                                      "##E84F90"),
+                                                                  // HexColor("#ffffff"),
+                                                                  // HexColor("#FFFFFF").withOpacity(0.67),
+                                                                ],
+                                                              ),
+                                                              color: Colors
+                                                                  .white,
+                                                              border: Border.all(
                                                                   color: Colors
                                                                       .white,
-                                                                  border: Border.all(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      width: 1),
-                                                                  borderRadius:
-                                                                      BorderRadius.all(
-                                                                          Radius.circular(
-                                                                              26.0))),
+                                                                  width: 1),
+                                                              borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius.circular(
+                                                                      26.0))),
                                                           child: Padding(
                                                             padding:
-                                                                const EdgeInsets
-                                                                        .symmetric(
-                                                                    vertical:
-                                                                        10,
-                                                                    horizontal:
-                                                                        5),
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                vertical:
+                                                                10,
+                                                                horizontal:
+                                                                5),
                                                             child: Column(
                                                               mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .center,
+                                                              MainAxisAlignment
+                                                                  .center,
                                                               children: [
                                                                 Text(
                                                                   'Report',
                                                                   textAlign:
-                                                                      TextAlign
-                                                                          .center,
+                                                                  TextAlign
+                                                                      .center,
                                                                   style: TextStyle(
                                                                       fontSize:
-                                                                          15,
+                                                                      15,
                                                                       fontFamily:
-                                                                          'PR',
+                                                                      'PR',
                                                                       color: Colors
                                                                           .white),
                                                                 ),
                                                                 Container(
                                                                   margin: EdgeInsets
                                                                       .symmetric(
-                                                                          horizontal:
-                                                                              20),
+                                                                      horizontal:
+                                                                      20),
                                                                   child:
-                                                                      Divider(
+                                                                  Divider(
                                                                     color: Colors
                                                                         .black,
                                                                     height: 20,
@@ -512,19 +556,19 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                                                   'Block',
                                                                   style: TextStyle(
                                                                       fontSize:
-                                                                          15,
+                                                                      15,
                                                                       fontFamily:
-                                                                          'PR',
+                                                                      'PR',
                                                                       color: Colors
                                                                           .white),
                                                                 ),
                                                                 Container(
                                                                   margin: EdgeInsets
                                                                       .symmetric(
-                                                                          horizontal:
-                                                                              20),
+                                                                      horizontal:
+                                                                      20),
                                                                   child:
-                                                                      Divider(
+                                                                  Divider(
                                                                     color: Colors
                                                                         .black,
                                                                     height: 20,
@@ -533,23 +577,23 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                                                 Text(
                                                                   'Remove follower',
                                                                   textAlign:
-                                                                      TextAlign
-                                                                          .center,
+                                                                  TextAlign
+                                                                      .center,
                                                                   style: TextStyle(
                                                                       fontSize:
-                                                                          15,
+                                                                      15,
                                                                       fontFamily:
-                                                                          'PR',
+                                                                      'PR',
                                                                       color: Colors
                                                                           .white),
                                                                 ),
                                                                 Container(
                                                                   margin: EdgeInsets
                                                                       .symmetric(
-                                                                          horizontal:
-                                                                              20),
+                                                                      horizontal:
+                                                                      20),
                                                                   child:
-                                                                      Divider(
+                                                                  Divider(
                                                                     color: Colors
                                                                         .black,
                                                                     height: 20,
@@ -559,9 +603,9 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                                                   'Share Profile ',
                                                                   style: TextStyle(
                                                                       fontSize:
-                                                                          15,
+                                                                      15,
                                                                       fontFamily:
-                                                                          'PR',
+                                                                      'PR',
                                                                       color: Colors
                                                                           .white),
                                                                 ),
@@ -583,7 +627,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
                             ),
                             Container(
                               margin:
-                                  EdgeInsets.only(top: 0, right: 16, left: 16),
+                              EdgeInsets.only(top: 0, right: 16, left: 16),
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -594,14 +638,14 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(50),
                                       child: (_creator_login_screen_controller
-                                              .userInfoModel_email!
-                                              .data![0]
-                                              .image!
-                                              .isNotEmpty
-                                          ? Image.network('http://foxyserver.com/funky/images/${_creator_login_screen_controller
                                           .userInfoModel_email!
                                           .data![0]
-                                          .image!}',fit: BoxFit.fitWidth,)
+                                          .image!
+                                          .isNotEmpty
+                                          ? Image.network(
+                                        'http://foxyserver.com/funky/images/${_creator_login_screen_controller.userInfoModel_email!.data![0].image!}',
+                                        fit: BoxFit.fitWidth,
+                                      )
                                           : Image.asset(AssetUtils.image1)),
                                     ),
                                   ),
@@ -615,10 +659,10 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                         children: [
                                           Text(
                                             (_creator_login_screen_controller
-                                                    .userInfoModel_email!
-                                                    .data![0]
-                                                    .fullName!
-                                                    .isNotEmpty
+                                                .userInfoModel_email!
+                                                .data![0]
+                                                .fullName!
+                                                .isNotEmpty
                                                 ? '${_creator_login_screen_controller.userInfoModel_email!.data![0].fullName}'
                                                 : 'Please update profile'),
                                             style: TextStyle(
@@ -628,9 +672,9 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                           ),
                                           IconButton(
                                               visualDensity:
-                                                  VisualDensity(vertical: -4),
+                                              VisualDensity(vertical: -4),
                                               padding:
-                                                  EdgeInsets.only(left: 5.0),
+                                              EdgeInsets.only(left: 5.0),
                                               icon: Icon(
                                                 Icons.edit,
                                                 color: Colors.grey,
@@ -645,15 +689,15 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                   ),
                                   Column(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         children: [
                                           IconButton(
                                               visualDensity:
-                                                  VisualDensity(vertical: -4),
+                                              VisualDensity(vertical: -4),
                                               padding:
-                                                  EdgeInsets.only(left: 5.0),
+                                              EdgeInsets.only(left: 5.0),
                                               icon: Image.asset(
                                                 AssetUtils.like_icon_filled,
                                                 color: HexColor(
@@ -675,9 +719,9 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                         children: [
                                           IconButton(
                                               padding:
-                                                  EdgeInsets.only(left: 5.0),
+                                              EdgeInsets.only(left: 5.0),
                                               visualDensity:
-                                                  VisualDensity(vertical: -4),
+                                              VisualDensity(vertical: -4),
                                               icon: Image.asset(
                                                 AssetUtils.profile_filled,
                                                 color: HexColor(
@@ -701,9 +745,9 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                         children: [
                                           IconButton(
                                               visualDensity:
-                                                  VisualDensity(vertical: -4),
+                                              VisualDensity(vertical: -4),
                                               padding:
-                                                  EdgeInsets.only(left: 5.0),
+                                              EdgeInsets.only(left: 5.0),
                                               icon: Image.asset(
                                                 AssetUtils.following_filled,
                                                 color: HexColor(
@@ -713,10 +757,10 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                               ),
                                               onPressed: () {
                                                 Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder: (_) =>
-                                                                FollowingScreen()))
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (_) =>
+                                                            FollowingScreen()))
                                                     .then(
                                                         (_) => setState(() {}));
 
@@ -738,20 +782,20 @@ class _Profile_ScreenState extends State<Profile_Screen>
                             ),
                             Container(
                               margin:
-                                  EdgeInsets.only(top: 0, right: 16, left: 16),
+                              EdgeInsets.only(top: 0, right: 16, left: 16),
                               child: Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                MainAxisAlignment.spaceBetween,
                                 children: [
                                   Expanded(
                                     child: Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      MainAxisAlignment.spaceBetween,
                                       children: [
                                         Container(
                                           decoration: BoxDecoration(
                                             borderRadius:
-                                                BorderRadius.circular(50),
+                                            BorderRadius.circular(50),
                                           ),
                                           child: IconButton(
                                             padding: EdgeInsets.zero,
@@ -771,7 +815,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                         Container(
                                           decoration: BoxDecoration(
                                             borderRadius:
-                                                BorderRadius.circular(50),
+                                            BorderRadius.circular(50),
                                           ),
                                           child: IconButton(
                                             padding: EdgeInsets.zero,
@@ -790,7 +834,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                         Container(
                                           decoration: BoxDecoration(
                                             borderRadius:
-                                                BorderRadius.circular(50),
+                                            BorderRadius.circular(50),
                                           ),
                                           child: IconButton(
                                             padding: EdgeInsets.zero,
@@ -822,7 +866,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                           decoration: BoxDecoration(
                                               color: Colors.white,
                                               borderRadius:
-                                                  BorderRadius.circular(25)),
+                                              BorderRadius.circular(25)),
                                           child: Container(
                                               alignment: Alignment.center,
                                               margin: EdgeInsets.symmetric(
@@ -846,7 +890,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                           decoration: BoxDecoration(
                                               color: Colors.white,
                                               borderRadius:
-                                                  BorderRadius.circular(25)),
+                                              BorderRadius.circular(25)),
                                           child: Container(
                                               alignment: Alignment.center,
                                               margin: EdgeInsets.symmetric(
@@ -874,7 +918,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
                             ),
                             Container(
                               margin:
-                                  EdgeInsets.only(top: 0, right: 16, left: 16),
+                              EdgeInsets.only(top: 0, right: 16, left: 16),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -909,7 +953,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                               width: 71,
                                               decoration: BoxDecoration(
                                                 borderRadius:
-                                                    BorderRadius.circular(50),
+                                                BorderRadius.circular(50),
                                               ),
                                               child: IconButton(
                                                 color: Colors.red,
@@ -945,225 +989,225 @@ class _Profile_ScreenState extends State<Profile_Screen>
                     controller: _tabController,
                     tabs: _tabs,
                   )
-                  // TabBar(
-                  //   labelPadding: EdgeInsets.zero,
-                  //   indicatorColor: Colors.black,
-                  //   controller: _tabController,
-                  //   tabs: <Widget>[
-                  //     Container(
-                  //       margin: EdgeInsets.only(bottom: 0),
-                  //       height: 50,
-                  //       width: 50,
-                  //       decoration: BoxDecoration(
-                  //           color: Colors.black,
-                  //           borderRadius: BorderRadius.circular(50),
-                  //           boxShadow: [
-                  //             BoxShadow(
-                  //               color: HexColor(CommonColor.blue),
-                  //               // spreadRadius: 5,
-                  //               blurRadius: 6,
-                  //               offset:
-                  //                   Offset(0, 3), // changes position of shadow
-                  //             ),
-                  //           ],
-                  //           gradient: LinearGradient(
-                  //             begin: Alignment.topLeft,
-                  //             end: Alignment.bottomRight,
-                  //             // stops: [0.1, 0.5, 0.7, 0.9],
-                  //             colors: [
-                  //               HexColor("#000000"),
-                  //               HexColor("#C12265"),
-                  //               // HexColor("#FFFFFF").withOpacity(0.67),
-                  //             ],
-                  //           ),
-                  //           border: Border.all(
-                  //               color: HexColor(CommonColor.blue), width: 1.5)),
-                  //       child: IconButton(
-                  //         onPressed: () {
-                  //           setState(() {
-                  //             index == 0;
-                  //           });
-                  //           print(index);
-                  //         },
-                  //         icon: Image.asset(
-                  //           AssetUtils.story1,
-                  //           height: 25,
-                  //           width: 25,
-                  //           color: HexColor(CommonColor.blue),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //     Container(
-                  //       margin: EdgeInsets.all(0),
-                  //       height: 50,
-                  //       width: 50,
-                  //       decoration: BoxDecoration(
-                  //           borderRadius: BorderRadius.circular(50),
-                  //           boxShadow: [
-                  //             BoxShadow(
-                  //               color: HexColor(CommonColor.green),
-                  //               // spreadRadius: 5,
-                  //               blurRadius: 6,
-                  //               offset:
-                  //                   Offset(0, 3), // changes position of shadow
-                  //             ),
-                  //           ],
-                  //           gradient: LinearGradient(
-                  //             begin: Alignment.topLeft,
-                  //             end: Alignment.bottomRight,
-                  //             // stops: [0.1, 0.5, 0.7, 0.9],
-                  //             colors: [
-                  //               HexColor("#000000"),
-                  //               HexColor("#C12265"),
-                  //               // HexColor("#FFFFFF").withOpacity(0.67),
-                  //             ],
-                  //           ),
-                  //           border: Border.all(
-                  //               color: HexColor(CommonColor.green), width: 1.5)),
-                  //       child: IconButton(
-                  //         onPressed: () {
-                  //           setState(() {
-                  //             index == 1;
-                  //           });
-                  //           print(index);
-                  //         },
-                  //         icon: Image.asset(
-                  //           AssetUtils.story2,
-                  //           height: 25,
-                  //           width: 25,
-                  //           color: HexColor(CommonColor.green),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //     Container(
-                  //       margin: EdgeInsets.all(0),
-                  //       height: 50,
-                  //       width: 50,
-                  //       decoration: BoxDecoration(
-                  //           boxShadow: [
-                  //             BoxShadow(
-                  //               color: HexColor(CommonColor.tile),
-                  //               // spreadRadius: 5,
-                  //               blurRadius: 6,
-                  //               offset:
-                  //                   Offset(0, 3), // changes position of shadow
-                  //             ),
-                  //           ],
-                  //           gradient: LinearGradient(
-                  //             begin: Alignment.topLeft,
-                  //             end: Alignment.bottomRight,
-                  //             // stops: [0.1, 0.5, 0.7, 0.9],
-                  //             colors: [
-                  //               HexColor("#000000"),
-                  //               HexColor("#C12265"),
-                  //               // HexColor("#FFFFFF").withOpacity(0.67),
-                  //             ],
-                  //           ),
-                  //           borderRadius: BorderRadius.circular(50),
-                  //           border: Border.all(
-                  //               color: HexColor(CommonColor.tile), width: 1.5)),
-                  //       child: IconButton(
-                  //         onPressed: () {
-                  //           setState(() {
-                  //             index == 2;
-                  //           });
-                  //           print(index);
-                  //         },
-                  //         icon: Image.asset(
-                  //           AssetUtils.story3,
-                  //           height: 25,
-                  //           width: 25,
-                  //           color: HexColor(CommonColor.tile),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //     Container(
-                  //       margin: EdgeInsets.all(0),
-                  //       height: 50,
-                  //       width: 50,
-                  //       decoration: BoxDecoration(
-                  //           boxShadow: [
-                  //             BoxShadow(
-                  //               color: HexColor(CommonColor.orange),
-                  //               // spreadRadius: 5,
-                  //               blurRadius: 6,
-                  //               offset:
-                  //                   Offset(0, 3), // changes position of shadow
-                  //             ),
-                  //           ],
-                  //           gradient: LinearGradient(
-                  //             begin: Alignment.topLeft,
-                  //             end: Alignment.bottomRight,
-                  //             // stops: [0.1, 0.5, 0.7, 0.9],
-                  //             colors: [
-                  //               HexColor("#000000"),
-                  //               HexColor("#C12265"),
-                  //               // HexColor("#FFFFFF").withOpacity(0.67),
-                  //             ],
-                  //           ),
-                  //           borderRadius: BorderRadius.circular(50),
-                  //           border: Border.all(
-                  //               color: HexColor(CommonColor.orange), width: 1.5)),
-                  //       child: IconButton(
-                  //         onPressed: () {
-                  //           setState(() {
-                  //             index == 3;
-                  //           });
-                  //           print(index);
-                  //         },
-                  //         icon: Image.asset(
-                  //           AssetUtils.story4,
-                  //           height: 25,
-                  //           width: 25,
-                  //           color: HexColor(CommonColor.orange),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //     Container(
-                  //       margin: EdgeInsets.all(0),
-                  //       height: 50,
-                  //       width: 50,
-                  //       decoration: BoxDecoration(
-                  //           boxShadow: [
-                  //             BoxShadow(
-                  //               color: Colors.white,
-                  //               // spreadRadius: 5,
-                  //               blurRadius: 6,
-                  //               offset:
-                  //                   Offset(0, 3), // changes position of shadow
-                  //             ),
-                  //           ],
-                  //           gradient: LinearGradient(
-                  //             begin: Alignment.topLeft,
-                  //             end: Alignment.bottomRight,
-                  //             // stops: [0.1, 0.5, 0.7, 0.9],
-                  //             colors: [
-                  //               HexColor("#000000"),
-                  //               HexColor("#C12265"),
-                  //               // HexColor("#FFFFFF").withOpacity(0.67),
-                  //             ],
-                  //           ),
-                  //           borderRadius: BorderRadius.circular(50),
-                  //           border: Border.all(color: Colors.white, width: 1.5)),
-                  //       child: IconButton(
-                  //         onPressed: () {
-                  //           setState(() {
-                  //             index == 4;
-                  //           });
-                  //           print(index);
-                  //         },
-                  //         icon: Image.asset(
-                  //           AssetUtils.story5,
-                  //           height: 25,
-                  //           width: 25,
-                  //           color: Colors.white,
-                  //         ),
-                  //       ),
-                  //     ),
-                  //
-                  //   ],
-                  // ),
-                  ),
+                // TabBar(
+                //   labelPadding: EdgeInsets.zero,
+                //   indicatorColor: Colors.black,
+                //   controller: _tabController,
+                //   tabs: <Widget>[
+                //     Container(
+                //       margin: EdgeInsets.only(bottom: 0),
+                //       height: 50,
+                //       width: 50,
+                //       decoration: BoxDecoration(
+                //           color: Colors.black,
+                //           borderRadius: BorderRadius.circular(50),
+                //           boxShadow: [
+                //             BoxShadow(
+                //               color: HexColor(CommonColor.blue),
+                //               // spreadRadius: 5,
+                //               blurRadius: 6,
+                //               offset:
+                //                   Offset(0, 3), // changes position of shadow
+                //             ),
+                //           ],
+                //           gradient: LinearGradient(
+                //             begin: Alignment.topLeft,
+                //             end: Alignment.bottomRight,
+                //             // stops: [0.1, 0.5, 0.7, 0.9],
+                //             colors: [
+                //               HexColor("#000000"),
+                //               HexColor("#C12265"),
+                //               // HexColor("#FFFFFF").withOpacity(0.67),
+                //             ],
+                //           ),
+                //           border: Border.all(
+                //               color: HexColor(CommonColor.blue), width: 1.5)),
+                //       child: IconButton(
+                //         onPressed: () {
+                //           setState(() {
+                //             index == 0;
+                //           });
+                //           print(index);
+                //         },
+                //         icon: Image.asset(
+                //           AssetUtils.story1,
+                //           height: 25,
+                //           width: 25,
+                //           color: HexColor(CommonColor.blue),
+                //         ),
+                //       ),
+                //     ),
+                //     Container(
+                //       margin: EdgeInsets.all(0),
+                //       height: 50,
+                //       width: 50,
+                //       decoration: BoxDecoration(
+                //           borderRadius: BorderRadius.circular(50),
+                //           boxShadow: [
+                //             BoxShadow(
+                //               color: HexColor(CommonColor.green),
+                //               // spreadRadius: 5,
+                //               blurRadius: 6,
+                //               offset:
+                //                   Offset(0, 3), // changes position of shadow
+                //             ),
+                //           ],
+                //           gradient: LinearGradient(
+                //             begin: Alignment.topLeft,
+                //             end: Alignment.bottomRight,
+                //             // stops: [0.1, 0.5, 0.7, 0.9],
+                //             colors: [
+                //               HexColor("#000000"),
+                //               HexColor("#C12265"),
+                //               // HexColor("#FFFFFF").withOpacity(0.67),
+                //             ],
+                //           ),
+                //           border: Border.all(
+                //               color: HexColor(CommonColor.green), width: 1.5)),
+                //       child: IconButton(
+                //         onPressed: () {
+                //           setState(() {
+                //             index == 1;
+                //           });
+                //           print(index);
+                //         },
+                //         icon: Image.asset(
+                //           AssetUtils.story2,
+                //           height: 25,
+                //           width: 25,
+                //           color: HexColor(CommonColor.green),
+                //         ),
+                //       ),
+                //     ),
+                //     Container(
+                //       margin: EdgeInsets.all(0),
+                //       height: 50,
+                //       width: 50,
+                //       decoration: BoxDecoration(
+                //           boxShadow: [
+                //             BoxShadow(
+                //               color: HexColor(CommonColor.tile),
+                //               // spreadRadius: 5,
+                //               blurRadius: 6,
+                //               offset:
+                //                   Offset(0, 3), // changes position of shadow
+                //             ),
+                //           ],
+                //           gradient: LinearGradient(
+                //             begin: Alignment.topLeft,
+                //             end: Alignment.bottomRight,
+                //             // stops: [0.1, 0.5, 0.7, 0.9],
+                //             colors: [
+                //               HexColor("#000000"),
+                //               HexColor("#C12265"),
+                //               // HexColor("#FFFFFF").withOpacity(0.67),
+                //             ],
+                //           ),
+                //           borderRadius: BorderRadius.circular(50),
+                //           border: Border.all(
+                //               color: HexColor(CommonColor.tile), width: 1.5)),
+                //       child: IconButton(
+                //         onPressed: () {
+                //           setState(() {
+                //             index == 2;
+                //           });
+                //           print(index);
+                //         },
+                //         icon: Image.asset(
+                //           AssetUtils.story3,
+                //           height: 25,
+                //           width: 25,
+                //           color: HexColor(CommonColor.tile),
+                //         ),
+                //       ),
+                //     ),
+                //     Container(
+                //       margin: EdgeInsets.all(0),
+                //       height: 50,
+                //       width: 50,
+                //       decoration: BoxDecoration(
+                //           boxShadow: [
+                //             BoxShadow(
+                //               color: HexColor(CommonColor.orange),
+                //               // spreadRadius: 5,
+                //               blurRadius: 6,
+                //               offset:
+                //                   Offset(0, 3), // changes position of shadow
+                //             ),
+                //           ],
+                //           gradient: LinearGradient(
+                //             begin: Alignment.topLeft,
+                //             end: Alignment.bottomRight,
+                //             // stops: [0.1, 0.5, 0.7, 0.9],
+                //             colors: [
+                //               HexColor("#000000"),
+                //               HexColor("#C12265"),
+                //               // HexColor("#FFFFFF").withOpacity(0.67),
+                //             ],
+                //           ),
+                //           borderRadius: BorderRadius.circular(50),
+                //           border: Border.all(
+                //               color: HexColor(CommonColor.orange), width: 1.5)),
+                //       child: IconButton(
+                //         onPressed: () {
+                //           setState(() {
+                //             index == 3;
+                //           });
+                //           print(index);
+                //         },
+                //         icon: Image.asset(
+                //           AssetUtils.story4,
+                //           height: 25,
+                //           width: 25,
+                //           color: HexColor(CommonColor.orange),
+                //         ),
+                //       ),
+                //     ),
+                //     Container(
+                //       margin: EdgeInsets.all(0),
+                //       height: 50,
+                //       width: 50,
+                //       decoration: BoxDecoration(
+                //           boxShadow: [
+                //             BoxShadow(
+                //               color: Colors.white,
+                //               // spreadRadius: 5,
+                //               blurRadius: 6,
+                //               offset:
+                //                   Offset(0, 3), // changes position of shadow
+                //             ),
+                //           ],
+                //           gradient: LinearGradient(
+                //             begin: Alignment.topLeft,
+                //             end: Alignment.bottomRight,
+                //             // stops: [0.1, 0.5, 0.7, 0.9],
+                //             colors: [
+                //               HexColor("#000000"),
+                //               HexColor("#C12265"),
+                //               // HexColor("#FFFFFF").withOpacity(0.67),
+                //             ],
+                //           ),
+                //           borderRadius: BorderRadius.circular(50),
+                //           border: Border.all(color: Colors.white, width: 1.5)),
+                //       child: IconButton(
+                //         onPressed: () {
+                //           setState(() {
+                //             index == 4;
+                //           });
+                //           print(index);
+                //         },
+                //         icon: Image.asset(
+                //           AssetUtils.story5,
+                //           height: 25,
+                //           width: 25,
+                //           color: Colors.white,
+                //         ),
+                //       ),
+                //     ),
+                //
+                //   ],
+                // ),
+              ),
             ];
           },
           body: TabBarView(
@@ -1178,7 +1222,8 @@ class _Profile_ScreenState extends State<Profile_Screen>
               gallery_screen(),
             ],
           ),
-        ));
+        ) ))
+        );
   }
 
   Widget gallery_screen() {
@@ -1356,6 +1401,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
   VideoModelList? _videoModelList;
 
   var uint8list;
+
   Future<dynamic> get_video_list(BuildContext context) async {
     setState(() {
       isvideoLoading = true;
@@ -1395,10 +1441,12 @@ class _Profile_ScreenState extends State<Profile_Screen>
           isvideoLoading = false;
         });
         uint8list = await VideoThumbnail.thumbnailFile(
-          video: "https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4",
+          video:
+              "https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4",
           thumbnailPath: (await getTemporaryDirectory()).path,
           imageFormat: ImageFormat.WEBP,
-          maxHeight: 64, // specify the height of the thumbnail, let the width auto-scaled to keep the source aspect ratio
+          maxHeight: 64,
+          // specify the height of the thumbnail, let the width auto-scaled to keep the source aspect ratio
           quality: 75,
         );
 
@@ -1501,8 +1549,11 @@ class _Profile_ScreenState extends State<Profile_Screen>
                               ? CircularProgressIndicator(
                                   color: HexColor(CommonColor.pinkFont),
                                 )
-                              : (_videoModelList!.data![index].uploadVideo!.isEmpty
-                                  ? Image.asset(AssetUtils.logo,)
+                              : (_videoModelList!
+                                      .data![index].uploadVideo!.isEmpty
+                                  ? Image.asset(
+                                      AssetUtils.logo,
+                                    )
                                   : GestureDetector(
                                       onTap: () {
                                         print('data');
@@ -1511,12 +1562,14 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                               .data![index].uploadVideo!,
                                         ));
                                       },
-                                      child:  Image.asset(AssetUtils.logo,)
+                                      child: Image.asset(
+                                        AssetUtils.logo,
+                                      )
                                       // Image.network(
                                       //   'http://foxyserver.com/funky/images/${_videoModelList!.data![index].uploadVideo}',
                                       //   fit: BoxFit.cover,
                                       // ),
-                                    ))),
+                                      ))),
                         ),
                       ),
                       staggeredTileBuilder: (int index) =>

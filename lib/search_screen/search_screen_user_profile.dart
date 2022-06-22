@@ -168,7 +168,7 @@ class _SearchUserProfileState extends State<SearchUserProfile>
     Tab(
       height: 60,
       icon: Container(
-        margin: EdgeInsets.only(bottom: 0),
+        margin: EdgeInsets.only(top: 10),
         height: 45,
         width: 45,
         decoration: BoxDecoration(
@@ -207,7 +207,7 @@ class _SearchUserProfileState extends State<SearchUserProfile>
     Tab(
       height: 60,
       icon: Container(
-        margin: EdgeInsets.only(bottom: 0),
+        margin: EdgeInsets.only(top: 10),
         height: 45,
         width: 45,
         decoration: BoxDecoration(
@@ -245,7 +245,7 @@ class _SearchUserProfileState extends State<SearchUserProfile>
     Tab(
       height: 60,
       icon: Container(
-        margin: EdgeInsets.only(bottom: 0),
+        margin: EdgeInsets.only(top:10),
         height: 45,
         width: 45,
         decoration: BoxDecoration(
@@ -283,7 +283,7 @@ class _SearchUserProfileState extends State<SearchUserProfile>
     Tab(
       height: 60,
       icon: Container(
-        margin: EdgeInsets.only(bottom: 0),
+        margin: EdgeInsets.only(top: 10),
         height: 45,
         width: 45,
         decoration: BoxDecoration(
@@ -322,7 +322,7 @@ class _SearchUserProfileState extends State<SearchUserProfile>
     Tab(
       height: 60,
       icon: Container(
-        margin: EdgeInsets.only(bottom: 0),
+        margin: EdgeInsets.only(top: 10),
         height: 45,
         width: 45,
         decoration: BoxDecoration(

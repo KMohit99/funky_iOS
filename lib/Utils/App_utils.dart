@@ -48,6 +48,7 @@ class URLConstants{
 
 
   static const VideoListApi = "videoList.php";
+  static const ImagewListApi = "home-imageList.php";
   static const FollowersListApi = "get-followUsers.php";
   static const followingListApi = "followingList";
   static const CountryListApi = "getCountry.php";

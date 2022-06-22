@@ -13,7 +13,7 @@ import '../Utils/App_utils.dart';
 import '../Utils/asset_utils.dart';
 import '../Utils/colorUtils.dart';
 import '../Utils/custom_textfeild.dart';
-import '../homepage/model/Homepage_model.dart';
+import '../homepage/model/VideoList_model.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
