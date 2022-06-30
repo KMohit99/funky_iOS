@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class CommonTextFormField extends StatelessWidget {
   final String title;
   final String? labelText;
+  final String? errorText;
   final TextEditingController? controller;
   final String? trailingImagePath;
   final TextInputType? keyboardType;
@@ -40,7 +41,7 @@ class CommonTextFormField extends StatelessWidget {
     this.align,
     this.validator,
     this.enabled,
-    this.height, this.onpasswordTap,
+    this.height, this.onpasswordTap, this.errorText,
   }) : super(key: key);
 
   @override
@@ -97,10 +98,12 @@ class CommonTextFormField extends StatelessWidget {
                 hintText: labelText ?? '',
                 filled: true,
                 border: InputBorder.none,
+                errorText: errorText,
                 enabledBorder: const OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.transparent, width: 1),
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
+
                 // focusedBorder: OutlineInputBorder(
                 //   borderSide:
                 //   BorderSide(color: ColorUtils.blueColor, width: 1),
@@ -231,7 +234,7 @@ class CommonTextFormField_text extends StatelessWidget {
                 contentPadding: EdgeInsets.only(left: 20, top: 14, bottom: 14),
                 alignLabelWithHint: false,
                 isDense: true,
-                labelText: labelText ?? '',
+                hintText: labelText ?? '',
                 counterStyle: TextStyle(
                   height: double.minPositive,
                 ),

@@ -1,21 +1,18 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:io' as Io;
-import 'dart:math';
+import 'dart:math' as math;
 import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:funky_new/custom_widget/page_loader.dart';
 import 'package:funky_new/dashboard/post_image_preview.dart';
-import 'package:funky_new/dashboard/post_screen.dart';
 import 'package:funky_new/dashboard/video_editor.dart';
-import 'package:funky_new/global_key.dart';
-
-// import 'package:funky_project/Authentication/creator_login/controller/creator_login_controller.dart';
-// import 'package:funky_project/homepage/ui/homepage_screen.dart';
+import 'package:funky_new/dashboard/video_recorder_screen.dart';
+import 'package:funky_new/settings/settings_screen.dart';
+import 'package:funky_new/video_recorder/lib/main.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:image_editor_plus/image_editor_plus.dart';
@@ -23,16 +20,11 @@ import 'package:image_picker/image_picker.dart';
 
 import '../Utils/asset_utils.dart';
 import '../Utils/colorUtils.dart';
-
-// import '../drawerScreen.dart';
-// import '../news_feed/new_feed_screen.dart';
-// import '../profile_screen/profile_screen.dart';
-// import '../search_screen/search_screen.dart';
-import 'dart:math' as math;
-
 import '../custom_widget/common_buttons.dart';
 import '../drawerScreen.dart';
+import '../getx_pagination/binding_utils.dart';
 import '../homepage/ui/homepage_screen.dart';
+import '../main.dart';
 import '../news_feed/new_feed_screen.dart';
 import '../profile_screen/profile_screen.dart';
 import '../search_screen/search_screen.dart';
@@ -76,7 +68,7 @@ class _DashboardState extends State<Dashboard> {
 
   Widget? get getPage {
     if (_page == 0) {
-      return HomePageScreen();
+      return const HomePageScreen();
     } else if (_page == 1) {
       return const SearchScreen();
     } else if (_page == 2) {
@@ -165,6 +157,11 @@ class _DashboardState extends State<Dashboard> {
     });
   }
 
+  videoRecorder() {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (BuildContext context) => SettingScreen()));
+  }
+
   void Pickvideo() async {
     var imgCamera = await imgPicker.pickVideo(source: ImageSource.gallery);
     setState(() {
@@ -208,6 +205,171 @@ class _DashboardState extends State<Dashboard> {
     // });
   }
 
+  Future image_upload() {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          double width = MediaQuery.of(context).size.width;
+          double height = MediaQuery.of(context).size.height;
+          return BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            child: AlertDialog(
+                backgroundColor: Colors.transparent,
+                contentPadding: EdgeInsets.zero,
+                elevation: 0.0,
+                // title: Center(child: Text("Evaluation our APP")),
+                content: Container(
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+                  height: screenHeight / 3,
+                  // width: 133,
+                  // padding: const EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: const Alignment(-1.0, 0.0),
+                        end: const Alignment(1.0, 0.0),
+                        transform: const GradientRotation(0.7853982),
+                        // stops: [0.1, 0.5, 0.7, 0.9],
+                        colors: [
+                          HexColor("#000000"),
+                          HexColor("#000000"),
+                          HexColor("##E84F90"),
+                          HexColor("#ffffff"),
+                          // HexColor("#FFFFFF").withOpacity(0.67),
+                        ],
+                      ),
+                      color: Colors.white,
+                      border: Border.all(color: Colors.white, width: 1),
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(26.0))),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(bottom: 10),
+                            child: common_button(
+                              onTap: () {
+                                openCamera();
+                                Navigator.pop(context);
+                                // Get.toNamed(BindingUtils.signupOption);
+                              },
+                              backgroud_color: Colors.black,
+                              lable_text: 'Camera',
+                              lable_text_color: Colors.white,
+                            ),
+                          ),
+                          common_button(
+                            onTap: () {
+                              openGallery();
+                              Navigator.pop(context);
+                              // Get.toNamed(BindingUtils.signupOption);
+                            },
+                            backgroud_color: Colors.black,
+                            lable_text: 'Gallery',
+                            lable_text_color: Colors.white,
+                          ),
+                          // const SizedBox(
+                          //   height: 10,
+                          // ),
+                        ],
+                      ),
+                    ],
+                  ),
+                )),
+          );
+        });
+  }
+
+  Future video_upload() {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          double width = MediaQuery.of(context).size.width;
+          double height = MediaQuery.of(context).size.height;
+          return BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            child: AlertDialog(
+                backgroundColor: Colors.transparent,
+                contentPadding: EdgeInsets.zero,
+                elevation: 0.0,
+                // title: Center(child: Text("Evaluation our APP")),
+                content: Container(
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+                  height: screenHeight / 3,
+                  // width: 133,
+                  // padding: const EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: const Alignment(-1.0, 0.0),
+                        end: const Alignment(1.0, 0.0),
+                        transform: const GradientRotation(0.7853982),
+                        // stops: [0.1, 0.5, 0.7, 0.9],
+                        colors: [
+                          HexColor("#000000"),
+                          HexColor("#000000"),
+                          HexColor("##E84F90"),
+                          HexColor("#ffffff"),
+                          // HexColor("#FFFFFF").withOpacity(0.67),
+                        ],
+                      ),
+                      color: Colors.white,
+                      border: Border.all(color: Colors.white, width: 1),
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(26.0))),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          common_button(
+                            onTap: () {
+                              print('Hello');
+                              // videoRecorder();
+                              //
+                              // // Get.to(VideoRecorder());
+                              // // Pickvideo();
+                              // Navigator.pop(
+                              //     context);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => MyApp_video()),
+                              );
+                              // Get.to(MyApp_video());
+                            },
+                            backgroud_color: Colors.black,
+                            lable_text: 'Camera',
+                            lable_text_color: Colors.white,
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          common_button(
+                            onTap: () {
+                              Pickvideo();
+                              Navigator.pop(context);
+                              // Get.toNamed(BindingUtils.signupOption);
+                            },
+                            backgroud_color: Colors.black,
+                            lable_text: 'Gallery',
+                            lable_text_color: Colors.white,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                )),
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     bool showFab = MediaQuery.of(context).viewInsets.bottom != 0;
@@ -221,7 +383,7 @@ class _DashboardState extends State<Dashboard> {
       extendBodyBehindAppBar: true,
       appBar: (_page == 0 || _page == 1 || _page == 2)
           ? PreferredSize(
-              preferredSize: Size.fromHeight(50),
+              preferredSize: const Size.fromHeight(50),
               child: AppBar(
                 backgroundColor: Colors.transparent,
                 title: Text(
@@ -230,7 +392,7 @@ class _DashboardState extends State<Dashboard> {
                       : (_page == 1
                           ? "Discover"
                           : (_page == 2 ? "News Feed" : ''))),
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontSize: 16, color: Colors.white, fontFamily: 'PB'),
                 ),
                 centerTitle: true,
@@ -272,7 +434,8 @@ class _DashboardState extends State<Dashboard> {
                 leading: Row(
                   children: [
                     Container(
-                      margin: EdgeInsets.only(left: 16, top: 0, bottom: 0),
+                      margin:
+                          const EdgeInsets.only(left: 16, top: 0, bottom: 0),
                       child: IconButton(
                           padding: EdgeInsets.zero,
                           onPressed: () {
@@ -288,7 +451,8 @@ class _DashboardState extends State<Dashboard> {
                     ),
                     Expanded(
                       child: Container(
-                        margin: EdgeInsets.only(left: 18, top: 0, bottom: 0),
+                        margin:
+                            const EdgeInsets.only(left: 18, top: 0, bottom: 0),
                         child: IconButton(
                             padding: EdgeInsets.zero,
                             onPressed: () {},
@@ -411,13 +575,13 @@ class _DashboardState extends State<Dashboard> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Container(
-                    margin: EdgeInsets.only(left: 28.0),
+                    margin: const EdgeInsets.only(left: 28.0),
                     decoration: BoxDecoration(
                         color: (_page == 0 ? Colors.white : Colors.transparent),
                         borderRadius: BorderRadius.circular(50)),
                     child: IconButton(
                       visualDensity:
-                          VisualDensity(vertical: -4, horizontal: -4),
+                          const VisualDensity(vertical: -4, horizontal: -4),
                       iconSize: 25.0,
                       icon: Image.asset(
                         AssetUtils.home_icon,
@@ -434,13 +598,13 @@ class _DashboardState extends State<Dashboard> {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.only(right: 28.0),
+                    margin: const EdgeInsets.only(right: 28.0),
                     decoration: BoxDecoration(
                         color: (_page == 1 ? Colors.white : Colors.transparent),
                         borderRadius: BorderRadius.circular(50)),
                     child: IconButton(
                       visualDensity:
-                          VisualDensity(vertical: -4, horizontal: -4),
+                          const VisualDensity(vertical: -4, horizontal: -4),
                       iconSize: 25.0,
                       icon: Image.asset(
                         AssetUtils.search_icon,
@@ -457,13 +621,13 @@ class _DashboardState extends State<Dashboard> {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.only(left: 28.0),
+                    margin: const EdgeInsets.only(left: 28.0),
                     decoration: BoxDecoration(
                         color: (_page == 2 ? Colors.white : Colors.transparent),
                         borderRadius: BorderRadius.circular(50)),
                     child: IconButton(
                       visualDensity:
-                          VisualDensity(vertical: -4, horizontal: -4),
+                          const VisualDensity(vertical: -4, horizontal: -4),
                       iconSize: 25.0,
                       icon: Image.asset(
                         AssetUtils.news_icon,
@@ -480,13 +644,13 @@ class _DashboardState extends State<Dashboard> {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.only(right: 28.0),
+                    margin: const EdgeInsets.only(right: 28.0),
                     decoration: BoxDecoration(
                         color: (_page == 3 ? Colors.white : Colors.transparent),
                         borderRadius: BorderRadius.circular(50)),
                     child: IconButton(
                       visualDensity:
-                          VisualDensity(vertical: -4, horizontal: -4),
+                          const VisualDensity(vertical: -4, horizontal: -4),
                       iconSize: 25.0,
                       icon: Image.asset(
                         AssetUtils.user_icon2,
@@ -520,7 +684,7 @@ class _DashboardState extends State<Dashboard> {
             child: Stack(
               children: [
                 Container(
-                  child: MyArc(diameter: 80),
+                  child: const MyArc(diameter: 80),
                 ),
                 Align(
                   alignment: Alignment.center,
@@ -560,17 +724,20 @@ class _DashboardState extends State<Dashboard> {
                                             MainAxisAlignment.end,
                                         children: [
                                           Container(
-                                            margin: EdgeInsets.symmetric(
+                                            margin: const EdgeInsets.symmetric(
                                                 vertical: 110, horizontal: 70),
                                             height: 115,
                                             // width: 133,
                                             // padding: const EdgeInsets.all(8.0),
                                             decoration: BoxDecoration(
                                                 gradient: LinearGradient(
-                                                  begin: Alignment(-1.0, 0.0),
-                                                  end: Alignment(1.0, 0.0),
-                                                  transform: GradientRotation(
-                                                      0.7853982),
+                                                  begin: const Alignment(
+                                                      -1.0, 0.0),
+                                                  end:
+                                                      const Alignment(1.0, 0.0),
+                                                  transform:
+                                                      const GradientRotation(
+                                                          0.7853982),
                                                   // stops: [0.1, 0.5, 0.7, 0.9],
                                                   colors: [
                                                     HexColor("#000000"),
@@ -584,97 +751,232 @@ class _DashboardState extends State<Dashboard> {
                                                 border: Border.all(
                                                     color: Colors.white,
                                                     width: 1),
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(26.0))),
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                        Radius.circular(26.0))),
                                             child: Column(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
                                               children: [
                                                 GestureDetector(
                                                   onTap: () {
+                                                    Navigator.pop(context);
                                                     print('name');
                                                     // Get.to(PostScreen());
                                                     showDialog(
                                                       context: context,
                                                       builder: (ctx) =>
                                                           AlertDialog(
-                                                        title: Text(
-                                                            "Pick Image from"),
-                                                        actions: <Widget>[
-                                                          Container(
-                                                            margin:
-                                                                EdgeInsets.only(
-                                                                    bottom: 10),
-                                                            child:
-                                                                common_button(
-                                                              onTap: () {
-                                                                openCamera();
-                                                                Navigator.pop(
-                                                                    context);
-                                                                // Get.toNamed(BindingUtils.signupOption);
-                                                              },
-                                                              backgroud_color:
-                                                                  Colors.black,
-                                                              lable_text:
-                                                                  'Camera',
-                                                              lable_text_color:
-                                                                  Colors.white,
-                                                            ),
+                                                        backgroundColor:
+                                                            Colors.transparent,
+                                                        contentPadding:
+                                                            EdgeInsets.zero,
+                                                        elevation: 0.0,
+                                                        content: Container(
+                                                          margin:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  vertical: 10,
+                                                                  horizontal:
+                                                                      0),
+                                                          height:
+                                                              screenHeight / 5,
+                                                          // width: 133,
+                                                          // padding: const EdgeInsets.all(8.0),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                                  gradient:
+                                                                      LinearGradient(
+                                                                    begin:
+                                                                        const Alignment(
+                                                                            -1.0,
+                                                                            0.0),
+                                                                    end: const Alignment(
+                                                                        1.0,
+                                                                        0.0),
+                                                                    transform:
+                                                                        const GradientRotation(
+                                                                            0.7853982),
+                                                                    // stops: [0.1, 0.5, 0.7, 0.9],
+                                                                    colors: [
+                                                                      HexColor(
+                                                                          "#000000"),
+                                                                      HexColor(
+                                                                          "#000000"),
+                                                                      HexColor(
+                                                                          "##E84F90"),
+                                                                      HexColor(
+                                                                          "#ffffff"),
+                                                                      // HexColor("#FFFFFF").withOpacity(0.67),
+                                                                    ],
+                                                                  ),
+                                                                  color: Colors
+                                                                      .white,
+                                                                  border: Border.all(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      width: 1),
+                                                                  borderRadius: const BorderRadius
+                                                                          .all(
+                                                                      Radius.circular(
+                                                                          26.0))),
+                                                          child: Column(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              Row(
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .min,
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
+                                                                children: [
+                                                                  Container(
+                                                                    margin: const EdgeInsets
+                                                                            .symmetric(
+                                                                        vertical:
+                                                                            10),
+                                                                    child: Row(
+                                                                      // mainAxisAlignment:
+                                                                      // MainAxisAlignment
+                                                                      //     .center,
+                                                                      children: [
+                                                                        GestureDetector(
+                                                                          onTap:(){
+                                                                            video_upload();
+                                                                          },
+                                                                          child: Column(
+                                                                            children: [
+                                                                              IconButton(
+                                                                                icon: const Icon(
+                                                                                  Icons.slow_motion_video_sharp,
+                                                                                  size: 40,
+                                                                                  color: Colors.white,
+                                                                                ),
+                                                                                onPressed: () {
+                                                                                  video_upload();
+
+                                                                                },
+                                                                              ),
+                                                                              SizedBox(height: 5,),
+                                                                              Container(
+                                                                                margin: const EdgeInsets.symmetric(horizontal: 0),
+                                                                                // height: 45,
+                                                                                // width:(width ?? 300) ,
+                                                                                decoration: BoxDecoration(border: Border.all(color: Colors.white, width: 1), borderRadius: BorderRadius.circular(25)),
+                                                                                child: Container(
+                                                                                    alignment: Alignment.center,
+                                                                                    margin: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                                                                                    child: Text(
+                                                                                      'Video',
+                                                                                      style: TextStyle(color: Colors.white, fontFamily: 'PR', fontSize: 16),
+                                                                                    )),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ),
+                                                                        SizedBox(
+                                                                          width:
+                                                                          20,
+                                                                        ),
+                                                                        GestureDetector(
+                                                                          onTap: (){
+                                                                            image_upload();
+                                                                          },
+                                                                          child: Column(
+                                                                            children: [
+                                                                              IconButton(
+                                                                                icon: const Icon(
+                                                                                  Icons.camera_alt,
+                                                                                  size: 40,
+                                                                                  color: Colors.black,
+                                                                                ),
+                                                                                onPressed: () {
+                                                                                  image_upload();
+
+                                                                                },
+                                                                              ),
+                                                                              SizedBox(height: 5,),
+                                                                              Container(
+                                                                                margin: const EdgeInsets.symmetric(horizontal: 0),
+                                                                                // height: 45,
+                                                                                // width:(width ?? 300) ,
+                                                                                decoration: BoxDecoration(border: Border.all(color: Colors.white, width: 1), borderRadius: BorderRadius.circular(25)),
+                                                                                child: Container(
+                                                                                    alignment: Alignment.center,
+                                                                                    margin: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                                                                                    child: Text(
+                                                                                      'Image',
+                                                                                      style: TextStyle(color: Colors.white, fontFamily: 'PR', fontSize: 16),
+                                                                                    )),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ),
+
+                                                                        // IconButton(
+                                                                        //   icon: const Icon(
+                                                                        //     Icons
+                                                                        //         .video_call,
+                                                                        //     size: 40,
+                                                                        //     color: Colors
+                                                                        //         .grey,
+                                                                        //   ),
+                                                                        //   onPressed:
+                                                                        //       () {
+                                                                        //         video_upload();
+                                                                        //       },
+                                                                        // ),
+                                                                      ],
+                                                                    ),
+                                                                  )
+
+                                                                  // const SizedBox(
+                                                                  //   height: 10,
+                                                                  // ),
+                                                                ],
+                                                              ),
+                                                            ],
                                                           ),
-                                                          common_button(
-                                                            onTap: () {
-                                                              openGallery();
-                                                              Navigator.pop(
-                                                                  context);
-                                                              // Get.toNamed(BindingUtils.signupOption);
-                                                            },
-                                                            backgroud_color:
-                                                                Colors.black,
-                                                            lable_text:
-                                                                'Gallery',
-                                                            lable_text_color:
-                                                                Colors.white,
-                                                          ),
-                                                          SizedBox(
-                                                            height: 10,
-                                                          ),
-                                                          common_button(
-                                                            onTap: () {
-                                                              Pickvideo();
-                                                              // Get.toNamed(BindingUtils.signupOption);
-                                                            },
-                                                            backgroud_color:
-                                                                Colors.black,
-                                                            lable_text: 'Video',
-                                                            lable_text_color:
-                                                                Colors.white,
-                                                          ),
-                                                        ],
+                                                        ),
                                                       ),
                                                     );
                                                   },
-                                                  child: Text(
+                                                  child: const Text(
                                                     'Post',
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                         fontSize: 15,
                                                         fontFamily: 'PR',
                                                         color: Colors.white),
                                                   ),
                                                 ),
                                                 Container(
-                                                  margin: EdgeInsets.symmetric(
+                                                  margin: const EdgeInsets
+                                                          .symmetric(
                                                       horizontal: 20),
-                                                  child: Divider(
+                                                  child: const Divider(
                                                     color: Colors.black,
                                                     height: 20,
                                                   ),
                                                 ),
-                                                Text(
-                                                  'Live',
-                                                  style: TextStyle(
-                                                      fontSize: 15,
-                                                      fontFamily: 'PR',
-                                                      color: Colors.white),
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    // Navigator
+                                                    //     .push(
+                                                    //     context,
+                                                    //     MaterialPageRoute(
+                                                    //         builder: (BuildContext context) =>
+                                                    //             VideoRecorder()));
+                                                  },
+                                                  child: const Text(
+                                                    'Live',
+                                                    style: TextStyle(
+                                                        fontSize: 15,
+                                                        fontFamily: 'PR',
+                                                        color: Colors.white),
+                                                  ),
                                                 ),
                                               ],
                                             ),
@@ -686,7 +988,7 @@ class _DashboardState extends State<Dashboard> {
                             );
                           },
                           tooltip: 'Increment',
-                          child: Icon(
+                          child: const Icon(
                             Icons.add,
                             color: Colors.black,
                             size: 30,
@@ -800,24 +1102,25 @@ class MyArc3 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-
       painter: MyPainter3(),
       size: Size(diameter, diameter),
     );
   }
 }
+
 class MyPainter3 extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    Paint paint = Paint()..shader = RadialGradient(
-      colors: [
-        HexColor('#C12265').withOpacity(0.8),
-        HexColor('#000000').withOpacity(0.5),
-      ],
-    ).createShader(Rect.fromCircle(
-      center: Offset(1,0),
-      radius:100,
-    ));
+    Paint paint = Paint()
+      ..shader = RadialGradient(
+        colors: [
+          HexColor('#C12265').withOpacity(0.8),
+          HexColor('#000000').withOpacity(0.5),
+        ],
+      ).createShader(Rect.fromCircle(
+        center: const Offset(1, 0),
+        radius: 100,
+      ));
     canvas.drawArc(
       Rect.fromCenter(
         center: Offset(size.height / 10, size.width / 2),

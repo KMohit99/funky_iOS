@@ -46,7 +46,6 @@ class _Profile_ScreenState extends State<Profile_Screen>
       Get.put(Creator_Login_screen_controller(),
           tag: Creator_Login_screen_controller().toString());
 
-  var thumbnail;
 
   @override
   void initState() {
@@ -67,8 +66,9 @@ class _Profile_ScreenState extends State<Profile_Screen>
         ? await _creator_login_screen_controller.CreatorgetUserInfo_Email(
             UserId: id_user)
         : await _creator_login_screen_controller.getUserInfo_social());
-    await get_gallery_list(context);
     await get_video_list(context);
+
+    await get_gallery_list(context);
   }
 
   int index = 0;
@@ -1399,8 +1399,8 @@ class _Profile_ScreenState extends State<Profile_Screen>
 
   bool isvideoLoading = true;
   VideoModelList? _videoModelList;
-
-  var uint8list;
+  List<String> thumb =[];
+  String? filePath;
 
   Future<dynamic> get_video_list(BuildContext context) async {
     setState(() {
@@ -1440,15 +1440,28 @@ class _Profile_ScreenState extends State<Profile_Screen>
         setState(() {
           isvideoLoading = false;
         });
-        uint8list = await VideoThumbnail.thumbnailFile(
-          video:
-              "https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4",
-          thumbnailPath: (await getTemporaryDirectory()).path,
-          imageFormat: ImageFormat.WEBP,
-          maxHeight: 64,
-          // specify the height of the thumbnail, let the width auto-scaled to keep the source aspect ratio
-          quality: 75,
-        );
+        print(_videoModelList!.data!.length);
+        for(var i = 0; i < _videoModelList!.data!.length ; i++){
+
+         final thumbnail = await VideoThumbnail.thumbnailFile(
+             video:
+             "http://foxyserver.com/funky/video/${_videoModelList!.data![i].uploadVideo}",
+             thumbnailPath:  (await getTemporaryDirectory()).path,
+             imageFormat: ImageFormat.WEBP,
+             maxHeight: 100,
+             maxWidth: 100,
+             quality: 75
+         );
+         setState(() {
+           final file = File(thumbnail!);
+           filePath = file.path;
+         });
+
+
+         thumb.add(filePath!);
+        }
+        print("thumbaaaa ;; $thumb");
+
 
         // for(var i = 0 ; i<= _videoModelList!.data!.length ; i++){
         //   Directory tempDir = await getTemporaryDirectory();
@@ -1592,4 +1605,6 @@ class _Profile_ScreenState extends State<Profile_Screen>
                     )))),
     );
   }
+
+
 }

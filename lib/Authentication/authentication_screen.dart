@@ -135,7 +135,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              // Get.to(GuestScreen());
+                              Get.to(GuestScreen());
                             },
                             child: Container(
                               child: Text(

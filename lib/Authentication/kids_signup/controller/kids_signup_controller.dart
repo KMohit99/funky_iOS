@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 // import 'package:funky_project/Authentication/kids_signup/ui/kids_otp_verification.dart';
 import 'package:get/get.dart';
@@ -14,6 +16,7 @@ import '../../../Utils/App_utils.dart';
 import '../../../Utils/toaster_widget.dart';
 // import '../../../homepage/model/UserInfoModel.dart';
 import '../../../dashboard/dashboard_screen.dart';
+import '../../../sharePreference.dart';
 import '../../creator_login/controller/creator_login_controller.dart';
 import '../../creator_login/model/creator_loginModel.dart';
 import 'package:http/http.dart' as http;
@@ -24,7 +27,10 @@ import '../../creator_signup/ui/creator_otp_verification.dart';
 import '../../kids_login/model/parents_otp_model.dart';
 import 'dart:convert' as convert;
 
+import '../../kids_login/ui/kids_email_verification.dart';
 import '../ui/kids_otp_verification.dart';
+import '../ui/kids_signup_email_verification.dart';
+import '../ui/paretns_otp_screen.dart';
 
 class Kids_signup_controller extends GetxController {
   bool isPasswordVisible = false;
@@ -49,60 +55,131 @@ class Kids_signup_controller extends GetxController {
   TextEditingController countryCode_controller = new TextEditingController();
   TextEditingController aboutMe_controller = new TextEditingController();
 
+
   RxBool isLoading = false.obs;
   LoginModel? loginModel;
+  File? imgFile;
+
   String selected_gender = 'male';
+  String? selected_country;
+  String? selected_country_code = '+91';
 
-  Future<dynamic> kids_signup(BuildContext context) async {
-    debugPrint('0-0-0-0-0-0-0 username');
-    // try {
-    //
-    // } catch (e) {
-    //   print('0-0-0-0-0-0- SignIn Error :- ${e.toString()}');
-    // }
-    isLoading(true);
-    Map data = {
-      'fullName': fullname_controller.text,
-      'userName': username_controller.text,
-      'email': email_controller.text,
-      'phone': phone_controller.text,
-      'parent_email': parentEmail_controller.text,
-      'password': password_controller.text,
-      'gender': selected_gender,
-      'location': location_controller.text,
-      'referral_code': reffralCode_controller.text,
-      'image': img64!.substring(0, 100),
-      'countryCode': countryCode_controller.text,
-      'about': aboutMe_controller.text,
-      'type': 'kids',
-    };
-    print(data);
-    // String body = json.encode(data);
 
-    var url = (URLConstants.base_url + URLConstants.SignUpApi);
-    print("url : $url");
-    print("body : $data");
+  // Future<dynamic> kids_signup(BuildContext context) async {
+  //   debugPrint('0-0-0-0-0-0-0 username');
+  //   // try {
+  //   //
+  //   // } catch (e) {
+  //   //   print('0-0-0-0-0-0- SignIn Error :- ${e.toString()}');
+  //   // }
+  //   isLoading(true);
+  //   Map data = {
+  //     'fullName': fullname_controller.text,
+  //     'userName': username_controller.text,
+  //     'email': email_controller.text,
+  //     'phone': phone_controller.text,
+  //     'parent_email': parentEmail_controller.text,
+  //     'password': password_controller.text,
+  //     'gender': selected_gender,
+  //     'location': location_controller.text,
+  //     'referral_code': reffralCode_controller.text,
+  //     'image': img64!.substring(0, 100),
+  //     'countryCode': countryCode_controller.text,
+  //     'about': aboutMe_controller.text,
+  //     'type': 'kids',
+  //   };
+  //   print(data);
+  //   // String body = json.encode(data);
+  //
+  //   var url = (URLConstants.base_url + URLConstants.SignUpApi);
+  //   print("url : $url");
+  //   print("body : $data");
+  //
+  //   var response = await http.post(
+  //     Uri.parse(url),
+  //     body: data,
+  //   );
+  //   print(response.body);
+  //   print(response.request);
+  //   print(response.statusCode);
+  //   // var final_data = jsonDecode(response.body);
+  //
+  //   // print('final data $final_data');
+  //
+  //   if (response.statusCode == 200) {
+  //     isLoading(false);
+  //     var data = jsonDecode(response.body);
+  //     loginModel = LoginModel.fromJson(data);
+  //     print(loginModel);
+  //     if (loginModel!.error == false) {
+  //       print("---------${loginModel!.message}");
+  //       if(loginModel!.message == 'User Already Exists'){
+  //         CommonWidget().showErrorToaster(msg: loginModel!.message!);
+  //       }else{
+  //         CommonWidget().showToaster(msg: loginModel!.message!);
+  //         Get.to(KidsOtpVerification());
+  //         await KidsSendOtp(context);
+  //       }
+  //       // Get.to(Dashboard());
+  //     } else {
+  //       print('Please try again');
+  //     }
+  //   } else {
+  //     print('Please try again');
+  //   }
+  // }
 
-    var response = await http.post(
-      Uri.parse(url),
-      body: data,
-    );
-    print(response.body);
-    print(response.request);
+  Future<dynamic> kids_signup({required BuildContext context}) async {
+    // showLoader(context);
+    var url = 'http://foxyserver.com/funky/api/signup.php';
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+    // List<int> imageBytes = imgFile!.readAsBytesSync();
+    // String baseimage = base64Encode(imageBytes);
+
+    if (imgFile != null) {
+      var files = await http.MultipartFile(
+          'image',
+          File(imgFile!.path).readAsBytes().asStream(),
+          File(imgFile!.path).lengthSync(),
+          filename: imgFile!.path.split("/").last);
+      request.files.add(files);
+    }
+    request.fields['fullName'] = fullname_controller.text;
+    request.fields['userName'] = username_controller.text;
+    request.fields['email'] = email_controller.text;
+    request.fields['phone'] = phone_controller.text;
+    request.fields['parent_email'] = parentEmail_controller.text;
+    request.fields['password'] = password_controller.text;
+    request.fields['gender'] = selected_gender;
+    request.fields['location'] = selected_country!;
+    request.fields['referral_code'] = reffralCode_controller.text;
+    request.fields['countryCode'] = selected_country_code!;
+    request.fields['about'] = aboutMe_controller.text;
+    request.fields['type'] = 'kids';
+
+    //userId,tagLine,description,address,postImage,uploadVideo,isVideo
+    // request.files.add(await http.MultipartFile.fromPath(
+    //     "image", widget.ImageFile.path));
+
+    var response = await request.send();
+    var responsed = await http.Response.fromStream(response);
     print(response.statusCode);
-    // var final_data = jsonDecode(response.body);
-
-    // print('final data $final_data');
+    print("response - ${response.statusCode}");
 
     if (response.statusCode == 200) {
       isLoading(false);
-      var data = jsonDecode(response.body);
+      var data = jsonDecode(responsed.body);
       loginModel = LoginModel.fromJson(data);
       print(loginModel);
       if (loginModel!.error == false) {
-        CommonWidget().showToaster(msg: 'Please verify the OTP');
-        Get.to(KidsOtpVerification());
-        await KidsSendOtp(context);
+        if(loginModel!.message == 'User Already Exists'){
+          CommonWidget().showErrorToaster(msg: loginModel!.message!);
+        }else{
+          CommonWidget().showToaster(msg: loginModel!.message!);
+          await PreferenceManager()
+              .setPref(URLConstants.type, loginModel!.user![0].type!);
+          await Get.to(Dashboard());
+        }
         // Get.to(Dashboard());
       } else {
         print('Please try again');
@@ -121,7 +198,8 @@ class Kids_signup_controller extends GetxController {
     debugPrint('0-0-0-0-0-0-0 username');
     isotpLoading(true);
     Map data = {
-      'email': phone_controller.text,
+      'email': email_controller.text,
+      'phone' : selected_country_code! + phone_controller.text
     };
     print(data);
     // String body = json.encode(data);
@@ -149,6 +227,8 @@ class Kids_signup_controller extends GetxController {
       if (otpsendModel!.error == false) {
         CommonWidget().showToaster(msg: 'Enter Otp');
         // Get.to(OtpScreen(received_otp: otpModel!.user![0].body!,));
+        Get.to(KidsOtpVerification());
+
       } else {
         print('Please try again');
         CommonWidget().showErrorToaster(msg: 'Enter valid Phone Number');
@@ -160,6 +240,7 @@ class Kids_signup_controller extends GetxController {
 
   RxBool isotpVerifyLoading = false.obs;
   otpVerifyModel? otpverifyModel;
+  parentsOtpModel? otpModel;
 
   Future<dynamic> KidsVerifyOtp(
       {required BuildContext context, required String otp_controller}) async {
@@ -193,9 +274,108 @@ class Kids_signup_controller extends GetxController {
       print(otpverifyModel);
       if (otpverifyModel!.error == false) {
         CommonWidget().showToaster(msg: 'Signed Up');
-        _creator_login_screen_controller.CreatorgetUserInfo_Email(
-            UserId: loginModel!.user![0].id!);
-        Get.to(Dashboard());
+        // _creator_login_screen_controller.CreatorgetUserInfo_Email(
+        //     UserId: loginModel!.user![0].id!);
+        await  Get.to(kids_signup_Email_verification());
+
+        // await kids_signup(context: context);
+        // Get.to(Dashboard());
+      } else {
+        print('Please try again');
+        CommonWidget().showErrorToaster(msg: 'Enter valid Otp');
+      }
+    } else {
+      print('Please try again');
+    }
+  }
+
+
+  Future<dynamic> ParentEmailVerification(BuildContext context) async {
+    debugPrint('0-0-0-0-0-0-0 username');
+    // try {
+    //
+    // } catch (e) {
+    //   print('0-0-0-0-0-0- SignIn Error :- ${e.toString()}');
+    // }
+    Map data = {
+      // 'userName': usernameController.text,
+      'email': parentEmail_controller.text,
+      // 'type': login_type,
+    };
+    print(data);
+    // String body = json.encode(data);
+
+    var url = (URLConstants.base_url + URLConstants.parentOtpVeri_Api);
+    print("url : $url");
+    print("body : $data");
+
+    var response = await http.post(
+      Uri.parse(url),
+      body: data,
+    );
+    print(response.body);
+    print(response.request);
+    print(response.statusCode);
+    // var final_data = jsonDecode(response.body);
+
+    // print('final data $final_data');
+
+    if (response.statusCode == 200) {
+      // isLoginLoading(false);
+      var data = jsonDecode(response.body);
+      otpModel = parentsOtpModel.fromJson(data);
+      if (otpModel!.error == false) {
+        CommonWidget().showToaster(msg: 'Enter Otp');
+        print("otp ${otpModel!.user![0].body!}");
+        Get.to(ParentsOtpScreen());
+      } else {
+        print('Please try again');
+        CommonWidget().showErrorToaster(msg: 'Enter valid Phone Number');
+      }
+    } else {
+      print('Please try again');
+    }
+  }
+
+
+  Future<dynamic> ParentsVerifyOtp(
+      {required BuildContext context, required String otp_controller}) async {
+    debugPrint('0-0-0-0-0-0-0 username');
+    isotpVerifyLoading(true);
+    // String id_user = await PreferenceManager().getPref(URLConstants.id);
+    //
+    // print("UserId ${id_user}");
+    Map data = {
+      'otp': otp_controller,
+    };
+    print(data);
+    // String body = json.encode(data);
+
+    var url = (URLConstants.base_url + URLConstants.creatorverify_Api);
+    print("url : $url");
+    print("body : $data");
+
+    var response = await http.post(
+      Uri.parse(url),
+      body: data,
+    );
+    print(response.body);
+    print(response.request);
+    print(response.statusCode);
+    // var final_data = jsonDecode(response.body);
+
+    // print('final data $final_data');
+
+    if (response.statusCode == 200) {
+      isotpVerifyLoading(false);
+      var data = jsonDecode(response.body);
+      otpverifyModel = otpVerifyModel.fromJson(data);
+      print(otpverifyModel);
+      if (otpverifyModel!.error == false) {
+        CommonWidget().showToaster(msg: 'Signed Up');
+        await kids_signup(context: context);
+
+        // await _loginScreenController.CreatorgetUserInfo_Email(UserId: id_user);
       } else {
         print('Please try again');
         CommonWidget().showErrorToaster(msg: 'Enter valid Otp');

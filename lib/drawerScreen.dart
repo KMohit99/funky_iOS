@@ -195,7 +195,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                     SizedBox(
                       height: 36,
                     ),
-                    (CommonService().getStoreValue(keys: 'type') == 'Kids'
+                    (PreferenceManager().getPref(URLConstants.type) == 'Kids'
                         ? GestureDetector(
                       onTap: () {},
                       child: Container(
@@ -384,7 +384,12 @@ class _DrawerScreenState extends State<DrawerScreen> {
         .setPref(URLConstants.id, '');
     await PreferenceManager()
         .setPref(URLConstants.type, '');
-    await Get.to(AuthenticationScreen());
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => AuthenticationScreen()),
+          (Route<dynamic> route) => false,
+    );
+    // await Get.to(AuthenticationScreen());
     setState((){
 
     });

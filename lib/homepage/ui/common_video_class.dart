@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 // import 'package:funky_project/Utils/colorUtils.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:readmore/readmore.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../Utils/asset_utils.dart';
@@ -14,6 +15,7 @@ import '../../custom_widget/common_buttons.dart';
 class VideoWidget extends StatefulWidget {
   final bool play;
   final String singerName;
+  final String description;
   final String songName;
 
   final String url;
@@ -25,7 +27,7 @@ class VideoWidget extends StatefulWidget {
     required this.play,
     required this.singerName,
     required this.songName,
-    required this.image_url,
+    required this.image_url, required this.description,
   }) : super(key: key);
 
   @override
@@ -62,6 +64,23 @@ class _VideoWidgetState extends State<VideoWidget> {
 
   int _currentPage = 0;
 
+  // an arbitrary value, this can be whatever you need it to be
+  double videoContainerRatio = 0.5;
+
+  double getScale() {
+    double videoRatio = _controller!.value.aspectRatio;
+
+    if (videoRatio < videoContainerRatio) {
+      ///for tall videos, we just return the inverse of the controller aspect ratio
+      return videoContainerRatio / videoRatio;
+    } else {
+      ///for wide videos, divide the video AR by the fixed container AR
+      ///so that the video does not over scale
+
+      return videoRatio / videoContainerRatio;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,7 +91,6 @@ class _VideoWidgetState extends State<VideoWidget> {
           child: _controller!.value.isInitialized
               ? Stack(
             children: [
-
               GestureDetector(
                 onTap: () {
                   print('hello');
@@ -90,7 +108,6 @@ class _VideoWidgetState extends State<VideoWidget> {
                 ),
               ),
               Container(
-
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
@@ -175,7 +192,7 @@ class _VideoWidgetState extends State<VideoWidget> {
                 child: SizedBox(
                   child: Container(
                     // color: Colors.red,
-                    margin: EdgeInsets.only(bottom: 20, left: 21),
+                    margin: EdgeInsets.only(bottom: 30, left: 21),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -291,85 +308,109 @@ class _VideoWidgetState extends State<VideoWidget> {
                         ),
                         ListTile(
                           visualDensity:
-                          VisualDensity(vertical: -4, horizontal: -4),
+                          VisualDensity(vertical: 4, horizontal: -4),
                           // tileColor: Colors.white,
+                          leading: (widget.image_url.length > 0
+                              ? ClipRRect(
+                            borderRadius:
+                            BorderRadius.circular(50),
+                            child: Container(
+                              height: 50,
+                              width: 50,
+                              color: Colors.red,
+                              child: Image.network(
+                                "${widget.image_url}",
+                              ),
+                            ),
+                          )
+                              : Container(
+                              height: 50,
+                              width: 50,
+                              child: IconButton(
+                                icon: Image.asset(
+                                  AssetUtils.user_icon3,
+                                  fit: BoxFit.fill,
+                                ),
+                                onPressed: () {},
+                              ))),
                           title: Row(
                             mainAxisAlignment:
                             MainAxisAlignment.spaceBetween,
                             children: [
-                              Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.start,
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  (widget.image_url.length > 0
-                                      ? ClipRRect(
-                                    borderRadius:
-                                    BorderRadius.circular(50),
-                                    child: Container(
-                                      height: 50,
-                                      width: 50,
-                                      color: Colors.red,
-                                      child: Image.network(
-                                        "${widget.image_url}",
-                                      ),
-                                    ),
-                                  )
-                                      : Container(
-                                      height: 50,
-                                      width: 50,
-                                      child: IconButton(
-                                        icon: Image.asset(
-                                          AssetUtils.user_icon3,
-                                          fit: BoxFit.fill,
+                                  Container(
+                                    constraints: BoxConstraints(minWidth: 100, maxWidth: 220),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Container(
+                                          child: Text(
+                                            widget.singerName,
+                                            maxLines: 2,
+                                            style: TextStyle(
+                                                color: HexColor('#ffffff'),
+                                                fontFamily: "PR",
+                                                fontSize: 14),
+                                          ),
                                         ),
-                                        onPressed: () {},
-                                      ))),
-                                  SizedBox(
-                                    width: 15,
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children: [
+                                            Image.asset(
+                                              AssetUtils.music_icon,
+                                              height: 15.0,
+                                              width: 15.0,
+                                              fit: BoxFit.cover,
+                                            ),
+                                            SizedBox(
+                                              width: 4.75,
+                                            ),
+                                            Text(
+                                              widget.songName,
+                                              style: TextStyle(
+                                                  color: HexColor('#FFFFFF')
+                                                      .withOpacity(0.55),
+                                                  fontFamily: "PR",
+                                                  fontSize: 10),
+                                            ),
+                                          ],
+                                        ),
+
+                                      ],
+                                    ),
                                   ),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        widget.singerName,
-                                        style: TextStyle(
-                                            color: HexColor('#D4D4D4'),
-                                            fontFamily: "PR",
-                                            fontSize: 14),
-                                      ),
-                                      Text(
-                                        'Original Audio',
-                                        style: TextStyle(
-                                            color: HexColor(
-                                                CommonColor.pinkFont),
-                                            fontFamily: "PR",
-                                            fontSize: 10),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Image.asset(
-                                    AssetUtils.music_icon,
-                                    height: 15.0,
-                                    width: 15.0,
-                                    fit: BoxFit.cover,
-                                  ),
-                                  SizedBox(
-                                    width: 4.75,
+                                  Container(
+                                    width: MediaQuery.of(context).size.width/4,
+                                    child: ReadMoreText(
+                                      widget.description,
+                                      trimLines: 2,
+                                      colorClickableText: Colors.grey,
+                                      trimMode: TrimMode.Line,
+                                      trimCollapsedText: 'Show more',
+                                      trimExpandedText: 'Show less',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontFamily: "PR",
+                                          fontSize: 12),
+                                      moreStyle: TextStyle(
+                                          color: Colors.grey,
+                                          fontFamily: "PR",
+                                          fontSize: 10),
+                                    ),
                                   ),
                                   Text(
-                                    widget.songName,
+                                    'Original Audio',
                                     style: TextStyle(
-                                        color: HexColor('#FFFFFF')
-                                            .withOpacity(0.55),
+                                        color: HexColor(
+                                            CommonColor.pinkFont),
                                         fontFamily: "PR",
                                         fontSize: 10),
                                   ),
                                 ],
                               ),
+
                             ],
                           ),
                           trailing: SizedBox.shrink(),

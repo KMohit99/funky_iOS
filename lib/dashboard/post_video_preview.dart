@@ -73,7 +73,7 @@ class _PostVideoPreviewScreenState extends State<PostVideoPreviewScreen> {
     return showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text("Pick Image from"),
+        title: Text("Post Video"),
         actions: <Widget>[
           Container(
             margin: EdgeInsets.only(bottom: 10),
@@ -123,7 +123,7 @@ class _PostVideoPreviewScreenState extends State<PostVideoPreviewScreen> {
           appBar: AppBar(
             backgroundColor: Colors.black,
             title: Text(
-              'Edit Post',
+              'Post Preview',
               style: TextStyle(
                   fontSize: 16, color: Colors.white, fontFamily: 'PB'),
             ),
@@ -133,7 +133,8 @@ class _PostVideoPreviewScreenState extends State<PostVideoPreviewScreen> {
                 padding: EdgeInsets.zero,
                 onPressed: () {
                   print('oject');
-                  Navigator.pop(context);
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Dashboard()));
                 },
                 icon: Icon(
                   Icons.arrow_back_outlined,

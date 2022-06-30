@@ -1,23 +1,27 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:funky_new/Authentication/kids_signup/controller/kids_signup_controller.dart';
+// import 'package:funky_project/dashboard/dashboard_screen.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 
 import '../../../Utils/asset_utils.dart';
+import '../../../Utils/custom_textfeild.dart';
+import '../../../Utils/toaster_widget.dart';
 import '../../../custom_widget/common_buttons.dart';
-import '../../creator_signup/controller/creator_signup_controller.dart';
-import '../controller/kids_signup_controller.dart';
 
-class KidsOtpVerification extends StatefulWidget {
-  const KidsOtpVerification({Key? key}) : super(key: key);
+class ParentsOtpScreen extends StatefulWidget {
+
+  const ParentsOtpScreen({Key? key}) : super(key: key);
 
   @override
-  State<KidsOtpVerification> createState() => _KidsOtpVerificationState();
+  State<ParentsOtpScreen> createState() => _ParentsOtpScreenState();
 }
 
-class _KidsOtpVerificationState extends State<KidsOtpVerification> {
+class _ParentsOtpScreenState extends State<ParentsOtpScreen> {
   final TextEditingController _pinOTPController = TextEditingController();
   final FocusNode _pinOTPFocus = FocusNode();
   String? varification;
@@ -58,15 +62,17 @@ class _KidsOtpVerificationState extends State<KidsOtpVerification> {
 
   void setCountDown() {
     final reduceSecondsBy = 1;
-    setState(() {
-      final seconds = myDuration.inSeconds - reduceSecondsBy;
-      if (seconds < 0) {
-        countdownTimer!.cancel();
-        print('timesup');
-      } else {
-        myDuration = Duration(seconds: seconds);
-      }
-    });
+    if (mounted) {
+      setState(() {
+        final seconds = myDuration.inSeconds - reduceSecondsBy;
+        if (seconds < 0) {
+          countdownTimer!.cancel();
+          print('timesup');
+        } else {
+          myDuration = Duration(seconds: seconds);
+        }
+      });
+    }
   }
 
   @override
@@ -74,10 +80,9 @@ class _KidsOtpVerificationState extends State<KidsOtpVerification> {
     startTimer();
     super.initState();
   }
+  final Kids_signup_controller _kids_signup_controller =
+  Get.put(Kids_signup_controller(), tag: Kids_signup_controller().toString());
 
-  final Kids_signup_controller _kids_signup_controller = Get.put(
-      Kids_signup_controller(),
-      tag: Kids_signup_controller().toString());
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +127,7 @@ class _KidsOtpVerificationState extends State<KidsOtpVerification> {
           appBar: AppBar(
             centerTitle: true,
             title: Text(
-              'Verify OTP',
+              'Verify Parents email',
               style: TextStyle(
                   fontSize: 16, fontFamily: 'PR', color: Colors.white),
             ),
@@ -140,7 +145,7 @@ class _KidsOtpVerificationState extends State<KidsOtpVerification> {
                 ),
                 Container(
                   child: Text(
-                    'Enter Parents',
+                    'Enter Otp',
                     style: TextStyle(
                         fontSize: 16, fontFamily: 'PB', color: Colors.white),
                   ),
@@ -170,30 +175,30 @@ class _KidsOtpVerificationState extends State<KidsOtpVerification> {
                 ),
                 Container(
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          '$seconds',
-                          style: TextStyle(
-                              fontSize: 16, fontFamily: 'PB', color: Colors.white),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Image.asset(
-                          AssetUtils.timer_icon,
-                          width: 22,
-                          height: 20,
-                          fit: BoxFit.contain,
-                        ),
-                      ],
-                    )),
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      '$seconds',
+                      style: TextStyle(
+                          fontSize: 16, fontFamily: 'PB', color: Colors.white),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Image.asset(
+                      AssetUtils.timer_icon,
+                      width: 22,
+                      height: 20,
+                      fit: BoxFit.contain,
+                    ),
+                  ],
+                )),
                 SizedBox(
                   height: 20,
                 ),
                 common_button(
                   onTap: () {
-                    _kids_signup_controller.KidsVerifyOtp(
+                    _kids_signup_controller.ParentsVerifyOtp(
                         context: context,
                         otp_controller: _pinOTPController.text);
                     // _kids_loginScreenController.ParentEmailVerification(context);

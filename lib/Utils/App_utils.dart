@@ -37,6 +37,7 @@ class URLConstants{
   static const socailsignUpApi = "social-signup.php";
   static const parentOtpVeri_Api = "parent-otp.php";
   static const creatorsend_Api = "send-otp.php";
+  static const check_user_Api = "check-user.php";
   static const creatorverify_Api = "otp-verify.php";
 
   static const password_reset_Api = "forgot-password.php";

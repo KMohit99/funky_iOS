@@ -140,6 +140,10 @@ class _HomePageScreenState extends State<HomePageScreen>
                                                   .data![index]
                                                   .uploadVideo!,
                                               play: true,
+                                              description: homepageController
+                                                  .videoListModel!
+                                                  .data![index]
+                                                  .description! ,
                                               songName: homepageController
                                                   .videoListModel!
                                                   .data![index]

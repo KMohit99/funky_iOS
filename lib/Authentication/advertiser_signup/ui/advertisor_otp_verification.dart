@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:funky_new/Authentication/advertiser_signup/controller/advertiser_signup_controller.dart';
 // import 'package:funky_project/dashboard/dashboard_screen.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -11,16 +12,15 @@ import '../../../Utils/asset_utils.dart';
 import '../../../Utils/custom_textfeild.dart';
 import '../../../Utils/toaster_widget.dart';
 import '../../../custom_widget/common_buttons.dart';
-import '../controller/creator_signup_controller.dart';
 
-class CreatorOtpVerification extends StatefulWidget {
-  const CreatorOtpVerification({Key? key}) : super(key: key);
+class AdvertisorOtpVerification extends StatefulWidget {
+  const AdvertisorOtpVerification({Key? key}) : super(key: key);
 
   @override
-  State<CreatorOtpVerification> createState() => Creator_OtpVerification();
+  State<AdvertisorOtpVerification> createState() => Creator_OtpVerification();
 }
 
-class Creator_OtpVerification extends State<CreatorOtpVerification> {
+class Creator_OtpVerification extends State<AdvertisorOtpVerification> {
   final TextEditingController _pinOTPController = TextEditingController();
   final FocusNode _pinOTPFocus = FocusNode();
   String? varification;
@@ -78,9 +78,9 @@ class Creator_OtpVerification extends State<CreatorOtpVerification> {
     super.initState();
   }
 
-  final Creator_signup_controller _creator_signup_controller = Get.put(
-      Creator_signup_controller(),
-      tag: Creator_signup_controller().toString());
+  final Advertiser_signup_controller advertiser_signup_controller = Get.put(
+      Advertiser_signup_controller(),
+      tag: Advertiser_signup_controller().toString());
 
   @override
   Widget build(BuildContext context) {
@@ -200,7 +200,7 @@ class Creator_OtpVerification extends State<CreatorOtpVerification> {
                     ),
                   common_button(
                     onTap: () {
-                      _creator_signup_controller.CreatorVerifyOtp(
+                      advertiser_signup_controller.AdvertisorVerifyOtp(
                           context: context,
                           otp_controller: _pinOTPController.text);
                       // _kids_loginScreenController.ParentEmailVerification(context);

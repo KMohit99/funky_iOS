@@ -48,3 +48,25 @@ class User {
     return data;
   }
 }
+
+class CheckUserModel {
+  String? statusCode;
+  bool? error;
+  String? message;
+
+  CheckUserModel({this.statusCode, this.error, this.message});
+
+  CheckUserModel.fromJson(Map<String, dynamic> json) {
+    statusCode = json['status_code'];
+    error = json['error'];
+    message = json['message'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['status_code'] = this.statusCode;
+    data['error'] = this.error;
+    data['message'] = this.message;
+    return data;
+  }
+}

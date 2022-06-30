@@ -12,12 +12,15 @@ import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:searchfield/searchfield.dart';
+import 'package:http/http.dart' as http;
 
 import '../../../Utils/asset_utils.dart';
 import '../../../Utils/asset_utils.dart';
 import '../../../Utils/custom_textfeild.dart';
 import '../../../Utils/App_utils.dart';
+import '../../../Utils/toaster_widget.dart';
 import '../../../custom_widget/common_buttons.dart';
+import '../../creator_login/model/creator_loginModel.dart';
 import '../controller/creator_signup_controller.dart';
 import '../model/CountryModel.dart';
 import '../model/countryModelclass.dart';
@@ -46,6 +49,17 @@ class _Creator_signupState extends State<Creator_signup> {
     super.initState();
   }
 
+  bool _obscureText = true;
+
+  String? _password;
+
+  // Toggles the password show status
+  void _toggle() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
+  }
+
   init() async {
     getAllFollowersList();
     // await _creator_signup_controller.getAllCountriesFromAPI(_creator_signup_controller.query_followers.text);
@@ -53,16 +67,15 @@ class _Creator_signupState extends State<Creator_signup> {
 
   bool location_tap = false;
   bool gender_tap = false;
-  File? imgFile;
   final imgPicker = ImagePicker();
 
   void openCamera() async {
     var imgCamera = await imgPicker.getImage(source: ImageSource.camera);
     setState(() {
-      imgFile = File(imgCamera!.path);
+      _creator_signup_controller.imgFile = File(imgCamera!.path);
       _creator_signup_controller.photoBase64 =
-          base64Encode(imgFile!.readAsBytesSync());
-      print("imgFile! ${imgFile}");
+          base64Encode(_creator_signup_controller.imgFile!.readAsBytesSync());
+      print("imgFile! ${_creator_signup_controller.imgFile}");
       // print(_creator_signup_controller.photoBase64);
 
       final bytes = Io.File(imgCamera.path).readAsBytesSync();
@@ -75,9 +88,9 @@ class _Creator_signupState extends State<Creator_signup> {
   void openGallery() async {
     var imgGallery = await imgPicker.getImage(source: ImageSource.gallery);
     setState(() {
-      imgFile = File(imgGallery!.path);
+      _creator_signup_controller.imgFile = File(imgGallery!.path);
       _creator_signup_controller.photoBase64 =
-          base64Encode(imgFile!.readAsBytesSync());
+          base64Encode(_creator_signup_controller.imgFile!.readAsBytesSync());
       print(_creator_signup_controller.photoBase64);
 
       final bytes = Io.File(imgGallery.path).readAsBytesSync();
@@ -167,7 +180,8 @@ class _Creator_signupState extends State<Creator_signup> {
                             width: 80,
                             child: ClipRRect(
                                 borderRadius: BorderRadius.circular(500),
-                                child: (imgFile == null
+                                child: (_creator_signup_controller.imgFile ==
+                                        null
                                     ? IconButton(
                                         icon: Image.asset(
                                           AssetUtils.user_icon,
@@ -210,7 +224,7 @@ class _Creator_signupState extends State<Creator_signup> {
                                         },
                                       )
                                     : Image.file(
-                                        imgFile!,
+                                        _creator_signup_controller.imgFile!,
                                         fit: BoxFit.fill,
                                       ))),
                           ),
@@ -280,7 +294,32 @@ class _Creator_signupState extends State<Creator_signup> {
                               _creator_signup_controller.username_controller,
                           labelText: "Enter username",
                           image_path: AssetUtils.human_icon,
+                          onChanged: (value) {
+                            value = _creator_signup_controller
+                                .username_controller.text;
+                            CheckUserName(context);
+                            setState(() {});
+                          },
+                          // errorText: checkUserModel!.message,
+                          tap: () {
+                            CheckUserName(context);
+                          },
                         ),
+                        (username_error == false
+                            ? Container(
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 30, vertical: 0),
+                                alignment: Alignment.centerRight,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 1.0, horizontal: 5),
+                                  child: Text(
+                                    checkUserModel!.message!,
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                ),
+                              )
+                            : SizedBox.shrink()),
                         SizedBox(
                           height: 12,
                         ),
@@ -290,8 +329,33 @@ class _Creator_signupState extends State<Creator_signup> {
                           controller:
                               _creator_signup_controller.email_controller,
                           labelText: "Enter Email",
+                          onChanged: (value) {
+                            value = _creator_signup_controller
+                                .email_controller.text;
+                            CheckEmailName(context);
+                            setState(() {});
+                          },
+                          // errorText: checkUserModel!.message,
+                          tap: () {
+                            CheckEmailName(context);
+                          },
                           image_path: AssetUtils.msg_icon,
                         ),
+                        (email_error == false
+                            ? Container(
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 30, vertical: 0),
+                                alignment: Alignment.centerRight,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 1.0, horizontal: 5),
+                                  child: Text(
+                                    checkEmailModel!.message!,
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                ),
+                              )
+                            : SizedBox.shrink()),
                         SizedBox(
                           height: 12,
                         ),
@@ -537,7 +601,7 @@ class _Creator_signupState extends State<Creator_signup> {
                               Container(
                                 // margin: EdgeInsets.only(left: 45,right: 45.93),
                                 margin:
-                                const EdgeInsets.symmetric(horizontal: 30),
+                                    const EdgeInsets.symmetric(horizontal: 30),
 
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -572,7 +636,8 @@ class _Creator_signupState extends State<Creator_signup> {
                                           ),
                                         ],
                                         color: Colors.white,
-                                        borderRadius: BorderRadius.circular(24.0),
+                                        borderRadius:
+                                            BorderRadius.circular(24.0),
                                       ),
                                       child: TextFormField(
                                         onTap: () {
@@ -591,7 +656,8 @@ class _Creator_signupState extends State<Creator_signup> {
                                           hintText: 'Enter Location',
                                           filled: true,
                                           border: InputBorder.none,
-                                          enabledBorder: const OutlineInputBorder(
+                                          enabledBorder:
+                                              const OutlineInputBorder(
                                             borderSide: BorderSide(
                                                 color: Colors.transparent,
                                                 width: 1),
@@ -636,7 +702,7 @@ class _Creator_signupState extends State<Creator_signup> {
 
                               (location_tap
                                   ? Container(
-                                height: 100,
+                                      height: 100,
                                       margin: const EdgeInsets.symmetric(
                                           horizontal: 30),
                                       decoration: BoxDecoration(
@@ -767,14 +833,13 @@ class _Creator_signupState extends State<Creator_signup> {
                                     isDense: true,
                                     hintText: "Enter phone no",
                                     filled: true,
+
                                     border: InputBorder.none,
-                                    enabledBorder:
-                                        const OutlineInputBorder(
+                                    enabledBorder: const OutlineInputBorder(
                                       borderSide: BorderSide(
-                                          color: Colors.transparent,
-                                          width: 1),
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(10)),
+                                          color: Colors.transparent, width: 1),
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(10)),
                                     ),
                                     // focusedBorder: OutlineInputBorder(
                                     //   borderSide:
@@ -797,14 +862,24 @@ class _Creator_signupState extends State<Creator_signup> {
                                         onPressed: () {},
                                       ),
                                     ),
-                                    prefixText:_creator_signup_controller.selected_country_code,
+                                    prefixText: _creator_signup_controller
+                                        .selected_country_code,
                                     prefixStyle: TextStyle(
                                       fontSize: 16,
                                       fontFamily: 'PR',
                                       color: Colors.black,
                                     ),
-
                                   ),
+                                  onChanged: (value) {
+                                    value = _creator_signup_controller
+                                        .phone_controller.text;
+                                    CheckPhoneName(context);
+                                    setState(() {});
+                                  },
+                                  // errorText: checkUserModel!.message,
+                                  onTap: () {
+                                    CheckPhoneName(context);
+                                  },
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontFamily: 'PR',
@@ -818,17 +893,38 @@ class _Creator_signupState extends State<Creator_signup> {
                             ],
                           ),
                         ),
+                        (phone_error == false
+                            ? Container(
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 30, vertical: 0),
+                                alignment: Alignment.centerRight,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 1.0, horizontal: 5),
+                                  child: Text(
+                                    checkPhoneModel!.message!,
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                ),
+                              )
+                            : SizedBox.shrink()),
                         SizedBox(
                           height: 12,
                         ),
                         CommonTextFormField(
-                          height: 45,
-                          title: TxtUtils.Password,
-                          controller:
-                              _creator_signup_controller.password_controller,
-                          labelText: 'Enter password',
-                          image_path: AssetUtils.key_icon,
-                        ),
+                            height: 45,
+                            title: TxtUtils.Password,
+                            controller:
+                                _creator_signup_controller.password_controller,
+                            labelText: 'Enter password',
+                            isObscure: _obscureText,
+                            maxLines: 1,
+                            image_path: (_obscureText
+                                ? AssetUtils.eye_open_icon
+                                : AssetUtils.eye_close_icon),
+                            onpasswordTap: () {
+                              _toggle();
+                            }),
                         SizedBox(
                           height: 12,
                         ),
@@ -839,7 +935,7 @@ class _Creator_signupState extends State<Creator_signup> {
                               _creator_signup_controller.gender_controller,
                           labelText: 'Select Gender',
                           image_path: AssetUtils.user_icon2,
-                          tap: (){
+                          tap: () {
                             setState(() {
                               gender_tap = true;
                             });
@@ -850,53 +946,55 @@ class _Creator_signupState extends State<Creator_signup> {
                         ),
                         (gender_tap
                             ? Container(
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 30),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(24),
-                            border: Border.all(
-                                width: 1, color: Colors.white),
-                            gradient: LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              // stops: [0.1, 0.5, 0.7, 0.9],
-                              colors: [
-                                HexColor("#000000"),
-                                HexColor("#C12265"),
-                                HexColor("#C12265"),
-                                HexColor("#FFFFFF"),
-                              ],
-                            ),
-                          ),
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: data.length,
-                            itemBuilder:
-                                (BuildContext context, int index) {
-                              return GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    gender_tap = false;
-                                    _creator_signup_controller.gender_controller.text = data[index];
-                                  });
-                                },
-                                child: Container(
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: 8),
-                                  child: Text(
-                                    data[index],
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontFamily: 'PR',
-                                      color: Colors.white,
-                                    ),
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 30),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(24),
+                                  border:
+                                      Border.all(width: 1, color: Colors.white),
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    // stops: [0.1, 0.5, 0.7, 0.9],
+                                    colors: [
+                                      HexColor("#000000"),
+                                      HexColor("#C12265"),
+                                      HexColor("#C12265"),
+                                      HexColor("#FFFFFF"),
+                                    ],
                                   ),
                                 ),
-                              );
-                            },
-                          ),
-                        )
+                                child: ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: data.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          gender_tap = false;
+                                          _creator_signup_controller
+                                              .gender_controller
+                                              .text = data[index];
+                                        });
+                                      },
+                                      child: Container(
+                                        margin:
+                                            EdgeInsets.symmetric(vertical: 8),
+                                        child: Text(
+                                          data[index],
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontFamily: 'PR',
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              )
                             : SizedBox.shrink()),
                         // Container(
                         //   margin: const EdgeInsets.symmetric(horizontal: 30),
@@ -1190,7 +1288,19 @@ class _Creator_signupState extends State<Creator_signup> {
                         ),
                         common_button(
                           onTap: () {
-                            _creator_signup_controller.creator_signup(context);
+                            if (username_error == true &&
+                                email_error == true &&
+                                phone_error == true) {
+                              if (_creator_signup_controller
+                                      .phone_controller.text.length <
+                                  10) {
+                                CommonWidget().showErrorToaster(
+                                    msg: "Enter valid number");
+                                return;
+                              }
+                              _creator_signup_controller.CreatorsendOtp(
+                                  context);
+                            }
                             // Get.toNamed(BindingUtils.signupOption);
                           },
                           backgroud_color: Colors.black,
@@ -1219,6 +1329,142 @@ class _Creator_signupState extends State<Creator_signup> {
     setState(() => this._creator_signup_controller.data_country = books);
     print(
         '_creator_signup_controller.data_country.length ${_creator_signup_controller.data_country.length}');
+  }
+
+  CheckUserModel? checkUserModel;
+  CheckUserModel? checkEmailModel;
+  CheckUserModel? checkPhoneModel;
+  bool username_error = true;
+  bool email_error = true;
+  bool phone_error = true;
+
+  Future<dynamic> CheckUserName(BuildContext context) async {
+    debugPrint('0-0-0-0-0-0-0 username');
+    Map data = {
+      'userName': _creator_signup_controller.username_controller.text,
+      'type': 'creator',
+    };
+    print(data);
+    // String body = json.encode(data);
+
+    var url = (URLConstants.base_url + URLConstants.check_user_Api);
+    print("url : $url");
+    print("body : $data");
+
+    var response = await http.post(
+      Uri.parse(url),
+      body: data,
+    );
+    print(response.body);
+    print(response.request);
+    print(response.statusCode);
+    // var final_data = jsonDecode(response.body);
+
+    // print('final data $final_data');
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      checkUserModel = CheckUserModel.fromJson(data);
+      print(checkUserModel);
+      setState(() {
+        username_error = checkUserModel!.error!;
+      });
+      if (checkUserModel!.error == false) {
+        setState(() {});
+        // Get.to(CreatorOtpVerification());
+        // Get.to(OtpScreen(received_otp: otpModel!.user![0].body!,));
+      } else {
+        print('Please try again');
+      }
+    } else {
+      print('Please try again');
+    }
+  }
+
+  Future<dynamic> CheckEmailName(BuildContext context) async {
+    debugPrint('0-0-0-0-0-0-0 username');
+    Map data = {
+      'email': _creator_signup_controller.email_controller.text,
+      'type': 'creator',
+    };
+    print(data);
+    // String body = json.encode(data);
+
+    var url = (URLConstants.base_url + URLConstants.check_user_Api);
+    print("url : $url");
+    print("body : $data");
+
+    var response = await http.post(
+      Uri.parse(url),
+      body: data,
+    );
+    print(response.body);
+    print(response.request);
+    print(response.statusCode);
+    // var final_data = jsonDecode(response.body);
+
+    // print('final data $final_data');
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      checkEmailModel = CheckUserModel.fromJson(data);
+      print(checkEmailModel);
+      setState(() {
+        email_error = checkEmailModel!.error!;
+      });
+      if (checkEmailModel!.error == false) {
+        setState(() {});
+        // Get.to(CreatorOtpVerification());
+        // Get.to(OtpScreen(received_otp: otpModel!.user![0].body!,));
+      } else {
+        print('Please try again');
+      }
+    } else {
+      print('Please try again');
+    }
+  }
+
+  Future<dynamic> CheckPhoneName(BuildContext context) async {
+    debugPrint('0-0-0-0-0-0-0 username');
+    Map data = {
+      'phone': _creator_signup_controller.phone_controller.text,
+      'type': 'creator',
+    };
+    print(data);
+    // String body = json.encode(data);
+
+    var url = (URLConstants.base_url + URLConstants.check_user_Api);
+    print("url : $url");
+    print("body : $data");
+
+    var response = await http.post(
+      Uri.parse(url),
+      body: data,
+    );
+    print(response.body);
+    print(response.request);
+    print(response.statusCode);
+    // var final_data = jsonDecode(response.body);
+
+    // print('final data $final_data');
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      checkPhoneModel = CheckUserModel.fromJson(data);
+      print(checkPhoneModel);
+      setState(() {
+        phone_error = checkPhoneModel!.error!;
+      });
+      if (checkPhoneModel!.error == false) {
+        setState(() {});
+        // Get.to(CreatorOtpVerification());
+        // Get.to(OtpScreen(received_otp: otpModel!.user![0].body!,));
+      } else {
+        print('Please try again');
+      }
+    } else {
+      print('Please try again');
+    }
   }
 }
 

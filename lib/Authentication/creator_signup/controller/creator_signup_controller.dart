@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 
 import '../../../Utils/App_utils.dart';
 import '../../../Utils/toaster_widget.dart';
+import '../../../custom_widget/page_loader.dart';
 import '../../../dashboard/dashboard_screen.dart';
 import '../../authentication_screen.dart';
 import '../../creator_login/controller/creator_login_controller.dart';
@@ -42,66 +44,133 @@ class Creator_signup_controller extends GetxController {
 
   RxBool isLoading = false.obs;
   LoginModel? loginModel;
+  File? imgFile;
 
-  Future<dynamic> creator_signup(BuildContext context) async {
-    debugPrint('0-0-0-0-0-0-0 username');
-    // try {
-    //
-    // } catch (e) {
-    //   print('0-0-0-0-0-0- SignIn Error :- ${e.toString()}');
-    // }
-    isLoading(true);
-    Map data = {
-      'fullName': fullname_controller.text,
-      'userName': username_controller.text,
-      'email': email_controller.text,
-      'phone': phone_controller.text,
-      'parent_email': '',
-      'password': password_controller.text,
-      'gender': selected_gender,
-      'location': selected_country_code,
-      'referral_code': reffralCode_controller.text,
-      // 'image': photoBase64!,
-      'image': img64!.substring(0, 100),
-      'countryCode': selected_country_code,
-      'about': aboutMe_controller.text,
-      'type': 'creator',
-    };
-    // print(data);
-    // String body = json.encode(data);
+  // Future<dynamic> creator_signup(BuildContext context) async {
+  //   debugPrint('0-0-0-0-0-0-0 username');
+  //   // try {
+  //   //
+  //   // } catch (e) {
+  //   //   print('0-0-0-0-0-0- SignIn Error :- ${e.toString()}');
+  //   // }
+  //   isLoading(true);
+  //   Map data = {
+  //     'fullName': fullname_controller.text,
+  //     'userName': username_controller.text,
+  //     'email': email_controller.text,
+  //     'phone': phone_controller.text,
+  //     'parent_email': '',
+  //     'password': password_controller.text,
+  //     'gender': gender_controller.text,
+  //     'location': selected_country,
+  //     'referral_code': reffralCode_controller.text,
+  //     // 'image': photoBase64!,
+  //     'image': img64!.substring(0, 100),
+  //     'countryCode': selected_country_code,
+  //     'about': aboutMe_controller.text,
+  //     'type': 'creator',
+  //   };
+  //   // print(data);
+  //   // String body = json.encode(data);
+  //
+  //   var url = ("http://foxyserver.com/funky/api/signup.php");
+  //   print("url : $url");
+  //   print("body : $data");
+  //
+  //   var response = await http.post(
+  //     Uri.parse(url),
+  //     body: data,
+  //   );
+  //   // print(response.body);
+  //   print(response.body);
+  //   print(response.request);
+  //   print(response.statusCode);
+  //   // var final_data = jsonDecode(response.body);
+  //
+  //   // print('final data $final_data');
+  //
+  //   if (response.statusCode == 200) {
+  //     isLoading(false);
+  //     var data = jsonDecode(response.body);
+  //     loginModel = LoginModel.fromJson(data);
+  //     print(loginModel);
+  //     if (loginModel!.error == false) {
+  //       CommonWidget().showToaster(msg: 'Please verify the OTP');
+  //       if(loginModel!.message == 'User Already Exists'){
+  //         CommonWidget().showErrorToaster(msg: loginModel!.message!);
+  //       }else{
+  //         CommonWidget().showToaster(msg: loginModel!.message!);
+  //         Get.to(CreatorOtpVerification());
+  //         await CreatorsendOtp(context);
+  //       }
+  //
+  //       // Get.to(Dashboard());
+  //     } else {
+  //       print('Please try again');
+  //     }
+  //   } else {
+  //     print('Please try again');
+  //   }
+  // }
 
-    var url = ("http://foxyserver.com/funky/api/signup.php");
-    print("url : $url");
-    print("body : $data");
+  Future<dynamic> creator_signup({required BuildContext context}) async {
+    // showLoader(context);
+    var url = 'http://foxyserver.com/funky/api/signup.php';
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+    // List<int> imageBytes = imgFile!.readAsBytesSync();
+    // String baseimage = base64Encode(imageBytes);
 
-    var response = await http.post(
-      Uri.parse(url),
-      body: data,
-    );
-    // print(response.body);
-    print(response.request);
+    if (imgFile != null) {
+      var files = await http.MultipartFile(
+          'image',
+          File(imgFile!.path).readAsBytes().asStream(),
+          File(imgFile!.path).lengthSync(),
+          filename: imgFile!.path.split("/").last);
+      request.files.add(files);
+    }
+    request.fields['fullName'] = fullname_controller.text;
+    request.fields['userName'] = username_controller.text;
+    request.fields['email'] = email_controller.text;
+    request.fields['phone'] = phone_controller.text;
+    request.fields['parent_email'] = '';
+    request.fields['password'] = password_controller.text;
+    request.fields['gender'] = gender_controller.text;
+    request.fields['location'] = selected_country!;
+    request.fields['referral_code'] = reffralCode_controller.text;
+    request.fields['countryCode'] = selected_country_code!;
+    request.fields['about'] = aboutMe_controller.text;
+    request.fields['type'] = 'creator';
+
+    //userId,tagLine,description,address,postImage,uploadVideo,isVideo
+    // request.files.add(await http.MultipartFile.fromPath(
+    //     "image", widget.ImageFile.path));
+
+    var response = await request.send();
+    var responsed = await http.Response.fromStream(response);
     print(response.statusCode);
-    // var final_data = jsonDecode(response.body);
-
-    // print('final data $final_data');
+    print("response - ${response.statusCode}");
 
     if (response.statusCode == 200) {
       isLoading(false);
-      var data = jsonDecode(response.body);
-      loginModel = LoginModel.fromJson(data);
-      print(loginModel);
+          var data = jsonDecode(responsed.body);
+          loginModel = LoginModel.fromJson(data);
+          print(loginModel);
       if (loginModel!.error == false) {
-        CommonWidget().showToaster(msg: 'Please verify the OTP');
-        Get.to(CreatorOtpVerification());
-        await CreatorsendOtp(context);
-        // Get.to(Dashboard());
-      } else {
-        print('Please try again');
-      }
-    } else {
-      print('Please try again');
-    }
+              if(loginModel!.message == 'User Already Exists'){
+                CommonWidget().showErrorToaster(msg: loginModel!.message!);
+              }else{
+                CommonWidget().showToaster(msg: loginModel!.message!);
+                await Get.to(Dashboard());
+              }
+              // Get.to(Dashboard());
+            } else {
+              print('Please try again');
+            }
+          } else {
+            print('Please try again');
+          }
   }
+
 
   final Creator_Login_screen_controller _creator_login_screen_controller =
       Get.put(Creator_Login_screen_controller(),
@@ -185,6 +254,7 @@ class Creator_signup_controller extends GetxController {
     isotpLoading(true);
     Map data = {
       'email': email_controller.text,
+      'phone' : selected_country_code! + phone_controller.text
     };
     print(data);
     // String body = json.encode(data);
@@ -211,6 +281,8 @@ class Creator_signup_controller extends GetxController {
       print(loginModel);
       if (otpsendModel!.error == false) {
         CommonWidget().showToaster(msg: 'Enter Otp');
+        Get.to(CreatorOtpVerification());
+
         // Get.to(OtpScreen(received_otp: otpModel!.user![0].body!,));
       } else {
         print('Please try again');
@@ -255,11 +327,8 @@ class Creator_signup_controller extends GetxController {
       otpverifyModel = otpVerifyModel.fromJson(data);
       print(otpverifyModel);
       if (otpverifyModel!.error == false) {
-        CommonWidget().showToaster(msg: 'Signed Up');
-        await _creator_login_screen_controller.CreatorgetUserInfo_Email(
-            UserId: loginModel!.user![0].id!);
-
-        await Get.to(Dashboard());
+        CommonWidget().showToaster(msg: otpverifyModel!.message!);
+        await creator_signup(context: context);
       } else {
         print('Please try again');
         CommonWidget().showErrorToaster(msg: 'Enter valid Otp');

@@ -271,18 +271,18 @@ class _VideoEditorState extends State<VideoEditor> {
                 icon: const Icon(Icons.rotate_right, color: Colors.white),
               ),
             ),
-            Expanded(
-              child: IconButton(
-                onPressed: _openCropScreen,
-                icon: const Icon(Icons.crop, color: Colors.white),
-              ),
-            ),
-            Expanded(
-              child: IconButton(
-                onPressed: _exportCover,
-                icon: const Icon(Icons.save_alt, color: Colors.white),
-              ),
-            ),
+            // Expanded(
+            //   child: IconButton(
+            //     onPressed: _openCropScreen,
+            //     icon: const Icon(Icons.crop, color: Colors.white),
+            //   ),
+            // ),
+            // Expanded(
+            //   child: IconButton(
+            //     onPressed: _exportCover,
+            //     icon: const Icon(Icons.save_alt, color: Colors.white),
+            //   ),
+            // ),
             Expanded(
               child: IconButton(
                 onPressed: _exportVideo,
@@ -354,7 +354,8 @@ class _VideoEditorState extends State<VideoEditor> {
           controller: _controller,
           height: height,
           quantity: 8,
-        ));
+        )
+    );
   }
 
   Widget _customSnackBar() {

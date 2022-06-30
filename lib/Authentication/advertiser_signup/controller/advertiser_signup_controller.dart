@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 // import 'package:funky_project/Authentication/kids_signup/ui/kids_otp_verification.dart';
@@ -22,6 +24,7 @@ import '../../creator_signup/model/countryModelclass.dart';
 import '../../creator_signup/model/otpVerifyModel.dart';
 import '../../creator_signup/ui/creator_otp_verification.dart';
 import '../../kids_login/model/parents_otp_model.dart';
+import '../ui/advertisor_otp_verification.dart';
 
 class Advertiser_signup_controller extends GetxController {
   TextEditingController fullname_controller = new TextEditingController();
@@ -40,36 +43,153 @@ class Advertiser_signup_controller extends GetxController {
   LoginModel? loginModel;
   String? selected_gender ;
 
+  String? selected_country;
+  String? selected_country_code = '+91';
+
   final Creator_Login_screen_controller _creator_login_screen_controller =
   Get.put(Creator_Login_screen_controller(),
       tag: Creator_Login_screen_controller().toString());
-  Future<dynamic> Advertiser_signup(BuildContext context) async {
+  // Future<dynamic> Advertiser_signup(BuildContext context) async {
+  //   debugPrint('0-0-0-0-0-0-0 username');
+  //   // try {
+  //   //
+  //   // } catch (e) {
+  //   //   print('0-0-0-0-0-0- SignIn Error :- ${e.toString()}');
+  //   // }
+  //   isLoading(true);
+  //   Map data = {
+  //     'fullName': fullname_controller.text,
+  //     'userName': username_controller.text,
+  //     'email': email_controller.text,
+  //     'phone': phone_controller.text,
+  //     'password': password_controller.text,
+  //     'gender': gender_controller.text,
+  //     'location' : location_controller.text,
+  //     'referral_code': reffralCode_controller.text,
+  //     // 'image': photoBase64!,
+  //     'image': img64!.substring(0, 100),
+  //     'countryCode': countryCode_controller.text,
+  //     'about': aboutMe_controller.text,
+  //     'type': 'advertisor',
+  //   };
+  //   print(data);
+  //   // String body = json.encode(data);
+  //
+  //   var url = (URLConstants.base_url + URLConstants.SignUpApi);
+  //   print("url : $url");
+  //   print("body : $data");
+  //
+  //   var response = await http.post(
+  //     Uri.parse(url),
+  //     body: data,
+  //   );
+  //   print(response.body);
+  //   print(response.request);
+  //   print(response.statusCode);
+  //   // var final_data = jsonDecode(response.body);
+  //
+  //   // print('final data $final_data');
+  //
+  //   if (response.statusCode == 200) {
+  //     isLoading(false);
+  //     var data = jsonDecode(response.body);
+  //     loginModel = LoginModel.fromJson(data);
+  //     print(loginModel);
+  //     if (loginModel!.error == false) {
+  //       CommonWidget().showToaster(msg: 'Signup successfull');
+  //       await _creator_login_screen_controller.CreatorgetUserInfo_Email(UserId: loginModel!.user![0].id!);
+  //
+  //       await Get.to(Dashboard());
+  //       // await KidsSendOtp(context);
+  //       // Get.to(Dashboard());
+  //     } else {
+  //       print('Please try again');
+  //     }
+  //   } else {
+  //     print('Please try again');
+  //   }
+  // }
+
+  File? imgFile;
+
+  Future<dynamic> Advertiser_signup({required BuildContext context}) async {
+    // showLoader(context);
+    var url = 'http://foxyserver.com/funky/api/signup.php';
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+    // List<int> imageBytes = imgFile!.readAsBytesSync();
+    // String baseimage = base64Encode(imageBytes);
+
+    if (imgFile != null) {
+      var files = await http.MultipartFile(
+          'image',
+          File(imgFile!.path).readAsBytes().asStream(),
+          File(imgFile!.path).lengthSync(),
+          filename: imgFile!.path.split("/").last);
+      request.files.add(files);
+    }
+    request.fields['fullName'] = fullname_controller.text;
+    request.fields['userName'] = username_controller.text;
+    request.fields['email'] = email_controller.text;
+    request.fields['phone'] = phone_controller.text;
+    request.fields['password'] = password_controller.text;
+    request.fields['gender'] = gender_controller.text;
+    request.fields['location'] = selected_country!;
+    request.fields['referral_code'] = reffralCode_controller.text;
+    request.fields['countryCode'] = selected_country_code!;
+    request.fields['about'] = aboutMe_controller.text;
+    request.fields['type'] = 'advertisor';
+
+    //userId,tagLine,description,address,postImage,uploadVideo,isVideo
+    // request.files.add(await http.MultipartFile.fromPath(
+    //     "image", widget.ImageFile.path));
+
+    var response = await request.send();
+    var responsed = await http.Response.fromStream(response);
+    print(response.statusCode);
+    print("response - ${response.statusCode}");
+
+    if (response.statusCode == 200) {
+      isLoading(false);
+      var data = jsonDecode(responsed.body);
+      loginModel = LoginModel.fromJson(data);
+      print(loginModel);
+      if (loginModel!.error == false) {
+        if(loginModel!.message == 'User Already Exists'){
+          CommonWidget().showErrorToaster(msg: loginModel!.message!);
+        }else{
+          CommonWidget().showToaster(msg: loginModel!.message!);
+          await Get.to(Dashboard());
+        }
+        // Get.to(Dashboard());
+      } else {
+        print('Please try again');
+      }
+    } else {
+      print('Please try again');
+    }
+  }
+
+  String? photoBase64;
+  String? img64;
+
+  RxBool isotpVerifyLoading = false.obs;
+  RxBool isotpLoading = false.obs;
+
+  otpVerifyModel? otpverifyModel;
+  parentsOtpModel? otpsendModel;
+
+
+  Future<dynamic> AdvertisorsendOtp(BuildContext context) async {
     debugPrint('0-0-0-0-0-0-0 username');
-    // try {
-    //
-    // } catch (e) {
-    //   print('0-0-0-0-0-0- SignIn Error :- ${e.toString()}');
-    // }
-    isLoading(true);
+    isotpLoading(true);
     Map data = {
-      'fullName': fullname_controller.text,
-      'userName': username_controller.text,
       'email': email_controller.text,
-      'phone': phone_controller.text,
-      'password': password_controller.text,
-      'gender': gender_controller.text,
-      'location' : location_controller.text,
-      'referral_code': reffralCode_controller.text,
-      // 'image': photoBase64!,
-      'image': img64!.substring(0, 100),
-      'countryCode': countryCode_controller.text,
-      'about': aboutMe_controller.text,
-      'type': 'advertisor',
+      'phone' : selected_country_code! + phone_controller.text
     };
     print(data);
     // String body = json.encode(data);
 
-    var url = (URLConstants.base_url + URLConstants.SignUpApi);
+    var url = (URLConstants.base_url + URLConstants.creatorsend_Api);
     print("url : $url");
     print("body : $data");
 
@@ -85,30 +205,67 @@ class Advertiser_signup_controller extends GetxController {
     // print('final data $final_data');
 
     if (response.statusCode == 200) {
-      isLoading(false);
+      isotpLoading(false);
       var data = jsonDecode(response.body);
-      loginModel = LoginModel.fromJson(data);
+      otpsendModel = parentsOtpModel.fromJson(data);
       print(loginModel);
-      if (loginModel!.error == false) {
-        CommonWidget().showToaster(msg: 'Signup successfull');
-        await _creator_login_screen_controller.CreatorgetUserInfo_Email(UserId: loginModel!.user![0].id!);
+      if (otpsendModel!.error == false) {
+        CommonWidget().showToaster(msg: 'Enter Otp');
+        Get.to(AdvertisorOtpVerification());
 
-        await Get.to(Dashboard());
-        // await KidsSendOtp(context);
-        // Get.to(Dashboard());
+        // Get.to(OtpScreen(received_otp: otpModel!.user![0].body!,));
       } else {
         print('Please try again');
+        CommonWidget().showErrorToaster(msg: 'Enter valid Phone Number');
       }
     } else {
       print('Please try again');
     }
   }
 
-  String? photoBase64;
-  String? img64;
 
-  RxBool isotpVerifyLoading = false.obs;
-  otpVerifyModel? otpverifyModel;
+  Future<dynamic> AdvertisorVerifyOtp(
+      {required BuildContext context, required String otp_controller}) async {
+    debugPrint('0-0-0-0-0-0-0 username');
+    isotpVerifyLoading(true);
+    Map data = {
+      'otp': otp_controller,
+    };
+    print(data);
+    // String body = json.encode(data);
+
+    var url = (URLConstants.base_url + URLConstants.creatorverify_Api);
+    print("url : $url");
+    print("body : $data");
+
+    var response = await http.post(
+      Uri.parse(url),
+      body: data,
+    );
+    print(response.body);
+    print(response.request);
+    print(response.statusCode);
+    // var final_data = jsonDecode(response.body);
+
+    // print('final data $final_data');
+
+    if (response.statusCode == 200) {
+      isotpVerifyLoading(false);
+      var data = jsonDecode(response.body);
+      otpverifyModel = otpVerifyModel.fromJson(data);
+      print(otpverifyModel);
+      if (otpverifyModel!.error == false) {
+        CommonWidget().showToaster(msg: otpverifyModel!.message!);
+        await Advertiser_signup(context: context);
+      } else {
+        print('Please try again');
+        CommonWidget().showErrorToaster(msg: 'Enter valid Otp');
+      }
+    } else {
+      print('Please try again');
+    }
+  }
+
 
   countryModel? countrymodelList;
   var getAllCountriesModelList = countryModel().obs;

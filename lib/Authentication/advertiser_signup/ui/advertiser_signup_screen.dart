@@ -11,11 +11,14 @@ import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:searchfield/searchfield.dart';
+import 'package:http/http.dart' as http;
 
 import '../../../Utils/App_utils.dart';
 import '../../../Utils/asset_utils.dart';
 import '../../../Utils/custom_textfeild.dart';
+import '../../../Utils/toaster_widget.dart';
 import '../../../custom_widget/common_buttons.dart';
+import '../../creator_login/model/creator_loginModel.dart';
 import '../../creator_signup/controller/creator_signup_controller.dart';
 import '../../creator_signup/model/countryModelclass.dart';
 import '../../kids_signup/controller/kids_signup_controller.dart';
@@ -50,6 +53,17 @@ class _AdvertiserSignUpScreenState extends State<AdvertiserSignUpScreen> {
     super.initState();
   }
 
+  bool _obscureText = true;
+
+  String? _password;
+
+  // Toggles the password show status
+  void _toggle() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
+  }
+
   bool location_tap = false;
 
   init() async {
@@ -58,16 +72,15 @@ class _AdvertiserSignUpScreenState extends State<AdvertiserSignUpScreen> {
     // await _creator_signup_controller.getAllCountriesFromAPI();
   }
 
-  File? imgFile;
   final imgPicker = ImagePicker();
   bool valuefirst = false;
 
   void openCamera() async {
     var imgCamera = await imgPicker.getImage(source: ImageSource.camera);
     setState(() {
-      imgFile = File(imgCamera!.path);
+      _advertiser_signup_controller.imgFile = File(imgCamera!.path);
       _advertiser_signup_controller.photoBase64 =
-          base64Encode(imgFile!.readAsBytesSync());
+          base64Encode(  _advertiser_signup_controller.imgFile!.readAsBytesSync());
       print(_advertiser_signup_controller.photoBase64);
     });
     Navigator.of(context).pop();
@@ -76,9 +89,9 @@ class _AdvertiserSignUpScreenState extends State<AdvertiserSignUpScreen> {
   void openGallery() async {
     var imgGallery = await imgPicker.getImage(source: ImageSource.gallery);
     setState(() {
-      imgFile = File(imgGallery!.path);
+      _advertiser_signup_controller.imgFile = File(imgGallery!.path);
       _advertiser_signup_controller.photoBase64 =
-          base64Encode(imgFile!.readAsBytesSync());
+          base64Encode(  _advertiser_signup_controller.imgFile!.readAsBytesSync());
       print(_advertiser_signup_controller.photoBase64);
     });
     Navigator.of(context).pop();
@@ -159,7 +172,7 @@ class _AdvertiserSignUpScreenState extends State<AdvertiserSignUpScreen> {
                           width: 80,
                           child: ClipRRect(
                               borderRadius: BorderRadius.circular(500),
-                              child: (imgFile == null
+                              child: (  _advertiser_signup_controller.imgFile == null
                                   ? IconButton(
                                       icon: Image.asset(
                                         AssetUtils.user_icon,
@@ -200,7 +213,7 @@ class _AdvertiserSignUpScreenState extends State<AdvertiserSignUpScreen> {
                                       },
                                     )
                                   : Image.file(
-                                      imgFile!,
+                                _advertiser_signup_controller.imgFile!,
                                       fit: BoxFit.fill,
                                     ))),
                         ),
@@ -225,7 +238,32 @@ class _AdvertiserSignUpScreenState extends State<AdvertiserSignUpScreen> {
                             _advertiser_signup_controller.username_controller,
                         labelText: "Enter username",
                         image_path: AssetUtils.human_icon,
+                        onChanged: (value) {
+                          value = _advertiser_signup_controller
+                              .username_controller.text;
+                          CheckUserName(context);
+                          setState(() {});
+                        },
+                        // errorText: checkUserModel!.message,
+                        tap: () {
+                          CheckUserName(context);
+                        },
                       ),
+                      (username_error == false
+                          ? Container(
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 30, vertical: 0),
+                        alignment: Alignment.centerRight,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 1.0, horizontal: 5),
+                          child: Text(
+                            checkUserModel!.message!,
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ),
+                      )
+                          : SizedBox.shrink()),
                       SizedBox(
                         height: 12,
                       ),
@@ -235,7 +273,32 @@ class _AdvertiserSignUpScreenState extends State<AdvertiserSignUpScreen> {
                             _advertiser_signup_controller.email_controller,
                         labelText: "Enter Email",
                         image_path: AssetUtils.msg_icon,
+                        onChanged: (value) {
+                          value = _advertiser_signup_controller
+                              .email_controller.text;
+                          CheckEmailName(context);
+                          setState(() {});
+                        },
+                        // errorText: checkUserModel!.message,
+                        tap: () {
+                          CheckEmailName(context);
+                        },
                       ),
+                      (email_error == false
+                          ? Container(
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 30, vertical: 0),
+                        alignment: Alignment.centerRight,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 1.0, horizontal: 5),
+                          child: Text(
+                            checkEmailModel!.message!,
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ),
+                      )
+                          : SizedBox.shrink()),
                       SizedBox(
                         height: 12,
                       ),
@@ -870,35 +933,37 @@ class _AdvertiserSignUpScreenState extends State<AdvertiserSignUpScreen> {
                                           (BuildContext context, int index) {
                                         return GestureDetector(
                                           onTap: () {
-                                            _creator_signup_controller
+                                            _advertiser_signup_controller
                                                     .selected_country =
                                                 _creator_signup_controller
                                                     .data_country[index].name!;
-                                            _creator_signup_controller
+
+                                            _advertiser_signup_controller
                                                     .selected_country_code =
                                                 _creator_signup_controller
                                                     .data_country[index]
                                                     .dialCode!;
-                                            print(_creator_signup_controller
-                                                .selected_country);
-                                            print(_creator_signup_controller
-                                                .selected_country_code);
+
+                                            // print(_creator_signup_controller
+                                            //     .selected_country);
+                                            // print(_creator_signup_controller
+                                            //     .selected_country_code);
 
                                             _creator_signup_controller
                                                     .query_followers.text =
                                                 _creator_signup_controller
                                                     .data_country[index].name!;
 
-                                            _advertiser_signup_controller
-                                                    .countryCode_controller
-                                                    .text =
-                                                _creator_signup_controller
-                                                    .data_country[index]
-                                                    .dialCode!;
-                                            _advertiser_signup_controller
-                                                    .location_controller.text =
-                                                _creator_signup_controller
-                                                    .data_country[index].name!;
+                                            // _advertiser_signup_controller
+                                            //         .countryCode_controller
+                                            //         .text =
+                                            //     _creator_signup_controller
+                                            //         .data_country[index]
+                                            //         .dialCode!;
+                                            // _advertiser_signup_controller
+                                            //         .location_controller.text =
+                                            //     _creator_signup_controller
+                                            //         .data_country[index].name!;
 
                                             setState(() {
                                               location_tap = false;
@@ -1004,13 +1069,23 @@ class _AdvertiserSignUpScreenState extends State<AdvertiserSignUpScreen> {
                                     ),
                                   ),
                                   prefixText: _advertiser_signup_controller
-                                      .countryCode_controller.text,
+                                      .selected_country_code,
                                   prefixStyle: TextStyle(
                                     fontSize: 16,
                                     fontFamily: 'PR',
                                     color: Colors.black,
                                   ),
                                 ),
+                                onChanged: (value) {
+                                  value = _advertiser_signup_controller
+                                      .phone_controller.text;
+                                  CheckPhoneName(context);
+                                  setState(() {});
+                                },
+                                // errorText: checkUserModel!.message,
+                                onTap: () {
+                                  CheckPhoneName(context);
+                                },
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontFamily: 'PR',
@@ -1024,7 +1099,21 @@ class _AdvertiserSignUpScreenState extends State<AdvertiserSignUpScreen> {
                           ],
                         ),
                       ),
-
+                      (phone_error == false
+                          ? Container(
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 30, vertical: 0),
+                        alignment: Alignment.centerRight,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 1.0, horizontal: 5),
+                          child: Text(
+                            checkPhoneModel!.message!,
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ),
+                      )
+                          : SizedBox.shrink()),
                       SizedBox(
                         height: 12,
                       ),
@@ -1033,8 +1122,15 @@ class _AdvertiserSignUpScreenState extends State<AdvertiserSignUpScreen> {
                         controller:
                             _advertiser_signup_controller.password_controller,
                         labelText: "Enter password",
-                        image_path: AssetUtils.key_icon,
-                      ),
+                          isObscure: _obscureText,
+                          maxLines: 1,
+                          image_path: (_obscureText
+                              ? AssetUtils.eye_open_icon
+                              : AssetUtils.eye_close_icon),
+                          onpasswordTap: () {
+                            _toggle();
+                          }
+                        ),
                       SizedBox(
                         height: 12,
                       ),
@@ -1398,8 +1494,21 @@ class _AdvertiserSignUpScreenState extends State<AdvertiserSignUpScreen> {
                       ),
                       common_button(
                         onTap: () {
-                          _advertiser_signup_controller.Advertiser_signup(
-                              context);
+                          if(username_error == true &&
+                              email_error == true &&
+                              phone_error == true){
+                                if (_creator_signup_controller
+                                    .phone_controller.text.length <
+                                    10) {
+                                      CommonWidget().showErrorToaster(
+                                          msg: "Enter valid number");
+                                      return;
+                                }
+                                _creator_signup_controller.CreatorsendOtp(
+                                    context);
+                          }
+                          _advertiser_signup_controller.AdvertisorsendOtp(
+                               context);
                           // Get.toNamed(BindingUtils.signupOption);
                         },
                         backgroud_color: Colors.black,
@@ -1419,6 +1528,141 @@ class _AdvertiserSignUpScreenState extends State<AdvertiserSignUpScreen> {
       },
     );
   }
+
+  CheckUserModel? checkUserModel;
+  CheckUserModel? checkEmailModel;
+  CheckUserModel? checkPhoneModel;
+  bool username_error = true;
+  bool email_error = true;
+  bool phone_error = true;
+
+  Future<dynamic> CheckUserName(BuildContext context) async {
+    debugPrint('0-0-0-0-0-0-0 username');
+    Map data = {
+      'userName': _advertiser_signup_controller.username_controller.text,
+      'type': 'creator',
+    };
+    print(data);
+    // String body = json.encode(data);
+
+    var url = (URLConstants.base_url + URLConstants.check_user_Api);
+    print("url : $url");
+    print("body : $data");
+
+    var response = await http.post(
+      Uri.parse(url),
+      body: data,
+    );
+    print(response.body);
+    print(response.request);
+    print(response.statusCode);
+    // var final_data = jsonDecode(response.body);
+
+    // print('final data $final_data');
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      checkUserModel = CheckUserModel.fromJson(data);
+      print(checkUserModel);
+      setState(() {
+        username_error = checkUserModel!.error!;
+      });
+      if (checkUserModel!.error == false) {
+        setState(() {});
+        // Get.to(CreatorOtpVerification());
+        // Get.to(OtpScreen(received_otp: otpModel!.user![0].body!,));
+      } else {
+        print('Please try again');
+      }
+    } else {
+      print('Please try again');
+    }
+  }
+  Future<dynamic> CheckEmailName(BuildContext context) async {
+    debugPrint('0-0-0-0-0-0-0 username');
+    Map data = {
+      'email': _advertiser_signup_controller.email_controller.text,
+      'type': 'creator',
+    };
+    print(data);
+    // String body = json.encode(data);
+
+    var url = (URLConstants.base_url + URLConstants.check_user_Api);
+    print("url : $url");
+    print("body : $data");
+
+    var response = await http.post(
+      Uri.parse(url),
+      body: data,
+    );
+    print(response.body);
+    print(response.request);
+    print(response.statusCode);
+    // var final_data = jsonDecode(response.body);
+
+    // print('final data $final_data');
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      checkEmailModel = CheckUserModel.fromJson(data);
+      print(checkEmailModel);
+      setState(() {
+        email_error = checkEmailModel!.error!;
+      });
+      if (checkEmailModel!.error == false) {
+        setState(() {});
+        // Get.to(CreatorOtpVerification());
+        // Get.to(OtpScreen(received_otp: otpModel!.user![0].body!,));
+      } else {
+        print('Please try again');
+      }
+    } else {
+      print('Please try again');
+    }
+  }
+  Future<dynamic> CheckPhoneName(BuildContext context) async {
+    debugPrint('0-0-0-0-0-0-0 username');
+    Map data = {
+      'phone': _advertiser_signup_controller.phone_controller.text,
+      'type': 'creator',
+    };
+    print(data);
+    // String body = json.encode(data);
+
+    var url = (URLConstants.base_url + URLConstants.check_user_Api);
+    print("url : $url");
+    print("body : $data");
+
+    var response = await http.post(
+      Uri.parse(url),
+      body: data,
+    );
+    print(response.body);
+    print(response.request);
+    print(response.statusCode);
+    // var final_data = jsonDecode(response.body);
+
+    // print('final data $final_data');
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      checkPhoneModel = CheckUserModel.fromJson(data);
+      print(checkPhoneModel);
+      setState(() {
+        phone_error = checkPhoneModel!.error!;
+      });
+      if (checkPhoneModel!.error == false) {
+        setState(() {});
+        // Get.to(CreatorOtpVerification());
+        // Get.to(OtpScreen(received_otp: otpModel!.user![0].body!,));
+      } else {
+        print('Please try again');
+      }
+    } else {
+      print('Please try again');
+    }
+  }
+
 
   Future<dynamic> getAllFollowersList() async {
     final books = await _creator_signup_controller.getAllCountriesFromAPI(
