@@ -105,6 +105,10 @@ class AssetUtils {
   static const ball_icon_2 = root + 'Icon awesome-videomd@3x.png';
   static const ball_icon_3 = root + 'Icon awesome-user-checkmd@3x.png';
 
+  static const seconds_15_unselected = root + 'Group 91@3x.png';
+  static const seconds_15_selected = root + 'Group 92@3x.png';
+  static const seconds_60_unselected = root + 'Group 90@3x.png';
+  static const seconds_60_selected = root + 'Group 93@3x.png';
 
   static const eye_open_icon = root + 'Icon ionic-ios-eye@3x.png';
   static const eye_close_icon = root + 'Group 108@3x.png';

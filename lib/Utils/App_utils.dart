@@ -56,6 +56,11 @@ class URLConstants{
   static const searchListApi = "search_users.php";
   static const blockListApi = "user-block-list.php";
   static const NewsFeedApi = "news-feeds.php";
+  static const NewsFeedLike_Unlike_Api = "feedsLike.php";
+  static const NewsFeed_Comment_Api = "get-newsfeeds-comment.php";
+  static const NewsFeed_Comment_like_Api = "news-feeds-comment-like.php";
+  static const NewsFeed_Comment_reply_like_Api = "news-feeds-reply-like.php";
+  static const NewsFeed_Comment_Post_Api = "news-feeds-comment.php";
   static const postApi = "post.php";
   static String id = "id";
   static String type = "type";

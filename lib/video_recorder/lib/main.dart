@@ -6,11 +6,14 @@ import 'package:camerawesome/models/orientations.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:funky_new/Utils/asset_utils.dart';
+import 'package:funky_new/custom_widget/page_loader.dart';
 import 'package:funky_new/video_recorder/lib/widgets/bottom_bar.dart';
 import 'package:funky_new/video_recorder/lib/widgets/camera_preview.dart';
 import 'package:funky_new/video_recorder/lib/widgets/preview_card.dart';
 import 'package:funky_new/video_recorder/lib/widgets/top_bar.dart';
 import 'package:get/get.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:image/image.dart' as imgUtils;
 
 import 'package:path_provider/path_provider.dart';
@@ -18,6 +21,7 @@ import 'package:camerawesome/camerawesome_plugin.dart';
 import 'package:video_compress/video_compress.dart';
 // import 'package:video_compress/video_compress.dart';
 
+import '../../Utils/colorUtils.dart';
 import '../../dashboard/post_video_preview.dart';
 import '../../dashboard/video_editor.dart';
 
@@ -114,7 +118,32 @@ class _MyApp_videoState extends State<MyApp_video>
                   orientation: _orientation,
                   previewAnimation: _previewAnimation,
                 )
-              : Container(),
+              : (instopvideo ? Center(
+            child: Container(
+                height: 80,
+                width: 100,
+                color: Colors.transparent,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    CircularProgressIndicator(
+                      color: HexColor(CommonColor.pinkFont),
+                    ),
+                  ],
+                )
+              // Material(
+              //   color: Colors.transparent,
+              //   child: LoadingIndicator(
+              //     backgroundColor: Colors.transparent,
+              //     indicatorType: Indicator.ballScale,
+              //     colors: _kDefaultRainbowColors,
+              //     strokeWidth: 4.0,
+              //     pathBackgroundColor: Colors.yellow,
+              //     // showPathBackground ? Colors.black45 : null,
+              //   ),
+              // ),
+            ),
+          ) : Container()),
         ],
       ),
     );
@@ -124,11 +153,13 @@ class _MyApp_videoState extends State<MyApp_video>
     15,
     60,
   ];
-  int selectedValue = 15;
-
+  bool seconds_15 = true;
+  bool seconds_60 = false;
+  int seconds_selected = 15;
 
   Widget _buildInterface() {
-    final seconds = myDuration.inSeconds.remainder(60);
+    final seconds15 = myDuration15.inSeconds.remainder(60);
+    final seconds60 = myDuration60.inSeconds.remainder(60);
 
     return Stack(
       children: <Widget>[
@@ -257,21 +288,67 @@ class _MyApp_videoState extends State<MyApp_video>
               }),
         ),
         Positioned(
+          bottom: 200,
+          left: 20,
+          child: Container(
+            child: Column(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      seconds_15 = true;
+                      seconds_60 = false;
+                      seconds_selected = 15;
+                    });
+                    debugPrint(seconds_selected.toString());
+                  },
+                  child: Image.asset(
+                    (seconds_15
+                        ? AssetUtils.seconds_15_selected
+                        : AssetUtils.seconds_15_unselected),
+                    scale: 2,
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      seconds_15 = false;
+                      seconds_60 = true;
+                      seconds_selected = 59;
+                    });
+                    print(seconds_60);
+                    debugPrint(seconds_selected.toString());
+                  },
+                  child: Image.asset(
+                    (seconds_60
+                        ? AssetUtils.seconds_60_selected
+                        : AssetUtils.seconds_60_unselected),
+                    scale: 2,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        Positioned(
           bottom: 150,
           left: 0,
           right: 0,
           child: Center(
             child: Text(
-              '$seconds seconds',
+              (seconds_15
+                  ? "$seconds15"
+                  : (seconds_60 ? "$seconds60" : "$seconds15")),
               style: TextStyle(
                   fontSize: 16, fontFamily: 'PB', color: Colors.white),
             ),
           ),
         ),
         BottomBarWidget(
-    // final seconds = myDuration!.inSeconds.remainder(60);
-
-    onZoomInTap: () {
+          onZoomInTap: () {
             if (_zoomNotifier.value <= 0.9) {
               _zoomNotifier.value += 0.1;
             }
@@ -291,7 +368,7 @@ class _MyApp_videoState extends State<MyApp_video>
             }
             setState(() {});
           },
-          onCaptureTap:(_isRecordingVideo ? _stopvideo: _recordVideo),
+          onCaptureTap: (_isRecordingVideo ? _stopvideo : _recordVideo),
           // (_captureMode.value == CaptureModes.PHOTO)
           // ? _takePhoto
           // : _recordVideo,
@@ -354,31 +431,157 @@ class _MyApp_videoState extends State<MyApp_video>
     print("==> img.width : ${img!.width} | img.height : ${img.height}");
     print("----------------------------------");
   }
-  Timer? countdownTimer;
-  Duration myDuration = Duration(seconds: 15);
 
-  void startTimer() {
-    countdownTimer =
-        Timer.periodic(Duration(seconds: 1), (_) => setCountDown());
+  Timer? countdownTimer_15;
+  Timer? countdownTimer_60;
+  Duration myDuration15 = const Duration(seconds: 15);
+  Duration myDuration60 = const Duration(seconds: 59);
+
+  void startTimer_15() {
+    countdownTimer_15 =
+        Timer.periodic(Duration(seconds: 1), (_) => setCountDown_15());
+  }
+  void startTimer_60() {
+    countdownTimer_60 =
+        Timer.periodic(Duration(seconds: 1), (_) => setCountDown_60());
   }
 
-  void setCountDown() {
+  void setCountDown_15() {
     final reduceSecondsBy = 1;
     setState(() {
-      final seconds = myDuration.inSeconds - reduceSecondsBy;
-      if (seconds < 0) {
-        countdownTimer!.cancel();
+      final seconds15 = myDuration15.inSeconds - reduceSecondsBy;
+      if (seconds15 < 0) {
+        countdownTimer_15!.cancel();
         print('timesup');
-        // _stopvideo();
+        _stopvideo();
       } else {
-        myDuration = Duration(seconds: seconds);
+        myDuration15 = Duration(seconds: seconds15);
       }
     });
   }
+  void setCountDown_60() {
+    final reduceSecondsBy = 1;
+    setState(() {
+      final seconds60 = myDuration60.inSeconds - reduceSecondsBy;
+      if (seconds60 < 0) {
+        countdownTimer_60!.cancel();
+        print('timesup');
+        _stopvideo();
+      } else {
+        myDuration60 = Duration(seconds: seconds60);
+      }
+    });
+  }
+
+  startWatch() {
+    setState(() {
+      watch.start();
+      // startTimer();
+      timer = Timer.periodic(Duration(microseconds: 100), updateTime);
+    });
+  }
+
+  stopWatch() {
+    setState(() {
+      watch.stop();
+      _stopvideo();
+      setTime();
+    });
+  }
+
+  setTime() {
+    var timeSoFar = watch.elapsedMilliseconds;
+    setState(() {
+      elapsedTime = transformMilliSeconds(timeSoFar);
+    });
+    print("elapsedTime $elapsedTime");
+  }
+
+  transformMilliSeconds(int milliseconds) {
+    int hundreds = (milliseconds / 10).truncate();
+    int seconds = (hundreds / 100).truncate();
+    int minutes = (seconds / 60).truncate();
+    int hours = (minutes / 60).truncate();
+
+    String hoursStr = (hours % 60).toString().padLeft(2, '0');
+    String minutesStr = (minutes % 60).toString().padLeft(2, '0');
+    String secondsStr = (seconds % 60).toString().padLeft(2, '0');
+
+    return "$minutesStr:$secondsStr";
+  }
+
+  Stopwatch watch = Stopwatch();
+  Timer? timer;
+  bool startStop = true;
+  bool started = true;
+
+  String elapsedTime = '00:00';
+
+  updateTime(Timer timer) async {
+    if (watch.isRunning) {
+      if (mounted) {
+        setState(() {
+          // print("startstop Inside=$startStop");
+          elapsedTime = transformMilliSeconds(watch.elapsedMilliseconds);
+        });
+        // if (elapsedTime == seconds_selected) {
+        //   // stopWatch();
+        //   // showLoader(context);
+        //   // setState(() {
+        //   //   _isRecordingVideo = true;
+        //   // });
+        //   // _recordVideo();
+        //   print("15 seconds complete");
+        //   print("inside stop video");
+        //   await _videoController.stopRecordingVideo();
+        //
+        //   // setState(() {
+        //   //   _isRecordingVideo = false;
+        //   // });
+        //   // setState(() {});
+        //
+        //   final file = File(_lastVideoPath);
+        //   print("----------------------------------");
+        //   print("VIDEO RECORDED");
+        //   print(
+        //       "==> has been recorded : ${file.exists()} | path : $_lastVideoPath");
+        //   print("----------------------------------");
+        //
+        //   await Future.delayed(Duration(milliseconds: 300));
+        //   MediaInfo? mediaInfo = await VideoCompress.compressVideo(
+        //     _lastVideoPath,
+        //     quality: VideoQuality.MediumQuality,
+        //     deleteOrigin: false, // It's false by default
+        //   );
+        //   print("page navigation");
+        //   // await hideLoader(context);
+        //   await Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //         builder: (context) => VideoEditor(
+        //               file: File(mediaInfo!.path!),
+        //             )
+        //         //     CameraPreview(
+        //         //   videoPath: _lastVideoPath,
+        //         // ),
+        //         ),
+        //   );
+        //   // start_animation();
+        // }
+      }
+    }
+  }
+
+  bool instopvideo = false;
   _stopvideo() async {
+
+    print("inside stop video");
     await _videoController.stopRecordingVideo();
 
-    _isRecordingVideo = false;
+    setState(() {
+      instopvideo = true;
+      _isRecordingVideo = false;
+    });
     setState(() {});
 
     final file = File(_lastVideoPath);
@@ -387,13 +590,15 @@ class _MyApp_videoState extends State<MyApp_video>
     print("==> has been recorded : ${file.exists()} | path : $_lastVideoPath");
     print("----------------------------------");
 
-    await Future.delayed(Duration(milliseconds: 300));
     MediaInfo? mediaInfo = await VideoCompress.compressVideo(
       _lastVideoPath,
       quality: VideoQuality.MediumQuality,
       deleteOrigin: false, // It's false by default
     );
-
+    print("page navigation");
+    setState(() {
+      instopvideo = false;
+    });
     await Navigator.push(
       context,
       MaterialPageRoute(
@@ -411,10 +616,14 @@ class _MyApp_videoState extends State<MyApp_video>
     // lets just make our phone vibrate
     HapticFeedback.mediumImpact();
 
-    // if (this._isRecordingVideo) {
+    // if (_isRecordingVideo) {
+    //   // stopWatch();
+    //   print("inside stop video");
     //   await _videoController.stopRecordingVideo();
     //
-    //   _isRecordingVideo = false;
+    //   setState(() {
+    //     _isRecordingVideo = false;
+    //   });
     //   setState(() {});
     //
     //   final file = File(_lastVideoPath);
@@ -425,18 +634,27 @@ class _MyApp_videoState extends State<MyApp_video>
     //   print("----------------------------------");
     //
     //   await Future.delayed(Duration(milliseconds: 300));
+    //   MediaInfo? mediaInfo = await VideoCompress.compressVideo(
+    //     _lastVideoPath,
+    //     quality: VideoQuality.MediumQuality,
+    //     deleteOrigin: false, // It's false by default
+    //   );
+    //   print("page navigation");
     //   await Navigator.push(
     //     context,
     //     MaterialPageRoute(
-    //       builder: (context) => PostVideoPreviewScreen(
-    //         videoFile: File(_lastVideoPath),
-    //       ),
-    //     ),
+    //         builder: (context) => VideoEditor(
+    //               file: File(mediaInfo!.path!),
+    //             )
+    //         //     CameraPreview(
+    //         //   videoPath: _lastVideoPath,
+    //         // ),
+    //         ),
     //   );
     // } else {
     //   final Directory extDir = await getTemporaryDirectory();
     //   final testDir =
-    //   await Directory('${extDir.path}/test').create(recursive: true);
+    //       await Directory('${extDir.path}/test').create(recursive: true);
     //   final String filePath = widget.randomPhotoName
     //       ? '${testDir.path}/${DateTime.now().millisecondsSinceEpoch}.mp4'
     //       : '${testDir.path}/video_test.mp4';
@@ -444,12 +662,12 @@ class _MyApp_videoState extends State<MyApp_video>
     //   _isRecordingVideo = true;
     //   _lastVideoPath = filePath;
     //   setState(() {});
-    //   startTimer();
+    //   // startTimer();
     //
     // }
     final Directory extDir = await getTemporaryDirectory();
     final testDir =
-    await Directory('${extDir.path}/test').create(recursive: true);
+        await Directory('${extDir.path}/test').create(recursive: true);
     final String filePath = widget.randomPhotoName
         ? '${testDir.path}/${DateTime.now().millisecondsSinceEpoch}.mp4'
         : '${testDir.path}/video_test.mp4';
@@ -462,10 +680,17 @@ class _MyApp_videoState extends State<MyApp_video>
     // );
     await _videoController.recordVideo(filePath);
     _isRecordingVideo = true;
-    _lastVideoPath =filePath;
+    _lastVideoPath = filePath;
     setState(() {});
-    startTimer();
+    print("seconds_15 $seconds_15");
+    print("seconds_60 $seconds_60");
+    Future.delayed(
+        Duration(seconds: (seconds_15 ? 15 : (seconds_60 ? 59 : 15))), () {
+      _stopvideo();
+    });
+    // (seconds_15 ? startTimer_15() : startTimer_60());
 
+    // startWatch();
   }
 
   _buildChangeResolutionDialog() {

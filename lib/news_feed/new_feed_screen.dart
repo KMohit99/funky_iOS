@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:funky_new/news_feed/heart_animation_widget.dart';
 import 'package:funky_new/news_feed/video_list_class.dart';
 
 // import 'package:funky_project/Utils/colorUtils.dart';
 // import 'package:funky_project/news_feed/news_feed_controller.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../Utils/asset_utils.dart';
 import '../Utils/colorUtils.dart';
 import '../Utils/custom_appbar.dart';
 import '../Utils/custom_textfeild.dart';
 import '../drawerScreen.dart';
-import 'news_feed_controller.dart';
+import 'image_list_class.dart';
+import 'controller/news_feed_controller.dart';
+import 'news_feed_cpmment_screen.dart';
 
 class NewsFeedScreen extends StatefulWidget {
   const NewsFeedScreen({Key? key}) : super(key: key);
@@ -21,12 +25,28 @@ class NewsFeedScreen extends StatefulWidget {
 }
 
 class _NewsFeedScreenState extends State<NewsFeedScreen> {
-  final news_feed_controller = new NewsFeed_screen_controller();
+  final NewsFeed_screen_controller news_feed_controller = Get.put(
+      NewsFeed_screen_controller(),
+      tag: NewsFeed_screen_controller().toString());
+
+  bool isLiked = false;
+  bool isHeartAnimating = false;
+  bool? liked;
 
   @override
   void initState() {
     news_feed_controller.getAllNewsFeedList();
     super.initState();
+  }
+
+  init() {
+    // setState(() {
+    //   liked = (news_feed_controller
+    //                   .newsfeedModel!
+    //                   .data![index]
+    //                   .feedlikeStatus! == "true" ? true : false);
+    // });
+    print("liked -----$liked");
   }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -44,194 +64,304 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
       //   //   _scaffoldKey.currentState!.openDrawer();
       //   // },
       // ),
-      body: Container(
-        margin: EdgeInsets.only(
-          top: 100,
-        ),
-        child:
-            // Center(child: Text('No Posts Yet',style: TextStyle(
-            //     color: Colors.white,
-            //     fontSize: 16,
-            //     fontFamily: 'PR')),)
-
-            Obx(() => news_feed_controller.isVideoLoading.value != true
-                ? ListView.builder(
-                    padding: EdgeInsets.only(bottom: 50),
-                    shrinkWrap: true,
-                    itemCount: news_feed_controller.newsfeedModel!.data!.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Column(
-                        children: [
-                          Container(
-                            child: ListTile(
-                              visualDensity:
-                                  VisualDensity(vertical: 0, horizontal: -4),
-                              dense: true,
-                              leading: Container(
-                                width: 50,
-                                child: CircleAvatar(
-                                  radius: 48, // Image radius
-                                  backgroundImage: NetworkImage(
-                                    "http://foxyserver.com/funky/images/${news_feed_controller.newsfeedModel!.data![index].logo}",
-                                  ),
-                                ),
-                              ),
-                              //
-                              // Container(
-                              //     height: 50,
-                              //     decoration: BoxDecoration(
-                              //       borderRadius: BorderRadius.circular(50),
-                              //       color: Colors.white,
-                              //     ),
-                              //     child: ClipRRect(
-                              //       borderRadius: BorderRadius.circular(50),
-                              //       child: IconButton(
-                              //         onPressed: () {},
-                              //         icon: Image.asset(
-                              //           AssetUtils.image1,
-                              //           fit: BoxFit.fill,
-                              //         ),
-                              //       ),
-                              //     )),
-                              title: Text(
-                                news_feed_controller
-                                    .newsfeedModel!.data![index].title!,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontFamily: 'PR'),
-                              ),
-                              trailing: IconButton(
-                                icon: Icon(
-                                  Icons.more_vert,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
-                                onPressed: () {},
+      body: Obx(() => news_feed_controller.isVideoLoading.value != true
+          ? ListView.builder(
+              padding: EdgeInsets.only(bottom: 50, top: 100),
+              shrinkWrap: true,
+              itemCount: news_feed_controller.newsfeedModel!.data!.length,
+              itemBuilder: (BuildContext context, int index) {
+                liked = (news_feed_controller
+                            .newsfeedModel!.data![index].feedlikeStatus! ==
+                        "true"
+                    ? true
+                    : false);
+                return Center(
+                  child: Column(
+                    children: [
+                      Container(
+                        child: ListTile(
+                          visualDensity:
+                              VisualDensity(vertical: 0, horizontal: -4),
+                          dense: true,
+                          leading: Container(
+                            width: 50,
+                            child: CircleAvatar(
+                              radius: 48, // Image radius
+                              backgroundImage: NetworkImage(
+                                "http://foxyserver.com/funky/images/${news_feed_controller.newsfeedModel!.data![index].logo!}",
                               ),
                             ),
                           ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Stack(
-                            children: [
-                              Container(
+                          //
+                          // Container(
+                          //     height: 50,
+                          //     decoration: BoxDecoration(
+                          //       borderRadius: BorderRadius.circular(50),
+                          //       color: Colors.white,
+                          //     ),
+                          //     child: ClipRRect(
+                          //       borderRadius: BorderRadius.circular(50),
+                          //       child: IconButton(
+                          //         onPressed: () {},
+                          //         icon: Image.asset(
+                          //           AssetUtils.image1,
+                          //           fit: BoxFit.fill,
+                          //         ),
+                          //       ),
+                          //     )),
+                          title: Text(
+                            news_feed_controller
+                                .newsfeedModel!.data![index].title!,
+                            style: TextStyle(
                                 color: Colors.white,
-                                width: MediaQuery.of(context).size.width,
-                                height: MediaQuery.of(context).size.height/1.5,
-                                child: (news_feed_controller.newsfeedModel!
-                                            .data![index].postImage!.isNotEmpty
-                                    ? Image.network(
-                                        "http://foxyserver.com/funky/images/${news_feed_controller.newsfeedModel!.data![index].postImage}",
-                                        fit: BoxFit.contain,
-                                      )
-                                    : (news_feed_controller.newsfeedModel!
-                                                .data![index].uploadVideo!.isNotEmpty
-                                        ? Videonews(
-                                            url: news_feed_controller
-                                                .newsfeedModel!
-                                                .data![index]
-                                                .uploadVideo!)
-                                        : Container(color: Colors.red,))),
-                              ),
-                              // Positioned.fill(
-                              //   child: Align(
-                              //     alignment: Alignment.bottomRight,
-                              //     child: Container(
-                              //       width: 100,
-                              //       height: 38,
-                              //       decoration: BoxDecoration(
-                              //           color: HexColor(CommonColor.pinkFont),
-                              //           borderRadius: BorderRadius.only(
-                              //             topLeft: Radius.circular(13),
-                              //             bottomLeft: Radius.circular(13),
-                              //           )),
-                              //       child: Container(
-                              //         alignment: Alignment.center,
-                              //         child: Text(
-                              //           'I am here',
-                              //           style: TextStyle(
-                              //               color: Colors.white,
-                              //               fontSize: 16,
-                              //               fontFamily: 'PR'),
-                              //         ),
-                              //       ),
-                              //     ),
-                              //   ),
-                              // )
-                            ],
+                                fontSize: 14,
+                                fontFamily: 'PB'),
                           ),
-                          Container(
-                            margin: EdgeInsets.only(left: 16, top: 13),
-                            alignment: Alignment.centerLeft,
-                            child: Text(
+                          // trailing: IconButton(
+                          //   icon: Icon(
+                          //     Icons.more_vert,
+                          //     color: Colors.white,
+                          //     size: 20,
+                          //   ),
+                          //   onPressed: () {},
+                          // ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      GestureDetector(
+                        onDoubleTap: () async {
+                          setState(() {
+                            isLiked = true;
+                            isHeartAnimating = true;
+                          });
+                          await news_feed_controller.FeedLikeUnlikeApi(
+                              context: context,
+                              news_post_feedlikeStatus: 'true',
+                              news_post_id_type: 'liked',
+                              news_post_id: news_feed_controller
+                                  .newsfeedModel!.data![index].newsID!);
+                          setState(() {
+                            liked = true;
+                          });
+                        },
+                        child: Container(
+                          color: Colors.white,
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height / 2,
+                          child: Stack(alignment: Alignment.center, children: [
+                            (news_feed_controller.newsfeedModel!.data![index]
+                                    .postImage!.isNotEmpty
+                                ? FadeInImage.assetNetwork(
+                                    fit: BoxFit.contain,
+                                    image: "http://foxyserver.com/funky/images/${news_feed_controller.newsfeedModel!.data![index].postImage}",
+                                    placeholder: 'assets/images/Funky_App_Icon.png',
+                                  )
+                                : (news_feed_controller.newsfeedModel!
+                                        .data![index].uploadVideo!.isNotEmpty
+                                    ? Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          Image.asset(
+                                            'assets/images/Funky_App_Icon.png',
+                                          ),
+                                          Center(
+                                              child: GestureDetector(
+                                                  // onTap: _playPause,
+                                                  child: Icon(
+                                            Icons.play_circle,
+                                            color: Colors.white,
+                                            size: 50,
+                                          )))
+                                        ],
+                                      )
+                                    : Center(
+                                        child: GestureDetector(
+                                            // onTap: _playPause,
+                                            child: Icon(
+                                        Icons.play_circle,
+                                        color: Colors.white,
+                                        size: 50,
+                                      ))))),
+                            Opacity(
+                              opacity: isHeartAnimating ? 1 : 0,
+                              child: HeartAnimationWidget(
+                                isAnimating: isHeartAnimating,
+                                duration: Duration(milliseconds: 900),
+                                onEnd: () {
+                                  setState(() {
+                                    isHeartAnimating = false;
+                                  });
+                                },
+                                child: Icon(
+                                  Icons.favorite,
+                                  color: HexColor(CommonColor.pinkFont),
+                                  size: 100,
+                                ),
+                              ),
+                            )
+                          ]),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(left: 16, top: 13),
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          news_feed_controller
+                              .newsfeedModel!.data![index].description!,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontFamily: 'PR'),
+                        ),
+                      ),
+                      Container(
+                        child: Row(
+                          children: [
+                            IconButton(
+                                padding: EdgeInsets.only(left: 5.0),
+                                icon: Icon(Icons.message,color: Colors.white,),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              NewsFeedCommantScreen(
+                                                newsID: news_feed_controller
+                                                    .newsfeedModel!
+                                                    .data![index]
+                                                    .newsID!,
+                                              )));
+                                }),
+                            Text(
                               news_feed_controller
-                                  .newsfeedModel!.data![index].description!,
+                                  .newsfeedModel!.data![index].feedCount!,
                               style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 16,
+                                  fontSize: 12,
                                   fontFamily: 'PR'),
                             ),
-                          ),
-                          Container(
-                            child: Row(
-                              children: [
-                                IconButton(
-                                    padding: EdgeInsets.only(left: 5.0),
-                                    icon: Image.asset(
-                                      AssetUtils.comment_icon,
-                                      color: Colors.white,
-                                      height: 20,
-                                      width: 20,
-                                    ),
-                                    onPressed: () {}),
-                                Text(
-                                  news_feed_controller.newsfeedModel!
-                                      .data![index].feedLikeCount!,
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                      fontFamily: 'PR'),
+                            IconButton(
+                                padding: EdgeInsets.only(left: 5.0),
+                                icon: Image.asset(
+                                  AssetUtils.like_icon_filled,
+                                  color: (news_feed_controller.newsfeedModel!
+                                              .data![index].feedlikeStatus ==
+                                          'false'
+                                      ? Colors.white
+                                      : HexColor(CommonColor.pinkFont)),
+                                  height: 20,
+                                  width: 20,
                                 ),
-                                IconButton(
-                                    padding: EdgeInsets.only(left: 5.0),
-                                    icon: Image.asset(
-                                      AssetUtils.like_icon_filled,
-                                      color: HexColor(CommonColor.pinkFont),
-                                      height: 20,
-                                      width: 20,
-                                    ),
-                                    onPressed: () {}),
-                                Text(
-                                  news_feed_controller.newsfeedModel!
-                                      .data![index].feedLikeCount!,
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                      fontFamily: 'PR'),
-                                ),
-                                IconButton(
-                                    padding: EdgeInsets.only(left: 5.0),
-                                    icon: Image.asset(
-                                      AssetUtils.share_icon2,
-                                      color: Colors.white,
-                                      height: 20,
-                                      width: 20,
-                                    ),
-                                    onPressed: () {}),
-                              ],
+                                onPressed: () async {
+                                  await news_feed_controller.FeedLikeUnlikeApi(
+                                      context: context,
+                                      news_post_feedlikeStatus:
+                                          (news_feed_controller
+                                                      .newsfeedModel!
+                                                      .data![index]
+                                                      .feedlikeStatus! ==
+                                                  "true"
+                                              ? 'false'
+                                              : 'true'),
+                                      news_post_id_type: (news_feed_controller
+                                                  .newsfeedModel!
+                                                  .data![index]
+                                                  .feedlikeStatus! ==
+                                              "true"
+                                          ? 'unliked'
+                                          : 'liked'),
+                                      news_post_id: news_feed_controller
+                                          .newsfeedModel!.data![index].newsID!);
+
+                                  if (news_feed_controller
+                                          .feedLikeUnlikeModel!.error ==
+                                      false) {
+                                    if (news_feed_controller
+                                            .feedLikeUnlikeModel!
+                                            .user![0]
+                                            .feedlikeStatus ==
+                                        'false') {
+                                      setState(() {
+                                        liked = false;
+                                      });
+                                    } else {
+                                      setState(() {
+                                        liked = true;
+                                      });
+                                    }
+                                    print(news_feed_controller
+                                        .feedLikeUnlikeModel!
+                                        .user![0]
+                                        .feedlikeStatus);
+                                    print(news_feed_controller.newsfeedModel!
+                                        .data![index].feedlikeStatus!);
+                                  }
+                                }),
+                            Text(
+                              news_feed_controller
+                                  .newsfeedModel!.data![index].feedLikeCount!,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontFamily: 'PR'),
                             ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          )
-                        ],
-                      );
-                    },
+                            IconButton(
+                                padding: EdgeInsets.only(left: 5.0),
+                                icon: Image.asset(
+                                  AssetUtils.share_icon2,
+                                  color: Colors.white,
+                                  height: 20,
+                                  width: 20,
+                                ),
+                                onPressed: () {
+                                  _onShare(
+                                      context: context,
+                                      link:
+                                          "http://foxyserver.com/funky/images/${news_feed_controller.newsfeedModel!.data![index].postImage}");
+                                }),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      )
+                    ],
+                  ),
+                );
+              },
+            )
+          : Center(
+              child: Container(
+                  height: 80,
+                  width: 100,
+                  color: Colors.transparent,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      CircularProgressIndicator(
+                        color: HexColor(CommonColor.pinkFont),
+                      ),
+                    ],
                   )
-                : Container()),
-      ),
+                  // Material(
+                  //   color: Colors.transparent,
+                  //   child: LoadingIndicator(
+                  //     backgroundColor: Colors.transparent,
+                  //     indicatorType: Indicator.ballScale,
+                  //     colors: _kDefaultRainbowColors,
+                  //     strokeWidth: 4.0,
+                  //     pathBackgroundColor: Colors.yellow,
+                  //     // showPathBackground ? Colors.black45 : null,
+                  //   ),
+                  // ),
+                  ),
+            )),
     );
+  }
+
+  void _onShare({required BuildContext context, required String link}) async {
+    Share.share(link, subject: 'Share App');
   }
 }

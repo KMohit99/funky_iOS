@@ -11,6 +11,7 @@ import 'getx_pagination/binding_utils.dart';
 import 'getx_pagination/page_route.dart';
 Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp();
   // FirebaseAppCheck.getInstance().installAppCheckProviderFactory(
   //     PlayIntegrityAppCheckProviderFactory.getInstance())

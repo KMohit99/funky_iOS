@@ -385,7 +385,7 @@ class _DashboardState extends State<Dashboard> {
           ? PreferredSize(
               preferredSize: const Size.fromHeight(50),
               child: AppBar(
-                backgroundColor: Colors.transparent,
+                backgroundColor: Colors.black,
                 title: Text(
                   (_page == 0
                       ? 'Dashboard'
@@ -551,123 +551,126 @@ class _DashboardState extends State<Dashboard> {
       // )   ,
       // drawer: DrawerScreen(),
 
-      bottomNavigationBar: SafeArea(
-        child: SizedBox(
-          height: 80,
-          child: BottomAppBar(
-            child: Container(
-              decoration: BoxDecoration(
-                // color: Colors.red,
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  // stops: [0.1, 0.5, 0.7, 0.9],
-                  colors: [
-                    HexColor("#C12265"),
-                    HexColor("#000000"),
-                    HexColor("#000000"),
-                    // HexColor("#FFFFFF").withOpacity(0.67),
+      bottomNavigationBar: Container(
+        color: Colors.black,
+        child: SafeArea(
+          child: SizedBox(
+            height: 80,
+            child: BottomAppBar(
+              child: Container(
+                decoration: BoxDecoration(
+                  // color: Colors.red,
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    // stops: [0.1, 0.5, 0.7, 0.9],
+                    colors: [
+                      HexColor("#C12265"),
+                      HexColor("#000000"),
+                      HexColor("#000000"),
+                      // HexColor("#FFFFFF").withOpacity(0.67),
+                    ],
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Container(
+                      margin: const EdgeInsets.only(left: 28.0),
+                      decoration: BoxDecoration(
+                          color: (_page == 0 ? Colors.white : Colors.transparent),
+                          borderRadius: BorderRadius.circular(50)),
+                      child: IconButton(
+                        visualDensity:
+                            const VisualDensity(vertical: -4, horizontal: -4),
+                        iconSize: 25.0,
+                        icon: Image.asset(
+                          AssetUtils.home_icon,
+                          color: (_page == 0 ? Colors.black : Colors.white),
+                          height: 20,
+                          width: 20,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _page = 0;
+                            // _myPage.jumpToPage(0);
+                          });
+                        },
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(right: 28.0),
+                      decoration: BoxDecoration(
+                          color: (_page == 1 ? Colors.white : Colors.transparent),
+                          borderRadius: BorderRadius.circular(50)),
+                      child: IconButton(
+                        visualDensity:
+                            const VisualDensity(vertical: -4, horizontal: -4),
+                        iconSize: 25.0,
+                        icon: Image.asset(
+                          AssetUtils.search_icon,
+                          color: (_page == 1 ? Colors.black : Colors.white),
+                          height: 20,
+                          width: 20,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _page = 1;
+                            // _myPage.jumpToPage(1);
+                          });
+                        },
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(left: 28.0),
+                      decoration: BoxDecoration(
+                          color: (_page == 2 ? Colors.white : Colors.transparent),
+                          borderRadius: BorderRadius.circular(50)),
+                      child: IconButton(
+                        visualDensity:
+                            const VisualDensity(vertical: -4, horizontal: -4),
+                        iconSize: 25.0,
+                        icon: Image.asset(
+                          AssetUtils.news_icon,
+                          color: (_page == 2 ? Colors.black : Colors.white),
+                          height: 20,
+                          width: 20,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _page = 2;
+                            // _myPage.jumpToPage(2);
+                          });
+                        },
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(right: 28.0),
+                      decoration: BoxDecoration(
+                          color: (_page == 3 ? Colors.white : Colors.transparent),
+                          borderRadius: BorderRadius.circular(50)),
+                      child: IconButton(
+                        visualDensity:
+                            const VisualDensity(vertical: -4, horizontal: -4),
+                        iconSize: 25.0,
+                        icon: Image.asset(
+                          AssetUtils.user_icon2,
+                          color: (_page == 3 ? Colors.black : Colors.white),
+                          height: 20,
+                          width: 20,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _page = 3;
+
+                            // _myPage.jumpToPage(3);
+                          });
+                        },
+                      ),
+                    )
                   ],
                 ),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Container(
-                    margin: const EdgeInsets.only(left: 28.0),
-                    decoration: BoxDecoration(
-                        color: (_page == 0 ? Colors.white : Colors.transparent),
-                        borderRadius: BorderRadius.circular(50)),
-                    child: IconButton(
-                      visualDensity:
-                          const VisualDensity(vertical: -4, horizontal: -4),
-                      iconSize: 25.0,
-                      icon: Image.asset(
-                        AssetUtils.home_icon,
-                        color: (_page == 0 ? Colors.black : Colors.white),
-                        height: 20,
-                        width: 20,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _page = 0;
-                          // _myPage.jumpToPage(0);
-                        });
-                      },
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(right: 28.0),
-                    decoration: BoxDecoration(
-                        color: (_page == 1 ? Colors.white : Colors.transparent),
-                        borderRadius: BorderRadius.circular(50)),
-                    child: IconButton(
-                      visualDensity:
-                          const VisualDensity(vertical: -4, horizontal: -4),
-                      iconSize: 25.0,
-                      icon: Image.asset(
-                        AssetUtils.search_icon,
-                        color: (_page == 1 ? Colors.black : Colors.white),
-                        height: 20,
-                        width: 20,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _page = 1;
-                          // _myPage.jumpToPage(1);
-                        });
-                      },
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(left: 28.0),
-                    decoration: BoxDecoration(
-                        color: (_page == 2 ? Colors.white : Colors.transparent),
-                        borderRadius: BorderRadius.circular(50)),
-                    child: IconButton(
-                      visualDensity:
-                          const VisualDensity(vertical: -4, horizontal: -4),
-                      iconSize: 25.0,
-                      icon: Image.asset(
-                        AssetUtils.news_icon,
-                        color: (_page == 2 ? Colors.black : Colors.white),
-                        height: 20,
-                        width: 20,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _page = 2;
-                          // _myPage.jumpToPage(2);
-                        });
-                      },
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(right: 28.0),
-                    decoration: BoxDecoration(
-                        color: (_page == 3 ? Colors.white : Colors.transparent),
-                        borderRadius: BorderRadius.circular(50)),
-                    child: IconButton(
-                      visualDensity:
-                          const VisualDensity(vertical: -4, horizontal: -4),
-                      iconSize: 25.0,
-                      icon: Image.asset(
-                        AssetUtils.user_icon2,
-                        color: (_page == 3 ? Colors.black : Colors.white),
-                        height: 20,
-                        width: 20,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _page = 3;
-
-                          // _myPage.jumpToPage(3);
-                        });
-                      },
-                    ),
-                  )
-                ],
               ),
             ),
           ),
@@ -726,7 +729,7 @@ class _DashboardState extends State<Dashboard> {
                                           Container(
                                             margin: const EdgeInsets.symmetric(
                                                 vertical: 110, horizontal: 70),
-                                            height: 115,
+                                            // height: 115,
                                             // width: 133,
                                             // padding: const EdgeInsets.all(8.0),
                                             decoration: BoxDecoration(
@@ -741,7 +744,7 @@ class _DashboardState extends State<Dashboard> {
                                                   // stops: [0.1, 0.5, 0.7, 0.9],
                                                   colors: [
                                                     HexColor("#000000"),
-                                                    HexColor("#000000"),
+                                                    HexColor("#000000").withOpacity(0.5),
                                                     HexColor("##E84F90"),
                                                     HexColor("#ffffff"),
                                                     // HexColor("#FFFFFF").withOpacity(0.67),
@@ -754,231 +757,234 @@ class _DashboardState extends State<Dashboard> {
                                                 borderRadius:
                                                     const BorderRadius.all(
                                                         Radius.circular(26.0))),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    Navigator.pop(context);
-                                                    print('name');
-                                                    // Get.to(PostScreen());
-                                                    showDialog(
-                                                      context: context,
-                                                      builder: (ctx) =>
-                                                          AlertDialog(
-                                                        backgroundColor:
-                                                            Colors.transparent,
-                                                        contentPadding:
-                                                            EdgeInsets.zero,
-                                                        elevation: 0.0,
-                                                        content: Container(
-                                                          margin:
-                                                              const EdgeInsets
-                                                                      .symmetric(
-                                                                  vertical: 10,
-                                                                  horizontal:
-                                                                      0),
-                                                          height:
-                                                              screenHeight / 5,
-                                                          // width: 133,
-                                                          // padding: const EdgeInsets.all(8.0),
-                                                          decoration:
-                                                              BoxDecoration(
-                                                                  gradient:
-                                                                      LinearGradient(
-                                                                    begin:
-                                                                        const Alignment(
-                                                                            -1.0,
-                                                                            0.0),
-                                                                    end: const Alignment(
-                                                                        1.0,
-                                                                        0.0),
-                                                                    transform:
-                                                                        const GradientRotation(
-                                                                            0.7853982),
-                                                                    // stops: [0.1, 0.5, 0.7, 0.9],
-                                                                    colors: [
-                                                                      HexColor(
-                                                                          "#000000"),
-                                                                      HexColor(
-                                                                          "#000000"),
-                                                                      HexColor(
-                                                                          "##E84F90"),
-                                                                      HexColor(
-                                                                          "#ffffff"),
-                                                                      // HexColor("#FFFFFF").withOpacity(0.67),
-                                                                    ],
-                                                                  ),
-                                                                  color: Colors
-                                                                      .white,
-                                                                  border: Border.all(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      width: 1),
-                                                                  borderRadius: const BorderRadius
-                                                                          .all(
-                                                                      Radius.circular(
-                                                                          26.0))),
-                                                          child: Column(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              Row(
-                                                                mainAxisSize:
-                                                                    MainAxisSize
-                                                                        .min,
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                children: [
-                                                                  Container(
-                                                                    margin: const EdgeInsets
-                                                                            .symmetric(
-                                                                        vertical:
-                                                                            10),
-                                                                    child: Row(
-                                                                      // mainAxisAlignment:
-                                                                      // MainAxisAlignment
-                                                                      //     .center,
-                                                                      children: [
-                                                                        GestureDetector(
-                                                                          onTap:(){
-                                                                            video_upload();
-                                                                          },
-                                                                          child: Column(
-                                                                            children: [
-                                                                              IconButton(
-                                                                                icon: const Icon(
-                                                                                  Icons.slow_motion_video_sharp,
-                                                                                  size: 40,
-                                                                                  color: Colors.white,
-                                                                                ),
-                                                                                onPressed: () {
-                                                                                  video_upload();
-
-                                                                                },
-                                                                              ),
-                                                                              SizedBox(height: 5,),
-                                                                              Container(
-                                                                                margin: const EdgeInsets.symmetric(horizontal: 0),
-                                                                                // height: 45,
-                                                                                // width:(width ?? 300) ,
-                                                                                decoration: BoxDecoration(border: Border.all(color: Colors.white, width: 1), borderRadius: BorderRadius.circular(25)),
-                                                                                child: Container(
-                                                                                    alignment: Alignment.center,
-                                                                                    margin: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-                                                                                    child: Text(
-                                                                                      'Video',
-                                                                                      style: TextStyle(color: Colors.white, fontFamily: 'PR', fontSize: 16),
-                                                                                    )),
-                                                                              ),
-                                                                            ],
-                                                                          ),
-                                                                        ),
-                                                                        SizedBox(
-                                                                          width:
-                                                                          20,
-                                                                        ),
-                                                                        GestureDetector(
-                                                                          onTap: (){
-                                                                            image_upload();
-                                                                          },
-                                                                          child: Column(
-                                                                            children: [
-                                                                              IconButton(
-                                                                                icon: const Icon(
-                                                                                  Icons.camera_alt,
-                                                                                  size: 40,
-                                                                                  color: Colors.black,
-                                                                                ),
-                                                                                onPressed: () {
-                                                                                  image_upload();
-
-                                                                                },
-                                                                              ),
-                                                                              SizedBox(height: 5,),
-                                                                              Container(
-                                                                                margin: const EdgeInsets.symmetric(horizontal: 0),
-                                                                                // height: 45,
-                                                                                // width:(width ?? 300) ,
-                                                                                decoration: BoxDecoration(border: Border.all(color: Colors.white, width: 1), borderRadius: BorderRadius.circular(25)),
-                                                                                child: Container(
-                                                                                    alignment: Alignment.center,
-                                                                                    margin: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-                                                                                    child: Text(
-                                                                                      'Image',
-                                                                                      style: TextStyle(color: Colors.white, fontFamily: 'PR', fontSize: 16),
-                                                                                    )),
-                                                                              ),
-                                                                            ],
-                                                                          ),
-                                                                        ),
-
-                                                                        // IconButton(
-                                                                        //   icon: const Icon(
-                                                                        //     Icons
-                                                                        //         .video_call,
-                                                                        //     size: 40,
-                                                                        //     color: Colors
-                                                                        //         .grey,
-                                                                        //   ),
-                                                                        //   onPressed:
-                                                                        //       () {
-                                                                        //         video_upload();
-                                                                        //       },
-                                                                        // ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.symmetric(vertical: 15.0,horizontal: 25),
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.pop(context);
+                                                      print('name');
+                                                      // Get.to(PostScreen());
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (ctx) =>
+                                                            AlertDialog(
+                                                          backgroundColor:
+                                                              Colors.transparent,
+                                                          contentPadding:
+                                                              EdgeInsets.zero,
+                                                          elevation: 0.0,
+                                                          content: Container(
+                                                            margin:
+                                                                const EdgeInsets
+                                                                        .symmetric(
+                                                                    vertical: 10,
+                                                                    horizontal:
+                                                                        0),
+                                                            height:
+                                                                screenHeight / 5,
+                                                            // width: 133,
+                                                            // padding: const EdgeInsets.all(8.0),
+                                                            decoration:
+                                                                BoxDecoration(
+                                                                    gradient:
+                                                                        LinearGradient(
+                                                                      begin:
+                                                                          const Alignment(
+                                                                              -1.0,
+                                                                              0.0),
+                                                                      end: const Alignment(
+                                                                          1.0,
+                                                                          0.0),
+                                                                      transform:
+                                                                          const GradientRotation(
+                                                                              0.7853982),
+                                                                      // stops: [0.1, 0.5, 0.7, 0.9],
+                                                                      colors: [
+                                                                        HexColor(
+                                                                            "#000000"),
+                                                                        HexColor(
+                                                                            "#000000"),
+                                                                        HexColor(
+                                                                            "##E84F90"),
+                                                                        HexColor(
+                                                                            "#ffffff"),
+                                                                        // HexColor("#FFFFFF").withOpacity(0.67),
                                                                       ],
                                                                     ),
-                                                                  )
+                                                                    color: Colors
+                                                                        .white,
+                                                                    border: Border.all(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        width: 1),
+                                                                    borderRadius: const BorderRadius
+                                                                            .all(
+                                                                        Radius.circular(
+                                                                            26.0))),
+                                                            child: Column(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Row(
+                                                                  mainAxisSize:
+                                                                      MainAxisSize
+                                                                          .min,
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  children: [
+                                                                    Container(
+                                                                      margin: const EdgeInsets
+                                                                              .symmetric(
+                                                                          vertical:
+                                                                              10),
+                                                                      child: Row(
+                                                                        // mainAxisAlignment:
+                                                                        // MainAxisAlignment
+                                                                        //     .center,
+                                                                        children: [
+                                                                          GestureDetector(
+                                                                            onTap:(){
+                                                                              video_upload();
+                                                                            },
+                                                                            child: Column(
+                                                                              children: [
+                                                                                IconButton(
+                                                                                  icon: const Icon(
+                                                                                    Icons.slow_motion_video_sharp,
+                                                                                    size: 40,
+                                                                                    color: Colors.white,
+                                                                                  ),
+                                                                                  onPressed: () {
+                                                                                    video_upload();
 
-                                                                  // const SizedBox(
-                                                                  //   height: 10,
-                                                                  // ),
-                                                                ],
-                                                              ),
-                                                            ],
+                                                                                  },
+                                                                                ),
+                                                                                SizedBox(height: 5,),
+                                                                                Container(
+                                                                                  margin: const EdgeInsets.symmetric(horizontal: 0),
+                                                                                  // height: 45,
+                                                                                  // width:(width ?? 300) ,
+                                                                                  decoration: BoxDecoration(border: Border.all(color: Colors.white, width: 1), borderRadius: BorderRadius.circular(25)),
+                                                                                  child: Container(
+                                                                                      alignment: Alignment.center,
+                                                                                      margin: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                                                                                      child: Text(
+                                                                                        'Video',
+                                                                                        style: TextStyle(color: Colors.white, fontFamily: 'PR', fontSize: 16),
+                                                                                      )),
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                          SizedBox(
+                                                                            width:
+                                                                            20,
+                                                                          ),
+                                                                          GestureDetector(
+                                                                            onTap: (){
+                                                                              image_upload();
+                                                                            },
+                                                                            child: Column(
+                                                                              children: [
+                                                                                IconButton(
+                                                                                  icon: const Icon(
+                                                                                    Icons.camera_alt,
+                                                                                    size: 40,
+                                                                                    color: Colors.black,
+                                                                                  ),
+                                                                                  onPressed: () {
+                                                                                    image_upload();
+
+                                                                                  },
+                                                                                ),
+                                                                                SizedBox(height: 5,),
+                                                                                Container(
+                                                                                  margin: const EdgeInsets.symmetric(horizontal: 0),
+                                                                                  // height: 45,
+                                                                                  // width:(width ?? 300) ,
+                                                                                  decoration: BoxDecoration(border: Border.all(color: Colors.white, width: 1), borderRadius: BorderRadius.circular(25)),
+                                                                                  child: Container(
+                                                                                      alignment: Alignment.center,
+                                                                                      margin: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                                                                                      child: Text(
+                                                                                        'Image',
+                                                                                        style: TextStyle(color: Colors.white, fontFamily: 'PR', fontSize: 16),
+                                                                                      )),
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                          ),
+
+                                                                          // IconButton(
+                                                                          //   icon: const Icon(
+                                                                          //     Icons
+                                                                          //         .video_call,
+                                                                          //     size: 40,
+                                                                          //     color: Colors
+                                                                          //         .grey,
+                                                                          //   ),
+                                                                          //   onPressed:
+                                                                          //       () {
+                                                                          //         video_upload();
+                                                                          //       },
+                                                                          // ),
+                                                                        ],
+                                                                      ),
+                                                                    )
+
+                                                                    // const SizedBox(
+                                                                    //   height: 10,
+                                                                    // ),
+                                                                  ],
+                                                                ),
+                                                              ],
+                                                            ),
                                                           ),
                                                         ),
-                                                      ),
-                                                    );
-                                                  },
-                                                  child: const Text(
-                                                    'Post',
-                                                    style: const TextStyle(
-                                                        fontSize: 15,
-                                                        fontFamily: 'PR',
-                                                        color: Colors.white),
+                                                      );
+                                                    },
+                                                    child: const Text(
+                                                      'Post',
+                                                      style: const TextStyle(
+                                                          fontSize: 15,
+                                                          fontFamily: 'PR',
+                                                          color: Colors.white),
+                                                    ),
                                                   ),
-                                                ),
-                                                Container(
-                                                  margin: const EdgeInsets
-                                                          .symmetric(
-                                                      horizontal: 20),
-                                                  child: const Divider(
-                                                    color: Colors.black,
-                                                    height: 20,
+                                                  Container(
+                                                    margin: const EdgeInsets
+                                                            .symmetric(
+                                                        horizontal: 20),
+                                                    child: const Divider(
+                                                      color: Colors.black,
+                                                      height: 20,
+                                                    ),
                                                   ),
-                                                ),
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    // Navigator
-                                                    //     .push(
-                                                    //     context,
-                                                    //     MaterialPageRoute(
-                                                    //         builder: (BuildContext context) =>
-                                                    //             VideoRecorder()));
-                                                  },
-                                                  child: const Text(
-                                                    'Live',
-                                                    style: TextStyle(
-                                                        fontSize: 15,
-                                                        fontFamily: 'PR',
-                                                        color: Colors.white),
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      // Navigator
+                                                      //     .push(
+                                                      //     context,
+                                                      //     MaterialPageRoute(
+                                                      //         builder: (BuildContext context) =>
+                                                      //             VideoRecorder()));
+                                                    },
+                                                    child: const Text(
+                                                      'Live',
+                                                      style: TextStyle(
+                                                          fontSize: 15,
+                                                          fontFamily: 'PR',
+                                                          color: Colors.white),
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ],
