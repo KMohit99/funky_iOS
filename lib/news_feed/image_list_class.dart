@@ -222,12 +222,17 @@ class _ImageNewsFeedState extends State<ImageNewsFeed> {
                       width: 20,
                     ),
                     onPressed: () {
-                      Navigator.push(
-                          context,
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => NewsFeedCommantScreen(
+                      //           newsID: widget.news_id,
+                      //         )));
+                      Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
-                              builder: (context) => NewsFeedCommantScreen(
-                                newsID: widget.news_id,
-                              )));
+                              builder: (context) => NewsFeedCommantScreen(newsID: widget.news_id,)),
+                              (route) => false
+                      );
                     }),
                 Text(
                   '1',

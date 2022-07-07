@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:funky_new/homepage/ui/post_image_commet_scren.dart';
+import 'package:get/get.dart';
 
 // import 'package:funky_project/Utils/colorUtils.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -11,23 +13,37 @@ import 'package:video_player/video_player.dart';
 import '../../Utils/asset_utils.dart';
 import '../../Utils/colorUtils.dart';
 import '../../custom_widget/common_buttons.dart';
+import '../../news_feed/heart_animation_widget.dart';
+import '../controller/homepage_controller.dart';
 
 class VideoWidget extends StatefulWidget {
   final bool play;
   final String singerName;
   final String description;
   final String songName;
-
   final String url;
   final String image_url;
 
-  const VideoWidget({
+  final String video_id;
+  final String comment_count;
+  String video_like_count;
+  String video_like_status;
+
+  final VoidCallback? onDoubleTap;
+
+  VideoWidget({
     Key? key,
     required this.url,
     required this.play,
     required this.singerName,
     required this.songName,
-    required this.image_url, required this.description,
+    required this.image_url,
+    required this.description,
+    required this.video_id,
+    required this.video_like_count,
+    required this.video_like_status,
+    this.onDoubleTap,
+    required this.comment_count,
   }) : super(key: key);
 
   @override
@@ -35,6 +51,8 @@ class VideoWidget extends StatefulWidget {
 }
 
 class _VideoWidgetState extends State<VideoWidget> {
+  final HomepageController homepageController =
+      Get.put(HomepageController(), tag: HomepageController().toString());
   VideoPlayerController? _controller;
 
   bool _onTouch = false;
@@ -45,6 +63,9 @@ class _VideoWidgetState extends State<VideoWidget> {
   void initState() {
     super.initState();
     print('image urlllllllllllll ${widget.url}');
+    print('image video_id ${widget.video_id}');
+    print('image video_like_count ${widget.video_like_count}');
+    print('image video_like_status ${widget.video_like_status}');
     _controller = VideoPlayerController.network(
         "http://foxyserver.com/funky/video/${widget.url}");
 
@@ -81,15 +102,42 @@ class _VideoWidgetState extends State<VideoWidget> {
     }
   }
 
+  bool isLiked = false;
+  bool isHeartAnimating = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.transparent,
         extendBodyBehindAppBar: true,
-        body: InkWell(
-          onTap: () {},
-          child: _controller!.value.isInitialized
-              ? Stack(
+        body: GestureDetector(
+          onDoubleTap: () async {
+            setState(() {
+              isLiked = true;
+              isHeartAnimating = true;
+            });
+            if (widget.video_like_status == 'false') {
+              await homepageController.PostLikeUnlikeApi(
+                  context: context,
+                  post_id: widget.video_id,
+                  post_id_type: 'liked',
+                  post_likeStatus: 'true');
+
+              if (homepageController.postLikeUnlikeModel!.error == false) {
+                print("mmmmm${widget.video_like_count}");
+                setState(() {
+                  widget.video_like_count =
+                      homepageController.postLikeUnlikeModel!.user![0].likes!;
+
+                  widget.video_like_status = homepageController
+                      .postLikeUnlikeModel!.user![0].likeStatus!;
+                });
+                print("mmmmm${widget.video_like_count}");
+              }
+            }
+          },
+          child: Stack(
+            alignment: Alignment.center,
             children: [
               GestureDetector(
                 onTap: () {
@@ -97,16 +145,36 @@ class _VideoWidgetState extends State<VideoWidget> {
                   isClicked = isClicked ? false : true;
                   print(isClicked);
                 },
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
-                  child: Center(
-                    child: AspectRatio(
-                        aspectRatio: _controller!.value.aspectRatio,
-                        child: VideoPlayer(_controller!)),
+                child: _controller!.value.isInitialized
+                    ? Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height,
+                        child: Center(
+                          child: AspectRatio(
+                              aspectRatio: _controller!.value.aspectRatio,
+                              child: VideoPlayer(_controller!)),
+                        ),
+                      )
+                    : Container(),
+              ),
+              Opacity(
+                opacity: isHeartAnimating ? 1 : 0,
+                child: HeartAnimationWidget(
+                  isAnimating: isHeartAnimating,
+                  duration: Duration(milliseconds: 900),
+                  onEnd: () {
+                    setState(() {
+                      isHeartAnimating = false;
+                    });
+                  },
+                  child: Icon(
+                    Icons.favorite,
+                    color: HexColor(CommonColor.pinkFont),
+                    size: 100,
                   ),
                 ),
               ),
+
               Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -127,7 +195,6 @@ class _VideoWidgetState extends State<VideoWidget> {
                       HexColor("#000000").withOpacity(0.9),
                     ],
                   ),
-
                 ),
               ),
 
@@ -149,6 +216,7 @@ class _VideoWidgetState extends State<VideoWidget> {
               //   alignment: Alignment.topCenter,
               //   height: MediaQuery.of(context).size.height/5,
               // ),
+
               Center(
                 child: ButtonTheme(
                     height: 50.0,
@@ -158,7 +226,7 @@ class _VideoWidgetState extends State<VideoWidget> {
                       duration: Duration(milliseconds: 100),
                       // how much you want the animation to be long)
                       child: GestureDetector(
-                        onTap: (){
+                        onTap: () {
                           setState(() {
                             isClicked = true;
                             if (_controller!.value.isPlaying) {
@@ -171,8 +239,7 @@ class _VideoWidgetState extends State<VideoWidget> {
                         child: Container(
                           decoration: BoxDecoration(
                               color: Colors.black.withOpacity(0.5),
-                              borderRadius: BorderRadius.circular(50)
-                          ),
+                              borderRadius: BorderRadius.circular(50)),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Icon(
@@ -187,6 +254,7 @@ class _VideoWidgetState extends State<VideoWidget> {
                       ),
                     )),
               ),
+
               Align(
                 alignment: Alignment.bottomLeft,
                 child: SizedBox(
@@ -202,97 +270,160 @@ class _VideoWidgetState extends State<VideoWidget> {
                             child: Container(
                               color: Colors.transparent,
                               width: 50,
-                              margin: EdgeInsets.only(bottom: 0, right: 21),
+                              margin: EdgeInsets.only(
+                                  bottom: 0, right: 21, left: 20.0),
                               alignment: Alignment.bottomRight,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
+                                  IconButton(
+                                      visualDensity:
+                                          VisualDensity(vertical: -4),
+                                      padding: EdgeInsets.only(left: 0.0),
+                                      icon: Image.asset(
+                                        AssetUtils.like_icon_filled,
+                                        color: (widget.video_like_status ==
+                                                'false'
+                                            ? Colors.white
+                                            : HexColor(CommonColor.pinkFont)),
+                                        scale: 3,
+                                      ),
+                                      onPressed: () async {
+                                        await homepageController
+                                            .PostLikeUnlikeApi(
+                                                context: context,
+                                                post_id: widget.video_id,
+                                                post_id_type:
+                                                    (widget.video_like_status ==
+                                                            "true"
+                                                        ? 'unliked'
+                                                        : 'liked'),
+                                                post_likeStatus:
+                                                    (widget.video_like_status ==
+                                                            "true"
+                                                        ? 'false'
+                                                        : 'true'));
+
+                                        if (homepageController
+                                                .postLikeUnlikeModel!.error ==
+                                            false) {
+                                          print(
+                                              "mmmmm${widget.video_like_count}");
+                                          setState(() {
+                                            widget.video_like_count =
+                                                homepageController
+                                                    .postLikeUnlikeModel!
+                                                    .user![0]
+                                                    .likes!;
+
+                                            widget.video_like_status =
+                                                homepageController
+                                                    .postLikeUnlikeModel!
+                                                    .user![0]
+                                                    .likeStatus!;
+                                          });
+                                          print(
+                                              "mmmmm${widget.video_like_count}");
+                                        }
+                                      }),
                                   Container(
-                                    child: IconButton(
-                                        padding: EdgeInsets.only(left: 28.0),
-                                        icon: Image.asset(
-                                          AssetUtils.like_icon,
-                                          color: Colors.white,
-                                          height: 30,
-                                          width: 30,
-                                        ),
-                                        onPressed: () {}),
+                                    child: Text(widget.video_like_count,
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 12,
+                                            fontFamily: 'PR')),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  IconButton(
+                                    visualDensity: VisualDensity(vertical: -4),
+                                    iconSize: 30.0,
+                                    padding: EdgeInsets.only(left: 0.0),
+                                    icon: Image.asset(
+                                      AssetUtils.comment_icon,
+                                      color: HexColor('#8AFC8D'),
+                                      scale: 3,
+                                    ),
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  PostImageCommentScreen(
+                                                    PostID: widget.video_id,
+                                                  )));
+                                      // setState(() {
+                                      //   // _myPage.jumpToPage(0);
+                                      // });
+                                    },
                                   ),
                                   Container(
-                                    child: IconButton(
-                                      iconSize: 30.0,
-                                      padding: EdgeInsets.only(left: 28.0),
-                                      icon: Image.asset(
-                                        AssetUtils.comment_icon,
-                                        color: HexColor('#8AFC8D'),
-                                        height: 30,
-                                        width: 30,
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          // _myPage.jumpToPage(0);
-                                        });
-                                      },
-                                    ),
+                                    child: Text('${widget.comment_count}',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 12,
+                                            fontFamily: 'PR')),
                                   ),
-                                  Container(
-                                    child: IconButton(
-                                      iconSize: 30.0,
-                                      padding: EdgeInsets.only(left: 28.0),
-                                      icon: Image.asset(
-                                        AssetUtils.share_icon,
-                                        color: HexColor('#66E4F2'),
-                                        height: 30,
-                                        width: 30,
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          // _myPage.jumpToPage(0);
-                                        });
-                                      },
-                                    ),
+                                  SizedBox(
+                                    height: 10,
                                   ),
-                                  Container(
-                                    child: IconButton(
-                                      iconSize: 30.0,
-                                      padding: EdgeInsets.only(left: 28.0),
-                                      icon: Image.asset(
-                                        AssetUtils.reward_icon,
-                                        color: HexColor('#F32E82'),
-                                        height: 30,
-                                        width: 30,
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          // _myPage.jumpToPage(0);
-                                        });
-                                      },
+                                  IconButton(
+                                    visualDensity: VisualDensity(vertical: -4),
+                                    padding: EdgeInsets.only(left: 0.0),
+                                    icon: Image.asset(
+                                      AssetUtils.share_icon,
+                                      color: HexColor('#66E4F2'),
+                                      scale: 2,
                                     ),
+                                    onPressed: () {
+                                      setState(() {
+                                        // _myPage.jumpToPage(0);
+                                      });
+                                    },
                                   ),
-                                  Container(
-                                    child: IconButton(
-                                      iconSize: 30.0,
-                                      padding: EdgeInsets.only(left: 28.0),
-                                      icon: Image.asset(
-                                        AssetUtils.music_icon,
-                                        color: HexColor('#F5C93A'),
-                                        height: 30,
-                                        width: 30,
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          // _myPage.jumpToPage(0);
-                                        });
-                                      },
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  IconButton(
+                                    visualDensity: VisualDensity(vertical: -4),
+                                    iconSize: 30.0,
+                                    padding: EdgeInsets.only(left: 0.0),
+                                    icon: Image.asset(
+                                      AssetUtils.reward_icon,
+                                      color: HexColor('#F32E82'),
+                                      scale: 3,
                                     ),
+                                    onPressed: () {
+                                      setState(() {
+                                        // _myPage.jumpToPage(0);
+                                      });
+                                    },
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  IconButton(
+                                    visualDensity: VisualDensity(vertical: -4),
+                                    padding: EdgeInsets.only(left: 0.0),
+                                    icon: Image.asset(
+                                      AssetUtils.music_icon,
+                                      color: HexColor('#F5C93A'),
+                                      scale: 3,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        // _myPage.jumpToPage(0);
+                                      });
+                                    },
                                   ),
                                 ],
                               ),
                             ),
                           ),
                         ),
-
                         Container(
                           alignment: Alignment.centerLeft,
                           child: Container(
@@ -308,42 +439,42 @@ class _VideoWidgetState extends State<VideoWidget> {
                         ),
                         ListTile(
                           visualDensity:
-                          VisualDensity(vertical: 4, horizontal: -4),
+                              VisualDensity(vertical: 4, horizontal: -4),
                           // tileColor: Colors.white,
                           leading: (widget.image_url.length > 0
                               ? ClipRRect(
-                            borderRadius:
-                            BorderRadius.circular(50),
-                            child: Container(
-                              height: 50,
-                              width: 50,
-                              color: Colors.red,
-                              child: Image.network(
-                                "${widget.image_url}",
-                              ),
-                            ),
-                          )
+                                  borderRadius: BorderRadius.circular(50),
+                                  child: Container(
+                                    height: 50,
+                                    width: 50,
+                                    color: Colors.red,
+                                    child: Image.network(
+                                      widget.image_url,
+                                    ),
+                                  ),
+                                )
                               : Container(
-                              height: 50,
-                              width: 50,
-                              child: IconButton(
-                                icon: Image.asset(
-                                  AssetUtils.user_icon3,
-                                  fit: BoxFit.fill,
-                                ),
-                                onPressed: () {},
-                              ))),
+                                  height: 50,
+                                  width: 50,
+                                  child: IconButton(
+                                    icon: Image.asset(
+                                      AssetUtils.user_icon3,
+                                      fit: BoxFit.fill,
+                                    ),
+                                    onPressed: () {},
+                                  ))),
                           title: Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
-                                    constraints: BoxConstraints(minWidth: 100, maxWidth: 220),
+                                    constraints: BoxConstraints(
+                                        minWidth: 100, maxWidth: 220),
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Container(
                                           child: Text(
@@ -356,7 +487,8 @@ class _VideoWidgetState extends State<VideoWidget> {
                                           ),
                                         ),
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
                                           children: [
                                             Image.asset(
                                               AssetUtils.music_icon,
@@ -377,12 +509,12 @@ class _VideoWidgetState extends State<VideoWidget> {
                                             ),
                                           ],
                                         ),
-
                                       ],
                                     ),
                                   ),
                                   Container(
-                                    width: MediaQuery.of(context).size.width/4,
+                                    width:
+                                        MediaQuery.of(context).size.width / 4,
                                     child: ReadMoreText(
                                       widget.description,
                                       trimLines: 2,
@@ -403,14 +535,12 @@ class _VideoWidgetState extends State<VideoWidget> {
                                   Text(
                                     'Original Audio',
                                     style: TextStyle(
-                                        color: HexColor(
-                                            CommonColor.pinkFont),
+                                        color: HexColor(CommonColor.pinkFont),
                                         fontFamily: "PR",
                                         fontSize: 10),
                                   ),
                                 ],
                               ),
-
                             ],
                           ),
                           trailing: SizedBox.shrink(),
@@ -420,10 +550,8 @@ class _VideoWidgetState extends State<VideoWidget> {
                   ),
                 ),
               ),
-
             ],
-          )
-              : Container(),
+          ),
         ));
   }
 }

@@ -43,13 +43,15 @@ class _NewsFeedCommantScreenState extends State<NewsFeedCommantScreen> {
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
         _newsFeed_screen_controller.Replyname_controller = '';
+        _newsFeed_screen_controller.Replying_comment_id = '';
       },
       child: Scaffold(
         backgroundColor: Colors.black,
         appBar: AppBar(
           title: const Text(
             "Comments",
-            style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: 'PR'),
+            style:
+                TextStyle(color: Colors.white, fontSize: 16, fontFamily: 'PR'),
           ),
           backgroundColor: Colors.black,
         ),
@@ -109,7 +111,9 @@ class _NewsFeedCommantScreenState extends State<NewsFeedCommantScreen> {
                                                   )))))),
                               title: Text(
                                 _newsFeed_screen_controller
-                                    .newsFeedCommnetModel!.data![index].userName!,
+                                    .newsFeedCommnetModel!
+                                    .data![index]
+                                    .userName!,
                                 style: TextStyle(
                                     color: HexColor(CommonColor.subHeaderColor),
                                     fontSize: 14,
@@ -117,7 +121,9 @@ class _NewsFeedCommantScreenState extends State<NewsFeedCommantScreen> {
                               ),
                               subtitle: Text(
                                 _newsFeed_screen_controller
-                                    .newsFeedCommnetModel!.data![index].message!,
+                                    .newsFeedCommnetModel!
+                                    .data![index]
+                                    .message!,
                                 style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 16,
@@ -128,8 +134,8 @@ class _NewsFeedCommantScreenState extends State<NewsFeedCommantScreen> {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   GestureDetector(
-                                    onTap: () {
-                                      _newsFeed_screen_controller
+                                    onTap: () async {
+                                      await _newsFeed_screen_controller
                                           .CommentLikeUnlikeApi(
                                               context: context,
                                               comment_id:
@@ -154,6 +160,35 @@ class _NewsFeedCommantScreenState extends State<NewsFeedCommantScreen> {
                                                       ? 'unliked'
                                                       : 'liked'),
                                               news_id: widget.newsID);
+
+                                      if (_newsFeed_screen_controller
+                                              .commentLikeUnlikeModel!.error ==
+                                          false) {
+                                        print(
+                                            "vvvv${_newsFeed_screen_controller.newsFeedCommnetModel!.data![index].likeCount!}");
+
+                                        setState(() {
+                                          _newsFeed_screen_controller
+                                                  .newsFeedCommnetModel!
+                                                  .data![index]
+                                                  .likeCount =
+                                              _newsFeed_screen_controller
+                                                  .commentLikeUnlikeModel!
+                                                  .user![0]
+                                                  .likeCount!;
+
+                                          _newsFeed_screen_controller
+                                                  .newsFeedCommnetModel!
+                                                  .data![index]
+                                                  .likeStatus =
+                                              _newsFeed_screen_controller
+                                                  .commentLikeUnlikeModel!
+                                                  .user![0]
+                                                  .likeStatus!;
+                                        });
+                                        print(
+                                            "mmmm${_newsFeed_screen_controller.newsFeedCommnetModel!.data![index].likeCount!}");
+                                      }
                                     },
                                     child: Image.asset(
                                       (_newsFeed_screen_controller
@@ -186,13 +221,28 @@ class _NewsFeedCommantScreenState extends State<NewsFeedCommantScreen> {
                                   ),
                                   GestureDetector(
                                     onTap: () {
+                                      print(
+                                          "name : ${_newsFeed_screen_controller.Replyname_controller!.length}");
+                                      print(
+                                          "id : ${_newsFeed_screen_controller.Replying_comment_id!.length}");
                                       _newsFeed_screen_controller
                                               .Replyname_controller =
                                           _newsFeed_screen_controller
                                               .newsFeedCommnetModel!
                                               .data![index]
                                               .userName!;
-                                      FocusScope.of(context).requestFocus(focusNode);
+                                      _newsFeed_screen_controller
+                                              .Replying_comment_id =
+                                          _newsFeed_screen_controller
+                                              .newsFeedCommnetModel!
+                                              .data![index]
+                                              .neID!;
+                                      print(
+                                          "name : ${_newsFeed_screen_controller.Replyname_controller}");
+                                      print(
+                                          "id : ${_newsFeed_screen_controller.Replying_comment_id}");
+                                      FocusScope.of(context)
+                                          .requestFocus(focusNode);
                                     },
                                     child: Text(
                                       'reply',
@@ -207,7 +257,8 @@ class _NewsFeedCommantScreenState extends State<NewsFeedCommantScreen> {
                               ),
                             ),
                             Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 40),
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 40),
                               alignment: Alignment.centerRight,
                               child: ListView.builder(
                                   shrinkWrap: true,
@@ -291,11 +342,12 @@ class _NewsFeedCommantScreenState extends State<NewsFeedCommantScreen> {
                                       ),
                                       trailing: Row(
                                         mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
                                         children: [
                                           GestureDetector(
-                                            onTap: () {
-                                              _newsFeed_screen_controller.CommentReplyLikeUnlikeApi(
+                                            onTap: () async {
+                                              await _newsFeed_screen_controller.CommentReplyLikeUnlikeApi(
                                                   context: context,
                                                   comment_id:
                                                       _newsFeed_screen_controller
@@ -322,6 +374,38 @@ class _NewsFeedCommantScreenState extends State<NewsFeedCommantScreen> {
                                                           ? 'unliked'
                                                           : 'liked'),
                                                   news_id: widget.newsID);
+
+                                              if (_newsFeed_screen_controller
+                                                      .commentReplyLikeUnlikeModel!
+                                                      .error ==
+                                                  false) {
+                                                print(
+                                                    "vvvv${_newsFeed_screen_controller.newsFeedCommnetModel!.data![index].replies![idx].likeStatus!}");
+
+                                                setState(() {
+                                                  _newsFeed_screen_controller
+                                                          .newsFeedCommnetModel!
+                                                          .data![index]
+                                                          .replies![idx]
+                                                          .likeCount =
+                                                      _newsFeed_screen_controller
+                                                          .commentReplyLikeUnlikeModel!
+                                                          .user![0]
+                                                          .likeCount!;
+
+                                                  _newsFeed_screen_controller
+                                                          .newsFeedCommnetModel!
+                                                          .data![index]
+                                                          .replies![idx]
+                                                          .likeStatus =
+                                                      _newsFeed_screen_controller
+                                                          .commentReplyLikeUnlikeModel!
+                                                          .user![0]
+                                                          .likeStatus!;
+                                                });
+                                                print(
+                                                    "mmmm${_newsFeed_screen_controller.newsFeedCommnetModel!.data![index].replies![idx].likeStatus}");
+                                              }
                                             },
                                             child: Image.asset(
                                               (_newsFeed_screen_controller
@@ -332,8 +416,8 @@ class _NewsFeedCommantScreenState extends State<NewsFeedCommantScreen> {
                                                       'true'
                                                   ? AssetUtils.like_icon_filled
                                                   : AssetUtils.like_icon),
-                                              color:
-                                                  HexColor(CommonColor.pinkFont),
+                                              color: HexColor(
+                                                  CommonColor.pinkFont),
                                               height: 15,
                                               width: 15,
                                             ),
@@ -375,7 +459,8 @@ class _NewsFeedCommantScreenState extends State<NewsFeedCommantScreen> {
                               margin: const EdgeInsets.symmetric(
                                   horizontal: 20, vertical: 20),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Container(
                                     width:
@@ -416,7 +501,8 @@ class _NewsFeedCommantScreenState extends State<NewsFeedCommantScreen> {
                                         //   BorderSide(color: ColorUtils.blueColor, width: 1),
                                         //   borderRadius: BorderRadius.all(Radius.circular(10)),
                                         // ),
-                                        prefixText: "@${_newsFeed_screen_controller.Replyname_controller}",
+                                        prefixText:
+                                            "@${_newsFeed_screen_controller.Replyname_controller}",
                                         hintStyle: TextStyle(
                                           fontSize: 14,
                                           fontFamily: 'PR',
@@ -438,10 +524,22 @@ class _NewsFeedCommantScreenState extends State<NewsFeedCommantScreen> {
                                   ),
                                   GestureDetector(
                                     onTap: () {
-                                      _newsFeed_screen_controller.CommentPostApi(
-                                          post_id: widget.newsID,
-                                          news_id: widget.newsID,
-                                          context: context);
+                                      (_newsFeed_screen_controller
+                                                  .Replyname_controller
+                                                  .isNotEmpty &&
+                                              _newsFeed_screen_controller
+                                                  .Replying_comment_id
+                                                  .isNotEmpty
+                                          ? _newsFeed_screen_controller
+                                              .ReplyCommentPostApi(
+                                              context: context,
+                                              news_id: widget.newsID,
+                                            )
+                                          : _newsFeed_screen_controller
+                                              .CommentPostApi(
+                                                  post_id: widget.newsID,
+                                                  news_id: widget.newsID,
+                                                  context: context));
                                     },
                                     child: const Icon(
                                       Icons.send,

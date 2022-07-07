@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 
 import '../Utils/App_utils.dart';
+import '../Utils/toaster_widget.dart';
 import '../sharePreference.dart';
 
 import 'package:http/http.dart' as http;
@@ -21,7 +22,7 @@ class Settings_screen_controller extends GetxController {
     String id_user = await PreferenceManager().getPref(URLConstants.id);
 
     isSearchLoading(true);
-    String url = (URLConstants.base_url + URLConstants.blockListApi + "?id=${id_user}");
+    String url = ("${URLConstants.base_url}${URLConstants.blockListApi}?id=${id_user}");
     String msg = '';
 
     // debugPrint('Get Sales Token ${tokens.toString()}');
@@ -44,7 +45,7 @@ class Settings_screen_controller extends GetxController {
         debugPrint(
             '2-2-2-2-2-2 Inside the product Controller Details ${blockListModel!.data!.length}');
         isSearchLoading(false);
-        // CommonWidget().showToaster(msg: data["success"].toString());
+        CommonWidget().showToaster(msg: blockListModel!.message!);
         return blockListModel;
       } else {
         // CommonWidget().showToaster(msg: msg.toString());

@@ -130,12 +130,12 @@ class Search_screen_controller extends GetxController {
 
         // await PreferenceManager()
         CommonWidget()
-            .showToaster(msg: data["User Added to block list"].toString());
-
+            .showToaster(msg: "User status has been blocked".toString());
+        Navigator.pop(context);
         //     .setPref(URLConstants.id, _followUnfolloemodel!.user![0].id!);
         // CommonService().setStoreKey(
         //     setKey: 'type', setValue: loginModel!.user![0].type!.toString());
-        print(CommonService().getStoreValue(keys: 'type').toString());
+        // print(CommonService().getStoreValue(keys: 'type').toString());
         // Get.to(kids_Email_verification());
       } else {
         print('Please try again');

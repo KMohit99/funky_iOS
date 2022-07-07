@@ -23,6 +23,7 @@ import '../Utils/colorUtils.dart';
 import '../custom_widget/common_buttons.dart';
 import '../drawerScreen.dart';
 import '../getx_pagination/binding_utils.dart';
+import '../homepage/controller/homepage_controller.dart';
 import '../homepage/ui/homepage_screen.dart';
 import '../main.dart';
 import '../news_feed/new_feed_screen.dart';
@@ -38,6 +39,8 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   GlobalKey<ScaffoldState>? _globalKey = GlobalKey<ScaffoldState>();
+  final HomepageController homepageController =
+  Get.put(HomepageController(), tag: HomepageController().toString());
 
   late double screenHeight, screenWidth;
   int _page = 0;
@@ -65,6 +68,17 @@ class _DashboardState extends State<Dashboard> {
         )) ??
         false;
   }
+  // @override
+  // void initState() {
+  //   init();
+  //   // **
+  //   super.initState();
+  // }
+  //
+  // init() async {
+  //   await homepageController.getAllVideosList();
+  //   await homepageController.getAllImagesList();
+  // }
 
   Widget? get getPage {
     if (_page == 0) {
@@ -385,7 +399,7 @@ class _DashboardState extends State<Dashboard> {
           ? PreferredSize(
               preferredSize: const Size.fromHeight(50),
               child: AppBar(
-                backgroundColor: Colors.black,
+                backgroundColor: Colors.transparent,
                 title: Text(
                   (_page == 0
                       ? 'Dashboard'

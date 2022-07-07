@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 import '../Utils/asset_utils.dart';
+import '../Utils/colorUtils.dart';
 import '../search_screen/search__screen_controller.dart';
 import 'controller.dart';
 
@@ -24,9 +26,9 @@ class _BlockListScreenState extends State<BlockListScreen> {
   }
 
   init() async {
-   await  _settings_screen_controller.getBlockList();
-
+    await _settings_screen_controller.getBlockList();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,86 +49,112 @@ class _BlockListScreenState extends State<BlockListScreen> {
           ),
           child: ClipRRect(
               child: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: Icon(Icons.arrow_back),
-              )),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.arrow_back),
+          )),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 10),
-            child: Obx(() =>
-            (_settings_screen_controller.isSearchLoading.value == true)
-                ? SizedBox.shrink()
-                : ListView.builder(
-              itemCount: _settings_screen_controller
-                  .blockListModel!.data!.length,
-              shrinkWrap: true,
-              itemBuilder: (BuildContext context, int index) {
-                return ListTile(
-                  leading: Container(
-                      height: 70,
-                      width: 70,
-                      // color: Colors.white,
-                      child: IconButton(
-                        icon: Image.asset(
-                          AssetUtils.user_icon3,
-                          fit: BoxFit.cover,
+      body: Obx(() =>
+          (_settings_screen_controller.isSearchLoading.value == true)
+              ? Center(
+            child: Container(
+                height: 80,
+                width: 100,
+                color: Colors.transparent,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    CircularProgressIndicator(
+                      color: HexColor(CommonColor.pinkFont),
+                    ),
+                  ],
+                )
+              // Material(
+              //   color: Colors.transparent,
+              //   child: LoadingIndicator(
+              //     backgroundColor: Colors.transparent,
+              //     indicatorType: Indicator.ballScale,
+              //     colors: _kDefaultRainbowColors,
+              //     strokeWidth: 4.0,
+              //     pathBackgroundColor: Colors.yellow,
+              //     // showPathBackground ? Colors.black45 : null,
+              //   ),
+              // ),
+            ),
+          )
+              : ListView.builder(
+                  itemCount: _settings_screen_controller
+                      .blockListModel!.data!.length,
+                  shrinkWrap: true,
+                  itemBuilder: (BuildContext context, int index) {
+                    return ListTile(
+                        leading: Container(
+                            height: 70,
+                            width: 70,
+                            // color: Colors.white,
+                            child: IconButton(
+                              icon: Image.asset(
+                                AssetUtils.user_icon3,
+                                fit: BoxFit.cover,
+                              ),
+                              onPressed: () {},
+                            )),
+                        title: Text(
+                          _settings_screen_controller
+                              .blockListModel!.data![index].fullName!,
+                          style: const TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                              fontFamily: 'PR'),
                         ),
-                        onPressed: () {},
-                      )),
-                    title: Text(
-                      _settings_screen_controller
-                          .blockListModel!.data![index].fullName!,
-                      style: const TextStyle(
-                          fontSize: 16,
-                          color: Colors.white,
-                          fontFamily: 'PR'),
-                    ),
-                    subtitle: Text(
-                      _settings_screen_controller
-                          .blockListModel!.data![index].userName!,
-                      style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
-                          fontFamily: 'PR'),
-                    ),
-                    trailing: GestureDetector(
-                      onTap: () {
-                        print(_settings_screen_controller
-                            .blockListModel!.data![index].id);
-                        _settings_screen_controller.Block_unblock_api(
-                            context: context,
-                            user_id: _settings_screen_controller
-                                .blockListModel!.data![index].id!,
-                            user_name: _settings_screen_controller
-                                .blockListModel!.data![index].userName!,
-                            social_bloc_type: _settings_screen_controller
-                                .blockListModel!.data![index].socialType!,
-                            block_unblock: "Unblock");
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(20)),
-                        child: Container(
-                          margin: EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 12),
-                          child: Text(
-                            'Unblock',
-                            style: const TextStyle(
-                                fontSize: 12,
-                                color: Colors.white,
-                                fontFamily: 'PR'),
+                        subtitle: Text(
+                          _settings_screen_controller
+                              .blockListModel!.data![index].userName!,
+                          style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey,
+                              fontFamily: 'PR'),
+                        ),
+                        trailing: GestureDetector(
+                          onTap: () {
+                            print(_settings_screen_controller
+                                .blockListModel!.data![index].id);
+                            _settings_screen_controller.Block_unblock_api(
+                                context: context,
+                                user_id: _settings_screen_controller
+                                    .blockListModel!.data![index].id!,
+                                user_name: _settings_screen_controller
+                                    .blockListModel!
+                                    .data![index]
+                                    .userName!,
+                                social_bloc_type:
+                                    _settings_screen_controller
+                                        .blockListModel!
+                                        .data![index]
+                                        .socialType!,
+                                block_unblock: "Unblock");
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(20)),
+                            child: Container(
+                              margin: EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 12),
+                              child: Text(
+                                'Unblock',
+                                style: const TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.white,
+                                    fontFamily: 'PR'),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ));
-              },
-            ))),
-      ),
+                        ));
+                  },
+                )),
     );
   }
 }

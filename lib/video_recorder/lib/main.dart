@@ -6,6 +6,7 @@ import 'package:camerawesome/models/orientations.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:funky_new/Utils/asset_utils.dart';
 import 'package:funky_new/custom_widget/page_loader.dart';
 import 'package:funky_new/video_recorder/lib/widgets/bottom_bar.dart';
@@ -22,6 +23,7 @@ import 'package:video_compress/video_compress.dart';
 // import 'package:video_compress/video_compress.dart';
 
 import '../../Utils/colorUtils.dart';
+import '../../Utils/toaster_widget.dart';
 import '../../dashboard/post_video_preview.dart';
 import '../../dashboard/video_editor.dart';
 
@@ -340,8 +342,8 @@ class _MyApp_videoState extends State<MyApp_video>
           child: Center(
             child: Text(
               (seconds_15
-                  ? "$seconds15"
-                  : (seconds_60 ? "$seconds60" : "$seconds15")),
+                  ? "00:$seconds15"
+                  : (seconds_60 ? "00:$seconds60" : "00:$seconds15")),
               style: TextStyle(
                   fontSize: 16, fontFamily: 'PB', color: Colors.white),
             ),
@@ -407,6 +409,7 @@ class _MyApp_videoState extends State<MyApp_video>
     );
   }
 
+
   _takePhoto() async {
     final Directory extDir = await getTemporaryDirectory();
     final testDir =
@@ -441,23 +444,26 @@ class _MyApp_videoState extends State<MyApp_video>
     countdownTimer_15 =
         Timer.periodic(Duration(seconds: 1), (_) => setCountDown_15());
   }
-  void startTimer_60() {
+  void startTimer_60()  {
     countdownTimer_60 =
         Timer.periodic(Duration(seconds: 1), (_) => setCountDown_60());
   }
 
+
+
   void setCountDown_15() {
     final reduceSecondsBy = 1;
-    setState(() {
+    setState(()  {
       final seconds15 = myDuration15.inSeconds - reduceSecondsBy;
       if (seconds15 < 0) {
         countdownTimer_15!.cancel();
         print('timesup');
-        _stopvideo();
+
       } else {
         myDuration15 = Duration(seconds: seconds15);
       }
     });
+
   }
   void setCountDown_60() {
     final reduceSecondsBy = 1;
@@ -466,7 +472,7 @@ class _MyApp_videoState extends State<MyApp_video>
       if (seconds60 < 0) {
         countdownTimer_60!.cancel();
         print('timesup');
-        _stopvideo();
+        // _stopvideo();
       } else {
         myDuration60 = Duration(seconds: seconds60);
       }
@@ -590,6 +596,14 @@ class _MyApp_videoState extends State<MyApp_video>
     print("==> has been recorded : ${file.exists()} | path : $_lastVideoPath");
     print("----------------------------------");
 
+    Fluttertoast.showToast(
+      msg: "Please Wait",
+      timeInSecForIosWeb: 5,
+      textColor: Colors.black,
+      backgroundColor: Colors.white,
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.BOTTOM,
+    );
     MediaInfo? mediaInfo = await VideoCompress.compressVideo(
       _lastVideoPath,
       quality: VideoQuality.MediumQuality,
@@ -684,11 +698,19 @@ class _MyApp_videoState extends State<MyApp_video>
     setState(() {});
     print("seconds_15 $seconds_15");
     print("seconds_60 $seconds_60");
-    Future.delayed(
-        Duration(seconds: (seconds_15 ? 15 : (seconds_60 ? 59 : 15))), () {
-      _stopvideo();
-    });
-    // (seconds_15 ? startTimer_15() : startTimer_60());
+    if(seconds_15){
+      startTimer_15();
+      Future.delayed(
+          const Duration(seconds: 17), () {
+        _stopvideo();
+      });
+    }else if(seconds_60){
+      startTimer_60();
+      Future.delayed(
+          const Duration(seconds: 62), () {
+        _stopvideo();
+      });
+    }
 
     // startWatch();
   }

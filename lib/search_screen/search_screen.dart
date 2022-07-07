@@ -71,52 +71,55 @@ class _SearchScreenState extends State<SearchScreen> {
         //   // },
         // ),
         body: Container(
-          margin: const EdgeInsets.only(top: 100, left: 23, right: 23),
+          margin: const EdgeInsets.only(top: 80, left: 23, right: 23),
           child: Column(
             children: [
-              Row(
-                children: [
-                  Expanded(
-                      child: CommonTextFormField_search(
-                    icon_color: Colors.black,
-                    Font_color: Colors.black,
-                    iconData: Icons.clear,
-                    color: Colors.white,
-                    controller: _search_screen_controller.searchquery,
-                    labelText: "Search",
-                    tap: () {
-                      setState(() {
-                        _search_screen_controller.taxfeildTapped(true);
-                      });
-                    },
-                    onpress: () {
-                      setState(() {
-                        _search_screen_controller.searchquery.clear();
-                      });
-                    },
-                    onChanged: (dynamic) {
-                      setState(() {
-                        _search_screen_controller.getUserList();
-                      });
-                    },
-                  )),
-                  Container(
-                    // color: Colors.red,
-                    margin: const EdgeInsets.only(left: 0, top: 0, bottom: 0),
-                    child: IconButton(
-                        visualDensity:
-                            VisualDensity(horizontal: -4, vertical: -4),
-                        padding: EdgeInsets.zero,
-                        onPressed: () {},
-                        icon: (Image.asset(
-                          AssetUtils.filter_icon,
-                          color: HexColor(CommonColor.pinkFont),
-                          height: 19.0,
-                          width: 19.0,
-                          fit: BoxFit.contain,
-                        ))),
-                  ),
-                ],
+              Container(
+                margin: EdgeInsets.only(bottom: 10),
+                child: Row(
+                  children: [
+                    Expanded(
+                        child: CommonTextFormField_search(
+                      icon_color: Colors.black,
+                      Font_color: Colors.black,
+                      iconData: Icons.clear,
+                      color: Colors.white,
+                      controller: _search_screen_controller.searchquery,
+                      labelText: "Search",
+                      tap: () {
+                        setState(() {
+                          _search_screen_controller.taxfeildTapped(true);
+                        });
+                      },
+                      onpress: () {
+                        setState(() {
+                          _search_screen_controller.searchquery.clear();
+                        });
+                      },
+                      onChanged: (dynamic) {
+                        setState(() {
+                          _search_screen_controller.getUserList();
+                        });
+                      },
+                    )),
+                    Container(
+                      // color: Colors.red,
+                      margin: const EdgeInsets.only(left: 0, top: 0, bottom: 0),
+                      child: IconButton(
+                          visualDensity:
+                              VisualDensity(horizontal: -4, vertical: -4),
+                          padding: EdgeInsets.zero,
+                          onPressed: () {},
+                          icon: (Image.asset(
+                            AssetUtils.filter_icon,
+                            color: HexColor(CommonColor.pinkFont),
+                            height: 19.0,
+                            width: 19.0,
+                            fit: BoxFit.contain,
+                          ))),
+                    ),
+                  ],
+                ),
               ),
               // (_search_screen_controller.searchlistModel != null ?  Expanded(
               //     child: ListView.builder(

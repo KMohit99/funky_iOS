@@ -326,51 +326,32 @@ class _Profile_ScreenState extends State<Profile_Screen>
         body: Obx(() => (_creator_login_screen_controller
                     .isuserinfoLoading.value ==
                 true
-            ? Center(
-                child: Material(
-                  color: Color(0x66DD4D4),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                          color: Colors.transparent,
-                          height: 80,
-                          width: 200,
-                          child: Container(
-                            color: Colors.black,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                CircularProgressIndicator(
-                                  color: HexColor(CommonColor.pinkFont),
-                                ),
-                                Text(
-                                  'Loading...',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18,
-                                      fontFamily: 'PR'),
-                                )
-                              ],
-                            ),
-                          )
-                          // Material(
-                          //   color: Colors.transparent,
-                          //   child: LoadingIndicator(
-                          //     backgroundColor: Colors.transparent,
-                          //     indicatorType: Indicator.ballScale,
-                          //     colors: _kDefaultRainbowColors,
-                          //     strokeWidth: 4.0,
-                          //     pathBackgroundColor: Colors.yellow,
-                          //     // showPathBackground ? Colors.black45 : null,
-                          //   ),
-                          // ),
-                          ),
-                    ],
+            ?  Center(
+          child: Container(
+              height: 80,
+              width: 100,
+              color: Colors.transparent,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  CircularProgressIndicator(
+                    color: HexColor(CommonColor.pinkFont),
                   ),
-                ),
+                ],
               )
+            // Material(
+            //   color: Colors.transparent,
+            //   child: LoadingIndicator(
+            //     backgroundColor: Colors.transparent,
+            //     indicatorType: Indicator.ballScale,
+            //     colors: _kDefaultRainbowColors,
+            //     strokeWidth: 4.0,
+            //     pathBackgroundColor: Colors.yellow,
+            //     // showPathBackground ? Colors.black45 : null,
+            //   ),
+            // ),
+          ),
+        )
             : NestedScrollView(
                 headerSliverBuilder:
                     (BuildContext context, bool innerBoxIsScrolled) {
@@ -1261,49 +1242,32 @@ class _Profile_ScreenState extends State<Profile_Screen>
       margin: EdgeInsets.only(top: 10, right: 16, left: 16),
       child: SingleChildScrollView(
           child: (ispostLoading == true
-              ? Material(
-                  color: Color(0x66DD4D4),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                          color: Colors.transparent,
-                          height: 80,
-                          width: 200,
-                          child: Container(
-                            color: Colors.black,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                CircularProgressIndicator(
-                                  color: HexColor(CommonColor.pinkFont),
-                                ),
-                                Text(
-                                  'Loading...',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18,
-                                      fontFamily: 'PR'),
-                                )
-                              ],
-                            ),
-                          )
-                          // Material(
-                          //   color: Colors.transparent,
-                          //   child: LoadingIndicator(
-                          //     backgroundColor: Colors.transparent,
-                          //     indicatorType: Indicator.ballScale,
-                          //     colors: _kDefaultRainbowColors,
-                          //     strokeWidth: 4.0,
-                          //     pathBackgroundColor: Colors.yellow,
-                          //     // showPathBackground ? Colors.black45 : null,
-                          //   ),
-                          // ),
-                          ),
-                    ],
-                  ),
+              ? Center(
+            child: Container(
+                height: 80,
+                width: 100,
+                color: Colors.transparent,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    CircularProgressIndicator(
+                      color: HexColor(CommonColor.pinkFont),
+                    ),
+                  ],
                 )
+              // Material(
+              //   color: Colors.transparent,
+              //   child: LoadingIndicator(
+              //     backgroundColor: Colors.transparent,
+              //     indicatorType: Indicator.ballScale,
+              //     colors: _kDefaultRainbowColors,
+              //     strokeWidth: 4.0,
+              //     pathBackgroundColor: Colors.yellow,
+              //     // showPathBackground ? Colors.black45 : null,
+              //   ),
+              // ),
+            ),
+          )
               : (_galleryModelList!.error == false
                   ? StaggeredGridView.countBuilder(
                       shrinkWrap: true,
@@ -1527,49 +1491,32 @@ class _Profile_ScreenState extends State<Profile_Screen>
       margin: EdgeInsets.only(top: 10, right: 16, left: 16),
       child: SingleChildScrollView(
           child: (isvideoLoading == true
-              ? Material(
-                  color: Color(0x66DD4D4),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                          color: Colors.transparent,
-                          height: 80,
-                          width: 200,
-                          child: Container(
-                            color: Colors.black,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                CircularProgressIndicator(
-                                  color: HexColor(CommonColor.pinkFont),
-                                ),
-                                Text(
-                                  'Loading...',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18,
-                                      fontFamily: 'PR'),
-                                )
-                              ],
-                            ),
-                          )
-                          // Material(
-                          //   color: Colors.transparent,
-                          //   child: LoadingIndicator(
-                          //     backgroundColor: Colors.transparent,
-                          //     indicatorType: Indicator.ballScale,
-                          //     colors: _kDefaultRainbowColors,
-                          //     strokeWidth: 4.0,
-                          //     pathBackgroundColor: Colors.yellow,
-                          //     // showPathBackground ? Colors.black45 : null,
-                          //   ),
-                          // ),
-                          ),
-                    ],
-                  ),
+              ? Center(
+            child: Container(
+                height: 80,
+                width: 100,
+                color: Colors.transparent,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    CircularProgressIndicator(
+                      color: HexColor(CommonColor.pinkFont),
+                    ),
+                  ],
                 )
+              // Material(
+              //   color: Colors.transparent,
+              //   child: LoadingIndicator(
+              //     backgroundColor: Colors.transparent,
+              //     indicatorType: Indicator.ballScale,
+              //     colors: _kDefaultRainbowColors,
+              //     strokeWidth: 4.0,
+              //     pathBackgroundColor: Colors.yellow,
+              //     // showPathBackground ? Colors.black45 : null,
+              //   ),
+              // ),
+            ),
+          )
               : (_videoModelList!.error == false
                   ? StaggeredGridView.countBuilder(
                       shrinkWrap: true,
