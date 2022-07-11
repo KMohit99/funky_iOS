@@ -75,6 +75,7 @@ class URLConstants{
 
   static const postApi = "post.php";
   static String id = "id";
+  static String username = "user";
   static String type = "type";
   static String social_type = "";
 

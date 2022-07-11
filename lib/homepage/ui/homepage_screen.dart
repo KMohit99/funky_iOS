@@ -11,6 +11,7 @@ import 'package:funky_new/homepage/ui/post_image_commet_scren.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:readmore/readmore.dart';
+import 'package:video_player/video_player.dart';
 
 // import 'package:video_player/video_player.dart';
 
@@ -24,7 +25,8 @@ import '../controller/homepage_controller.dart';
 import 'common_video_class.dart';
 
 class HomePageScreen extends StatefulWidget {
-  const HomePageScreen({
+
+const HomePageScreen({
     Key? key,
   }) : super(key: key);
 
@@ -75,6 +77,7 @@ class _HomePageScreenState extends State<HomePageScreen>
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool isLiked = false;
   bool isHeartAnimating = false;
+  // VideoPlayerController? controller_last;
 
   @override
   Widget build(BuildContext context) {

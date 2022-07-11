@@ -326,32 +326,32 @@ class _Profile_ScreenState extends State<Profile_Screen>
         body: Obx(() => (_creator_login_screen_controller
                     .isuserinfoLoading.value ==
                 true
-            ?  Center(
-          child: Container(
-              height: 80,
-              width: 100,
-              color: Colors.transparent,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  CircularProgressIndicator(
-                    color: HexColor(CommonColor.pinkFont),
-                  ),
-                ],
+            ? Center(
+                child: Container(
+                    height: 80,
+                    width: 100,
+                    color: Colors.transparent,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        CircularProgressIndicator(
+                          color: HexColor(CommonColor.pinkFont),
+                        ),
+                      ],
+                    )
+                    // Material(
+                    //   color: Colors.transparent,
+                    //   child: LoadingIndicator(
+                    //     backgroundColor: Colors.transparent,
+                    //     indicatorType: Indicator.ballScale,
+                    //     colors: _kDefaultRainbowColors,
+                    //     strokeWidth: 4.0,
+                    //     pathBackgroundColor: Colors.yellow,
+                    //     // showPathBackground ? Colors.black45 : null,
+                    //   ),
+                    // ),
+                    ),
               )
-            // Material(
-            //   color: Colors.transparent,
-            //   child: LoadingIndicator(
-            //     backgroundColor: Colors.transparent,
-            //     indicatorType: Indicator.ballScale,
-            //     colors: _kDefaultRainbowColors,
-            //     strokeWidth: 4.0,
-            //     pathBackgroundColor: Colors.yellow,
-            //     // showPathBackground ? Colors.black45 : null,
-            //   ),
-            // ),
-          ),
-        )
             : NestedScrollView(
                 headerSliverBuilder:
                     (BuildContext context, bool innerBoxIsScrolled) {
@@ -1243,31 +1243,31 @@ class _Profile_ScreenState extends State<Profile_Screen>
       child: SingleChildScrollView(
           child: (ispostLoading == true
               ? Center(
-            child: Container(
-                height: 80,
-                width: 100,
-                color: Colors.transparent,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    CircularProgressIndicator(
-                      color: HexColor(CommonColor.pinkFont),
-                    ),
-                  ],
+                  child: Container(
+                      height: 80,
+                      width: 100,
+                      color: Colors.transparent,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          CircularProgressIndicator(
+                            color: HexColor(CommonColor.pinkFont),
+                          ),
+                        ],
+                      )
+                      // Material(
+                      //   color: Colors.transparent,
+                      //   child: LoadingIndicator(
+                      //     backgroundColor: Colors.transparent,
+                      //     indicatorType: Indicator.ballScale,
+                      //     colors: _kDefaultRainbowColors,
+                      //     strokeWidth: 4.0,
+                      //     pathBackgroundColor: Colors.yellow,
+                      //     // showPathBackground ? Colors.black45 : null,
+                      //   ),
+                      // ),
+                      ),
                 )
-              // Material(
-              //   color: Colors.transparent,
-              //   child: LoadingIndicator(
-              //     backgroundColor: Colors.transparent,
-              //     indicatorType: Indicator.ballScale,
-              //     colors: _kDefaultRainbowColors,
-              //     strokeWidth: 4.0,
-              //     pathBackgroundColor: Colors.yellow,
-              //     // showPathBackground ? Colors.black45 : null,
-              //   ),
-              // ),
-            ),
-          )
               : (_galleryModelList!.error == false
                   ? StaggeredGridView.countBuilder(
                       shrinkWrap: true,
@@ -1371,7 +1371,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
 
       if (_galleryModelList!.error == false) {
         CommonWidget().showToaster(msg: 'Succesful');
-        print(_galleryModelList);
+        // print(_galleryModelList);
         setState(() {
           ispostLoading = false;
         });
@@ -1430,7 +1430,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
 
       if (_videoModelList!.error == false) {
         CommonWidget().showToaster(msg: 'Succesful');
-        print(_videoModelList);
+        // print(_videoModelList);
         setState(() {
           isvideoLoading = false;
         });
@@ -1492,31 +1492,31 @@ class _Profile_ScreenState extends State<Profile_Screen>
       child: SingleChildScrollView(
           child: (isvideoLoading == true
               ? Center(
-            child: Container(
-                height: 80,
-                width: 100,
-                color: Colors.transparent,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    CircularProgressIndicator(
-                      color: HexColor(CommonColor.pinkFont),
-                    ),
-                  ],
+                  child: Container(
+                      height: 80,
+                      width: 100,
+                      color: Colors.transparent,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          CircularProgressIndicator(
+                            color: HexColor(CommonColor.pinkFont),
+                          ),
+                        ],
+                      )
+                      // Material(
+                      //   color: Colors.transparent,
+                      //   child: LoadingIndicator(
+                      //     backgroundColor: Colors.transparent,
+                      //     indicatorType: Indicator.ballScale,
+                      //     colors: _kDefaultRainbowColors,
+                      //     strokeWidth: 4.0,
+                      //     pathBackgroundColor: Colors.yellow,
+                      //     // showPathBackground ? Colors.black45 : null,
+                      //   ),
+                      // ),
+                      ),
                 )
-              // Material(
-              //   color: Colors.transparent,
-              //   child: LoadingIndicator(
-              //     backgroundColor: Colors.transparent,
-              //     indicatorType: Indicator.ballScale,
-              //     colors: _kDefaultRainbowColors,
-              //     strokeWidth: 4.0,
-              //     pathBackgroundColor: Colors.yellow,
-              //     // showPathBackground ? Colors.black45 : null,
-              //   ),
-              // ),
-            ),
-          )
               : (_videoModelList!.error == false
                   ? StaggeredGridView.countBuilder(
                       shrinkWrap: true,

@@ -437,7 +437,7 @@ class HomepageController extends GetxController {
         await clear();
       } else {
         print('Please try again');
-        CommonWidget().showErrorToaster(msg: 'Enter valid Otp');
+        CommonWidget().showErrorToaster(msg: 'Enter valid');
       }
     } else {
       print('Please try again');

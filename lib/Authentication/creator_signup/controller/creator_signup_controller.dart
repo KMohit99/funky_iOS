@@ -152,25 +152,24 @@ class Creator_signup_controller extends GetxController {
 
     if (response.statusCode == 200) {
       isLoading(false);
-          var data = jsonDecode(responsed.body);
-          loginModel = LoginModel.fromJson(data);
-          print(loginModel);
+      var data = jsonDecode(responsed.body);
+      loginModel = LoginModel.fromJson(data);
+      print(loginModel);
       if (loginModel!.error == false) {
-              if(loginModel!.message == 'User Already Exists'){
-                CommonWidget().showErrorToaster(msg: loginModel!.message!);
-              }else{
-                CommonWidget().showToaster(msg: loginModel!.message!);
-                await Get.to(Dashboard());
-              }
-              // Get.to(Dashboard());
-            } else {
-              print('Please try again');
-            }
-          } else {
-            print('Please try again');
-          }
+        if (loginModel!.message == 'User Already Exists') {
+          CommonWidget().showErrorToaster(msg: loginModel!.message!);
+        } else {
+          CommonWidget().showToaster(msg: loginModel!.message!);
+          await Get.to(Dashboard());
+        }
+        // Get.to(Dashboard());
+      } else {
+        print('Please try again');
+      }
+    } else {
+      print('Please try again');
+    }
   }
-
 
   final Creator_Login_screen_controller _creator_login_screen_controller =
       Get.put(Creator_Login_screen_controller(),
@@ -181,60 +180,124 @@ class Creator_signup_controller extends GetxController {
     required String usertype,
     required String socialtype,
   }) async {
-    debugPrint('0-0-0-0-0-0-0 username');
-    // try {
+    // debugPrint('0-0-0-0-0-0-0 username');
+    // // try {
+    // //
+    // // } catch (e) {
+    // //   print('0-0-0-0-0-0- SignIn Error :- ${e.toString()}');
+    // // }
+    // isLoading(true);
+    // Map data = {
+    //   'fullName': fullname_controller.text,
+    //   'userName': username_controller.text,
+    //   'email': email_controller.text,
+    //   'phone': phone_controller.text,
+    //   // 'parent_email': parentEmail_controller.text,
+    //   // 'password': password_controller.text,
+    //   'gender': selected_gender,
+    //   'location': selectedcountry!.name,
+    //   'referral_code': reffralCode_controller.text,
+    //   'image': (_creator_login_screen_controller
+    //           .userInfoModel_email!.data![0].profileUrl!.isNotEmpty
+    //       ? _creator_login_screen_controller
+    //           .userInfoModel_email!.data![0].profileUrl!
+    //           .toString()
+    //       : img64!.substring(0, 100)),
+    //   // 'countryCode': countryCode_controller.text,
+    //   'about': aboutMe_controller.text,
+    //   'type': usertype,
+    //   'social_type': socialtype
+    // };
+    // print(data);
+    // // String body = json.encode(data);
     //
-    // } catch (e) {
-    //   print('0-0-0-0-0-0- SignIn Error :- ${e.toString()}');
+    // var url = ("http://foxyserver.com/funky/api/editProfile.php");
+    // print("url : $url");
+    // print("body : $data");
+    //
+    // var response = await http.post(
+    //   Uri.parse(url),
+    //   body: data,
+    // );
+    // print(response.body);
+    // print(response.request);
+    // print(response.statusCode);
+    // // var final_data = jsonDecode(response.body);
+    //
+    // // print('final data $final_data');
+    //
+    // if (response.statusCode == 200) {
+    //   isLoading(false);
+    //   var data = jsonDecode(response.body);
+    //   loginModel = LoginModel.fromJson(data);
+    //   if (loginModel!.error == false) {
+    //     CommonWidget().showToaster(msg: 'Please verify the OTP');
+    //     Get.to(AuthenticationScreen());
+    //     // await CreatorsendOtp(context);
+    //     // Get.to(Dashboard());
+    //   } else {
+    //     print('Please try again');
+    //   }
+    // } else {
+    //   print('Please try again');
     // }
-    isLoading(true);
-    Map data = {
-      'fullName': fullname_controller.text,
-      'userName': username_controller.text,
-      'email': email_controller.text,
-      'phone': phone_controller.text,
-      // 'parent_email': parentEmail_controller.text,
-      // 'password': password_controller.text,
-      'gender': selected_gender,
-      'location': selectedcountry!.name,
-      'referral_code': reffralCode_controller.text,
-      'image': (_creator_login_screen_controller
-              .userInfoModel_email!.data![0].profileUrl!.isNotEmpty
-          ? _creator_login_screen_controller
-              .userInfoModel_email!.data![0].profileUrl!
-              .toString()
-          : img64!.substring(0, 100)),
-      // 'countryCode': countryCode_controller.text,
-      'about': aboutMe_controller.text,
-      'type': usertype,
-      'social_type': socialtype
-    };
-    print(data);
-    // String body = json.encode(data);
 
-    var url = ("http://foxyserver.com/funky/api/editProfile.php");
-    print("url : $url");
-    print("body : $data");
+    var url = 'http://foxyserver.com/funky/api/editProfile.php';
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+    // List<int> imageBytes = imgFile!.readAsBytesSync();
+    // String baseimage = base64Encode(imageBytes);
 
-    var response = await http.post(
-      Uri.parse(url),
-      body: data,
-    );
-    print(response.body);
-    print(response.request);
+    if (imgFile != null) {
+      var files = await http.MultipartFile(
+          'image',
+          File(imgFile!.path).readAsBytes().asStream(),
+          File(imgFile!.path).lengthSync(),
+          filename: imgFile!.path.split("/").last);
+      request.files.add(files);
+    } else {
+      var files = await http.MultipartFile.fromString(
+          'image',
+          // File(imgFile!.path).readAsBytes().asStream(),
+          // File(imgFile!.path).lengthSync(),
+          _creator_login_screen_controller
+              .userInfoModel_email!.data![0].image!);
+      request.files.add(files);
+    }
+
+    request.fields['fullName'] = fullname_controller.text;
+    request.fields['userName'] = username_controller.text;
+    request.fields['email'] = email_controller.text;
+    request.fields['phone'] = phone_controller.text;
+    request.fields['parent_email'] = '';
+    request.fields['password'] = password_controller.text;
+    request.fields['gender'] = gender_controller.text;
+    request.fields['location'] = selected_country!;
+    request.fields['referral_code'] = reffralCode_controller.text;
+    request.fields['countryCode'] = selected_country_code!;
+    request.fields['about'] = aboutMe_controller.text;
+    request.fields['type'] = usertype;
+
+    //userId,tagLine,description,address,postImage,uploadVideo,isVideo
+    // request.files.add(await http.MultipartFile.fromPath(
+    //     "image", widget.ImageFile.path));
+
+    var response = await request.send();
+    var responsed = await http.Response.fromStream(response);
     print(response.statusCode);
-    // var final_data = jsonDecode(response.body);
-
-    // print('final data $final_data');
+    print("response - ${response.statusCode}");
 
     if (response.statusCode == 200) {
       isLoading(false);
-      var data = jsonDecode(response.body);
+      var data = jsonDecode(responsed.body);
       loginModel = LoginModel.fromJson(data);
+      print(loginModel);
       if (loginModel!.error == false) {
-        CommonWidget().showToaster(msg: 'Please verify the OTP');
-        Get.to(AuthenticationScreen());
-        // await CreatorsendOtp(context);
+        if (loginModel!.message == 'User Already Exists') {
+          CommonWidget().showErrorToaster(msg: loginModel!.message!);
+        } else {
+          CommonWidget().showToaster(msg: loginModel!.message!);
+          await Get.to(Dashboard());
+        }
         // Get.to(Dashboard());
       } else {
         print('Please try again');
@@ -254,7 +317,7 @@ class Creator_signup_controller extends GetxController {
     isotpLoading(true);
     Map data = {
       'email': email_controller.text,
-      'phone' : selected_country_code! + phone_controller.text
+      'phone': selected_country_code! + phone_controller.text
     };
     print(data);
     // String body = json.encode(data);
@@ -343,14 +406,12 @@ class Creator_signup_controller extends GetxController {
   var getAllCountriesModelList = countryModel().obs;
   RxBool iscountryLoading = false.obs;
 
-  List<CountryList> data_country =[];
+  List<CountryList> data_country = [];
   CountryList? selectedcountry;
   String? selected_country;
   String? selected_country_code = '+91';
 
-  TextEditingController query_followers =  TextEditingController();
-
-
+  TextEditingController query_followers = TextEditingController();
 
   Future<List<CountryList>> getAllCountriesFromAPI(String query) async {
     // iscountryLoading(true);
@@ -1039,7 +1100,7 @@ class Creator_signup_controller extends GetxController {
     data_country = countrymodelList!.countryList!;
     print(data_country);
 
-    List? books =[];
+    List? books = [];
     books = data["countryList"]?.cast<dynamic>();
 
     return books!.map((json) => CountryList.fromJson(json)).where((book) {
@@ -1048,8 +1109,5 @@ class Creator_signup_controller extends GetxController {
 
       return titleLower.contains(searchLower);
     }).toList();
-
   }
-
-
 }

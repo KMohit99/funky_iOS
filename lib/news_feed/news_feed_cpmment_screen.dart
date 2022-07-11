@@ -222,9 +222,9 @@ class _NewsFeedCommantScreenState extends State<NewsFeedCommantScreen> {
                                   GestureDetector(
                                     onTap: () {
                                       print(
-                                          "name : ${_newsFeed_screen_controller.Replyname_controller!.length}");
+                                          "name : ${_newsFeed_screen_controller.Replyname_controller.length}");
                                       print(
-                                          "id : ${_newsFeed_screen_controller.Replying_comment_id!.length}");
+                                          "id : ${_newsFeed_screen_controller.Replying_comment_id.length}");
                                       _newsFeed_screen_controller
                                               .Replyname_controller =
                                           _newsFeed_screen_controller

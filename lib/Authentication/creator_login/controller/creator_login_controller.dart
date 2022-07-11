@@ -140,7 +140,7 @@ class Creator_Login_screen_controller extends GetxController {
             '2-2-2-2-2-2 Inside the Get UserInfo Controller Details ${userInfoModel_email!.data!.length}');
         isuserinfoLoading(false);
         // CommonWidget().showToaster(msg: data["success"].toString());
-        await Get.to(Dashboard());
+        // await Get.to(Dashboard());
 
         return userInfoModel_email;
       } else {

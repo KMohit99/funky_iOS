@@ -47,6 +47,10 @@
 	<true/>
 	<key>NSPhotoLibraryUsageDescription</key>
     <string>Allow access to photo library</string>
+    <key>NSMotionUsageDescription</key>
+   <string>Motion usage description</string>
+   <key>NSPhotoLibraryAddUsageDescription</key>
+   <string>NSPhotoLibraryAddUsageDescription</string>
     <key>NSCameraUsageDescription</key>
     <string>My description about why I need this capability</string>
     <key>CFBundleURLTypes</key>

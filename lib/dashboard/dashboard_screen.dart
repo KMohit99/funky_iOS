@@ -9,7 +9,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:funky_new/dashboard/post_image_preview.dart';
+import 'package:funky_new/dashboard/story_/stories_editor.dart';
+// import 'package:funky_new/dashboard/story_/story_designer.dart';
 import 'package:funky_new/dashboard/video_editor.dart';
+// import 'package:stories_editor/stories_editor.dart';
 import 'package:funky_new/dashboard/video_recorder_screen.dart';
 import 'package:funky_new/settings/settings_screen.dart';
 import 'package:funky_new/video_recorder/lib/main.dart';
@@ -17,6 +20,8 @@ import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:image_editor_plus/image_editor_plus.dart';
 import 'package:image_picker/image_picker.dart';
+// import 'package:stories_editor/stories_editor.dart';
+import 'package:video_player/video_player.dart';
 
 import '../Utils/asset_utils.dart';
 import '../Utils/colorUtils.dart';
@@ -40,7 +45,7 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   GlobalKey<ScaffoldState>? _globalKey = GlobalKey<ScaffoldState>();
   final HomepageController homepageController =
-  Get.put(HomepageController(), tag: HomepageController().toString());
+      Get.put(HomepageController(), tag: HomepageController().toString());
 
   late double screenHeight, screenWidth;
   int _page = 0;
@@ -68,6 +73,7 @@ class _DashboardState extends State<Dashboard> {
         )) ??
         false;
   }
+
   // @override
   // void initState() {
   //   init();
@@ -82,7 +88,7 @@ class _DashboardState extends State<Dashboard> {
 
   Widget? get getPage {
     if (_page == 0) {
-      return const HomePageScreen();
+      return HomePageScreen();
     } else if (_page == 1) {
       return const SearchScreen();
     } else if (_page == 2) {
@@ -91,6 +97,8 @@ class _DashboardState extends State<Dashboard> {
       return const Profile_Screen();
     }
   }
+
+  VideoPlayerController? controller_last;
 
   File? imgFile;
   Uint8List? imageData;
@@ -132,6 +140,23 @@ class _DashboardState extends State<Dashboard> {
       print(er);
     });
   }
+
+  // void openGallery_() async {
+  //   var imgGallery = await imgPicker.pickImage(source: ImageSource.gallery);
+  //   setState(() {
+  //     imgFile = File(imgGallery!.path);
+  //     imageData = imgFile!.readAsBytesSync();
+  //     print(imageData);
+  //   });
+  //   // editedImage();
+  //   // showLoader(context);
+  //   File editedFile = await Navigator.of(context).push(MaterialPageRoute(
+  //       builder: (context) => StoriesEditor(
+  //             // filePath: imgFile!.path,
+  //             onDone: (String) {},
+  //             giphyKey: '',
+  //           )));
+  // }
 
   void openCamera() async {
     var imgCamera = await imgPicker.getImage(source: ImageSource.camera);
@@ -593,7 +618,8 @@ class _DashboardState extends State<Dashboard> {
                     Container(
                       margin: const EdgeInsets.only(left: 28.0),
                       decoration: BoxDecoration(
-                          color: (_page == 0 ? Colors.white : Colors.transparent),
+                          color:
+                              (_page == 0 ? Colors.white : Colors.transparent),
                           borderRadius: BorderRadius.circular(50)),
                       child: IconButton(
                         visualDensity:
@@ -616,7 +642,8 @@ class _DashboardState extends State<Dashboard> {
                     Container(
                       margin: const EdgeInsets.only(right: 28.0),
                       decoration: BoxDecoration(
-                          color: (_page == 1 ? Colors.white : Colors.transparent),
+                          color:
+                              (_page == 1 ? Colors.white : Colors.transparent),
                           borderRadius: BorderRadius.circular(50)),
                       child: IconButton(
                         visualDensity:
@@ -639,7 +666,8 @@ class _DashboardState extends State<Dashboard> {
                     Container(
                       margin: const EdgeInsets.only(left: 28.0),
                       decoration: BoxDecoration(
-                          color: (_page == 2 ? Colors.white : Colors.transparent),
+                          color:
+                              (_page == 2 ? Colors.white : Colors.transparent),
                           borderRadius: BorderRadius.circular(50)),
                       child: IconButton(
                         visualDensity:
@@ -662,7 +690,8 @@ class _DashboardState extends State<Dashboard> {
                     Container(
                       margin: const EdgeInsets.only(right: 28.0),
                       decoration: BoxDecoration(
-                          color: (_page == 3 ? Colors.white : Colors.transparent),
+                          color:
+                              (_page == 3 ? Colors.white : Colors.transparent),
                           borderRadius: BorderRadius.circular(50)),
                       child: IconButton(
                         visualDensity:
@@ -720,7 +749,7 @@ class _DashboardState extends State<Dashboard> {
                       child: FittedBox(
                         child: FloatingActionButton(
                           backgroundColor: Colors.white,
-                          onPressed: () {
+                          onPressed: () async {
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
@@ -758,7 +787,8 @@ class _DashboardState extends State<Dashboard> {
                                                   // stops: [0.1, 0.5, 0.7, 0.9],
                                                   colors: [
                                                     HexColor("#000000"),
-                                                    HexColor("#000000").withOpacity(0.5),
+                                                    HexColor("#000000")
+                                                        .withOpacity(0.5),
                                                     HexColor("##E84F90"),
                                                     HexColor("#ffffff"),
                                                     // HexColor("#FFFFFF").withOpacity(0.67),
@@ -772,7 +802,10 @@ class _DashboardState extends State<Dashboard> {
                                                     const BorderRadius.all(
                                                         Radius.circular(26.0))),
                                             child: Padding(
-                                              padding: const EdgeInsets.symmetric(vertical: 15.0,horizontal: 25),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 15.0,
+                                                      horizontal: 25),
                                               child: Column(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
@@ -787,7 +820,8 @@ class _DashboardState extends State<Dashboard> {
                                                         builder: (ctx) =>
                                                             AlertDialog(
                                                           backgroundColor:
-                                                              Colors.transparent,
+                                                              Colors
+                                                                  .transparent,
                                                           contentPadding:
                                                               EdgeInsets.zero,
                                                           elevation: 0.0,
@@ -795,21 +829,22 @@ class _DashboardState extends State<Dashboard> {
                                                             margin:
                                                                 const EdgeInsets
                                                                         .symmetric(
-                                                                    vertical: 10,
+                                                                    vertical:
+                                                                        10,
                                                                     horizontal:
                                                                         0),
                                                             height:
-                                                                screenHeight / 5,
+                                                                screenHeight /
+                                                                    5,
                                                             // width: 133,
                                                             // padding: const EdgeInsets.all(8.0),
                                                             decoration:
                                                                 BoxDecoration(
                                                                     gradient:
                                                                         LinearGradient(
-                                                                      begin:
-                                                                          const Alignment(
-                                                                              -1.0,
-                                                                              0.0),
+                                                                      begin: const Alignment(
+                                                                          -1.0,
+                                                                          0.0),
                                                                       end: const Alignment(
                                                                           1.0,
                                                                           0.0),
@@ -834,7 +869,8 @@ class _DashboardState extends State<Dashboard> {
                                                                     border: Border.all(
                                                                         color: Colors
                                                                             .white,
-                                                                        width: 1),
+                                                                        width:
+                                                                            1),
                                                                     borderRadius: const BorderRadius
                                                                             .all(
                                                                         Radius.circular(
@@ -857,16 +893,19 @@ class _DashboardState extends State<Dashboard> {
                                                                               .symmetric(
                                                                           vertical:
                                                                               10),
-                                                                      child: Row(
+                                                                      child:
+                                                                          Row(
                                                                         // mainAxisAlignment:
                                                                         // MainAxisAlignment
                                                                         //     .center,
                                                                         children: [
                                                                           GestureDetector(
-                                                                            onTap:(){
+                                                                            onTap:
+                                                                                () {
                                                                               video_upload();
                                                                             },
-                                                                            child: Column(
+                                                                            child:
+                                                                                Column(
                                                                               children: [
                                                                                 IconButton(
                                                                                   icon: const Icon(
@@ -876,10 +915,11 @@ class _DashboardState extends State<Dashboard> {
                                                                                   ),
                                                                                   onPressed: () {
                                                                                     video_upload();
-
                                                                                   },
                                                                                 ),
-                                                                                SizedBox(height: 5,),
+                                                                                SizedBox(
+                                                                                  height: 5,
+                                                                                ),
                                                                                 Container(
                                                                                   margin: const EdgeInsets.symmetric(horizontal: 0),
                                                                                   // height: 45,
@@ -898,13 +938,15 @@ class _DashboardState extends State<Dashboard> {
                                                                           ),
                                                                           SizedBox(
                                                                             width:
-                                                                            20,
+                                                                                20,
                                                                           ),
                                                                           GestureDetector(
-                                                                            onTap: (){
+                                                                            onTap:
+                                                                                () {
                                                                               image_upload();
                                                                             },
-                                                                            child: Column(
+                                                                            child:
+                                                                                Column(
                                                                               children: [
                                                                                 IconButton(
                                                                                   icon: const Icon(
@@ -914,10 +956,11 @@ class _DashboardState extends State<Dashboard> {
                                                                                   ),
                                                                                   onPressed: () {
                                                                                     image_upload();
-
                                                                                   },
                                                                                 ),
-                                                                                SizedBox(height: 5,),
+                                                                                SizedBox(
+                                                                                  height: 5,
+                                                                                ),
                                                                                 Container(
                                                                                   margin: const EdgeInsets.symmetric(horizontal: 0),
                                                                                   // height: 45,
@@ -981,7 +1024,29 @@ class _DashboardState extends State<Dashboard> {
                                                     ),
                                                   ),
                                                   GestureDetector(
-                                                    onTap: () {
+                                                    onTap: () async {
+                                                      // openGallery_();
+                                                      File editedFile = await Navigator
+                                                          .of(context)
+                                                          .push(
+                                                          MaterialPageRoute(
+                                                              builder:
+                                                                  (context) =>
+                                                                  StoriesEditor(
+                                                                    giphyKey:
+                                                                    '',
+                                                                    onDone:
+                                                                        (String) {},
+                                                                    // filePath:
+                                                                    //     imgFile!.path,
+                                                                  )));
+                                                      if (editedFile != null) {
+                                                        print('editedFile: ${editedFile.path}');
+                                                      }
+                                                      // editedImage();
+                                                      // showLoader(context);
+
+
                                                       // Navigator
                                                       //     .push(
                                                       //     context,

@@ -26,6 +26,7 @@ class VideoWidget extends StatefulWidget {
 
   final String video_id;
   final String comment_count;
+
   String video_like_count;
   String video_like_status;
 
@@ -53,7 +54,7 @@ class VideoWidget extends StatefulWidget {
 class _VideoWidgetState extends State<VideoWidget> {
   final HomepageController homepageController =
       Get.put(HomepageController(), tag: HomepageController().toString());
-  VideoPlayerController? _controller;
+  VideoPlayerController? controller_last;
 
   bool _onTouch = false;
   Timer? _timer;
@@ -66,21 +67,21 @@ class _VideoWidgetState extends State<VideoWidget> {
     print('image video_id ${widget.video_id}');
     print('image video_like_count ${widget.video_like_count}');
     print('image video_like_status ${widget.video_like_status}');
-    _controller = VideoPlayerController.network(
+    controller_last = VideoPlayerController.network(
         "http://foxyserver.com/funky/video/${widget.url}");
 
-    _controller!.setLooping(true);
-    _controller!.initialize().then((_) {
+    controller_last!.setLooping(true);
+    controller_last!.initialize().then((_) {
       setState(() {});
     });
-    _controller!.play();
+    (widget.play ? controller_last!.play() : controller_last!.pause());
   }
 
   @override
   void dispose() {
     // _timer?.cancel();
     super.dispose();
-    _controller!.dispose();
+    controller_last!.dispose();
   }
 
   int _currentPage = 0;
@@ -89,7 +90,7 @@ class _VideoWidgetState extends State<VideoWidget> {
   double videoContainerRatio = 0.5;
 
   double getScale() {
-    double videoRatio = _controller!.value.aspectRatio;
+    double videoRatio = controller_last!.value.aspectRatio;
 
     if (videoRatio < videoContainerRatio) {
       ///for tall videos, we just return the inverse of the controller aspect ratio
@@ -111,6 +112,11 @@ class _VideoWidgetState extends State<VideoWidget> {
         backgroundColor: Colors.transparent,
         extendBodyBehindAppBar: true,
         body: GestureDetector(
+          onTap: () {
+            setState(() {
+              isClicked = false;
+            });
+          },
           onDoubleTap: () async {
             setState(() {
               isLiked = true;
@@ -145,14 +151,14 @@ class _VideoWidgetState extends State<VideoWidget> {
                   isClicked = isClicked ? false : true;
                   print(isClicked);
                 },
-                child: _controller!.value.isInitialized
+                child: controller_last!.value.isInitialized
                     ? Container(
                         width: MediaQuery.of(context).size.width,
                         height: MediaQuery.of(context).size.height,
                         child: Center(
                           child: AspectRatio(
-                              aspectRatio: _controller!.value.aspectRatio,
-                              child: VideoPlayer(_controller!)),
+                              aspectRatio: controller_last!.value.aspectRatio,
+                              child: VideoPlayer(controller_last!)),
                         ),
                       )
                     : Container(),
@@ -229,10 +235,10 @@ class _VideoWidgetState extends State<VideoWidget> {
                         onTap: () {
                           setState(() {
                             isClicked = true;
-                            if (_controller!.value.isPlaying) {
-                              _controller!.pause();
+                            if (controller_last!.value.isPlaying) {
+                              controller_last!.pause();
                             } else {
-                              _controller!.play();
+                              controller_last!.play();
                             }
                           });
                         },
@@ -243,7 +249,7 @@ class _VideoWidgetState extends State<VideoWidget> {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Icon(
-                              _controller!.value.isPlaying
+                              controller_last!.value.isPlaying
                                   ? Icons.pause
                                   : Icons.play_arrow,
                               size: 30.0,

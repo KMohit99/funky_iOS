@@ -18,6 +18,7 @@ Future<void> main() async{
   runApp(MyApp());
 
 }
+RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -32,6 +33,8 @@ class MyApp extends StatelessWidget {
       initialRoute: BindingUtils.initialRoute,
       initialBinding: Splash_Bindnig(),
       getPages: AppPages.getPageList,
+      navigatorObservers: [routeObserver], //HERE
+
       // home: (Token == '_' ||
       //         Token.toString() == 'null' ||
       //         Token.toString().isEmpty ||
