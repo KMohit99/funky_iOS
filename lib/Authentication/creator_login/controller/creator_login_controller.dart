@@ -93,7 +93,7 @@ class Creator_Login_screen_controller extends GetxController {
         );
         hideLoader(context);
         await clear();
-        await Get.to(Dashboard());
+        await Get.to(Dashboard(page: 0,));
       } else {
         hideLoader(context);
         CommonWidget().showErrorToaster(msg: "Invalid Details");
@@ -377,7 +377,7 @@ class Creator_Login_screen_controller extends GetxController {
             gravity: ToastGravity.BOTTOM,
           );
           hideLoader(context);
-          await Get.to(Dashboard());
+          await Get.to(Dashboard(page: 0,));
         } else {
           print('Please try again');
         }
@@ -463,7 +463,7 @@ class Creator_Login_screen_controller extends GetxController {
             gravity: ToastGravity.BOTTOM,
           );
           hideLoader(context);
-          await Get.to(Dashboard());
+          await Get.to(Dashboard(page: 0,));
         } else {
           print('Please try again');
         }

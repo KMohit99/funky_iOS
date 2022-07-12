@@ -53,9 +53,8 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
-
       },
       child: Scaffold(
         key: _scaffoldKey,
@@ -78,7 +77,8 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
                 color: Colors.red,
               ),
               Expanded(
-                child: Obx(() => news_feed_controller.isVideoLoading.value != true
+                child: Obx(() => news_feed_controller.isVideoLoading.value !=
+                        true
                     ? ListView.builder(
                         padding: EdgeInsets.only(bottom: 0, top: 00),
                         shrinkWrap: true,
@@ -151,12 +151,15 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
                                       isLiked = true;
                                       isHeartAnimating = true;
                                     });
-                                    await news_feed_controller.FeedLikeUnlikeApi(
-                                        context: context,
-                                        news_post_feedlikeStatus: 'true',
-                                        news_post_id_type: 'liked',
-                                        news_post_id: news_feed_controller
-                                            .newsfeedModel!.data![index].newsID!);
+                                    await news_feed_controller
+                                        .FeedLikeUnlikeApi(
+                                            context: context,
+                                            news_post_feedlikeStatus: 'true',
+                                            news_post_id_type: 'liked',
+                                            news_post_id: news_feed_controller
+                                                .newsfeedModel!
+                                                .data![index]
+                                                .newsID!);
 
                                     if (news_feed_controller
                                             .feedLikeUnlikeModel!.error ==
@@ -213,7 +216,8 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
                                                       .uploadVideo!
                                                       .isNotEmpty
                                                   ? Stack(
-                                                      alignment: Alignment.center,
+                                                      alignment:
+                                                          Alignment.center,
                                                       children: [
                                                         Image.asset(
                                                           'assets/images/Funky_App_Icon.png',
@@ -262,8 +266,8 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
                                   margin: EdgeInsets.only(left: 16, top: 13),
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                    news_feed_controller
-                                        .newsfeedModel!.data![index].description!,
+                                    news_feed_controller.newsfeedModel!
+                                        .data![index].description!,
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 16,
@@ -310,7 +314,8 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
                                                         .feedlikeStatus ==
                                                     'false'
                                                 ? Colors.white
-                                                : HexColor(CommonColor.pinkFont)),
+                                                : HexColor(
+                                                    CommonColor.pinkFont)),
                                             height: 20,
                                             width: 20,
                                           ),
@@ -333,13 +338,15 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
                                                             "true"
                                                         ? 'unliked'
                                                         : 'liked'),
-                                                news_post_id: news_feed_controller
-                                                    .newsfeedModel!
-                                                    .data![index]
-                                                    .newsID!);
+                                                news_post_id:
+                                                    news_feed_controller
+                                                        .newsfeedModel!
+                                                        .data![index]
+                                                        .newsID!);
 
                                             if (news_feed_controller
-                                                    .feedLikeUnlikeModel!.error ==
+                                                    .feedLikeUnlikeModel!
+                                                    .error ==
                                                 false) {
                                               // if (news_feed_controller
                                               //         .feedLikeUnlikeModel!

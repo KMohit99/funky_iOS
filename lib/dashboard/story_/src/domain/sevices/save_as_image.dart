@@ -3,6 +3,8 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:funky_new/dashboard/story_/story_image_preview.dart';
+import 'package:get/get.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -29,6 +31,8 @@ Future takePicture(
     if (saveToGallery) {
       final result = await ImageGallerySaver.saveImage(pngBytes,
           quality: 100, name: "stories_creator${DateTime.now()}.png");
+      print("result${imagePath}");
+      await Get.to(Story_image_preview(ImageFile: File(imagePath)));
       if (result != null) {
         return true;
       } else {

@@ -178,7 +178,7 @@ class Kids_signup_controller extends GetxController {
           CommonWidget().showToaster(msg: loginModel!.message!);
           await PreferenceManager()
               .setPref(URLConstants.type, loginModel!.user![0].type!);
-          await Get.to(Dashboard());
+          await Get.to(Dashboard(page: 0,));
         }
         // Get.to(Dashboard());
       } else {

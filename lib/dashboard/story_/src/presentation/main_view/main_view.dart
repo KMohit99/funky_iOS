@@ -143,7 +143,7 @@ class _MainViewState extends State<MainView> {
 
   /// screen size
   final _screenSize =
-      MediaQueryData.fromWindow(WidgetsBinding.instance!.window);
+      MediaQueryData.fromWindow(WidgetsBinding.instance.window);
 
   /// recorder controller
   final WidgetRecorderController _recorderController =

@@ -160,7 +160,7 @@ class Creator_signup_controller extends GetxController {
           CommonWidget().showErrorToaster(msg: loginModel!.message!);
         } else {
           CommonWidget().showToaster(msg: loginModel!.message!);
-          await Get.to(Dashboard());
+          await Get.to(Dashboard(page: 0,));
         }
         // Get.to(Dashboard());
       } else {
@@ -296,7 +296,7 @@ class Creator_signup_controller extends GetxController {
           CommonWidget().showErrorToaster(msg: loginModel!.message!);
         } else {
           CommonWidget().showToaster(msg: loginModel!.message!);
-          await Get.to(Dashboard());
+          await Get.to(Dashboard(page: 0,));
         }
         // Get.to(Dashboard());
       } else {

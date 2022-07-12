@@ -134,7 +134,7 @@ class _PostVideoPreviewScreenState extends State<PostVideoPreviewScreen> {
                 onPressed: () {
                   print('oject');
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Dashboard()));
+                      MaterialPageRoute(builder: (context) => Dashboard(page: 0,)));
                 },
                 icon: Icon(
                   Icons.arrow_back_outlined,
@@ -453,7 +453,7 @@ class _PostVideoPreviewScreenState extends State<PostVideoPreviewScreen> {
       print(responseData);
       hideLoader(context);
       await Navigator.push(
-          context, MaterialPageRoute(builder: (context) => Dashboard()));
+          context, MaterialPageRoute(builder: (context) => Dashboard(page: 0,)));
       // await Get.to(Profile_Screen());
     } else {
       print("ERROR");

@@ -45,7 +45,7 @@ class _SplashScreenState extends State<SplashScreen> {
             type_user == 'type' ||
             type_user.isEmpty)
         ? Get.toNamed(BindingUtils.AuthenticationScreenRoute)
-        : Get.to(Dashboard());
+        : Get.to(Dashboard(page: 0,));
   }
 
   @override

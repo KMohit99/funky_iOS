@@ -74,6 +74,9 @@ class URLConstants{
 
 
   static const postApi = "post.php";
+  static const StoryPostApi = "newStoryPost.php";
+  static const StoryGetApi = "get-storyList.php";
+  static const StoryGetCountApi = "get-viewStory.php";
   static String id = "id";
   static String username = "user";
   static String type = "type";

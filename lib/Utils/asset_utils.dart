@@ -83,9 +83,9 @@ class AssetUtils {
   static const kidsaccount_icon = root + 'Icon awesome-baby.png';
   static const invite_icon = root + 'Icon awesome-share.png';
   static const notification_icon = root + 'Icon awesome-bell.png';
-  static const report_icon = root + 'Icon material-report-problem.png';
-  static const help_icon = root + 'Icon feather-help-circle.png';
-  static const community_icon =root + 'Icon material-group.png';
+  static const report_icon = root + 'Icon material-report-problem@3x.png';
+  static const help_icon = root + 'Icon feather-help-circle@3x.png';
+  static const community_icon =root + 'Icon material-group@3x.png';
   static const terms_service_icon = root + 'Icon awesome-file-alt-2.png';
   static const copyright_icon = root + 'Icon awesome-file-alt-2.png';
   static const logout_icon = root + 'Logout.png';

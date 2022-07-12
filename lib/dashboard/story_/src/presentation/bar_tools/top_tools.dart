@@ -13,6 +13,7 @@ import '../utils/constants/text_animation_type.dart';
 import '../utils/modal_sheets.dart';
 import '../widgets/animated_onTap_button.dart';
 import '../widgets/tool_button.dart';
+
 // import 'package:stories_editor/src/domain/providers/notifiers/control_provider.dart';
 // import 'package:stories_editor/src/domain/providers/notifiers/draggable_widget_notifier.dart';
 // import 'package:stories_editor/src/domain/providers/notifiers/painting_notifier.dart';
@@ -27,11 +28,11 @@ class TopTools extends StatefulWidget {
   final GlobalKey contentKey;
   final BuildContext context;
   final Function renderWidget;
-  const TopTools(
-      {Key? key,
-      required this.contentKey,
-      required this.context,
-      required this.renderWidget})
+
+  const TopTools({Key? key,
+    required this.contentKey,
+    required this.context,
+    required this.renderWidget})
       : super(key: key);
 
   @override
@@ -40,9 +41,11 @@ class TopTools extends StatefulWidget {
 
 class _TopToolsState extends State<TopTools> {
   bool _createVideo = false;
+
   @override
   Widget build(BuildContext context) {
-    return Consumer3<ControlNotifier, PaintingNotifier,
+    return Consumer3<ControlNotifier,
+        PaintingNotifier,
         DraggableWidgetNotifier>(
       builder: (_, controlNotifier, paintingNotifier, itemNotifier, __) {
         return SafeArea(
@@ -53,6 +56,7 @@ class _TopToolsState extends State<TopTools> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+
                 /// close button
                 ToolButton(
                     child: const Icon(
@@ -110,6 +114,7 @@ class _TopToolsState extends State<TopTools> {
                               contentKey: widget.contentKey,
                               context: context,
                               saveToGallery: true);
+
                           if (response) {
                             Fluttertoast.showToast(msg: 'Successfully saved');
                           } else {
@@ -128,8 +133,11 @@ class _TopToolsState extends State<TopTools> {
                       size: 20,
                     ),
                     backGroundColor: HexColor('#C12265'),
-                    onTap: () => createGiphyItem(
-                        context: context, giphyKey: controlNotifier.giphyKey)),
+                    onTap: () {
+                      // createGiphyItem(
+                      //     context: context,
+                      //     giphyKey: controlNotifier.giphyKey);
+                    }),
                 ToolButton(
                     child: const ImageIcon(
                       AssetImage('assets/icons/draw.png'),
@@ -159,8 +167,9 @@ class _TopToolsState extends State<TopTools> {
                     size: 20,
                   ),
                   backGroundColor: HexColor('#C12265'),
-                  onTap: () => controlNotifier.isTextEditing =
-                      !controlNotifier.isTextEditing,
+                  onTap: () =>
+                  controlNotifier.isTextEditing =
+                  !controlNotifier.isTextEditing,
                 ),
               ],
             ),

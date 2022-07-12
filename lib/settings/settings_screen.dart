@@ -47,19 +47,19 @@ class _SettingScreenState extends State<SettingScreen> {
   // ];
   List icon_list = [
     AssetUtils.manage_icon,
-    AssetUtils.manage_icon,
-    AssetUtils.share_icon,
-    AssetUtils.share_icon3,
-    AssetUtils.hand_holding,
+    AssetUtils.file_alt,
     AssetUtils.security,
+    AssetUtils.rewardsIcons,
+    // AssetUtils.hand_holding,
+    AssetUtils.share_icon,
+    AssetUtils.noti_icon,
+    AssetUtils.report_icon,
+    AssetUtils.help_icon,
+    AssetUtils.community_icon,
     AssetUtils.file_alt,
     AssetUtils.file_alt,
     AssetUtils.file_alt,
-    AssetUtils.file_alt,
-    AssetUtils.file_alt,
-    AssetUtils.file_alt,
-    AssetUtils.file_alt,
-    AssetUtils.file_alt,
+    AssetUtils.logout_icon,
   ];
 
   List icon_name = [
@@ -67,7 +67,7 @@ class _SettingScreenState extends State<SettingScreen> {
     "Privacy",
     "Security and login",
     "Rewards",
-    "Kids accocunt",
+    // "Kids accocunt",
     "Invite friends",
     "Notifications",
     "Report a problem",
@@ -111,6 +111,7 @@ class _SettingScreenState extends State<SettingScreen> {
         children: [
           Expanded(
             child: ListView.builder(
+              padding: EdgeInsets.only(bottom: 50),
               itemCount: icon_list.length,
               shrinkWrap: true,
               itemBuilder: (BuildContext context, int index) {
@@ -149,8 +150,9 @@ class _SettingScreenState extends State<SettingScreen> {
                       onPressed: () {},
                       icon: Image.asset(
                         icon_list[index],
-                        height: 15,
-                        width: 15,
+                        color: Colors.white,
+                        height: 20,
+                        width: 20,
                       ),
                     ),
                     title: Text(
@@ -160,10 +162,11 @@ class _SettingScreenState extends State<SettingScreen> {
                     ),
                     trailing: IconButton(
                       icon: Icon(
-                        Icons.arrow_forward_ios,
-                        color: Colors.white,
-                        size: 15,
+                        Icons.arrow_forward_ios_sharp,
+                        color: Colors.pink,
+                        size: 18,
                       ),
+
                       onPressed: () {},
                     ),
                   ),

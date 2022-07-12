@@ -112,7 +112,7 @@ class InstagramView extends StatelessWidget {
             .setPref(URLConstants.id, loginModel!.user![0].id!);
 
         await getUserInfo_social();
-        await Get.to(Dashboard());
+        await Get.to(Dashboard(page: 0,));
       } else {
         print('Please try again');
       }
@@ -190,7 +190,7 @@ class InstagramView extends StatelessWidget {
               //     context: context,
               //     socail_type: 'twitter');
 
-              await Get.to(Dashboard());
+              await Get.to(Dashboard(page: 0,));
               // await Navigator.of(context).push(
               //   MaterialPageRoute(
               //     builder: (context) => HomeView(

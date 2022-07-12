@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gallery_media_picker/gallery_media_picker.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
@@ -70,12 +71,13 @@ class BottomTools extends StatelessWidget {
                                 if (controlNotifier.mediaPath.isEmpty) {
                                   scrollNotifier.pageController.animateToPage(1,
                                       duration:
-                                          const Duration(milliseconds: 300),
+                                          const Duration(milliseconds:500),
                                       curve: Curves.ease);
                                 }
                               },
                               child: const CoverThumbnail(
-                                thumbnailQuality: 150,
+
+                                thumbnailQuality: 10,
                               ),
                             ))
 
@@ -134,16 +136,26 @@ class BottomTools extends StatelessWidget {
                                 await renderWidget();
                               } else {
                                 debugPrint('creating image');
-                                await takePicture(
-                                        contentKey: contentKey,
-                                        context: context,
-                                        saveToGallery: false)
-                                    .then((bytes) {
-                                  if (bytes != null) {
-                                    pngUri = bytes;
-                                    onDone(pngUri);
-                                  } else {}
-                                });
+                                // await takePicture(
+                                //         contentKey: contentKey,
+                                //         context: context,
+                                //         saveToGallery: false)
+                                //     .then((bytes) {
+                                //   if (bytes != null) {
+                                //     pngUri = bytes;
+                                //     onDone(pngUri);
+                                //   } else {}
+                                // });
+                                debugPrint('creating image');
+                                var response = await takePicture(
+                                    contentKey: contentKey,
+                                    context: context,
+                                    saveToGallery: true);
+                                if (response) {
+                                  Fluttertoast.showToast(msg: 'Successfully saved');
+                                } else {
+                                  Fluttertoast.showToast(msg: 'Error');
+                                }
                               }
                             }
                             setState(() {

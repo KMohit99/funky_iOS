@@ -90,7 +90,7 @@ class Advertiser_Login_screen_controller extends GetxController {
 
         await clear();
 
-        await Get.to(Dashboard());
+        await Get.to(Dashboard(page: 0,));
       } else {
         print('Please try again');
       }

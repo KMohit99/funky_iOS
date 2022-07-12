@@ -10,8 +10,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:funky_new/dashboard/post_image_preview.dart';
 import 'package:funky_new/dashboard/story_/stories_editor.dart';
+
 // import 'package:funky_new/dashboard/story_/story_designer.dart';
 import 'package:funky_new/dashboard/video_editor.dart';
+
 // import 'package:stories_editor/stories_editor.dart';
 import 'package:funky_new/dashboard/video_recorder_screen.dart';
 import 'package:funky_new/settings/settings_screen.dart';
@@ -20,6 +22,7 @@ import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:image_editor_plus/image_editor_plus.dart';
 import 'package:image_picker/image_picker.dart';
+
 // import 'package:stories_editor/stories_editor.dart';
 import 'package:video_player/video_player.dart';
 
@@ -36,7 +39,8 @@ import '../profile_screen/profile_screen.dart';
 import '../search_screen/search_screen.dart';
 
 class Dashboard extends StatefulWidget {
-  const Dashboard({Key? key}) : super(key: key);
+  int page;
+  Dashboard({Key? key, required this.page}) : super(key: key);
 
   @override
   _DashboardState createState() => _DashboardState();
@@ -48,7 +52,7 @@ class _DashboardState extends State<Dashboard> {
       Get.put(HomepageController(), tag: HomepageController().toString());
 
   late double screenHeight, screenWidth;
-  int _page = 0;
+  // int widget.page = 0;
   String? appbar_name;
 
   Future<bool> _onWillPop() async {
@@ -87,13 +91,13 @@ class _DashboardState extends State<Dashboard> {
   // }
 
   Widget? get getPage {
-    if (_page == 0) {
+    if (widget.page == 0) {
       return HomePageScreen();
-    } else if (_page == 1) {
+    } else if (widget.page == 1) {
       return const SearchScreen();
-    } else if (_page == 2) {
+    } else if (widget.page == 2) {
       return const NewsFeedScreen();
-    } else if (_page == 3) {
+    } else if (widget.page == 3) {
       return const Profile_Screen();
     }
   }
@@ -420,17 +424,17 @@ class _DashboardState extends State<Dashboard> {
       drawer: DrawerScreen(),
       backgroundColor: HexColor(CommonColor.appBackColor),
       extendBodyBehindAppBar: true,
-      appBar: (_page == 0 || _page == 1 || _page == 2)
+      appBar: (widget.page == 0 || widget.page == 1 || widget.page == 2)
           ? PreferredSize(
               preferredSize: const Size.fromHeight(50),
               child: AppBar(
                 backgroundColor: Colors.transparent,
                 title: Text(
-                  (_page == 0
+                  (widget.page == 0
                       ? 'Dashboard'
-                      : (_page == 1
+                      : (widget.page == 1
                           ? "Discover"
-                          : (_page == 2 ? "News Feed" : ''))),
+                          : (widget.page == 2 ? "News Feed" : ''))),
                   style: const TextStyle(
                       fontSize: 16, color: Colors.white, fontFamily: 'PB'),
                 ),
@@ -496,8 +500,8 @@ class _DashboardState extends State<Dashboard> {
                             padding: EdgeInsets.zero,
                             onPressed: () {},
                             icon: (Image.asset(
-                              AssetUtils.user_icon,
-                              color: Colors.white,
+                              AssetUtils.user_icon3,
+                              color: Colors.pinkAccent,
                               height: 20.0,
                               width: 20.0,
                               fit: BoxFit.contain,
@@ -619,7 +623,7 @@ class _DashboardState extends State<Dashboard> {
                       margin: const EdgeInsets.only(left: 28.0),
                       decoration: BoxDecoration(
                           color:
-                              (_page == 0 ? Colors.white : Colors.transparent),
+                              (widget.page == 0 ? Colors.white : Colors.transparent),
                           borderRadius: BorderRadius.circular(50)),
                       child: IconButton(
                         visualDensity:
@@ -627,13 +631,13 @@ class _DashboardState extends State<Dashboard> {
                         iconSize: 25.0,
                         icon: Image.asset(
                           AssetUtils.home_icon,
-                          color: (_page == 0 ? Colors.black : Colors.white),
+                          color: (widget.page == 0 ? Colors.black : Colors.white),
                           height: 20,
                           width: 20,
                         ),
                         onPressed: () {
                           setState(() {
-                            _page = 0;
+                            widget.page = 0;
                             // _myPage.jumpToPage(0);
                           });
                         },
@@ -643,7 +647,7 @@ class _DashboardState extends State<Dashboard> {
                       margin: const EdgeInsets.only(right: 28.0),
                       decoration: BoxDecoration(
                           color:
-                              (_page == 1 ? Colors.white : Colors.transparent),
+                              (widget.page == 1 ? Colors.white : Colors.transparent),
                           borderRadius: BorderRadius.circular(50)),
                       child: IconButton(
                         visualDensity:
@@ -651,13 +655,13 @@ class _DashboardState extends State<Dashboard> {
                         iconSize: 25.0,
                         icon: Image.asset(
                           AssetUtils.search_icon,
-                          color: (_page == 1 ? Colors.black : Colors.white),
+                          color: (widget.page == 1 ? Colors.black : Colors.white),
                           height: 20,
                           width: 20,
                         ),
                         onPressed: () {
                           setState(() {
-                            _page = 1;
+                            widget.page = 1;
                             // _myPage.jumpToPage(1);
                           });
                         },
@@ -667,7 +671,7 @@ class _DashboardState extends State<Dashboard> {
                       margin: const EdgeInsets.only(left: 28.0),
                       decoration: BoxDecoration(
                           color:
-                              (_page == 2 ? Colors.white : Colors.transparent),
+                              (widget.page == 2 ? Colors.white : Colors.transparent),
                           borderRadius: BorderRadius.circular(50)),
                       child: IconButton(
                         visualDensity:
@@ -675,13 +679,13 @@ class _DashboardState extends State<Dashboard> {
                         iconSize: 25.0,
                         icon: Image.asset(
                           AssetUtils.news_icon,
-                          color: (_page == 2 ? Colors.black : Colors.white),
+                          color: (widget.page == 2 ? Colors.black : Colors.white),
                           height: 20,
                           width: 20,
                         ),
                         onPressed: () {
                           setState(() {
-                            _page = 2;
+                            widget.page = 2;
                             // _myPage.jumpToPage(2);
                           });
                         },
@@ -691,7 +695,7 @@ class _DashboardState extends State<Dashboard> {
                       margin: const EdgeInsets.only(right: 28.0),
                       decoration: BoxDecoration(
                           color:
-                              (_page == 3 ? Colors.white : Colors.transparent),
+                              (widget.page == 3 ? Colors.white : Colors.transparent),
                           borderRadius: BorderRadius.circular(50)),
                       child: IconButton(
                         visualDensity:
@@ -699,13 +703,13 @@ class _DashboardState extends State<Dashboard> {
                         iconSize: 25.0,
                         icon: Image.asset(
                           AssetUtils.user_icon2,
-                          color: (_page == 3 ? Colors.black : Colors.white),
+                          color: (widget.page == 3 ? Colors.black : Colors.white),
                           height: 20,
                           width: 20,
                         ),
                         onPressed: () {
                           setState(() {
-                            _page = 3;
+                            widget.page = 3;
 
                             // _myPage.jumpToPage(3);
                           });
@@ -735,11 +739,11 @@ class _DashboardState extends State<Dashboard> {
                 Align(
                   alignment: Alignment.center,
                   child: Container(
-                    height: 50.79,
-                    width: 50.79,
+                    height: 60.79,
+                    width: 60.79,
                     decoration: BoxDecoration(
                       border: Border.all(
-                          color: Colors.white.withOpacity(0.14), width: 5),
+                          color: Colors.white.withOpacity(0.2), width: 10),
                       borderRadius: BorderRadius.circular(50),
                       // color: Colors.grey
                     ),
@@ -1026,26 +1030,9 @@ class _DashboardState extends State<Dashboard> {
                                                   GestureDetector(
                                                     onTap: () async {
                                                       // openGallery_();
-                                                      File editedFile = await Navigator
-                                                          .of(context)
-                                                          .push(
-                                                          MaterialPageRoute(
-                                                              builder:
-                                                                  (context) =>
-                                                                  StoriesEditor(
-                                                                    giphyKey:
-                                                                    '',
-                                                                    onDone:
-                                                                        (String) {},
-                                                                    // filePath:
-                                                                    //     imgFile!.path,
-                                                                  )));
-                                                      if (editedFile != null) {
-                                                        print('editedFile: ${editedFile.path}');
-                                                      }
+
                                                       // editedImage();
                                                       // showLoader(context);
-
 
                                                       // Navigator
                                                       //     .push(
@@ -1074,9 +1061,9 @@ class _DashboardState extends State<Dashboard> {
                           },
                           tooltip: 'Increment',
                           child: const Icon(
-                            Icons.add,
+                            Icons.add_rounded,
                             color: Colors.black,
-                            size: 30,
+                            size: 40,
                           ),
                           elevation: 0.0,
                         ),
@@ -1105,6 +1092,28 @@ class _DashboardState extends State<Dashboard> {
       ),
     );
   }
+
+  List<String> font_family = [
+    'Alegreya',
+    'B612',
+    'TitilliumWeb',
+    'Varela',
+    'Vollkorn',
+    'Rakkas',
+    'ConcertOne',
+    'YatraOne',
+    'OldStandardTT',
+    'Neonderthaw',
+    'DancingScript',
+    'SedgwickAve',
+    'IndieFlower',
+    'Sacramento',
+    'PressStart2P',
+    'FrederickatheGreat',
+    'ReenieBeanie',
+    'BungeeShade',
+    'UnifrakturMaguntia',
+  ];
 }
 
 class MyArc extends StatelessWidget {

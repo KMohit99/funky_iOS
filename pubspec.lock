@@ -1113,6 +1113,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.10.0"
+  stories_editor:
+    dependency: "direct main"
+    description:
+      name: stories_editor
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.8"
   stream_channel:
     dependency: transitive
     description:

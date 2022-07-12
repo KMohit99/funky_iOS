@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
+import 'dart:convert' as convert;
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:funky_new/custom_widget/page_loader.dart';
+import 'package:funky_new/profile_screen/story_view/storyView.dart';
 import 'package:funky_new/profile_screen/video_viewer.dart';
 
 // import 'package:funky_project/Authentication/creator_login/model/creator_loginModel.dart';
@@ -26,11 +28,13 @@ import '../Utils/toaster_widget.dart';
 import '../custom_widget/common_buttons.dart';
 
 // import '../header_model.dart';
+import '../dashboard/story_/stories_editor.dart';
 import '../sharePreference.dart';
 import 'edit_profile_screen.dart';
 import 'followers_screen.dart';
 import 'following_screen.dart';
 import 'model/galleryModel.dart';
+import 'model/getStoryModel.dart';
 import 'model/videoModelList.dart';
 
 class Profile_Screen extends StatefulWidget {
@@ -65,6 +69,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
         ? await _creator_login_screen_controller.CreatorgetUserInfo_Email(
             UserId: id_user)
         : await _creator_login_screen_controller.getUserInfo_social());
+    await get_story_list();
     await get_video_list(context);
 
     await get_gallery_list(context);
@@ -88,9 +93,9 @@ class _Profile_ScreenState extends State<Profile_Screen>
   TabController? _tabController;
   List<Tab> _tabs = [
     Tab(
-      height: 60,
+      height: 63,
       icon: Container(
-        margin: EdgeInsets.only(top: 10),
+        margin: EdgeInsets.only(top: 20),
         height: 45,
         width: 45,
         decoration: BoxDecoration(
@@ -127,9 +132,9 @@ class _Profile_ScreenState extends State<Profile_Screen>
       ),
     ),
     Tab(
-      height: 60,
+      height: 63,
       icon: Container(
-        margin: EdgeInsets.only(top: 10),
+        margin: EdgeInsets.only(top: 20),
         height: 45,
         width: 45,
         decoration: BoxDecoration(
@@ -165,9 +170,9 @@ class _Profile_ScreenState extends State<Profile_Screen>
       ),
     ),
     Tab(
-      height: 60,
+      height: 63,
       icon: Container(
-        margin: EdgeInsets.only(top: 10),
+        margin: EdgeInsets.only(top: 20),
         height: 45,
         width: 45,
         decoration: BoxDecoration(
@@ -203,9 +208,9 @@ class _Profile_ScreenState extends State<Profile_Screen>
       ),
     ),
     Tab(
-      height: 60,
+      height: 63,
       icon: Container(
-        margin: EdgeInsets.only(top: 10),
+        margin: EdgeInsets.only(top: 20),
         height: 45,
         width: 45,
         decoration: BoxDecoration(
@@ -242,9 +247,9 @@ class _Profile_ScreenState extends State<Profile_Screen>
       ),
     ),
     Tab(
-      height: 60,
+      height: 63,
       icon: Container(
-        margin: EdgeInsets.only(top: 10),
+        margin: EdgeInsets.only(top: 20),
         height: 45,
         width: 45,
         decoration: BoxDecoration(
@@ -927,57 +932,117 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        Container(
-                                          margin: EdgeInsets.all(5),
-                                          height: 61,
-                                          width: 61,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(50),
-                                              border: Border.all(
-                                                  color: Colors.white,
-                                                  width: 3)),
-                                          child: IconButton(
-                                            onPressed: () {},
-                                            icon: Icon(
-                                              Icons.add,
-                                              color: HexColor(
-                                                  CommonColor.pinkFont),
+                                        Column(
+                                          children: [
+                                            Container(
+                                              margin: EdgeInsets.symmetric(
+                                                  horizontal: 5),
+                                              height: 61,
+                                              width: 61,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(50),
+                                                  border: Border.all(
+                                                      color: Colors.white,
+                                                      width: 3)),
+                                              child: IconButton(
+                                                onPressed: () async {
+                                                  File editedFile = await Navigator
+                                                          .of(context)
+                                                      .push(MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              StoriesEditor(
+                                                                // fontFamilyList: font_family,
+                                                                giphyKey: '',
+                                                                onDone:
+                                                                    (String) {},
+                                                                // filePath:
+                                                                //     imgFile!.path,
+                                                              )));
+                                                  if (editedFile != null) {
+                                                    print(
+                                                        'editedFile: ${editedFile.path}');
+                                                  }
+                                                },
+                                                icon: Icon(
+                                                  Icons.add,
+                                                  color: HexColor(
+                                                      CommonColor.pinkFont),
+                                                ),
+                                              ),
                                             ),
-                                          ),
+                                            SizedBox(
+                                              height: 2,
+                                            ),
+                                            Text(
+                                              'Add Story',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontFamily: 'PR',
+                                                  fontSize: 12),
+                                            )
+                                          ],
                                         ),
                                         Expanded(
                                           child: SizedBox(
-                                            height: 70,
+                                            height: 80,
                                             child: ListView.builder(
-                                                itemCount: Story_img.length,
+                                                itemCount: story_info.length,
                                                 shrinkWrap: true,
                                                 scrollDirection:
                                                     Axis.horizontal,
                                                 itemBuilder:
                                                     (BuildContext context,
                                                         int index) {
-                                                  return Container(
-                                                    margin: EdgeInsets.all(0),
-                                                    height: 71,
-                                                    width: 71,
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              50),
-                                                    ),
-                                                    child: IconButton(
-                                                      color: Colors.red,
-                                                      visualDensity:
-                                                          VisualDensity(
-                                                              vertical: -4,
-                                                              horizontal: -4),
-                                                      onPressed: () {},
-                                                      icon: Image.asset(
-                                                        Story_img[index],
-                                                        fit: BoxFit.cover,
-                                                        // color: HexColor(CommonColor.pinkFont),
-                                                      ),
+                                                  return Padding(
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
+                                                        horizontal: 8.0),
+                                                    child: Column(
+                                                      children: [
+                                                        GestureDetector(
+                                                          onTap: () {
+                                                            print(index);
+                                                            Get.to(() =>
+                                                                StoryScreen(
+                                                                  stories:
+                                                                      story_info,
+                                                                  story_no:
+                                                                      index,
+                                                                ));
+                                                            // Get.to(StoryScreen(stories: story_info));
+                                                          },
+                                                          child: SizedBox(
+                                                            height: 60,
+                                                            width: 60,
+                                                            child: ClipRRect(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          50),
+                                                              child: FadeInImage
+                                                                  .assetNetwork(
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                                image: "http://foxyserver.com/funky/images/${story_info[index].storyPhoto!}",
+                                                                placeholder: 'assets/images/Funky_App_Icon.png',
+                                                                // color: HexColor(CommonColor.pinkFont),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 3,
+                                                        ),
+                                                        Text(
+                                                          '${story_info[index].title}',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontFamily: 'PR',
+                                                              fontSize: 14),
+                                                        )
+                                                      ],
                                                     ),
                                                   );
                                                 }),
@@ -1577,5 +1642,61 @@ class _Profile_ScreenState extends State<Profile_Screen>
                       ),
                     )))),
     );
+  }
+
+  bool isStoryLoading = true;
+  GetStoryModel? getStoryModel;
+  List<Data_story> story_info = [];
+
+  // List<String> thumb = [];
+  // String? filePath;
+
+  Future<dynamic> get_story_list() async {
+    print('Inside creator get email');
+    setState(() {
+      isStoryLoading = true;
+    });
+    String id_user = await PreferenceManager().getPref(URLConstants.id);
+    print("UserID $id_user");
+    String url =
+        ("${URLConstants.base_url}${URLConstants.StoryGetApi}?userId=$id_user");
+    // debugPrint('Get Sales Token ${tokens.toString()}');
+    // try {
+    // } catch (e) {
+    //   print('1-1-1-1 Get Purchase ${e.toString()}');
+    // }
+
+    http.Response response = await http.get(Uri.parse(url));
+
+    print('Response request: ${response.request}');
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      var data = convert.jsonDecode(response.body);
+      getStoryModel = GetStoryModel.fromJson(data);
+      // getUSerModelList(userInfoModel_email);
+      if (getStoryModel!.error == false) {
+        debugPrint(
+            '2-2-2-2-2-2 Inside the Get UserInfo Controller Details ${getStoryModel!.data!.length}');
+        story_info = getStoryModel!.data!;
+        setState(() {
+          isStoryLoading = false;
+        });
+        // CommonWidget().showToaster(msg: data["success"].toString());
+        // await Get.to(Dashboard());
+
+        return getStoryModel;
+      } else {
+        // CommonWidget().showToaster(msg: msg.toString());
+        return null;
+      }
+    } else if (response.statusCode == 422) {
+      // CommonWidget().showToaster(msg: msg.toString());
+    } else if (response.statusCode == 401) {
+      // CommonService().unAuthorizedUser();
+    } else {
+      // CommonWidget().showToaster(msg: msg.toString());
+    }
   }
 }

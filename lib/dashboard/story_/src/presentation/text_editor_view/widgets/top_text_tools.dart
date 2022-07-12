@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:funky_new/Utils/colorUtils.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 
 import '../../../domain/providers/notifiers/text_editing_notifier.dart';
@@ -41,19 +43,18 @@ class TopTextTools extends StatelessWidget {
                         scale: !editorNotifier.isFontFamily ? 0.8 : 1.3,
                         child: !editorNotifier.isFontFamily
                             ? const ImageIcon(
-                                AssetImage('assets/icons/text.png',
-                                    package: 'stories_editor'),
+                                AssetImage('assets/icons/text.png'),
                                 size: 20,
                                 color: Colors.white,
                               )
                             : Image.asset(
-                                'assets/icons/circular_gradient.png',
-                                package: 'stories_editor',
+                                'assets/icons/circular_gradient.png'
                               )),
                   ),
 
                   /// text align
                   ToolButton(
+                    backGroundColor: HexColor('#C12265'),
                     onTap: editorNotifier.onAlignmentChange,
                     child: Transform.scale(
                         scale: 0.8,
@@ -69,6 +70,7 @@ class TopTextTools extends StatelessWidget {
 
                   /// background color
                   ToolButton(
+                    backGroundColor: HexColor('#C12265'),
                     onTap: editorNotifier.onBackGroundChange,
                     child: Transform.scale(
                         scale: 0.7,
@@ -76,21 +78,21 @@ class TopTextTools extends StatelessWidget {
                           child: Padding(
                             padding: EdgeInsets.only(left: 5, bottom: 3),
                             child: ImageIcon(
-                              AssetImage('assets/icons/font_backGround.png',
-                                  package: 'stories_editor'),
+                              AssetImage('assets/icons/font_backGround.png'),
                               color: Colors.white,
                             ),
                           ),
                         )),
                   ),
                   ToolButton(
+                    backGroundColor: HexColor('#C12265'),
                     onTap: () {
                       editorNotifier.isTextAnimation =
                           !editorNotifier.isTextAnimation;
 
                       /// animate to selected animation page
                       if (editorNotifier.isTextAnimation) {
-                        WidgetsBinding.instance!.addPostFrameCallback((_) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
                           if (editorNotifier
                               .textAnimationController.hasClients) {
                             editorNotifier.textAnimationController
@@ -101,7 +103,7 @@ class TopTextTools extends StatelessWidget {
                           }
                         });
                       } else {
-                        WidgetsBinding.instance!.addPostFrameCallback((_) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
                           if (editorNotifier.fontFamilyController.hasClients) {
                             editorNotifier.fontFamilyController.animateToPage(
                                 editorNotifier.fontFamilyIndex,
@@ -117,8 +119,7 @@ class TopTextTools extends StatelessWidget {
                           child: Padding(
                             padding: EdgeInsets.all(0),
                             child: ImageIcon(
-                              AssetImage('assets/icons/video_trim.png',
-                                  package: 'stories_editor'),
+                              AssetImage('assets/icons/video_trim.png'),
                               color: Colors.white,
                             ),
                           ),
