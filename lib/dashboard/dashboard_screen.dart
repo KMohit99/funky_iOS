@@ -22,12 +22,14 @@ import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:image_editor_plus/image_editor_plus.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // import 'package:stories_editor/stories_editor.dart';
 import 'package:video_player/video_player.dart';
 
 import '../Utils/asset_utils.dart';
 import '../Utils/colorUtils.dart';
+import '../chat/main.dart';
 import '../custom_widget/common_buttons.dart';
 import '../drawerScreen.dart';
 import '../getx_pagination/binding_utils.dart';
@@ -40,6 +42,7 @@ import '../search_screen/search_screen.dart';
 
 class Dashboard extends StatefulWidget {
   int page;
+
   Dashboard({Key? key, required this.page}) : super(key: key);
 
   @override
@@ -52,6 +55,7 @@ class _DashboardState extends State<Dashboard> {
       Get.put(HomepageController(), tag: HomepageController().toString());
 
   late double screenHeight, screenWidth;
+
   // int widget.page = 0;
   String? appbar_name;
 
@@ -248,7 +252,7 @@ class _DashboardState extends State<Dashboard> {
     // });
   }
 
-  Future image_upload() {
+  Future image_Gallery() {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -296,23 +300,24 @@ class _DashboardState extends State<Dashboard> {
                             margin: const EdgeInsets.only(bottom: 10),
                             child: common_button(
                               onTap: () {
-                                openCamera();
+                                // openCamera();
+                                openGallery();
                                 Navigator.pop(context);
                                 // Get.toNamed(BindingUtils.signupOption);
                               },
                               backgroud_color: Colors.black,
-                              lable_text: 'Camera',
+                              lable_text: 'Image',
                               lable_text_color: Colors.white,
                             ),
                           ),
                           common_button(
                             onTap: () {
-                              openGallery();
+                              Pickvideo();
                               Navigator.pop(context);
                               // Get.toNamed(BindingUtils.signupOption);
                             },
                             backgroud_color: Colors.black,
-                            lable_text: 'Gallery',
+                            lable_text: 'Video',
                             lable_text_color: Colors.white,
                           ),
                           // const SizedBox(
@@ -383,7 +388,9 @@ class _DashboardState extends State<Dashboard> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => MyApp_video()),
+                                    builder: (context) => MyApp_video(
+                                          story: false,
+                                        )),
                               );
                               // Get.to(MyApp_video());
                             },
@@ -443,6 +450,10 @@ class _DashboardState extends State<Dashboard> {
                   Row(
                     children: [
                       InkWell(
+                        onTap: () async {
+                            SharedPreferences prefs = await SharedPreferences.getInstance();
+                          Get.to(chat_(prefs: prefs));
+                        },
                         child: Padding(
                           padding: const EdgeInsets.only(
                               right: 20.0, top: 0.0, bottom: 5.0),
@@ -622,8 +633,9 @@ class _DashboardState extends State<Dashboard> {
                     Container(
                       margin: const EdgeInsets.only(left: 28.0),
                       decoration: BoxDecoration(
-                          color:
-                              (widget.page == 0 ? Colors.white : Colors.transparent),
+                          color: (widget.page == 0
+                              ? Colors.white
+                              : Colors.transparent),
                           borderRadius: BorderRadius.circular(50)),
                       child: IconButton(
                         visualDensity:
@@ -631,7 +643,8 @@ class _DashboardState extends State<Dashboard> {
                         iconSize: 25.0,
                         icon: Image.asset(
                           AssetUtils.home_icon,
-                          color: (widget.page == 0 ? Colors.black : Colors.white),
+                          color:
+                              (widget.page == 0 ? Colors.black : Colors.white),
                           height: 20,
                           width: 20,
                         ),
@@ -646,8 +659,9 @@ class _DashboardState extends State<Dashboard> {
                     Container(
                       margin: const EdgeInsets.only(right: 28.0),
                       decoration: BoxDecoration(
-                          color:
-                              (widget.page == 1 ? Colors.white : Colors.transparent),
+                          color: (widget.page == 1
+                              ? Colors.white
+                              : Colors.transparent),
                           borderRadius: BorderRadius.circular(50)),
                       child: IconButton(
                         visualDensity:
@@ -655,7 +669,8 @@ class _DashboardState extends State<Dashboard> {
                         iconSize: 25.0,
                         icon: Image.asset(
                           AssetUtils.search_icon,
-                          color: (widget.page == 1 ? Colors.black : Colors.white),
+                          color:
+                              (widget.page == 1 ? Colors.black : Colors.white),
                           height: 20,
                           width: 20,
                         ),
@@ -670,8 +685,9 @@ class _DashboardState extends State<Dashboard> {
                     Container(
                       margin: const EdgeInsets.only(left: 28.0),
                       decoration: BoxDecoration(
-                          color:
-                              (widget.page == 2 ? Colors.white : Colors.transparent),
+                          color: (widget.page == 2
+                              ? Colors.white
+                              : Colors.transparent),
                           borderRadius: BorderRadius.circular(50)),
                       child: IconButton(
                         visualDensity:
@@ -679,7 +695,8 @@ class _DashboardState extends State<Dashboard> {
                         iconSize: 25.0,
                         icon: Image.asset(
                           AssetUtils.news_icon,
-                          color: (widget.page == 2 ? Colors.black : Colors.white),
+                          color:
+                              (widget.page == 2 ? Colors.black : Colors.white),
                           height: 20,
                           width: 20,
                         ),
@@ -694,8 +711,9 @@ class _DashboardState extends State<Dashboard> {
                     Container(
                       margin: const EdgeInsets.only(right: 28.0),
                       decoration: BoxDecoration(
-                          color:
-                              (widget.page == 3 ? Colors.white : Colors.transparent),
+                          color: (widget.page == 3
+                              ? Colors.white
+                              : Colors.transparent),
                           borderRadius: BorderRadius.circular(50)),
                       child: IconButton(
                         visualDensity:
@@ -703,7 +721,8 @@ class _DashboardState extends State<Dashboard> {
                         iconSize: 25.0,
                         icon: Image.asset(
                           AssetUtils.user_icon2,
-                          color: (widget.page == 3 ? Colors.black : Colors.white),
+                          color:
+                              (widget.page == 3 ? Colors.black : Colors.white),
                           height: 20,
                           width: 20,
                         ),
@@ -816,7 +835,6 @@ class _DashboardState extends State<Dashboard> {
                                                 children: [
                                                   GestureDetector(
                                                     onTap: () {
-                                                      Navigator.pop(context);
                                                       print('name');
                                                       // Get.to(PostScreen());
                                                       showDialog(
@@ -906,19 +924,33 @@ class _DashboardState extends State<Dashboard> {
                                                                           GestureDetector(
                                                                             onTap:
                                                                                 () {
-                                                                              video_upload();
+                                                                              // video_upload();
+                                                                              Navigator.push(
+                                                                                context,
+                                                                                MaterialPageRoute(
+                                                                                    builder: (context) => MyApp_video(
+                                                                                          story: false,
+                                                                                        )),
+                                                                              );
                                                                             },
                                                                             child:
                                                                                 Column(
                                                                               children: [
                                                                                 IconButton(
                                                                                   icon: const Icon(
-                                                                                    Icons.slow_motion_video_sharp,
-                                                                                    size: 40,
+                                                                                    Icons.camera_alt,
+                                                                                    size: 30,
                                                                                     color: Colors.white,
                                                                                   ),
                                                                                   onPressed: () {
-                                                                                    video_upload();
+                                                                                    // video_upload();
+                                                                                    Navigator.push(
+                                                                                      context,
+                                                                                      MaterialPageRoute(
+                                                                                          builder: (context) => MyApp_video(
+                                                                                                story: false,
+                                                                                              )),
+                                                                                    );
                                                                                   },
                                                                                 ),
                                                                                 SizedBox(
@@ -933,7 +965,7 @@ class _DashboardState extends State<Dashboard> {
                                                                                       alignment: Alignment.center,
                                                                                       margin: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                                                                                       child: Text(
-                                                                                        'Video',
+                                                                                        'Camera',
                                                                                         style: TextStyle(color: Colors.white, fontFamily: 'PR', fontSize: 16),
                                                                                       )),
                                                                                 ),
@@ -947,19 +979,24 @@ class _DashboardState extends State<Dashboard> {
                                                                           GestureDetector(
                                                                             onTap:
                                                                                 () {
-                                                                              image_upload();
+                                                                              // image_upload();
+                                                                                  Navigator.pop(context);
+                                                                                  image_Gallery();
                                                                             },
                                                                             child:
                                                                                 Column(
                                                                               children: [
                                                                                 IconButton(
                                                                                   icon: const Icon(
-                                                                                    Icons.camera_alt,
-                                                                                    size: 40,
-                                                                                    color: Colors.black,
+                                                                                    Icons.photo_library_sharp,
+                                                                                    size: 30,
+                                                                                    color: Colors.white,
                                                                                   ),
                                                                                   onPressed: () {
-                                                                                    image_upload();
+                                                                                    Navigator.pop(context);
+
+                                                                                    image_Gallery();
+                                                                                    // Pickvideo();
                                                                                   },
                                                                                 ),
                                                                                 SizedBox(
@@ -974,7 +1011,7 @@ class _DashboardState extends State<Dashboard> {
                                                                                       alignment: Alignment.center,
                                                                                       margin: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                                                                                       child: Text(
-                                                                                        'Image',
+                                                                                        'Gallery',
                                                                                         style: TextStyle(color: Colors.white, fontFamily: 'PR', fontSize: 16),
                                                                                       )),
                                                                                 ),

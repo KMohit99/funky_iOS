@@ -106,7 +106,7 @@ class Search_screen_controller extends GetxController {
     print(data);
     // String body = json.encode(data);
 
-    var url = ("http://foxyserver.com/funky/api/blockUser.php");
+    var url = ("https://foxytechnologies.com/funky/api/blockUser.php");
     print("url : $url");
     print("body : $data");
 
@@ -362,7 +362,7 @@ class Search_screen_controller extends GetxController {
       'social_type': type_social,
     }; // String body = json.encode(data);
 
-    var url = ("http://foxyserver.com/funky/api/followUnfollow.php");
+    var url = ("https://foxytechnologies.com/funky/api/followUnfollow.php");
     print("url : $url");
     print("body : $data");
 

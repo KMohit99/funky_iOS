@@ -27,20 +27,21 @@ Future takePicture(
     String imagePath = '$dir/stories_creator${DateTime.now()}.png';
     File capturedFile = File(imagePath);
     await capturedFile.writeAsBytes(pngBytes);
+    await Get.to(Story_image_preview(ImageFile: capturedFile, isImage: true,));
 
-    if (saveToGallery) {
-      final result = await ImageGallerySaver.saveImage(pngBytes,
-          quality: 100, name: "stories_creator${DateTime.now()}.png");
-      print("result${imagePath}");
-      await Get.to(Story_image_preview(ImageFile: File(imagePath)));
-      if (result != null) {
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      return imagePath;
-    }
+    // if (saveToGallery) {
+    //   final result = await ImageGallerySaver.saveImage(pngBytes,
+    //       quality: 100, name: "stories_creator${DateTime.now()}.png");
+    //   print("result${imagePath}");
+    //   await Get.to(Story_image_preview(ImageFile: File(imagePath), isImage: true,));
+    //   if (result != null) {
+    //     return true;
+    //   } else {
+    //     return false;
+    //   }
+    // } else {
+    //   return imagePath;
+    // }
   } catch (e) {
     debugPrint('exception => $e');
     return false;

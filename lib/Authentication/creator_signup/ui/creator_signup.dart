@@ -37,8 +37,8 @@ class _Creator_signupState extends State<Creator_signup> {
       Creator_signup_controller(),
       tag: Creator_signup_controller().toString());
   final List<String> data = <String>[
-    'male',
-    'female',
+    'Male',
+    'Female',
   ];
   List<Data_country> data2 = <Data_country>[];
   final TextEditingController textEditingController = TextEditingController();

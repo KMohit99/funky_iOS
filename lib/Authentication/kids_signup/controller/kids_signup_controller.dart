@@ -131,7 +131,7 @@ class Kids_signup_controller extends GetxController {
 
   Future<dynamic> kids_signup({required BuildContext context}) async {
     // showLoader(context);
-    var url = 'http://foxyserver.com/funky/api/signup.php';
+    var url = 'https://foxytechnologies.com/funky/api/signup.php';
     var request = http.MultipartRequest('POST', Uri.parse(url));
     // List<int> imageBytes = imgFile!.readAsBytesSync();
     // String baseimage = base64Encode(imageBytes);

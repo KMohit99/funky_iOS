@@ -55,7 +55,7 @@ class Kids_Login_screen_controller extends GetxController {
     print(data);
     // String body = json.encode(data);
 
-    var url = ("http://foxyserver.com/funky/api/login.php");
+    var url = ("https://foxytechnologies.com/funky/api/login.php");
     print("url : $url");
     print("body : $data");
 

@@ -34,6 +34,11 @@ dependencies:
   hexcolor: ^2.0.7
   http: ^0.13.4
   fluttertoast: ^8.0.8
+  cloud_firestore: 3.1.9
+  firebase_storage: 10.2.13
+  firebase_messaging: ^11.4.0
+  flutter_local_notifications: ^9.5.0
+
   firebase_auth: ^3.1.4
   firebase_core: ^1.8.0
   flutter_facebook_auth: ^4.1.2
@@ -101,6 +106,8 @@ dependencies:
   ffmpeg_kit_flutter_min_gpl: ^4.5.1
     # permission
   permission_handler: ^9.2.0
+  marquee: ^2.2.3
+
     # toast
 #  fluttertoast: ^8.0.9
 

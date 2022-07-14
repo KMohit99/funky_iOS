@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -16,6 +17,7 @@ import 'package:funky_new/video_recorder/lib/widgets/top_bar.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:image/image.dart' as imgUtils;
+import 'package:image_editor_plus/image_editor_plus.dart';
 
 import 'package:path_provider/path_provider.dart';
 import 'package:camerawesome/camerawesome_plugin.dart';
@@ -24,15 +26,20 @@ import 'package:video_compress/video_compress.dart';
 
 import '../../Utils/colorUtils.dart';
 import '../../Utils/toaster_widget.dart';
+import '../../dashboard/post_image_preview.dart';
 import '../../dashboard/post_video_preview.dart';
+import '../../dashboard/story_/stories_editor.dart';
+import '../../dashboard/story_/story_image_preview.dart';
 import '../../dashboard/video_editor.dart';
+import 'dart:io' as Io;
 
 class MyApp_video extends StatefulWidget {
   // just for E2E test. if true we create our images names from datetime.
   // Else it's just a name to assert image exists
   final bool randomPhotoName;
+  final bool? story;
 
-  MyApp_video({this.randomPhotoName = true});
+  MyApp_video({this.randomPhotoName = true, this.story});
 
   @override
   _MyApp_videoState createState() => _MyApp_videoState();
@@ -120,32 +127,34 @@ class _MyApp_videoState extends State<MyApp_video>
                   orientation: _orientation,
                   previewAnimation: _previewAnimation,
                 )
-              : (instopvideo ? Center(
-            child: Container(
-                height: 80,
-                width: 100,
-                color: Colors.transparent,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    CircularProgressIndicator(
-                      color: HexColor(CommonColor.pinkFont),
-                    ),
-                  ],
-                )
-              // Material(
-              //   color: Colors.transparent,
-              //   child: LoadingIndicator(
-              //     backgroundColor: Colors.transparent,
-              //     indicatorType: Indicator.ballScale,
-              //     colors: _kDefaultRainbowColors,
-              //     strokeWidth: 4.0,
-              //     pathBackgroundColor: Colors.yellow,
-              //     // showPathBackground ? Colors.black45 : null,
-              //   ),
-              // ),
-            ),
-          ) : Container()),
+              : (instopvideo
+                  ? Center(
+                      child: Container(
+                          height: 80,
+                          width: 100,
+                          color: Colors.transparent,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              CircularProgressIndicator(
+                                color: HexColor(CommonColor.pinkFont),
+                              ),
+                            ],
+                          )
+                          // Material(
+                          //   color: Colors.transparent,
+                          //   child: LoadingIndicator(
+                          //     backgroundColor: Colors.transparent,
+                          //     indicatorType: Indicator.ballScale,
+                          //     colors: _kDefaultRainbowColors,
+                          //     strokeWidth: 4.0,
+                          //     pathBackgroundColor: Colors.yellow,
+                          //     // showPathBackground ? Colors.black45 : null,
+                          //   ),
+                          // ),
+                          ),
+                    )
+                  : Container()),
         ],
       ),
     );
@@ -336,7 +345,7 @@ class _MyApp_videoState extends State<MyApp_video>
           ),
         ),
         Positioned(
-          bottom: 150,
+          bottom: 170,
           left: 0,
           right: 0,
           child: Center(
@@ -370,10 +379,9 @@ class _MyApp_videoState extends State<MyApp_video>
             }
             setState(() {});
           },
-          onCaptureTap: (_isRecordingVideo ? _stopvideo : _recordVideo),
-          // (_captureMode.value == CaptureModes.PHOTO)
-          // ? _takePhoto
-          // : _recordVideo,
+          onCaptureTap: (_captureMode.value == CaptureModes.PHOTO)
+              ? _takePhoto
+              : (_isRecordingVideo ? _stopvideo : _recordVideo),
           rotationController: _iconsAnimationController!,
           orientation: _orientation,
           isRecording: _isRecordingVideo,
@@ -409,6 +417,8 @@ class _MyApp_videoState extends State<MyApp_video>
     );
   }
 
+  Uint8List? imageData;
+  File? imgFile;
 
   _takePhoto() async {
     final Directory extDir = await getTemporaryDirectory();
@@ -426,6 +436,51 @@ class _MyApp_videoState extends State<MyApp_video>
       _previewAnimationController!.reset();
     }
     _previewAnimationController!.forward();
+
+    imgFile = File(filePath);
+    imageData = imgFile!.readAsBytesSync();
+
+    if (widget.story == false) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ImageEditor(
+            image: imageData,
+          ),
+        ),
+      ).then((editedImage) {
+        if (editedImage != null) {
+          setState(() {
+            // imgFile = editedImage;
+            String base64String = base64Encode(editedImage);
+            final decodedBytes = base64Decode(base64String);
+            var file = Io.File(imgFile!.path);
+            file.writeAsBytesSync(decodedBytes);
+            print(file.path.split('/').last);
+            imgFile = file;
+            Get.to(PostImagePreviewScreen(
+              ImageFile: editedImage!,
+            ));
+            Navigator.pop(context);
+          });
+        }
+      }).catchError((er) {
+        print(er);
+      });
+    } else {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => StoriesEditor(
+                    // fontFamilyList: font_family,
+                    giphyKey: '',
+                    imageData: File(filePath),
+                    onDone: (String) {},
+                    // filePath:
+                    //     imgFile!.path,
+                  )));
+    }
+    ;
     print("----------------------------------");
     print("TAKE PHOTO CALLED");
     final file = File(filePath);
@@ -444,27 +499,25 @@ class _MyApp_videoState extends State<MyApp_video>
     countdownTimer_15 =
         Timer.periodic(Duration(seconds: 1), (_) => setCountDown_15());
   }
-  void startTimer_60()  {
+
+  void startTimer_60() {
     countdownTimer_60 =
         Timer.periodic(Duration(seconds: 1), (_) => setCountDown_60());
   }
 
-
-
   void setCountDown_15() {
     final reduceSecondsBy = 1;
-    setState(()  {
+    setState(() {
       final seconds15 = myDuration15.inSeconds - reduceSecondsBy;
       if (seconds15 < 0) {
         countdownTimer_15!.cancel();
         print('timesup');
-
       } else {
         myDuration15 = Duration(seconds: seconds15);
       }
     });
-
   }
+
   void setCountDown_60() {
     final reduceSecondsBy = 1;
     setState(() {
@@ -579,8 +632,8 @@ class _MyApp_videoState extends State<MyApp_video>
   }
 
   bool instopvideo = false;
-  _stopvideo() async {
 
+  _stopvideo() async {
     print("inside stop video");
     await _videoController.stopRecordingVideo();
 
@@ -613,17 +666,22 @@ class _MyApp_videoState extends State<MyApp_video>
     setState(() {
       instopvideo = false;
     });
-    await Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => VideoEditor(
-                file: File(mediaInfo!.path!),
-              )
-          //     CameraPreview(
-          //   videoPath: _lastVideoPath,
-          // ),
-          ),
-    );
+    (widget.story == false
+        ? await Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => VideoEditor(
+                      file: File(mediaInfo!.path!),
+                    )
+                //     CameraPreview(
+                //   videoPath: _lastVideoPath,
+                // ),
+                ),
+          )
+        : await Get.to(Story_image_preview(
+            ImageFile: File(mediaInfo!.path!),
+            isImage: false,
+          )));
   }
 
   _recordVideo() async {
@@ -698,16 +756,14 @@ class _MyApp_videoState extends State<MyApp_video>
     setState(() {});
     print("seconds_15 $seconds_15");
     print("seconds_60 $seconds_60");
-    if(seconds_15){
+    if (seconds_15) {
       startTimer_15();
-      Future.delayed(
-          const Duration(seconds: 17), () {
+      Future.delayed(const Duration(seconds: 17), () {
         _stopvideo();
       });
-    }else if(seconds_60){
+    } else if (seconds_60) {
       startTimer_60();
-      Future.delayed(
-          const Duration(seconds: 62), () {
+      Future.delayed(const Duration(seconds: 62), () {
         _stopvideo();
       });
     }

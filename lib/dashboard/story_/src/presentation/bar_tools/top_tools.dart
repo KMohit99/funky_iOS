@@ -53,7 +53,7 @@ class _TopToolsState extends State<TopTools> {
             padding: const EdgeInsets.symmetric(vertical: 10),
             decoration: const BoxDecoration(color: Colors.transparent),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
 
@@ -63,7 +63,7 @@ class _TopToolsState extends State<TopTools> {
                       Icons.close,
                       color: Colors.white,
                     ),
-                    backGroundColor: HexColor('#C12265'),
+                    backGroundColor: HexColor('#000000'),
                     onTap: () async {
                       var res = await exitDialog(
                           context: widget.context,
@@ -87,57 +87,58 @@ class _TopToolsState extends State<TopTools> {
                           });
                         }
                       }),
-                ToolButton(
-                    child: const ImageIcon(
-                      AssetImage('assets/icons/download.png'),
-                      color: Colors.white,
-                      size: 20,
-                    ),
-                    backGroundColor: HexColor('#C12265'),
-                    onTap: () async {
-                      if (paintingNotifier.lines.isNotEmpty ||
-                          itemNotifier.draggableWidget.isNotEmpty) {
-                        for (var element in itemNotifier.draggableWidget) {
-                          if (element.type == ItemType.gif ||
-                              element.animationType != TextAnimationType.none) {
-                            setState(() {
-                              _createVideo = true;
-                            });
-                          }
-                        }
-                        if (_createVideo) {
-                          debugPrint('creating video');
-                          await widget.renderWidget();
-                        } else {
-                          debugPrint('creating image');
-                          var response = await takePicture(
-                              contentKey: widget.contentKey,
-                              context: context,
-                              saveToGallery: true);
-
-                          if (response) {
-                            Fluttertoast.showToast(msg: 'Successfully saved');
-                          } else {
-                            Fluttertoast.showToast(msg: 'Error');
-                          }
-                        }
-                      }
-                      setState(() {
-                        _createVideo = false;
-                      });
-                    }),
-                ToolButton(
-                    child: const ImageIcon(
-                      AssetImage('assets/icons/stickers.png'),
-                      color: Colors.white,
-                      size: 20,
-                    ),
-                    backGroundColor: HexColor('#C12265'),
-                    onTap: () {
-                      // createGiphyItem(
-                      //     context: context,
-                      //     giphyKey: controlNotifier.giphyKey);
-                    }),
+                ///download icon
+                // ToolButton(
+                //     child: const ImageIcon(
+                //       AssetImage('assets/icons/download.png'),
+                //       color: Colors.white,
+                //       size: 20,
+                //     ),
+                //     backGroundColor: HexColor('#C12265'),
+                //     onTap: () async {
+                //       if (paintingNotifier.lines.isNotEmpty ||
+                //           itemNotifier.draggableWidget.isNotEmpty) {
+                //         for (var element in itemNotifier.draggableWidget) {
+                //           if (element.type == ItemType.gif ||
+                //               element.animationType != TextAnimationType.none) {
+                //             setState(() {
+                //               _createVideo = true;
+                //             });
+                //           }
+                //         }
+                //         if (_createVideo) {
+                //           debugPrint('creating video');
+                //           await widget.renderWidget();
+                //         } else {
+                //           debugPrint('creating image');
+                //           var response = await takePicture(
+                //               contentKey: widget.contentKey,
+                //               context: context,
+                //               saveToGallery: true);
+                //
+                //           if (response) {
+                //             Fluttertoast.showToast(msg: 'Successfully saved');
+                //           } else {
+                //             Fluttertoast.showToast(msg: 'Error');
+                //           }
+                //         }
+                //       }
+                //       setState(() {
+                //         _createVideo = false;
+                //       });
+                //     }),
+                // ToolButton(
+                //     child: const ImageIcon(
+                //       AssetImage('assets/icons/stickers.png'),
+                //       color: Colors.white,
+                //       size: 20,
+                //     ),
+                //     backGroundColor: HexColor('#C12265'),
+                //     onTap: () {
+                //       // createGiphyItem(
+                //       //     context: context,
+                //       //     giphyKey: controlNotifier.giphyKey);
+                //     }),
                 ToolButton(
                     child: const ImageIcon(
                       AssetImage('assets/icons/draw.png'),

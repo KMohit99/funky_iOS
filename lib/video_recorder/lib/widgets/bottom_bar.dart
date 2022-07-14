@@ -4,6 +4,7 @@ import 'package:camerawesome/models/orientations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:funky_new/video_recorder/lib/widgets/take_photo_button.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 import 'camera_buttons.dart';
 
@@ -12,7 +13,6 @@ class BottomBarWidget extends StatelessWidget {
   final ValueNotifier<CameraOrientations> orientation;
   final ValueNotifier<CaptureModes> captureMode;
   final ValueNotifier<CameraFlashes> switchFlash;
-
 
   final bool isRecording;
   final Function onZoomInTap;
@@ -33,12 +33,13 @@ class BottomBarWidget extends StatelessWidget {
     required this.onZoomInTap,
     required this.onCaptureTap,
     required this.onCaptureModeSwitchChange,
-    required this.switchFlash, required this.onChangeSensorTap, required this.onFlashTap,
+    required this.switchFlash,
+    required this.onChangeSensorTap,
+    required this.onFlashTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
     return Positioned(
       bottom: 0,
       left: 0,
@@ -70,7 +71,7 @@ class BottomBarWidget extends StatelessWidget {
                     ),
                     CameraButton(
                       key: ValueKey('cameraButton'),
-                      captureMode: CaptureModes.VIDEO,
+                      captureMode: captureMode.value,
                       isRecording: isRecording,
                       onTap: () => onCaptureTap.call(),
                     ),
@@ -89,30 +90,30 @@ class BottomBarWidget extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 10.0),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: [
-                //     Icon(
-                //       Icons.photo_camera,
-                //       color: Colors.white,
-                //     ),
-                //     Switch(
-                //       key: ValueKey('captureModeSwitch'),
-                //       value: (captureMode.value == CaptureModes.VIDEO),
-                //       activeColor: Color(0xFF4F6AFF),
-                //       onChanged: !isRecording
-                //           ? (value) {
-                //               HapticFeedback.heavyImpact();
-                //               onCaptureModeSwitchChange.call();
-                //             }
-                //           : null,
-                //     ),
-                //     Icon(
-                //       Icons.videocam,
-                //       color: Colors.white,
-                //     ),
-                //   ],
-                // ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.photo_camera,
+                      color: Colors.white,
+                    ),
+                    Switch(
+                      key: ValueKey('captureModeSwitch'),
+                      value: (captureMode.value == CaptureModes.VIDEO),
+                      activeColor: Color(0xFFC12265),
+                      onChanged: !isRecording
+                          ? (value) {
+                              HapticFeedback.heavyImpact();
+                              onCaptureModeSwitchChange.call();
+                            }
+                          : null,
+                    ),
+                    Icon(
+                      Icons.videocam,
+                      color: Colors.white,
+                    ),
+                  ],
+                ),
               ],
             ),
           ],
@@ -120,6 +121,7 @@ class BottomBarWidget extends StatelessWidget {
       ),
     );
   }
+
   IconData _getFlashIcon() {
     switch (switchFlash.value) {
       case CameraFlashes.NONE:
@@ -134,5 +136,4 @@ class BottomBarWidget extends StatelessWidget {
         return Icons.flash_off;
     }
   }
-
 }

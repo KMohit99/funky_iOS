@@ -1,13 +1,19 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:funky_new/profile_screen/story_view/story_edit.dart';
+import 'package:get/get.dart';
 import 'package:helpers/helpers.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../Utils/App_utils.dart';
 import '../../Utils/colorUtils.dart';
+import '../../Utils/toaster_widget.dart';
+import '../../custom_widget/common_buttons.dart';
+import '../../dashboard/dashboard_screen.dart';
 import '../../sharePreference.dart';
 import '../model/getStoryCountModel.dart';
 import '../model/getStoryModel.dart';
@@ -52,9 +58,10 @@ class _StoryScreenState extends State<StoryScreen>
             _loadStory(story: widget.stories[widget.story_no]);
           } else {
             // Out of bounds - loop story
-            // You can also Navigator.of(context).pop() here
-            widget.story_no = 0;
-            _loadStory(story: widget.stories[widget.story_no]);
+            // You can also
+            Navigator.of(context).pop();
+            // widget.story_no = 0;
+            // _loadStory(story: widget.stories[widget.story_no]);
           }
         });
       }
@@ -85,10 +92,7 @@ class _StoryScreenState extends State<StoryScreen>
                 child: Container(
                   // color: Colors.green,
                   alignment: Alignment.center,
-                  height: MediaQuery
-                      .of(context)
-                      .size
-                      .height / 1.1,
+                  height: MediaQuery.of(context).size.height / 1.1,
                   child: PageView.builder(
                     controller: _pageController,
                     physics: NeverScrollableScrollPhysics(),
@@ -98,16 +102,15 @@ class _StoryScreenState extends State<StoryScreen>
                       get_story_count(story_id: story.stID!);
                       if (story.isVideo == 'false') {
                         print(
-                            "http://foxyserver.com/funky/images/${story
-                                .storyPhoto!}");
+                            "http://foxyserver.com/funky/images/${story.storyPhoto!}");
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 0.0),
                           child: Container(
                             // color: Colors.white,
+                            margin: EdgeInsets.symmetric(vertical: 90),
                             child: FadeInImage.assetNetwork(
                               image:
-                              "http://foxyserver.com/funky/images/${story
-                                  .storyPhoto!}",
+                                  "http://foxyserver.com/funky/images/${story.storyPhoto!}",
                               fit: BoxFit.contain,
                               placeholder: 'assets/images/Funky_App_Icon.png',
                             ),
@@ -116,17 +119,21 @@ class _StoryScreenState extends State<StoryScreen>
                       } else {
                         if (_videoController != null &&
                             _videoController!.value.isInitialized) {
-                          return FittedBox(
-                            fit: BoxFit.cover,
-                            child: SizedBox(
-                              width: _videoController!.value.size.width,
-                              height: _videoController!.value.size.height,
-                              child: VideoPlayer(_videoController!),
+                          return Container(
+                            // color: Colors.white,
+                            margin: EdgeInsets.symmetric(
+                                horizontal: 0, vertical: 0),
+                            height: MediaQuery.of(context).size.height / 1.2,
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: AspectRatio(
+                                  aspectRatio:
+                                      _videoController!.value.aspectRatio,
+                                  child: VideoPlayer(_videoController!)),
                             ),
                           );
                         }
                       }
-
                       return const SizedBox.shrink();
                     },
                   ),
@@ -143,15 +150,15 @@ class _StoryScreenState extends State<StoryScreen>
                     children: widget.stories
                         .asMap()
                         .map((i, e) {
-                      return MapEntry(
-                        i,
-                        AnimatedBar(
-                          animController: _animController!,
-                          position: i,
-                          currentIndex: widget.story_no,
-                        ),
-                      );
-                    })
+                          return MapEntry(
+                            i,
+                            AnimatedBar(
+                              animController: _animController!,
+                              position: i,
+                              currentIndex: widget.story_no,
+                            ),
+                          );
+                        })
                         .values
                         .toList(),
                   ),
@@ -163,12 +170,22 @@ class _StoryScreenState extends State<StoryScreen>
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
-                        CircleAvatar(
-                          radius: 20.0,
-                          backgroundColor: Colors.grey[300],
-                          backgroundImage: CachedNetworkImageProvider(
-                            "http://foxyserver.com/funky/images/${story
-                                .storyPhoto!}",
+                        SizedBox(
+                          height: 40,
+                          width: 40,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(50),
+                            child: (story.storyPhoto!.isEmpty
+                                ? Image.asset(
+                                    'assets/images/Funky_App_Icon.png')
+                                : FadeInImage.assetNetwork(
+                                    fit: BoxFit.cover,
+                                    image:
+                                        "http://foxyserver.com/funky/images/${story.storyPhoto!}",
+                                    placeholder:
+                                        'assets/images/Funky_App_Icon.png',
+                                    // color: HexColor(CommonColor.pinkFont),
+                                  )),
                           ),
                         ),
                         const SizedBox(width: 10.0),
@@ -200,11 +217,22 @@ class _StoryScreenState extends State<StoryScreen>
                         ),
                         IconButton(
                           icon: const Icon(
-                            Icons.close,
+                            Icons.more_vert,
                             size: 30.0,
                             color: Colors.white,
                           ),
-                          onPressed: () => Navigator.of(context).pop(),
+                          onPressed: () {
+                            print(story.stID!);
+                            // share_icon(story_id: story.stID!);
+                            pop_up(
+                                story_id: story.stID!,
+                                story_image: (story.storyPhoto!.isEmpty
+                                    ? 'assets/images/Funky_App_Icon.png'
+                                    : story.storyPhoto!),
+                                story_title: story.title!,
+                                is_video: story.isVideo!);
+                            // delete_story(story_id: story.stID!);
+                          },
                         ),
                       ],
                     ),
@@ -219,10 +247,7 @@ class _StoryScreenState extends State<StoryScreen>
   }
 
   void _onTapDown(TapDownDetails details, Data_story story) {
-    final double screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
+    final double screenWidth = MediaQuery.of(context).size.width;
     final double dx = details.globalPosition.dx;
     if (dx < screenWidth / 3) {
       setState(() {
@@ -282,9 +307,9 @@ class _StoryScreenState extends State<StoryScreen>
       _animController!.duration = Duration(seconds: 10);
       _animController!.forward();
     } else {
-      _videoController = null;
-      _videoController!.dispose();
-      _videoController = VideoPlayerController.network(story.uploadVideo!)
+      // _videoController = null;
+      _videoController = VideoPlayerController.network(
+          "http://foxyserver.com/funky/video/${story.uploadVideo!}")
         ..initialize().then((_) {
           setState(() {});
           if (_videoController!.value.isInitialized) {
@@ -300,18 +325,15 @@ class _StoryScreenState extends State<StoryScreen>
         duration: const Duration(milliseconds: 1),
         curve: Curves.easeInOut,
       );
+      // if(story.isVideo == 'true'){
+      //   _videoController!.dispose();
+      // }
     }
   }
 
   selectTowerBottomSheet(BuildContext context) {
-    final screenheight = MediaQuery
-        .of(context)
-        .size
-        .height;
-    final screenwidth = MediaQuery
-        .of(context)
-        .size
-        .width;
+    final screenheight = MediaQuery.of(context).size.height;
+    final screenwidth = MediaQuery.of(context).size.width;
     showModalBottomSheet(
       backgroundColor: Colors.black,
       shape: RoundedRectangleBorder(
@@ -360,28 +382,80 @@ class _StoryScreenState extends State<StoryScreen>
                   padding: const EdgeInsets.all(33.9),
                   child: Column(
                     children: [
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        margin: EdgeInsets.symmetric(vertical: 0),
-                        child: Text('Select media',
-                            style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.pink,
-                                fontFamily: 'PR')),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                  icon: Icon(
+                                    Icons.remove_red_eye,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () {
+                                    _animController!.stop();
+                                    selectTowerBottomSheet(context);
+                                  },
+                                ),
+                                Text(
+                                  '${storyCountModel!.data!.length}',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'PM',
+                                      fontSize: 18),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            alignment: Alignment.centerRight,
+                            child: Icon(
+                              Icons.close,
+                              color: Colors.white,
+                            ),
+                          )
+                        ],
                       ),
                       ListView.builder(
                         itemCount: storyCountModel!.data!.length,
                         shrinkWrap: true,
                         itemBuilder: (BuildContext context, int index) {
-                          return Container(
-                            child: Text(storyCountModel!.data![index].fullName!,
+                          return ListTile(
+                            visualDensity:
+                                VisualDensity(vertical: -4, horizontal: -4),
+                            leading: Container(
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(50),
+                                child: (storyCountModel!.data![index].user!
+                                        .profileUrl!.isNotEmpty
+                                    ? Image.network(storyCountModel!
+                                        .data![index].user!.profileUrl!)
+                                    : Image.network(
+                                        'http://foxyserver.com/funky/images/${storyCountModel!.data![index].user!.image!}')),
+                              ),
+                            ),
+                            title: Text(storyCountModel!.data![index].fullName!,
                                 style: TextStyle(
                                     fontSize: 16,
-                                    color: Colors.pink,
+                                    color: Colors.white,
+                                    fontFamily: 'PR')),
+                            subtitle: Text(
+                                storyCountModel!.data![index].userName!,
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.white,
                                     fontFamily: 'PR')),
                           );
+                          //   Container(
+                          //   child: Text(storyCountModel!.data![index].fullName!,
+                          //       style: TextStyle(
+                          //           fontSize: 16,
+                          //           color: Colors.pink,
+                          //           fontFamily: 'PR')),
+                          // );
                         },
                       ),
                       SizedBox(height: 20),
@@ -403,8 +477,7 @@ class _StoryScreenState extends State<StoryScreen>
     print('Inside creator get email');
     isStoryCountLoading = true;
     String url =
-    ("${URLConstants.base_url}${URLConstants
-        .StoryGetCountApi}?stoID=${story_id}");
+        ("${URLConstants.base_url}${URLConstants.StoryGetCountApi}?stoID=${story_id}");
     // debugPrint('Get Sales Token ${tokens.toString()}');
     // try {
     // } catch (e) {
@@ -423,8 +496,7 @@ class _StoryScreenState extends State<StoryScreen>
       // getUSerModelList(userInfoModel_email);
       if (storyCountModel!.error == false) {
         debugPrint(
-            '2-2-2-2-2-2 Inside the Get UserInfo Controller Details ${storyCountModel!
-                .data!.length}');
+            '2-2-2-2-2-2 Inside the Get UserInfo Controller Details ${storyCountModel!.data!.length}');
         // story_info = getStoryModel!.data!;
 
         // CommonWidget().showToaster(msg: data["success"].toString());
@@ -433,9 +505,7 @@ class _StoryScreenState extends State<StoryScreen>
         isStoryCountLoading = false;
         return storyCountModel;
       } else {
-        setState(() {
-          isStoryCountLoading = false;
-        });
+        isStoryCountLoading = false;
         // CommonWidget().showToaster(msg: msg.toString());
         return null;
       }
@@ -446,6 +516,284 @@ class _StoryScreenState extends State<StoryScreen>
     } else {
       // CommonWidget().showToaster(msg: msg.toString());
     }
+  }
+
+  Future<dynamic> delete_story({required String story_id}) async {
+    debugPrint('0-0-0-0-0-0-0 username');
+
+    String id_user = await PreferenceManager().getPref(URLConstants.id);
+
+    // isLikeLoading(true);
+
+    Map data = {
+      'stID': story_id,
+    };
+    print(data);
+    // String body = json.encode(data);
+
+    var url = (URLConstants.base_url + URLConstants.StoryDeleteApi);
+    print("url : $url");
+    print("body : $data");
+
+    var response = await http.post(
+      Uri.parse(url),
+      body: data,
+    );
+    print(response.body);
+    print(response.request);
+    print(response.statusCode);
+    // var final_data = jsonDecode(response.body);
+
+    // print('final data $final_data');
+
+    if (response.statusCode == 200) {
+      // isLikeLoading(false);
+      var data = jsonDecode(response.body);
+      // feedLikeUnlikeModel = FeedLikeUnlikeModel.fromJson(data);
+      print(data);
+      if (data["error"] == false) {
+        CommonWidget().showToaster(msg: data["message"]);
+        // feedlikeStatus = feedLikeUnlikeModel!.user![0].feedlikeStatus!;
+        // feedlikeCount = feedLikeUnlikeModel!.user![0].feedLikeCount!;
+        // await getAllNewsFeedList();
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Dashboard(
+                      page: 3,
+                    )));
+      } else {
+        print('Please try again');
+        CommonWidget().showErrorToaster(msg: 'Enter valid Otp');
+      }
+    } else {
+      print('Please try again');
+    }
+  }
+
+  share_icon({required String story_id}) {
+    _animController!.stop();
+    return showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text("Delete Story ?",
+            style:
+                TextStyle(fontSize: 18, color: Colors.black, fontFamily: 'PM')),
+        actions: <Widget>[
+          Container(
+            margin: EdgeInsets.only(bottom: 10),
+            child: common_button(
+              onTap: () {
+                delete_story(story_id: story_id);
+                // Get.toNamed(BindingUtils.signupOption);
+              },
+              backgroud_color: Colors.black,
+              lable_text: 'Delete',
+              lable_text_color: Colors.white,
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(bottom: 10),
+            child: common_button(
+              onTap: () {
+                Navigator.pop(context);
+                _animController!.forward();
+                // delete_story(story_id: story_id);
+                // Get.toNamed(BindingUtils.signupOption);
+              },
+              backgroud_color: Colors.black,
+              lable_text: 'Cancel',
+              lable_text_color: Colors.white,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future pop_up({
+    required String story_id,
+    required String story_image,
+    required String story_title,
+    required String is_video,
+  }) {
+    _animController!.stop();
+    _videoController!.pause();
+    return showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Colors.transparent,
+        contentPadding: EdgeInsets.zero,
+        elevation: 0.0,
+        content: Container(
+          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+          height: MediaQuery.of(context).size.height / 5,
+          // width: 133,
+          // padding: const EdgeInsets.all(8.0),
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: const Alignment(-1.0, 0.0),
+                end: const Alignment(1.0, 0.0),
+                transform: const GradientRotation(0.7853982),
+                // stops: [0.1, 0.5, 0.7, 0.9],
+                colors: [
+                  HexColor("#000000"),
+                  HexColor("#000000"),
+                  HexColor("##E84F90"),
+                  HexColor("#ffffff"),
+                  // HexColor("#FFFFFF").withOpacity(0.67),
+                ],
+              ),
+              color: Colors.white,
+              border: Border.all(color: Colors.white, width: 1),
+              borderRadius: const BorderRadius.all(Radius.circular(26.0))),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    child: Row(
+                      // mainAxisAlignment:
+                      // MainAxisAlignment
+                      //     .center,
+                      children: [
+                        Column(
+                          children: [
+                            IconButton(
+                              icon: const Icon(
+                                Icons.delete_forever_outlined,
+                                size: 30,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {
+                                delete_story(story_id: story_id);
+                                // camera_upload();
+                              },
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                delete_story(story_id: story_id);
+                              },
+                              child: Container(
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 0),
+                                // height: 45,
+                                // width:(width ?? 300) ,
+                                width: 100,
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: Colors.white, width: 1),
+                                    borderRadius: BorderRadius.circular(25)),
+                                child: Container(
+                                    alignment: Alignment.center,
+                                    margin: EdgeInsets.symmetric(
+                                        vertical: 12, horizontal: 20),
+                                    child: Text(
+                                      'Delete',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontFamily: 'PR',
+                                          fontSize: 16),
+                                    )),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Column(
+                          children: [
+                            IconButton(
+                              icon: const Icon(
+                                Icons.auto_fix_high_rounded,
+                                size: 30,
+                                color: Colors.white,
+                              ),
+                              onPressed: () async {
+                                Get.to(StoryEdit(
+                                  ImageFile: story_image,
+                                  storyId: story_id,
+                                  story_title: story_title,
+                                  isvideo:  is_video,
+                                ));
+                                // File editedFile = await Navigator.of(context)
+                                //     .push(MaterialPageRoute(
+                                //         builder: (context) => StoriesEditor(
+                                //               // fontFamilyList: font_family,
+                                //               giphyKey: '',
+                                //               onDone: (String) {},
+                                //               // filePath:
+                                //               //     imgFile!.path,
+                                //             )));
+                                // if (editedFile != null) {
+                                //   print('editedFile: ${editedFile.path}');
+                                // }
+                              },
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Container(
+                              margin: const EdgeInsets.symmetric(horizontal: 0),
+                              // height: 45,
+                              width: 100,
+                              decoration: BoxDecoration(
+                                  border:
+                                      Border.all(color: Colors.white, width: 1),
+                                  borderRadius: BorderRadius.circular(25)),
+                              child: Container(
+                                  alignment: Alignment.center,
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: 12, horizontal: 20),
+                                  child: Text(
+                                    'Edit',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: 'PR',
+                                        fontSize: 16),
+                                  )),
+                            ),
+                          ],
+                        ),
+
+                        // IconButton(
+                        //   icon: const Icon(
+                        //     Icons
+                        //         .video_call,
+                        //     size: 40,
+                        //     color: Colors
+                        //         .grey,
+                        //   ),
+                        //   onPressed:
+                        //       () {
+                        //         video_upload();
+                        //       },
+                        // ),
+                      ],
+                    ),
+                  )
+
+                  // const SizedBox(
+                  //   height: 10,
+                  // ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    ).then((value) {
+      _animController!.forward();
+      _videoController!.play();
+    });
   }
 }
 
@@ -478,14 +826,14 @@ class AnimatedBar extends StatelessWidget {
                 ),
                 position == currentIndex
                     ? AnimatedBuilder(
-                  animation: animController,
-                  builder: (context, child) {
-                    return _buildContainer(
-                      constraints.maxWidth * animController.value,
-                      HexColor(CommonColor.pinkFont),
-                    );
-                  },
-                )
+                        animation: animController,
+                        builder: (context, child) {
+                          return _buildContainer(
+                            constraints.maxWidth * animController.value,
+                            HexColor(CommonColor.pinkFont),
+                          );
+                        },
+                      )
                     : const SizedBox.shrink(),
               ],
             );
@@ -538,7 +886,7 @@ class UserInfo extends StatelessWidget {
           child: Text(
             '${stories.title}',
             style:
-            TextStyle(color: Colors.white, fontFamily: 'PM', fontSize: 18),
+                TextStyle(color: Colors.white, fontFamily: 'PM', fontSize: 18),
           ),
         ),
         IconButton(

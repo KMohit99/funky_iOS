@@ -15,6 +15,8 @@ import 'package:funky_new/profile_screen/video_viewer.dart';
 // import 'package:funky_project/profile_screen/edit_profile_screen.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:marquee/marquee.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
@@ -29,7 +31,9 @@ import '../custom_widget/common_buttons.dart';
 
 // import '../header_model.dart';
 import '../dashboard/story_/stories_editor.dart';
+import '../dashboard/story_/story_image_preview.dart';
 import '../sharePreference.dart';
+import '../video_recorder/lib/main.dart';
 import 'edit_profile_screen.dart';
 import 'followers_screen.dart';
 import 'following_screen.dart';
@@ -93,9 +97,10 @@ class _Profile_ScreenState extends State<Profile_Screen>
   TabController? _tabController;
   List<Tab> _tabs = [
     Tab(
-      height: 63,
+      iconMargin: EdgeInsets.all(5),
+      height: 75,
       icon: Container(
-        margin: EdgeInsets.only(top: 20),
+        // margin: EdgeInsets.only(top: 40),
         height: 45,
         width: 45,
         decoration: BoxDecoration(
@@ -132,9 +137,10 @@ class _Profile_ScreenState extends State<Profile_Screen>
       ),
     ),
     Tab(
-      height: 63,
+      iconMargin: EdgeInsets.all(5),
+      height: 75,
       icon: Container(
-        margin: EdgeInsets.only(top: 20),
+        // margin: EdgeInsets.only(top: 20),
         height: 45,
         width: 45,
         decoration: BoxDecoration(
@@ -170,9 +176,10 @@ class _Profile_ScreenState extends State<Profile_Screen>
       ),
     ),
     Tab(
-      height: 63,
+      iconMargin: EdgeInsets.all(5),
+      height: 75,
       icon: Container(
-        margin: EdgeInsets.only(top: 20),
+        // margin: EdgeInsets.only(top: 20),
         height: 45,
         width: 45,
         decoration: BoxDecoration(
@@ -208,9 +215,10 @@ class _Profile_ScreenState extends State<Profile_Screen>
       ),
     ),
     Tab(
-      height: 63,
+      iconMargin: EdgeInsets.all(5),
+      height: 75,
       icon: Container(
-        margin: EdgeInsets.only(top: 20),
+        // margin: EdgeInsets.only(top: 20),
         height: 45,
         width: 45,
         decoration: BoxDecoration(
@@ -247,9 +255,10 @@ class _Profile_ScreenState extends State<Profile_Screen>
       ),
     ),
     Tab(
-      height: 63,
+      iconMargin: EdgeInsets.all(5),
+      height: 75,
       icon: Container(
-        margin: EdgeInsets.only(top: 20),
+        // margin: EdgeInsets.only(top: 20),
         height: 45,
         width: 45,
         decoration: BoxDecoration(
@@ -364,7 +373,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
                     SliverAppBar(
                         backgroundColor: Colors.black,
                         automaticallyImplyLeading: false,
-                        expandedHeight: 370.0,
+                        expandedHeight: 400.0,
                         floating: false,
                         pinned: true,
                         flexibleSpace: FlexibleSpaceBar(
@@ -928,8 +937,10 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                   ),
                                   Container(
                                     margin: EdgeInsets.only(
-                                        top: 0, right: 16, left: 16),
+                                        top: 0, right: 0, left: 0),
                                     child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         Column(
@@ -937,8 +948,8 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                             Container(
                                               margin: EdgeInsets.symmetric(
                                                   horizontal: 5),
-                                              height: 61,
-                                              width: 61,
+                                              height: 60,
+                                              width: 60,
                                               decoration: BoxDecoration(
                                                   borderRadius:
                                                       BorderRadius.circular(50),
@@ -946,23 +957,28 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                                       color: Colors.white,
                                                       width: 3)),
                                               child: IconButton(
+                                                visualDensity: VisualDensity(
+                                                    vertical: -4,
+                                                    horizontal: -4),
                                                 onPressed: () async {
-                                                  File editedFile = await Navigator
-                                                          .of(context)
-                                                      .push(MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              StoriesEditor(
-                                                                // fontFamilyList: font_family,
-                                                                giphyKey: '',
-                                                                onDone:
-                                                                    (String) {},
-                                                                // filePath:
-                                                                //     imgFile!.path,
-                                                              )));
-                                                  if (editedFile != null) {
-                                                    print(
-                                                        'editedFile: ${editedFile.path}');
-                                                  }
+                                                  // File editedFile = await Navigator
+                                                  //         .of(context)
+                                                  //     .push(MaterialPageRoute(
+                                                  //         builder: (context) =>
+                                                  //             StoriesEditor(
+                                                  //               // fontFamilyList: font_family,
+                                                  //               giphyKey: '',
+                                                  //               onDone:
+                                                  //                   (String) {},
+                                                  //               // filePath:
+                                                  //               //     imgFile!.path,
+                                                  //             )));
+                                                  // if (editedFile != null) {
+                                                  //   print(
+                                                  //       'editedFile: ${editedFile.path}');
+                                                  // }
+                                                  // openCamera();
+                                                  pop_up();
                                                 },
                                                 icon: Icon(
                                                   Icons.add,
@@ -972,7 +988,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                               ),
                                             ),
                                             SizedBox(
-                                              height: 2,
+                                              height: 5,
                                             ),
                                             Text(
                                               'Add Story',
@@ -985,7 +1001,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                         ),
                                         Expanded(
                                           child: SizedBox(
-                                            height: 80,
+                                            height: 85,
                                             child: ListView.builder(
                                                 itemCount: story_info.length,
                                                 shrinkWrap: true,
@@ -1020,28 +1036,88 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                                                   BorderRadius
                                                                       .circular(
                                                                           50),
-                                                              child: FadeInImage
-                                                                  .assetNetwork(
-                                                                fit: BoxFit
-                                                                    .cover,
-                                                                image: "http://foxyserver.com/funky/images/${story_info[index].storyPhoto!}",
-                                                                placeholder: 'assets/images/Funky_App_Icon.png',
-                                                                // color: HexColor(CommonColor.pinkFont),
-                                                              ),
+                                                              child: (story_info[
+                                                                          index]
+                                                                      .storyPhoto!
+                                                                      .isEmpty
+                                                                  ? Image.file(
+                                                                  test_thumb[index]
+                                                                      // 'assets/images/Funky_App_Icon.png'
+                                                              )
+                                                                  : FadeInImage
+                                                                      .assetNetwork(
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                      image:
+                                                                          "http://foxyserver.com/funky/images/${story_info[index].storyPhoto!}",
+                                                                      placeholder:
+                                                                          'assets/images/Funky_App_Icon.png',
+                                                                      // color: HexColor(CommonColor.pinkFont),
+                                                                    )),
                                                             ),
                                                           ),
                                                         ),
                                                         SizedBox(
-                                                          height: 3,
+                                                          height: 5,
                                                         ),
-                                                        Text(
-                                                          '${story_info[index].title}',
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontFamily: 'PR',
-                                                              fontSize: 14),
-                                                        )
+                                                        (story_info[index]
+                                                                    .title!
+                                                                    .length >=
+                                                                5
+                                                            ? Container(
+                                                                height: 20,
+                                                                width: 40,
+                                                                child: Marquee(
+                                                                  text:
+                                                                      '${story_info[index].title}',
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontFamily:
+                                                                          'PR',
+                                                                      fontSize:
+                                                                          14),
+                                                                  scrollAxis: Axis
+                                                                      .horizontal,
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
+                                                                  blankSpace:
+                                                                      20.0,
+                                                                  velocity:
+                                                                      30.0,
+                                                                  pauseAfterRound:
+                                                                      Duration(
+                                                                          milliseconds:
+                                                                              100),
+                                                                  startPadding:
+                                                                      10.0,
+                                                                  accelerationDuration:
+                                                                      Duration(
+                                                                          seconds:
+                                                                              1),
+                                                                  accelerationCurve:
+                                                                      Curves
+                                                                          .easeIn,
+                                                                  decelerationDuration:
+                                                                      Duration(
+                                                                          microseconds:
+                                                                              500),
+                                                                  decelerationCurve:
+                                                                      Curves
+                                                                          .easeOut,
+                                                                ),
+                                                              )
+                                                            : Text(
+                                                                '${story_info[index].title}',
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontFamily:
+                                                                        'PR',
+                                                                    fontSize:
+                                                                        14),
+                                                              ))
                                                       ],
                                                     ),
                                                   );
@@ -1418,7 +1494,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
     print(data);
     // String body = json.encode(data);
 
-    var url = ('http://foxyserver.com/funky/api/galleryList.php');
+    var url = ('https://foxytechnologies.com/funky/api/galleryList.php');
     print("url : $url");
     print("body : $data");
     var response = await http.post(
@@ -1477,7 +1553,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
     print(data);
     // String body = json.encode(data);
 
-    var url = ('http://foxyserver.com/funky/api/post-videoList.php');
+    var url = ('https://foxytechnologies.com/funky/api/post-videoList.php');
     print("url : $url");
     print("body : $data");
     var response = await http.post(
@@ -1648,11 +1724,13 @@ class _Profile_ScreenState extends State<Profile_Screen>
   GetStoryModel? getStoryModel;
   List<Data_story> story_info = [];
 
+  List<File> test_thumb = [];
+
   // List<String> thumb = [];
   // String? filePath;
 
   Future<dynamic> get_story_list() async {
-    print('Inside creator get email');
+    print('Inside Story get email');
     setState(() {
       isStoryLoading = true;
     });
@@ -1680,6 +1758,29 @@ class _Profile_ScreenState extends State<Profile_Screen>
         debugPrint(
             '2-2-2-2-2-2 Inside the Get UserInfo Controller Details ${getStoryModel!.data!.length}');
         story_info = getStoryModel!.data!;
+
+
+        // test = File(uint8list!);
+
+        for (int i = 0; i < story_info.length; i++) {
+          if (story_info[i].isVideo == 'true') {
+            final uint8list = await VideoThumbnail.thumbnailFile(
+              video:
+              ("http://foxyserver.com/funky/video/${story_info[i].uploadVideo}"),
+              thumbnailPath: (await getTemporaryDirectory()).path,
+              imageFormat: ImageFormat.JPEG,
+              maxHeight: 64,
+              // specify the height of the thumbnail, let the width auto-scaled to keep the source aspect ratio
+              quality: 75,
+            );
+            test_thumb.add(File(uint8list!));
+            // print(test_thumb[i].path);
+          }else if(story_info[i].isVideo == 'false'){
+            test_thumb.add(File(story_info[i].image!));
+            // print(story_info[i].image);
+          }
+          print("test----------${test_thumb[i].path}");
+        }
         setState(() {
           isStoryLoading = false;
         });
@@ -1698,5 +1799,340 @@ class _Profile_ScreenState extends State<Profile_Screen>
     } else {
       // CommonWidget().showToaster(msg: msg.toString());
     }
+  }
+
+  File? imgFile;
+  final imgPicker = ImagePicker();
+
+  Future image_Gallery() {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          double width = MediaQuery.of(context).size.width;
+          double height = MediaQuery.of(context).size.height;
+          return BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            child: AlertDialog(
+                backgroundColor: Colors.transparent,
+                contentPadding: EdgeInsets.zero,
+                elevation: 0.0,
+                // title: Center(child: Text("Evaluation our APP")),
+                content: Container(
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+                  height: MediaQuery.of(context).size.height / 3,
+                  // width: 133,
+                  // padding: const EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: const Alignment(-1.0, 0.0),
+                        end: const Alignment(1.0, 0.0),
+                        transform: const GradientRotation(0.7853982),
+                        // stops: [0.1, 0.5, 0.7, 0.9],
+                        colors: [
+                          HexColor("#000000"),
+                          HexColor("#000000"),
+                          HexColor("##E84F90"),
+                          HexColor("#ffffff"),
+                          // HexColor("#FFFFFF").withOpacity(0.67),
+                        ],
+                      ),
+                      color: Colors.white,
+                      border: Border.all(color: Colors.white, width: 1),
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(26.0))),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(bottom: 10),
+                            child: common_button(
+                              onTap: () {
+                                // openCamera();
+                                openGallery();
+                                Navigator.pop(context);
+                                // Get.toNamed(BindingUtils.signupOption);
+                              },
+                              backgroud_color: Colors.black,
+                              lable_text: 'Image',
+                              lable_text_color: Colors.white,
+                            ),
+                          ),
+                          common_button(
+                            onTap: () {
+                              Pickvideo();
+                              Navigator.pop(context);
+                              // Get.toNamed(BindingUtils.signupOption);
+                            },
+                            backgroud_color: Colors.black,
+                            lable_text: 'Video',
+                            lable_text_color: Colors.white,
+                          ),
+                          // const SizedBox(
+                          //   height: 10,
+                          // ),
+                        ],
+                      ),
+                    ],
+                  ),
+                )),
+          );
+        });
+  }
+
+  void openGallery() async {
+    var imgCamera = await imgPicker.getImage(source: ImageSource.gallery);
+    setState(() {
+      imgFile = File(imgCamera!.path);
+      // _creator_signup_controller.photoBase64 =
+      //     base64Encode(imgFile!.readAsBytesSync());
+      // print(_creator_signup_controller.photoBase64);
+    });
+    File editedFile = await Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => StoriesEditor(
+              // fontFamilyList: font_family,
+              giphyKey:
+                  'https://giphy.com/gifs/congratulations-congrats-xT0xezQGU5xCDJuCPe',
+              imageData: imgFile,
+              onDone: (String) {},
+              // filePath:
+              //     imgFile!.path,
+            )));
+    if (editedFile != null) {
+      print('editedFile: ${editedFile.path}');
+    }
+  }
+
+  void Pickvideo() async {
+    var imgCamera = await imgPicker.pickVideo(source: ImageSource.gallery);
+    setState(() {
+      imgFile = File(imgCamera!.path);
+      // _creator_signup_controller.photoBase64 =
+      //     base64Encode(imgFile!.readAsBytesSync());
+      // print(_creator_signup_controller.photoBase64);
+    });
+    await Get.to(Story_image_preview(
+      ImageFile: File(imgFile!.path),
+      isImage: false,
+    ));
+
+    // File editedFile = await Navigator.of(context).push(MaterialPageRoute(
+    //     builder: (context) => StoriesEditor(
+    //           // fontFamilyList: font_family,
+    //           giphyKey: '',
+    //           imageData: imgFile,
+    //           onDone: (String) {},
+    //           // filePath:
+    //           //     imgFile!.path,
+    //         )));
+    // if (editedFile != null) {
+    //   print('editedFile: ${editedFile.path}');
+    // }
+  }
+
+  late double screenHeight, screenWidth;
+
+  Future pop_up() {
+    return showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Colors.transparent,
+        contentPadding: EdgeInsets.zero,
+        elevation: 0.0,
+        content: Container(
+          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+          height: MediaQuery.of(context).size.height / 5,
+          // width: 133,
+          // padding: const EdgeInsets.all(8.0),
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: const Alignment(-1.0, 0.0),
+                end: const Alignment(1.0, 0.0),
+                transform: const GradientRotation(0.7853982),
+                // stops: [0.1, 0.5, 0.7, 0.9],
+                colors: [
+                  HexColor("#000000"),
+                  HexColor("#000000"),
+                  HexColor("##E84F90"),
+                  HexColor("#ffffff"),
+                  // HexColor("#FFFFFF").withOpacity(0.67),
+                ],
+              ),
+              color: Colors.white,
+              border: Border.all(color: Colors.white, width: 1),
+              borderRadius: const BorderRadius.all(Radius.circular(26.0))),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    child: Row(
+                      // mainAxisAlignment:
+                      // MainAxisAlignment
+                      //     .center,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            // camera_upload();
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MyApp_video(
+                                        story: true,
+                                      )),
+                            );
+                          },
+                          child: Column(
+                            children: [
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.camera_alt,
+                                  size: 30,
+                                  color: Colors.white,
+                                ),
+                                onPressed: () {
+                                  // camera_upload();
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => MyApp_video(
+                                              story: true,
+                                            )),
+                                  );
+                                },
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Container(
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 0),
+                                // height: 45,
+                                // width:(width ?? 300) ,
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: Colors.white, width: 1),
+                                    borderRadius: BorderRadius.circular(25)),
+                                child: Container(
+                                    alignment: Alignment.center,
+                                    margin: EdgeInsets.symmetric(
+                                        vertical: 12, horizontal: 20),
+                                    child: Text(
+                                      'Camera',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontFamily: 'PR',
+                                          fontSize: 16),
+                                    )),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        GestureDetector(
+                          onTap: () async {
+                            // File editedFile = await Navigator.of(context)
+                            //     .push(MaterialPageRoute(
+                            //         builder: (context) => StoriesEditor(
+                            //               // fontFamilyList: font_family,
+                            //               giphyKey: '',
+                            //               onDone: (String) {},
+                            //               // filePath:
+                            //               //     imgFile!.path,
+                            //             )));
+                            // if (editedFile != null) {
+                            //   print('editedFile: ${editedFile.path}');
+                            // }
+                            image_Gallery();
+                          },
+                          child: Column(
+                            children: [
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.photo_library_sharp,
+                                  size: 30,
+                                  color: Colors.white,
+                                ),
+                                onPressed: () async {
+                                  // File editedFile = await Navigator.of(context)
+                                  //     .push(MaterialPageRoute(
+                                  //         builder: (context) => StoriesEditor(
+                                  //               // fontFamilyList: font_family,
+                                  //               giphyKey: '',
+                                  //               onDone: (String) {},
+                                  //               // filePath:
+                                  //               //     imgFile!.path,
+                                  //             )));
+                                  // if (editedFile != null) {
+                                  //   print('editedFile: ${editedFile.path}');
+                                  // }
+                                  image_Gallery();
+                                },
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Container(
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 0),
+                                // height: 45,
+                                // width:(width ?? 300) ,
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: Colors.white, width: 1),
+                                    borderRadius: BorderRadius.circular(25)),
+                                child: Container(
+                                    alignment: Alignment.center,
+                                    margin: EdgeInsets.symmetric(
+                                        vertical: 12, horizontal: 20),
+                                    child: Text(
+                                      'Gallery',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontFamily: 'PR',
+                                          fontSize: 16),
+                                    )),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        // IconButton(
+                        //   icon: const Icon(
+                        //     Icons
+                        //         .video_call,
+                        //     size: 40,
+                        //     color: Colors
+                        //         .grey,
+                        //   ),
+                        //   onPressed:
+                        //       () {
+                        //         video_upload();
+                        //       },
+                        // ),
+                      ],
+                    ),
+                  )
+
+                  // const SizedBox(
+                  //   height: 10,
+                  // ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

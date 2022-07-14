@@ -1,6 +1,8 @@
 // ignore_for_file: must_be_immutable
 // library stories_editor;
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:funky_new/dashboard/story_/src/domain/providers/notifiers/control_provider.dart';
@@ -12,6 +14,7 @@ import 'package:funky_new/dashboard/story_/src/domain/providers/notifiers/scroll
 import 'package:funky_new/dashboard/story_/src/domain/providers/notifiers/text_editing_notifier.dart';
 import 'package:funky_new/dashboard/story_/src/presentation/main_view/main_view.dart';
 import 'package:provider/provider.dart';
+
 // import 'package:provider/provider.dart';
 // import 'package:stories_editor/src/domain/providers/notifiers/control_provider.dart';
 // import 'package:stories_editor/src/domain/providers/notifiers/draggable_widget_notifier.dart';
@@ -58,19 +61,21 @@ class StoriesEditor extends StatefulWidget {
   /// gallery thumbnail quality
   final int? galleryThumbnailQuality;
 
+  final File? imageData;
+
   const StoriesEditor(
       {Key? key,
-        required this.giphyKey,
-        required this.onDone,
-        this.middleBottomWidget,
-        this.colorList,
-        this.gradientColors,
-        this.fontFamilyList,
-        this.isCustomFontList,
-        this.onBackPress,
-        this.onDoneButtonStyle,
-        this.editorBackgroundColor,
-        this.galleryThumbnailQuality})
+      required this.giphyKey,
+      required this.onDone,
+      this.middleBottomWidget,
+      this.colorList,
+      this.gradientColors,
+      this.fontFamilyList,
+      this.isCustomFontList,
+      this.onBackPress,
+      this.onDoneButtonStyle,
+      this.editorBackgroundColor,
+      this.galleryThumbnailQuality, this.imageData,})
       : super(key: key);
 
   @override
@@ -110,6 +115,7 @@ class _StoriesEditorState extends State<StoriesEditor> {
         ChangeNotifierProvider(create: (_) => RenderingNotifier()),
       ],
       child: MainView(
+        imagedata: widget.imageData,
         giphyKey: widget.giphyKey,
         onDone: widget.onDone,
         fontFamilyList: widget.fontFamilyList,

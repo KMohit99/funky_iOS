@@ -31,7 +31,8 @@ class TxtUtils {
 
 }
 class URLConstants{
-  static const String base_url = "http://foxyserver.com/funky/api/";
+  // static const String base_url = "http://foxyserver.com/funky/api/";
+  static const String base_url = "https://foxytechnologies.com//funky/api/";
   static const loginApi = "login.php";
   static const SignUpApi = "signup.php";
   static const socailsignUpApi = "social-signup.php";
@@ -77,6 +78,9 @@ class URLConstants{
   static const StoryPostApi = "newStoryPost.php";
   static const StoryGetApi = "get-storyList.php";
   static const StoryGetCountApi = "get-viewStory.php";
+  static const StoryDeleteApi = "deleteStory.php";
+  static const StoryViewApi = "view-story.php";
+  static const StoryEditApi = "editStory.php";
   static String id = "id";
   static String username = "user";
   static String type = "type";

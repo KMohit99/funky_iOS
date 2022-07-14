@@ -73,7 +73,8 @@ class _PostVideoPreviewScreenState extends State<PostVideoPreviewScreen> {
     return showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text("Post Video"),
+        title: Text("Post Video",style: TextStyle(
+            fontSize: 18, color: Colors.black, fontFamily: 'PM')),
         actions: <Widget>[
           Container(
             margin: EdgeInsets.only(bottom: 10),

@@ -22,6 +22,7 @@ class TopTextTools extends StatelessWidget {
             alignment: Alignment.topCenter,
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.end,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   /// font family / font color
@@ -84,47 +85,47 @@ class TopTextTools extends StatelessWidget {
                           ),
                         )),
                   ),
-                  ToolButton(
-                    backGroundColor: HexColor('#C12265'),
-                    onTap: () {
-                      editorNotifier.isTextAnimation =
-                          !editorNotifier.isTextAnimation;
-
-                      /// animate to selected animation page
-                      if (editorNotifier.isTextAnimation) {
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          if (editorNotifier
-                              .textAnimationController.hasClients) {
-                            editorNotifier.textAnimationController
-                                .animateToPage(
-                                    editorNotifier.fontAnimationIndex,
-                                    duration: const Duration(milliseconds: 300),
-                                    curve: Curves.easeIn);
-                          }
-                        });
-                      } else {
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          if (editorNotifier.fontFamilyController.hasClients) {
-                            editorNotifier.fontFamilyController.animateToPage(
-                                editorNotifier.fontFamilyIndex,
-                                duration: const Duration(milliseconds: 300),
-                                curve: Curves.easeIn);
-                          }
-                        });
-                      }
-                    },
-                    child: Transform.scale(
-                        scale: 0.7,
-                        child: const Center(
-                          child: Padding(
-                            padding: EdgeInsets.all(0),
-                            child: ImageIcon(
-                              AssetImage('assets/icons/video_trim.png'),
-                              color: Colors.white,
-                            ),
-                          ),
-                        )),
-                  )
+                  // ToolButton(
+                  //   backGroundColor: HexColor('#C12265'),
+                  //   onTap: () {
+                  //     editorNotifier.isTextAnimation =
+                  //         !editorNotifier.isTextAnimation;
+                  //
+                  //     /// animate to selected animation page
+                  //     if (editorNotifier.isTextAnimation) {
+                  //       WidgetsBinding.instance.addPostFrameCallback((_) {
+                  //         if (editorNotifier
+                  //             .textAnimationController.hasClients) {
+                  //           editorNotifier.textAnimationController
+                  //               .animateToPage(
+                  //                   editorNotifier.fontAnimationIndex,
+                  //                   duration: const Duration(milliseconds: 300),
+                  //                   curve: Curves.easeIn);
+                  //         }
+                  //       });
+                  //     } else {
+                  //       WidgetsBinding.instance.addPostFrameCallback((_) {
+                  //         if (editorNotifier.fontFamilyController.hasClients) {
+                  //           editorNotifier.fontFamilyController.animateToPage(
+                  //               editorNotifier.fontFamilyIndex,
+                  //               duration: const Duration(milliseconds: 300),
+                  //               curve: Curves.easeIn);
+                  //         }
+                  //       });
+                  //     }
+                  //   },
+                  //   child: Transform.scale(
+                  //       scale: 0.7,
+                  //       child: const Center(
+                  //         child: Padding(
+                  //           padding: EdgeInsets.all(0),
+                  //           child: ImageIcon(
+                  //             AssetImage('assets/icons/video_trim.png'),
+                  //             color: Colors.white,
+                  //           ),
+                  //         ),
+                  //       )),
+                  // )
                 ],
               ),
 
@@ -139,7 +140,7 @@ class TopTextTools extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           vertical: 6, horizontal: 12),
                       decoration: BoxDecoration(
-                          color: Colors.transparent,
+                          color: Colors.black,
                           border: Border.all(color: Colors.white, width: 1.5),
                           borderRadius: BorderRadius.circular(15)),
                       child: const Text(

@@ -1,7 +1,11 @@
 // ignore_for_file: must_be_immutable
 
 import 'dart:async';
+
+// import 'dart:html';
 import 'dart:io';
+import 'package:funky_new/dashboard/dashboard_screen.dart';
+import 'package:path/path.dart' as p;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +38,7 @@ import '../utils/constants/render_state.dart';
 import '../utils/modal_sheets.dart';
 import '../widgets/animated_onTap_button.dart';
 import '../widgets/scrollable_pageView.dart';
+
 // import 'package:stories_editor/src/domain/models/editable_items.dart';
 // import 'package:stories_editor/src/domain/models/painting_model.dart';
 // import 'package:stories_editor/src/domain/providers/notifiers/control_provider.dart';
@@ -72,6 +77,7 @@ import '../../domain/providers/notifiers/text_editing_notifier.dart';
 import '../utils/constants/item_type.dart';
 import '../widgets/color_selector.dart';
 import '../widgets/size_slider_selector.dart';
+
 class MainView extends StatefulWidget {
   /// editor custom font families
   final List<String>? fontFamilyList;
@@ -103,22 +109,25 @@ class MainView extends StatefulWidget {
   /// gallery thumbnail quality
   final int? galleryThumbnailQuality;
 
+  final File? imagedata;
+
   /// editor custom color palette list
   List<Color>? colorList;
-  MainView(
-      {Key? key,
-      required this.giphyKey,
-      required this.onDone,
-      this.middleBottomWidget,
-      this.colorList,
-      this.isCustomFontList,
-      this.fontFamilyList,
-      this.gradientColors,
-      this.onBackPress,
-      this.onDoneButtonStyle,
-      this.editorBackgroundColor,
-      this.galleryThumbnailQuality})
-      : super(key: key);
+
+  MainView({
+    Key? key,
+    required this.giphyKey,
+    required this.onDone,
+    this.middleBottomWidget,
+    this.colorList,
+    this.isCustomFontList,
+    this.fontFamilyList,
+    this.gradientColors,
+    this.onBackPress,
+    this.onDoneButtonStyle,
+    this.editorBackgroundColor,
+    this.galleryThumbnailQuality, this.imagedata,
+  }) : super(key: key);
 
   @override
   _MainViewState createState() => _MainViewState();
@@ -142,8 +151,7 @@ class _MainViewState extends State<MainView> {
   bool _inAction = false;
 
   /// screen size
-  final _screenSize =
-      MediaQueryData.fromWindow(WidgetsBinding.instance.window);
+  final _screenSize = MediaQueryData.fromWindow(WidgetsBinding.instance.window);
 
   /// recorder controller
   final WidgetRecorderController _recorderController =
@@ -151,11 +159,31 @@ class _MainViewState extends State<MainView> {
 
   @override
   void initState() {
+    // print('wwwwwww${widget.imagedata!.path}');
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       var _control = Provider.of<ControlNotifier>(context, listen: false);
+      var _item = Provider.of<DraggableWidgetNotifier>(context, listen: false);
+
+      _control.mediaPath = widget.imagedata!.path;
+      if (_control.mediaPath.isNotEmpty) {
+        _item.draggableWidget.insert(
+            0,
+            EditableItem()
+              ..type = ItemType.image
+              ..position = const Offset(0.0, 0));
+        print(_control.mediaPath);
+        // final extension = p.extension(
+        //     controlNotifier.mediaPath); // '.dart'
+        // print(extension);
+        // if (extension == '.MP4') {
+        //   Navigator.of(context).push(MaterialPageRoute(
+        //       builder: (context) => Dashboard(page: 0)));
+        // }
+      }
 
       /// initialize control variable provider
       _control.giphyKey = widget.giphyKey;
+      // _control.mediaPath = widget.imagedata!.path;
       _control.middleBottomWidget = widget.middleBottomWidget;
       _control.isCustomFontList = widget.isCustomFontList ?? false;
       if (widget.gradientColors != null) {
@@ -329,7 +357,8 @@ class _MainViewState extends State<MainView> {
                                                                   .height -
                                                               132,
                                                           child: StreamBuilder<
-                                                              List<PaintingModel>>(
+                                                              List<
+                                                                  PaintingModel>>(
                                                             stream: paintingProvider
                                                                 .linesStreamController
                                                                 .stream,
@@ -447,15 +476,18 @@ class _MainViewState extends State<MainView> {
                           ],
                         ),
                         gallery: GalleryMediaPicker(
+                          // onlyVideos: true,
                           gridViewController: scrollProvider.gridController,
                           thumbnailQuality: widget.galleryThumbnailQuality,
                           singlePick: true,
-                          onlyImages: true,
+                          // onlyImages: true,
+
                           appBarColor:
                               widget.editorBackgroundColor ?? Colors.black,
                           gridViewPhysics: itemProvider.draggableWidget.isEmpty
                               ? const NeverScrollableScrollPhysics()
                               : const ScrollPhysics(),
+
                           pathList: (path) {
                             controlNotifier.mediaPath = path[0]['path'];
                             if (controlNotifier.mediaPath.isNotEmpty) {
@@ -464,6 +496,14 @@ class _MainViewState extends State<MainView> {
                                   EditableItem()
                                     ..type = ItemType.image
                                     ..position = const Offset(0.0, 0));
+                              print(controlNotifier.mediaPath);
+                              final extension = p.extension(
+                                  controlNotifier.mediaPath); // '.dart'
+                              print(extension);
+                              if (extension == '.MP4') {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => Dashboard(page: 0)));
+                              }
                             }
                             scrollProvider.pageController.animateToPage(0,
                                 duration: const Duration(milliseconds: 300),
@@ -485,7 +525,7 @@ class _MainViewState extends State<MainView> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8, vertical: 2),
                                   decoration: BoxDecoration(
-                                      color: Colors.transparent,
+                                      color: Colors.pink,
                                       borderRadius: BorderRadius.circular(10),
                                       border: Border.all(
                                         color: Colors.white,
@@ -583,6 +623,7 @@ class _MainViewState extends State<MainView> {
   Future<bool> _popScope() async {
     final controlNotifier =
         Provider.of<ControlNotifier>(context, listen: false);
+
     /// change to false text editing
     if (controlNotifier.isTextEditing) {
       controlNotifier.isTextEditing = !controlNotifier.isTextEditing;

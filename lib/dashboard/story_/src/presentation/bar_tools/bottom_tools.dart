@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gallery_media_picker/gallery_media_picker.dart';
@@ -12,6 +14,7 @@ import '../../domain/sevices/save_as_image.dart';
 import '../utils/constants/item_type.dart';
 import '../utils/constants/text_animation_type.dart';
 import '../widgets/animated_onTap_button.dart';
+
 // import 'package:stories_editor/src/domain/providers/notifiers/control_provider.dart';
 // import 'package:stories_editor/src/domain/providers/notifiers/draggable_widget_notifier.dart';
 // import 'package:stories_editor/src/domain/providers/notifiers/painting_notifier.dart';
@@ -29,20 +32,26 @@ class BottomTools extends StatelessWidget {
 
   /// editor background color
   final Color? editorBackgroundColor;
-  const BottomTools(
-      {Key? key,
-      required this.contentKey,
-      required this.onDone,
-      required this.renderWidget,
-      this.onDoneButtonStyle,
-      this.editorBackgroundColor})
+
+  const BottomTools({Key? key,
+    required this.contentKey,
+    required this.onDone,
+    required this.renderWidget,
+    this.onDoneButtonStyle,
+    this.editorBackgroundColor})
       : super(key: key);
+
+ final String path = 'result/var/mobile/Containers/Data/Application/FD6B5AEF-9859-4D27-A02F-898C688C0053/Documents/stories_creator2022-07-13 12:19:40.641568.png';
 
   @override
   Widget build(BuildContext context) {
-    var _size = MediaQuery.of(context).size;
+    var _size = MediaQuery
+        .of(context)
+        .size;
     bool _createVideo = false;
-    return Consumer4<ControlNotifier, ScrollNotifier, DraggableWidgetNotifier,
+    return Consumer4<ControlNotifier,
+        ScrollNotifier,
+        DraggableWidgetNotifier,
         PaintingNotifier>(
       builder: (_, controlNotifier, scrollNotifier, itemNotifier,
           paintingNotifier, __) {
@@ -53,6 +62,7 @@ class BottomTools extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+
               /// preview gallery
               Container(
                 width: _size.width / 3,
@@ -61,51 +71,51 @@ class BottomTools extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: SizedBox(
                   child: _preViewContainer(
+
                     /// if [model.imagePath] is null/empty return preview image
                     child: controlNotifier.mediaPath.isEmpty
                         ? ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: GestureDetector(
-                              onTap: () {
-                                /// scroll to gridView page
-                                if (controlNotifier.mediaPath.isEmpty) {
-                                  scrollNotifier.pageController.animateToPage(1,
-                                      duration:
-                                          const Duration(milliseconds:500),
-                                      curve: Curves.ease);
-                                }
-                              },
-                              child: const CoverThumbnail(
-
-                                thumbnailQuality: 10,
-                              ),
-                            ))
-
-                        /// return clear [imagePath] provider
-                        : GestureDetector(
-                            onTap: () {
-                              /// clear image url variable
-                              controlNotifier.mediaPath = '';
-                              itemNotifier.draggableWidget.removeAt(0);
-                            },
-                            child: Container(
-                              height: 45,
-                              width: 45,
-                              color: Colors.transparent,
-                              child: Transform.scale(
-                                scale: 0.7,
-                                child: const Icon(
-                                  Icons.delete,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
+                        borderRadius: BorderRadius.circular(8),
+                        child: GestureDetector(
+                          onTap: () {
+                            /// scroll to gridView page
+                            if (controlNotifier.mediaPath.isEmpty) {
+                              scrollNotifier.pageController.animateToPage(1,
+                                  duration:
+                                  const Duration(milliseconds: 500),
+                                  curve: Curves.ease);
+                              // controlNotifier.mediaPath = path;
+                            }
+                          },
+                          child: const CoverThumbnail(
+                            thumbnailQuality: 10,
                           ),
+                        ))
+
+                    /// return clear [imagePath] provider
+                        : GestureDetector(
+                      onTap: () {
+                        /// clear image url variable
+                        controlNotifier.mediaPath = '';
+                        itemNotifier.draggableWidget.removeAt(0);
+                      },
+                      child: Container(
+                        height: 45,
+                        width: 45,
+                        color: Colors.transparent,
+                        child: Transform.scale(
+                          scale: 0.7,
+                          child: const Icon(
+                            Icons.delete,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
 
-            
 
               /// save final image to gallery
               Container(
@@ -122,7 +132,7 @@ class BottomTools extends StatelessWidget {
                             if (paintingNotifier.lines.isNotEmpty ||
                                 itemNotifier.draggableWidget.isNotEmpty) {
                               for (var element
-                                  in itemNotifier.draggableWidget) {
+                              in itemNotifier.draggableWidget) {
                                 if (element.type == ItemType.gif ||
                                     element.animationType !=
                                         TextAnimationType.none) {
@@ -152,7 +162,8 @@ class BottomTools extends StatelessWidget {
                                     context: context,
                                     saveToGallery: true);
                                 if (response) {
-                                  Fluttertoast.showToast(msg: 'Successfully saved');
+                                  Fluttertoast.showToast(
+                                      msg: 'Successfully saved');
                                 } else {
                                   Fluttertoast.showToast(msg: 'Error');
                                 }
@@ -165,7 +176,7 @@ class BottomTools extends StatelessWidget {
                           child: onDoneButtonStyle ??
                               Container(
                                 padding: const EdgeInsets.only(
-                                    left: 12, right: 5, top: 10, bottom:10),
+                                    left: 12, right: 5, top: 10, bottom: 10),
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(15),
                                     color: HexColor('#C12265'),

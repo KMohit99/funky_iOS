@@ -6,6 +6,7 @@ import 'dart:io' as Io;
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:funky_new/Utils/colorUtils.dart';
 
 // import 'package:funky_project/Authentication/creator_signup/model/countryModelclass.dart';
 // import 'package:funky_project/controller/controllers_class.dart';
@@ -40,7 +41,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   final List<String> data = <String>[
     'male',
-    'female',
+    'Female',
   ];
   List<Data_country> data2 = <Data_country>[];
 
@@ -51,7 +52,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   init() async {
-    // await _creator_signup_controller.getAllCountriesFromAPI();
+    await _creator_signup_controller.getcountry();
     await user_info_setup();
   }
 
@@ -84,27 +85,23 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       print(
           "imgFile ${_creator_login_screen_controller.userInfoModel_email!.data![0].location}");
 
-      // CountryList getCountry = _creator_signup_controller.data_country
-      //     .firstWhere((element) =>
-      //         _creator_login_screen_controller
-      //             .userInfoModel_email!.data![0].location ==
-      //         element.name);
-      // _creator_signup_controller.selectedcountry = getCountry;
-
-      CountryList unit_new = _creator_signup_controller.data_country.firstWhere(
-          (element) =>
-              element.name ==
+      CountryList getCountry = _creator_signup_controller.data_country
+          .firstWhere((element) =>
               _creator_login_screen_controller
-                  .userInfoModel_email!.data![0].location);
+                  .userInfoModel_email!.data![0].location ==
+              element.name);
+      _creator_signup_controller.query_followers.text = getCountry.name!;
+
       // _creator_signup_controller.query_followers.text = unit_new.name!;
 
-      // if(_creator_login_screen_controller.userInfoModel_email!.data![0].gender!.isNotEmpty){
-      //   String get_gender = data.firstWhere((element) =>
-      //   element == _creator_login_screen_controller.userInfoModel_email!.data![0].gender);
-      //   _creator_signup_controller
-      //       .selected_gender = get_gender;
-      //
-      // }
+      if (_creator_login_screen_controller
+          .userInfoModel_email!.data![0].gender!.isNotEmpty) {
+        String get_gender = data.firstWhere((element) =>
+            element ==
+            _creator_login_screen_controller
+                .userInfoModel_email!.data![0].gender);
+        _creator_signup_controller.gender_controller.text = get_gender;
+      }
     });
   }
 
@@ -213,118 +210,94 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         SizedBox(
                           height: 20,
                         ),
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.white, width: 1),
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                          child: Container(
-                            height: 80,
-                            width: 80,
-                            child: ClipRRect(
+                        Stack(
+                          children: [
+                            ClipRRect(
                                 borderRadius: BorderRadius.circular(500),
                                 child: (_creator_login_screen_controller
                                         .userInfoModel_email!
                                         .data![0]
                                         .image!
-                                        .isNotEmpty
-                                    ? Image.network(
-                                        "http://foxyserver.com/funky/images/${_creator_login_screen_controller.userInfoModel_email!.data![0].image!}",
+                                        .isEmpty
+                                    ? Image.asset(
+                                        AssetUtils.user_icon,
                                         fit: BoxFit.fill,
+                                        height: 80,
+                                        width: 80,
                                       )
                                     : (imgFile == null
-                                        ? IconButton(
-                                            icon: Image.asset(
-                                              AssetUtils.user_icon,
-                                              fit: BoxFit.fill,
-                                            ),
-                                            onPressed: () {
-                                              showDialog(
-                                                context: context,
-                                                builder: (ctx) => AlertDialog(
-                                                  title:
-                                                      Text("Pick Image from"),
-                                                  actions: <Widget>[
-                                                    Container(
-                                                      margin: EdgeInsets.only(
-                                                          bottom: 10),
-                                                      child: common_button(
-                                                        onTap: () {
-                                                          openCamera();
-                                                          // Get.toNamed(BindingUtils.signupOption);
-                                                        },
-                                                        backgroud_color:
-                                                            Colors.black,
-                                                        lable_text: 'Camera',
-                                                        lable_text_color:
-                                                            Colors.white,
-                                                      ),
-                                                    ),
-                                                    common_button(
-                                                      onTap: () {
-                                                        openGallery();
-                                                        // Get.toNamed(BindingUtils.signupOption);
-                                                      },
-                                                      backgroud_color:
-                                                          Colors.black,
-                                                      lable_text: 'Gallery',
-                                                      lable_text_color:
-                                                          Colors.white,
-                                                    ),
-                                                  ],
-                                                ),
-                                              );
-                                            },
+                                        ? Image.network(
+                                            "http://foxyserver.com/funky/images/${_creator_login_screen_controller.userInfoModel_email!.data![0].image!}",
+                                            height: 80,
+                                            width: 80,
+                                            fit: BoxFit.fill,
                                           )
                                         : Image.file(
                                             imgFile!,
-                                            fit: BoxFit.fill,
+                                            height: 80,
+                                            width: 80,
+                                            fit: BoxFit.cover,
                                           )))),
-                          ),
-                          // SizedBox(
-                          //   height: 80,
-                          //   width: 80,
-                          //   child: (imgFile == null ? IconButton(
-                          //     icon: Image.asset(
-                          //       AssetUtils.user_icon,
-                          //       fit: BoxFit.fill,
-                          //     ),
-                          //     onPressed: () {
-                          //       showDialog(
-                          //         context: context,
-                          //         builder: (ctx) => AlertDialog(
-                          //
-                          //           title: Text("Pick Image from"),
-                          //           actions: <Widget>[
-                          //             Container(
-                          //               margin: EdgeInsets.only(bottom: 10),
-                          //               child: common_button(
-                          //                 onTap: () {
-                          //                   openCamera();
-                          //                   // Get.toNamed(BindingUtils.signupOption);
-                          //                 },
-                          //                 backgroud_color: Colors.black,
-                          //                 lable_text: 'Camera',
-                          //                 lable_text_color: Colors.white,
-                          //               ),
-                          //             ),
-                          //
-                          //             common_button(
-                          //               onTap: () {
-                          //                openGallery();
-                          //                 // Get.toNamed(BindingUtils.signupOption);
-                          //               },
-                          //               backgroud_color: Colors.black,
-                          //               lable_text: 'Gallery',
-                          //               lable_text_color: Colors.white,
-                          //             ),
-                          //           ],
-                          //         ),
-                          //       );
-                          //     },
-                          //   ) : Image.file(imgFile!, fit: BoxFit.fill,)
-                          // ),
-                          // ),
+                            Positioned(
+                              bottom: 2,
+                              right: 0,
+                              child: GestureDetector(
+                                onTap: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (ctx) => AlertDialog(
+                                      title: Text("Pick Image from"),
+                                      actions: <Widget>[
+                                        Container(
+                                          margin: EdgeInsets.only(bottom: 10),
+                                          child: common_button(
+                                            onTap: () {
+                                              openCamera();
+                                              // Get.toNamed(BindingUtils.signupOption);
+                                            },
+                                            backgroud_color: Colors.black,
+                                            lable_text: 'Camera',
+                                            lable_text_color: Colors.white,
+                                          ),
+                                        ),
+                                        common_button(
+                                          onTap: () {
+                                            openGallery();
+                                            // Get.toNamed(BindingUtils.signupOption);
+                                          },
+                                          backgroud_color: Colors.black,
+                                          lable_text: 'Gallery',
+                                          lable_text_color: Colors.white,
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(50),
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        HexColor('#36393E'),
+                                        HexColor('#020204'),
+                                      ],
+                                      begin: Alignment.centerLeft,
+                                      end: Alignment.centerRight,
+                                    ),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: Icon(
+                                      Icons.camera_alt,
+                                      color: HexColor(CommonColor.pinkFont),
+                                      size: 15,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
                         ),
                         SizedBox(
                           height: 12,
@@ -792,144 +765,212 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         SizedBox(
                           height: 12,
                         ),
-                        Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 30),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                margin: EdgeInsets.only(left: 18),
-                                child: Text(
-                                  "Gender",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontFamily: 'PR',
-                                    color: Colors.white,
+                        // Container(
+                        //   margin: const EdgeInsets.symmetric(horizontal: 30),
+                        //   child: Column(
+                        //     crossAxisAlignment: CrossAxisAlignment.start,
+                        //     mainAxisAlignment: MainAxisAlignment.start,
+                        //     children: [
+                        //       Container(
+                        //         margin: EdgeInsets.only(left: 18),
+                        //         child: Text(
+                        //           "Gender",
+                        //           style: TextStyle(
+                        //             fontSize: 14,
+                        //             fontFamily: 'PR',
+                        //             color: Colors.white,
+                        //           ),
+                        //         ),
+                        //       ),
+                        //       SizedBox(
+                        //         height: 12,
+                        //       ),
+                        //       Container(
+                        //         height: 45,
+                        //         width: screenwidth,
+                        //         decoration: BoxDecoration(
+                        //           boxShadow: const [
+                        //             BoxShadow(
+                        //               color: Colors.black,
+                        //               blurRadius: 5,
+                        //               offset: Offset(0, 0),
+                        //               spreadRadius: -5,
+                        //             ),
+                        //           ],
+                        //           color: Colors.white,
+                        //           borderRadius: BorderRadius.circular(24.0),
+                        //         ),
+                        //         child: FormField<String>(
+                        //           builder: (FormFieldState<String> state) {
+                        //             return DropdownButtonHideUnderline(
+                        //               child: DropdownButton2(
+                        //                 isExpanded: true,
+                        //                 hint: Row(
+                        //                   children: [
+                        //                     SizedBox(
+                        //                       width: 4,
+                        //                     ),
+                        //                     Expanded(
+                        //                       child: Text(
+                        //                         'Select gender',
+                        //                         style: TextStyle(
+                        //                           fontSize: 14,
+                        //                           fontFamily: 'PR',
+                        //                           color: Colors.grey,
+                        //                         ),
+                        //                         overflow: TextOverflow.ellipsis,
+                        //                       ),
+                        //                     ),
+                        //                   ],
+                        //                 ),
+                        //                 items: data
+                        //                     .map((item) =>
+                        //                         DropdownMenuItem<String>(
+                        //                           value: item,
+                        //                           child: Text(
+                        //                             item,
+                        //                             style: TextStyle(
+                        //                               fontSize: 16,
+                        //                               fontFamily: 'PR',
+                        //                               color: Colors.pink,
+                        //                             ),
+                        //                             overflow:
+                        //                                 TextOverflow.ellipsis,
+                        //                           ),
+                        //                         ))
+                        //                     .toList(),
+                        //                 value: _creator_signup_controller
+                        //                     .selected_gender,
+                        //                 onChanged: (value) {
+                        //                   setState(() {
+                        //                     _creator_signup_controller
+                        //                             .selected_gender =
+                        //                         value as String;
+                        //                   });
+                        //                   // print(contactdetailsController
+                        //                   //     .selectedValue);
+                        //                 },
+                        //                 iconSize: 25,
+                        //                 icon: Image.asset(
+                        //                   AssetUtils.downArrow_icon,
+                        //                   height: 13,
+                        //                   width: 13,
+                        //                 ),
+                        //                 iconEnabledColor: Color(0xff007DEF),
+                        //                 iconDisabledColor: Color(0xff007DEF),
+                        //                 buttonHeight: 50,
+                        //                 buttonWidth: 160,
+                        //                 buttonPadding: const EdgeInsets.only(
+                        //                     left: 15, right: 15),
+                        //                 buttonDecoration: BoxDecoration(
+                        //                     borderRadius:
+                        //                         BorderRadius.circular(10),
+                        //                     color: Colors.transparent),
+                        //                 buttonElevation: 0,
+                        //                 itemHeight: 40,
+                        //                 itemPadding: const EdgeInsets.only(
+                        //                     left: 14, right: 14),
+                        //                 dropdownMaxHeight: 200,
+                        //                 dropdownPadding: null,
+                        //                 dropdownDecoration: BoxDecoration(
+                        //                   borderRadius:
+                        //                       BorderRadius.circular(24),
+                        //                   border: Border.all(
+                        //                       width: 1, color: Colors.white),
+                        //                   gradient: LinearGradient(
+                        //                     begin: Alignment.topLeft,
+                        //                     end: Alignment.bottomRight,
+                        //                     // stops: [0.1, 0.5, 0.7, 0.9],
+                        //                     colors: [
+                        //                       HexColor("#000000"),
+                        //                       HexColor("#000000"),
+                        //                       HexColor("#C12265"),
+                        //                       HexColor("#FFFFFF"),
+                        //                     ],
+                        //                   ),
+                        //                 ),
+                        //                 dropdownElevation: 8,
+                        //                 scrollbarRadius:
+                        //                     const Radius.circular(40),
+                        //                 scrollbarThickness: 6,
+                        //                 scrollbarAlwaysShow: true,
+                        //                 offset: const Offset(0, -5),
+                        //               ),
+                        //             );
+                        //           },
+                        //         ),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+                        CommonTextFormField(
+                          height: 45,
+                          title: "Gender",
+                          controller:
+                              _creator_signup_controller.gender_controller,
+                          labelText: 'Select Gender',
+                          image_path: AssetUtils.user_icon2,
+                          tap: () {
+                            setState(() {
+                              gender_tap = true;
+                            });
+                          },
+                        ),
+                        SizedBox(
+                          height: 12,
+                        ),
+                        (gender_tap
+                            ? Container(
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 30),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(24),
+                                  border:
+                                      Border.all(width: 1, color: Colors.white),
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    // stops: [0.1, 0.5, 0.7, 0.9],
+                                    colors: [
+                                      HexColor("#000000"),
+                                      HexColor("#C12265"),
+                                      HexColor("#C12265"),
+                                      HexColor("#FFFFFF"),
+                                    ],
                                   ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 12,
-                              ),
-                              Container(
-                                height: 45,
-                                width: screenwidth,
-                                decoration: BoxDecoration(
-                                  boxShadow: const [
-                                    BoxShadow(
-                                      color: Colors.black,
-                                      blurRadius: 5,
-                                      offset: Offset(0, 0),
-                                      spreadRadius: -5,
-                                    ),
-                                  ],
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(24.0),
-                                ),
-                                child: FormField<String>(
-                                  builder: (FormFieldState<String> state) {
-                                    return DropdownButtonHideUnderline(
-                                      child: DropdownButton2(
-                                        isExpanded: true,
-                                        hint: Row(
-                                          children: [
-                                            SizedBox(
-                                              width: 4,
-                                            ),
-                                            Expanded(
-                                              child: Text(
-                                                'Select gender',
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontFamily: 'PR',
-                                                  color: Colors.grey,
-                                                ),
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        items: data
-                                            .map((item) =>
-                                                DropdownMenuItem<String>(
-                                                  value: item,
-                                                  child: Text(
-                                                    item,
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontFamily: 'PR',
-                                                      color: Colors.pink,
-                                                    ),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                                ))
-                                            .toList(),
-                                        value: _creator_signup_controller
-                                            .selected_gender,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            _creator_signup_controller
-                                                    .selected_gender =
-                                                value as String;
-                                          });
-                                          // print(contactdetailsController
-                                          //     .selectedValue);
-                                        },
-                                        iconSize: 25,
-                                        icon: Image.asset(
-                                          AssetUtils.downArrow_icon,
-                                          height: 13,
-                                          width: 13,
-                                        ),
-                                        iconEnabledColor: Color(0xff007DEF),
-                                        iconDisabledColor: Color(0xff007DEF),
-                                        buttonHeight: 50,
-                                        buttonWidth: 160,
-                                        buttonPadding: const EdgeInsets.only(
-                                            left: 15, right: 15),
-                                        buttonDecoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            color: Colors.transparent),
-                                        buttonElevation: 0,
-                                        itemHeight: 40,
-                                        itemPadding: const EdgeInsets.only(
-                                            left: 14, right: 14),
-                                        dropdownMaxHeight: 200,
-                                        dropdownPadding: null,
-                                        dropdownDecoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(24),
-                                          border: Border.all(
-                                              width: 1, color: Colors.white),
-                                          gradient: LinearGradient(
-                                            begin: Alignment.topLeft,
-                                            end: Alignment.bottomRight,
-                                            // stops: [0.1, 0.5, 0.7, 0.9],
-                                            colors: [
-                                              HexColor("#000000"),
-                                              HexColor("#000000"),
-                                              HexColor("#C12265"),
-                                              HexColor("#FFFFFF"),
-                                            ],
+                                child: ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: data.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          gender_tap = false;
+                                          _creator_signup_controller
+                                              .gender_controller
+                                              .text = data[index];
+                                        });
+                                      },
+                                      child: Container(
+                                        margin:
+                                            EdgeInsets.symmetric(vertical: 8),
+                                        child: Text(
+                                          data[index],
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontFamily: 'PR',
+                                            color: Colors.white,
                                           ),
                                         ),
-                                        dropdownElevation: 8,
-                                        scrollbarRadius:
-                                            const Radius.circular(40),
-                                        scrollbarThickness: 6,
-                                        scrollbarAlwaysShow: true,
-                                        offset: const Offset(0, -5),
                                       ),
                                     );
                                   },
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
+                              )
+                            : SizedBox.shrink()),
                         SizedBox(
                           height: 12,
                         ),

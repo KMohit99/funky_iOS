@@ -13,6 +13,7 @@ import 'package:funky_new/search_screen/search__screen_controller.dart';
 // import 'package:funky_project/search_screen/search__screen_controller.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:marquee/marquee.dart';
 
 import '../Authentication/creator_login/controller/creator_login_controller.dart';
 import '../Utils/App_utils.dart';
@@ -26,11 +27,14 @@ import 'dart:convert' as convert;
 import '../profile_screen/model/followUnfollowModel.dart';
 import '../profile_screen/model/followersModel.dart';
 import '../profile_screen/model/galleryModel.dart';
+import '../profile_screen/model/getStoryModel.dart';
 import '../profile_screen/model/videoModelList.dart';
+import '../profile_screen/story_view/storyView.dart';
 import '../profile_screen/video_viewer.dart';
 import '../sharePreference.dart';
 import 'Followers_scren.dart';
 import 'Following_scren.dart';
+import 'ViewStoryModel.dart';
 
 class SearchUserProfile extends StatefulWidget {
   final Data_searchApi search_user_data;
@@ -68,10 +72,9 @@ class _SearchUserProfileState extends State<SearchUserProfile>
         : await _search_screen_controller.getUserInfo_social(
         UserId: widget.search_user_data.id!));
     await _search_screen_controller.compare_data();
-
+    await get_story_list();
     await get_video_list(context);
     await get_gallery_list(context);
-
   }
 
   // Data_followers? _search_screen_controller.is_follower;
@@ -166,9 +169,10 @@ class _SearchUserProfileState extends State<SearchUserProfile>
 
   static List<Tab> _tabs = [
     Tab(
-      height: 60,
+      iconMargin: EdgeInsets.all(5),
+      height: 75,
       icon: Container(
-        margin: EdgeInsets.only(top: 10),
+        // margin: EdgeInsets.only(top: 40),
         height: 45,
         width: 45,
         decoration: BoxDecoration(
@@ -205,9 +209,10 @@ class _SearchUserProfileState extends State<SearchUserProfile>
       ),
     ),
     Tab(
-      height: 60,
+      iconMargin: EdgeInsets.all(5),
+      height: 75,
       icon: Container(
-        margin: EdgeInsets.only(top: 10),
+        // margin: EdgeInsets.only(top: 20),
         height: 45,
         width: 45,
         decoration: BoxDecoration(
@@ -243,9 +248,10 @@ class _SearchUserProfileState extends State<SearchUserProfile>
       ),
     ),
     Tab(
-      height: 60,
+      iconMargin: EdgeInsets.all(5),
+      height: 75,
       icon: Container(
-        margin: EdgeInsets.only(top:10),
+        // margin: EdgeInsets.only(top: 20),
         height: 45,
         width: 45,
         decoration: BoxDecoration(
@@ -281,9 +287,10 @@ class _SearchUserProfileState extends State<SearchUserProfile>
       ),
     ),
     Tab(
-      height: 60,
+      iconMargin: EdgeInsets.all(5),
+      height: 75,
       icon: Container(
-        margin: EdgeInsets.only(top: 10),
+        // margin: EdgeInsets.only(top: 20),
         height: 45,
         width: 45,
         decoration: BoxDecoration(
@@ -320,9 +327,10 @@ class _SearchUserProfileState extends State<SearchUserProfile>
       ),
     ),
     Tab(
-      height: 60,
+      iconMargin: EdgeInsets.all(5),
+      height: 75,
       icon: Container(
-        margin: EdgeInsets.only(top: 10),
+        // margin: EdgeInsets.only(top: 20),
         height: 45,
         width: 45,
         decoration: BoxDecoration(
@@ -454,7 +462,7 @@ class _SearchUserProfileState extends State<SearchUserProfile>
               SliverAppBar(
                   backgroundColor: Colors.black,
                   automaticallyImplyLeading: false,
-                  expandedHeight: 370.0,
+                  expandedHeight: 400.0,
                   floating: false,
                   pinned: true,
                   flexibleSpace: FlexibleSpaceBar(
@@ -714,7 +722,7 @@ class _SearchUserProfileState extends State<SearchUserProfile>
                                           .image!
                                           .isNotEmpty
                                           ? Image.network(
-                                        "http://foxyserver.com/funky/images/${_search_screen_controller
+                                        "https://foxytechnologies.com/funky/images/${_search_screen_controller
                                             .userInfoModel_email!.data![0]
                                             .image!}",
                                         height: 80,
@@ -986,13 +994,13 @@ class _SearchUserProfileState extends State<SearchUserProfile>
                                           .value ==
                                           true
                                           ? SizedBox(
-                                        height: 20,
-                                          width:20,
+                                          height: 20,
+                                          width: 20,
                                           child: CircularProgressIndicator(
 
                                             color: HexColor(
                                                 CommonColor.pinkFont),
-                                          strokeWidth: 2,))
+                                            strokeWidth: 2,))
                                           : GestureDetector(
                                         onTap: () async {
                                           await _search_screen_controller
@@ -1211,62 +1219,161 @@ class _SearchUserProfileState extends State<SearchUserProfile>
                                   .size
                                   .width,
                             ),
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.all(5),
-                                  height: 61,
-                                  width: 61,
-                                  decoration: BoxDecoration(
-                                      borderRadius:
-                                      BorderRadius.circular(50),
-                                      border: Border.all(
-                                          color: Colors.white, width: 3)),
-                                  child: IconButton(
-                                    onPressed: () {},
-                                    icon: Icon(
-                                      Icons.add,
-                                      color:
-                                      HexColor(CommonColor.pinkFont),
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: SizedBox(
-                                    height: 70,
-                                    child: ListView.builder(
-                                        itemCount: Story_img.length,
-                                        shrinkWrap: true,
-                                        scrollDirection: Axis.horizontal,
-                                        itemBuilder:
-                                            (BuildContext context,
-                                            int index) {
-                                          return  Container(
-                                            margin: EdgeInsets.all(0),
-                                            height: 71,
-                                            width: 71,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                              BorderRadius.circular(50),
-                                            ),
-                                            child: IconButton(
-                                              color: Colors.red,
-                                              visualDensity: VisualDensity(
-                                                  vertical: -4,
-                                                  horizontal: -4),
-                                              onPressed: () {},
-                                              icon: Image.asset(
-                                                Story_img[index],
-                                                fit: BoxFit.cover,
-                                                // color: HexColor(CommonColor.pinkFont),
+                            Container(
+                              margin: EdgeInsets.only(
+                                  top: 0, right: 16, left: 0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  // Column(
+                                  //   children: [
+                                  //     Container(
+                                  //       margin: EdgeInsets.symmetric(
+                                  //           horizontal: 5),
+                                  //       height: 61,
+                                  //       width: 61,
+                                  //       decoration: BoxDecoration(
+                                  //           borderRadius:
+                                  //           BorderRadius.circular(50),
+                                  //           border: Border.all(
+                                  //               color: Colors.white,
+                                  //               width: 3)),
+                                  //       child: IconButton(
+                                  //         onPressed: () async {
+                                  //           // File editedFile = await Navigator
+                                  //           //     .of(context)
+                                  //           //     .push(MaterialPageRoute(
+                                  //           //     builder: (context) =>
+                                  //           //         StoriesEditor(
+                                  //           //           // fontFamilyList: font_family,
+                                  //           //           giphyKey: '',
+                                  //           //           onDone:
+                                  //           //               (String) {},
+                                  //           //           // filePath:
+                                  //           //           //     imgFile!.path,
+                                  //           //         )));
+                                  //           // if (editedFile != null) {
+                                  //           //   print(
+                                  //           //       'editedFile: ${editedFile.path}');
+                                  //           // }
+                                  //         },
+                                  //         icon: Icon(
+                                  //           Icons.add,
+                                  //           color: HexColor(
+                                  //               CommonColor.pinkFont),
+                                  //         ),
+                                  //       ),
+                                  //     ),
+                                  //     SizedBox(
+                                  //       height: 2,
+                                  //     ),
+                                  //     Text(
+                                  //       'Add Story',
+                                  //       style: TextStyle(
+                                  //           color: Colors.white,
+                                  //           fontFamily: 'PR',
+                                  //           fontSize: 12),
+                                  //     )
+                                  //   ],
+                                  // ),
+                                  Expanded(
+                                    child: SizedBox(
+                                      height: 85,
+                                      child: ListView.builder(
+                                          itemCount: story_info.length,
+                                          shrinkWrap: true,
+                                          scrollDirection:
+                                          Axis.horizontal,
+                                          itemBuilder:
+                                              (BuildContext context,
+                                              int index) {
+                                            return Padding(
+                                              padding: const EdgeInsets
+                                                  .symmetric(
+                                                  horizontal: 8.0),
+                                              child: Column(
+                                                children: [
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      print(index);
+                                                      view_story(story_id: story_info[index].stID!);
+                                                      Get.to(() =>
+                                                          StoryScreen(
+                                                            stories:
+                                                            story_info,
+                                                            story_no:
+                                                            index,
+                                                          ));
+                                                      // Get.to(StoryScreen(stories: story_info));
+                                                    },
+                                                    child: SizedBox(
+                                                      height: 60,
+                                                      width: 60,
+                                                      child: ClipRRect(
+                                                        borderRadius:
+                                                        BorderRadius
+                                                            .circular(
+                                                            50),
+                                                        child: FadeInImage
+                                                            .assetNetwork(
+                                                          fit: BoxFit
+                                                              .cover,
+                                                          image: "https://foxytechnologies.com/funky/images/${story_info[index]
+                                                              .storyPhoto!}",
+                                                          placeholder: 'assets/images/Funky_App_Icon.png',
+                                                          // color: HexColor(CommonColor.pinkFont),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 0,
+                                                  ),
+                                                  // Text(
+                                                  //   '${story_info[index].title}',
+                                                  //   style: TextStyle(
+                                                  //       color:
+                                                  //       Colors.white,
+                                                  //       fontFamily: 'PR',
+                                                  //       fontSize: 14),
+                                                  // )
+                                                  Container(
+                                                    height: 20,
+                                                    width: 40,
+                                                    child: Marquee(
+                                                      text: '${story_info[index].title}',
+                                                      style: TextStyle(
+                                                          color:
+                                                          Colors.white,
+                                                          fontFamily: 'PR',
+                                                          fontSize: 14),
+                                                      scrollAxis: Axis
+                                                          .horizontal,
+                                                      crossAxisAlignment: CrossAxisAlignment
+                                                          .start,
+                                                      blankSpace: 20.0,
+                                                      velocity: 30.0,
+                                                      pauseAfterRound: Duration(
+                                                          milliseconds: 100),
+                                                      startPadding: 10.0,
+                                                      accelerationDuration: Duration(
+                                                          seconds: 1),
+                                                      accelerationCurve: Curves
+                                                          .easeIn,
+                                                      decelerationDuration: Duration(
+                                                          microseconds: 500),
+                                                      decelerationCurve: Curves
+                                                          .easeOut,
+                                                    ),
+                                                  )
+                                                ],
                                               ),
-                                            ),
-                                          );
-                                        }),
-                                  ),
-                                )
-                              ],
+                                            );
+                                          }),
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                             Container(
                               margin: EdgeInsets.symmetric(vertical: 15),
@@ -1323,7 +1430,7 @@ class _SearchUserProfileState extends State<SearchUserProfile>
     print(data);
     // String body = json.encode(data);
 
-    var url = ('http://foxyserver.com/funky/api/post-videoList.php');
+    var url = ('https://foxytechnologies.com/funky/api/post-videoList.php');
     print("url : $url");
     print("body : $data");
     var response = await http.post(
@@ -1436,7 +1543,8 @@ class _SearchUserProfileState extends State<SearchUserProfile>
                         ));
                       },
                       child: Image.network(
-                        'http://foxyserver.com/funky/images/${_videoModelList!.data![index].image}',
+                        'https://foxytechnologies.com/funky/images/${_videoModelList!
+                            .data![index].image}',
                       ),
                     ))),
                   ),
@@ -1461,6 +1569,7 @@ class _SearchUserProfileState extends State<SearchUserProfile>
           )))),
     );
   }
+
   Widget gallery_screen() {
     return Container(
       margin: EdgeInsets.only(top: 10, right: 16, left: 16),
@@ -1530,7 +1639,8 @@ class _SearchUserProfileState extends State<SearchUserProfile>
                         .data![index].postImage!.isEmpty
                         ? Image.asset(AssetUtils.logo)
                         : Image.network(
-                      'http://foxyserver.com/funky/images/${_galleryModelList!.data![index].postImage}',
+                      'https://foxytechnologies.com/funky/images/${_galleryModelList!
+                          .data![index].postImage}',
                       loadingBuilder:
                           (context, child, loadingProgress) {
                         if (loadingProgress == null)
@@ -1557,7 +1667,7 @@ class _SearchUserProfileState extends State<SearchUserProfile>
           )
               : Padding(
             padding: const EdgeInsets.all(8.0),
-            child:Center(
+            child: Center(
               child: Container(
                 margin: EdgeInsets.only(top: 50),
                 child: Text("${_videoModelList!.message}",
@@ -1591,7 +1701,7 @@ class _SearchUserProfileState extends State<SearchUserProfile>
     print(data);
     // String body = json.encode(data);
 
-    var url = ('http://foxyserver.com/funky/api/galleryList.php');
+    var url = ('https://foxytechnologies.com/funky/api/galleryList.php');
     print("url : $url");
     print("body : $data");
     var response = await http.post(
@@ -1629,4 +1739,116 @@ class _SearchUserProfileState extends State<SearchUserProfile>
       print('Please try again');
     }
   }
+
+  bool isStoryLoading = true;
+  GetStoryModel? getStoryModel;
+  List<Data_story> story_info = [];
+
+  // List<String> thumb = [];
+  // String? filePath;
+
+  Future<dynamic> get_story_list() async {
+    print('Inside creator get email');
+    setState(() {
+      isStoryLoading = true;
+    });
+    String id_user = await PreferenceManager().getPref(URLConstants.id);
+    print("UserID $id_user");
+    String url =
+    ("${URLConstants.base_url}${URLConstants.StoryGetApi}?userId=${widget
+        .search_user_data.id}");
+    // debugPrint('Get Sales Token ${tokens.toString()}');
+    // try {
+    // } catch (e) {
+    //   print('1-1-1-1 Get Purchase ${e.toString()}');
+    // }
+
+    http.Response response = await http.get(Uri.parse(url));
+
+    print('Response request: ${response.request}');
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      var data = convert.jsonDecode(response.body);
+      getStoryModel = GetStoryModel.fromJson(data);
+      // getUSerModelList(userInfoModel_email);
+      if (getStoryModel!.error == false) {
+        debugPrint(
+            '2-2-2-2-2-2 Inside the Get UserInfo Controller Details ${getStoryModel!
+                .data!.length}');
+        story_info = getStoryModel!.data!;
+        setState(() {
+          isStoryLoading = false;
+        });
+        // CommonWidget().showToaster(msg: data["success"].toString());
+        // await Get.to(Dashboard());
+
+        return getStoryModel;
+      } else {
+        // CommonWidget().showToaster(msg: msg.toString());
+        return null;
+      }
+    } else if (response.statusCode == 422) {
+      // CommonWidget().showToaster(msg: msg.toString());
+    } else if (response.statusCode == 401) {
+      // CommonService().unAuthorizedUser();
+    } else {
+      // CommonWidget().showToaster(msg: msg.toString());
+    }
+  }
+
+  ViewStoryModel? viewStoryModel;
+
+  Future<dynamic> view_story({required String story_id}) async {
+    debugPrint('0-0-0-0-0-0-0 username');
+
+    String id_user = await PreferenceManager().getPref(URLConstants.id);
+
+    // isLikeLoading(true);
+
+    Map data = {
+      'stID': story_id,
+    };
+    print(data);
+    // String body = json.encode(data);
+
+    var url = (URLConstants.base_url + URLConstants.StoryViewApi);
+    print("url : $url");
+    print("body : $data");
+
+    var response = await http.post(
+      Uri.parse(url),
+      body: data,
+    );
+    print(response.body);
+    print(response.request);
+    print(response.statusCode);
+    // var final_data = jsonDecode(response.body);
+
+    // print('final data $final_data');
+
+    if (response.statusCode == 200) {
+      // isLikeLoading(false);
+      var data = jsonDecode(response.body);
+      viewStoryModel = ViewStoryModel.fromJson(data);
+      print(viewStoryModel!.message);
+      if (viewStoryModel!.error == false) {
+        // CommonWidget().showToaster(msg: data["message"]);
+        // feedlikeStatus = feedLikeUnlikeModel!.user![0].feedlikeStatus!;
+        // feedlikeCount = feedLikeUnlikeModel!.user![0].feedLikeCount!;
+        // await getAllNewsFeedList();
+        // Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //         builder: (context) => Dashboard(page: 3,)));
+      } else {
+        print('Please try again');
+        CommonWidget().showErrorToaster(msg: 'Enter valid Otp');
+      }
+    } else {
+      print('Please try again');
+    }
+  }
+
 }

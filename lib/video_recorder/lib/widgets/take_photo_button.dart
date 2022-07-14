@@ -61,8 +61,8 @@ class _CameraButtonState extends State<CameraButton>
           scale: _scale,
           child: CustomPaint(
             painter: CameraButtonPainter(
-              CaptureModes.VIDEO,
-              // widget.captureMode ?? CaptureModes.PHOTO,
+              // CaptureModes.VIDEO,
+              widget.captureMode ?? CaptureModes.PHOTO,
               isRecording: widget.isRecording!,
             ),
           ),
@@ -104,7 +104,7 @@ class CameraButtonPainter extends CustomPainter {
       ..isAntiAlias = true;
     var radius = size.width / 2;
     var center = Offset(size.width / 2, size.height / 2);
-    bgPainter.color = Colors.white.withOpacity(1);
+    bgPainter.color = Colors.white.withOpacity(0.5);
     canvas.drawCircle(center, radius, bgPainter);
 
     if (this.captureMode == CaptureModes.VIDEO && this.isRecording) {

@@ -9,6 +9,7 @@ import 'package:funky_new/profile_screen/profile_screen.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:http/http.dart' as http;
+import 'package:video_player/video_player.dart';
 
 import '../../Utils/App_utils.dart';
 import '../../Utils/asset_utils.dart';
@@ -20,9 +21,11 @@ import '../../sharePreference.dart';
 import '../dashboard_screen.dart';
 
 class Story_image_preview extends StatefulWidget {
+  final bool isImage;
   final File ImageFile;
 
-  const Story_image_preview({Key? key, required this.ImageFile})
+  const Story_image_preview(
+      {Key? key, required this.ImageFile, required this.isImage})
       : super(key: key);
 
   @override
@@ -32,12 +35,35 @@ class Story_image_preview extends StatefulWidget {
 class _Story_image_previewState extends State<Story_image_preview> {
   bool valuefirst = false;
   TextEditingController title_controller = new TextEditingController();
+  bool isClicked = false; // boolean that states if the button is pressed or not
+  VideoPlayerController? video_controller;
+
+  @override
+  void initState() {
+    super.initState();
+    print('image urlllllllllllll ${widget.ImageFile}');
+    video_controller = VideoPlayerController.file(widget.ImageFile);
+
+    video_controller!.setLooping(true);
+    video_controller!.initialize().then((_) {
+      setState(() {});
+    });
+    video_controller!.pause();
+  }
+
+  @override
+  void dispose() {
+    // _timer?.cancel();
+    super.dispose();
+    video_controller!.dispose();
+  }
 
   share_icon() {
     return showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text("Pick Image from"),
+        title: Text("Share your story", style: TextStyle(
+            fontSize: 18, color: Colors.black, fontFamily: 'PM')),
         actions: <Widget>[
           Container(
             margin: EdgeInsets.only(bottom: 10),
@@ -97,7 +123,11 @@ class _Story_image_previewState extends State<Story_image_preview> {
                 padding: EdgeInsets.zero,
                 onPressed: () {
                   print('oject');
-                  Navigator.pop(context);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Dashboard(page: 3)));
+                  // Navigator.pop(context);
                 },
                 icon: Icon(
                   Icons.arrow_back_outlined,
@@ -127,7 +157,7 @@ class _Story_image_previewState extends State<Story_image_preview> {
                   Container(
                     // width: 300,
                     child: TextFormField(
-                      maxLength: 150,
+                      maxLength: 20,
                       decoration: const InputDecoration(
                         contentPadding:
                             EdgeInsets.only(left: 20, top: 14, bottom: 14),
@@ -168,11 +198,38 @@ class _Story_image_previewState extends State<Story_image_preview> {
                   SizedBox(
                     height: 20,
                   ),
-                  Container(
-                    child: Image.file(
-                      widget.ImageFile,
-                    ),
-                  )
+                  (widget.isImage
+                      ? Container(
+                          child: Image.file(
+                            widget.ImageFile,
+                          ),
+                        )
+                      : GestureDetector(
+                          onTap: () {
+                            print('hello');
+                            isClicked = isClicked ? false : true;
+                            print(isClicked);
+                            if (video_controller!.value.isPlaying) {
+                              video_controller!.pause();
+                            } else {
+                              video_controller!.play();
+                            }
+                          },
+                          child: Container(
+                            // color: Colors.white,
+                            margin: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 0),
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height / 1.2,
+                            child: Align(
+                              alignment: Alignment.topCenter,
+                              child: AspectRatio(
+                                  aspectRatio:
+                                      video_controller!.value.aspectRatio,
+                                  child: VideoPlayer(video_controller!)),
+                            ),
+                          ),
+                        )),
                 ],
               ),
             ),
@@ -188,13 +245,16 @@ class _Story_image_previewState extends State<Story_image_preview> {
     var url = (URLConstants.base_url + URLConstants.StoryPostApi);
     var request = http.MultipartRequest('POST', Uri.parse(url));
 
-    var files =
-        await http.MultipartFile.fromPath('story_photo', widget.ImageFile.path);
+    var files = (widget.isImage
+        ? await http.MultipartFile.fromPath(
+            'story_photo', widget.ImageFile.path)
+        : await http.MultipartFile.fromPath(
+            'uploadVideo', widget.ImageFile.path));
     request.files.add(files);
     request.fields['userId'] = id_user;
     request.fields['title'] = title_controller.text;
-    request.fields['uploadVideo'] = '';
-    request.fields['isVideo'] = 'false';
+    // request.fields['uploadVideo'] = '';
+    request.fields['isVideo'] = (widget.isImage ? 'false' : 'true');
 
     //userId,tagLine,description,address,postImage,uploadVideo,isVideo
     // request.files.add(await http.MultipartFile.fromPath(
@@ -210,7 +270,9 @@ class _Story_image_previewState extends State<Story_image_preview> {
       print(widget.ImageFile.path);
       print(responseData);
       hideLoader(context);
-      await Get.to(Dashboard(page: 3,));
+      await Get.to(Dashboard(
+        page: 3,
+      ));
     } else {
       print("ERROR");
     }
