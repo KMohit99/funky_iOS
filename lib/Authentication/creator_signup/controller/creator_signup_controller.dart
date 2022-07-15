@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -9,9 +11,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../Utils/App_utils.dart';
 import '../../../Utils/toaster_widget.dart';
+import '../../../chat/constants/firestore_constants.dart';
 import '../../../custom_widget/page_loader.dart';
 import '../../../dashboard/dashboard_screen.dart';
 import '../../authentication_screen.dart';
@@ -112,6 +116,8 @@ class Creator_signup_controller extends GetxController {
   //     print('Please try again');
   //   }
   // }
+  final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+  final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
 
   Future<dynamic> creator_signup({required BuildContext context}) async {
     // showLoader(context);
@@ -159,8 +165,43 @@ class Creator_signup_controller extends GetxController {
         if (loginModel!.message == 'User Already Exists') {
           CommonWidget().showErrorToaster(msg: loginModel!.message!);
         } else {
-          CommonWidget().showToaster(msg: loginModel!.message!);
-          await Get.to(Dashboard(page: 0,));
+          // CommonWidget().showToaster(msg: loginModel!.message!);
+
+          final QuerySnapshot result = await firebaseFirestore
+              .collection(FirestoreConstants.pathUserCollection)
+              .where(FirestoreConstants.id, isEqualTo: loginModel!.user![0].id)
+              .get();
+          final List<DocumentSnapshot> documents = result.docs;
+          if (documents.isEmpty) {
+            // Writing data to server because here is a new user
+            firebaseFirestore
+                .collection(FirestoreConstants.pathUserCollection)
+                .doc(loginModel!.user![0].id)
+                .set({
+              FirestoreConstants.nickname: fullname_controller.text,
+              FirestoreConstants.photoUrl:
+                  "https://foxytechnologies.com/funky//images/${imgFile!.path}",
+              FirestoreConstants.id: loginModel!.user![0].id,
+              'createdAt': DateTime.now().millisecondsSinceEpoch.toString(),
+              FirestoreConstants.chattingWith: null
+            });
+
+            // Write data to local storage
+            // User? currentUser = firebaseUser;
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            await prefs.setString(
+                FirestoreConstants.id, loginModel!.user![0].id!);
+            await prefs.setString(
+                FirestoreConstants.nickname, fullname_controller.text ?? "");
+            await prefs.setString(
+                FirestoreConstants.photoUrl,
+                "https://foxytechnologies.com/funky/images/${imgFile!.path}" ??
+                    "");
+          }
+
+          await Get.to(Dashboard(
+            page: 0,
+          ));
         }
         // Get.to(Dashboard());
       } else {
@@ -296,7 +337,9 @@ class Creator_signup_controller extends GetxController {
           CommonWidget().showErrorToaster(msg: loginModel!.message!);
         } else {
           CommonWidget().showToaster(msg: loginModel!.message!);
-          await Get.to(Dashboard(page: 0,));
+          await Get.to(Dashboard(
+            page: 0,
+          ));
         }
         // Get.to(Dashboard());
       } else {
@@ -413,7 +456,7 @@ class Creator_signup_controller extends GetxController {
 
   TextEditingController query_followers = TextEditingController();
 
-  Future<void> getcountry()async {
+  Future<void> getcountry() async {
     countrymodelList = CountryModel.fromJson({
       "countryList": [
         {"name": "Afghanistan", "dial_code": "+93", "code": "AF"},
@@ -739,6 +782,7 @@ class Creator_signup_controller extends GetxController {
     data_country = countrymodelList!.countryList!;
     print(data_country);
   }
+
   Future<List<CountryList>> getAllCountriesFromAPI(String query) async {
     // iscountryLoading(true);
     // print('inside xountry');

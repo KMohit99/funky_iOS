@@ -35,7 +35,7 @@ dependencies:
   http: ^0.13.4
   fluttertoast: ^8.0.8
   cloud_firestore: 3.1.9
-  firebase_storage: 10.2.13
+  firebase_storage: ^10.2.13
   firebase_messaging: ^11.4.0
   flutter_local_notifications: ^9.5.0
 

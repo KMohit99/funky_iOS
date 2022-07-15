@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 // import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 // import 'package:funky_project/Authentication/kids_login/ui/otp_screen.dart';
 // import 'package:funky_project/Utils/toaster_widget.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 // import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 // import 'package:twitter_login/twitter_login.dart';
 
@@ -16,6 +18,8 @@ import '../../../Utils/App_utils.dart';
 // import '../../../homepage/model/UserInfoModel.dart';
 // import '../../../sharePreference.dart';
 import '../../../Utils/toaster_widget.dart';
+import '../../../chat/constants/firestore_constants.dart';
+import '../../../chat/models/user_chat.dart';
 import '../../../custom_widget/page_loader.dart';
 import '../../../homepage/model/UserInfoModel.dart';
 import '../../../sharePreference.dart';
@@ -36,6 +40,7 @@ class Kids_Login_screen_controller extends GetxController {
 
   RxBool isotpLoading = false.obs;
   parentsOtpModel? otpModel;
+  final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
   Future<dynamic> checkLogin(
       {required BuildContext context, required String login_type}) async {
@@ -84,6 +89,23 @@ class Kids_Login_screen_controller extends GetxController {
 
         await PreferenceManager()
             .setPref(URLConstants.social_type, "");
+        ///firebase calls
+        final QuerySnapshot result = await firebaseFirestore
+            .collection(FirestoreConstants.pathUserCollection)
+            .where(FirestoreConstants.id, isEqualTo: loginModel!.user![0].id)
+            .get();
+        final List<DocumentSnapshot> documents = result.docs;
+
+        DocumentSnapshot documentSnapshot = documents[0];
+        UserChat userChat = UserChat.fromDocument(documentSnapshot);
+        // Write data to local
+        SharedPreferences prefs =
+        await SharedPreferences.getInstance();
+        await prefs.setString(FirestoreConstants.id, userChat.id);
+        await prefs.setString(FirestoreConstants.nickname, userChat.nickname);
+        await prefs.setString(FirestoreConstants.photoUrl, userChat.photoUrl);
+        await prefs.setString(FirestoreConstants.aboutMe, userChat.aboutMe);
+
         // CommonService().setStoreKey(
         //     setKey: 'type', setValue: loginModel!.user![0].type!.toString());
         String n = await PreferenceManager().getPref(URLConstants.id);
@@ -91,7 +113,9 @@ class Kids_Login_screen_controller extends GetxController {
         print(n.toString());
         print('/////////////////////////////////////////');
         clear();
-       await  Get.to(kids_Email_verification());
+        hideLoader(context);
+
+        await  Get.to(kids_Email_verification());
       } else {
         hideLoader(context);
         CommonWidget().showErrorToaster(msg: "Invalid Details");

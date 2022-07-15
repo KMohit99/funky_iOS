@@ -27,6 +27,7 @@ Future takePicture(
     String imagePath = '$dir/stories_creator${DateTime.now()}.png';
     File capturedFile = File(imagePath);
     await capturedFile.writeAsBytes(pngBytes);
+    // Navigator.pop(context);
     await Get.to(Story_image_preview(ImageFile: capturedFile, isImage: true,));
 
     // if (saveToGallery) {

@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 // import 'package:funky_project/Authentication/kids_signup/ui/kids_otp_verification.dart';
@@ -12,9 +14,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../Utils/App_utils.dart';
 import '../../../Utils/toaster_widget.dart';
+import '../../../chat/constants/firestore_constants.dart';
 import '../../../dashboard/dashboard_screen.dart';
 import '../../creator_login/controller/creator_login_controller.dart';
 import '../../creator_login/model/creator_loginModel.dart';
@@ -112,6 +116,9 @@ class Advertiser_signup_controller extends GetxController {
 
   File? imgFile;
 
+  final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+  final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
+
   Future<dynamic> Advertiser_signup({required BuildContext context}) async {
     // showLoader(context);
     var url = 'http://foxyserver.com/funky/api/signup.php';
@@ -158,6 +165,38 @@ class Advertiser_signup_controller extends GetxController {
           CommonWidget().showErrorToaster(msg: loginModel!.message!);
         }else{
           CommonWidget().showToaster(msg: loginModel!.message!);
+
+          final QuerySnapshot result = await firebaseFirestore
+              .collection(FirestoreConstants.pathUserCollection)
+              .where(FirestoreConstants.id, isEqualTo: loginModel!.user![0].id)
+              .get();
+          final List<DocumentSnapshot> documents = result.docs;
+          if (documents.isEmpty) {
+            // Writing data to server because here is a new user
+            firebaseFirestore
+                .collection(FirestoreConstants.pathUserCollection)
+                .doc(loginModel!.user![0].id)
+                .set({
+              FirestoreConstants.nickname: fullname_controller.text,
+              FirestoreConstants.photoUrl:
+              "https://foxytechnologies.com/funky/images/${imgFile!.path}",
+              FirestoreConstants.id: loginModel!.user![0].id,
+              'createdAt': DateTime.now().millisecondsSinceEpoch.toString(),
+              FirestoreConstants.chattingWith: null
+            });
+
+            // Write data to local storage
+            // User? currentUser = firebaseUser;
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            await prefs.setString(
+                FirestoreConstants.id, loginModel!.user![0].id!);
+            await prefs.setString(
+                FirestoreConstants.nickname, fullname_controller.text ?? "");
+            await prefs.setString(
+                FirestoreConstants.photoUrl,
+                "https://foxytechnologies.com/funky/images/${imgFile!.path}" ??
+                    "");
+          }
           await Get.to(Dashboard(page: 0,));
         }
         // Get.to(Dashboard());

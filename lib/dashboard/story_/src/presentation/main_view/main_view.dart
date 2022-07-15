@@ -109,7 +109,7 @@ class MainView extends StatefulWidget {
   /// gallery thumbnail quality
   final int? galleryThumbnailQuality;
 
-  final File? imagedata;
+  final File imagedata;
 
   /// editor custom color palette list
   List<Color>? colorList;
@@ -126,8 +126,9 @@ class MainView extends StatefulWidget {
     this.onBackPress,
     this.onDoneButtonStyle,
     this.editorBackgroundColor,
-    this.galleryThumbnailQuality, this.imagedata,
+    this.galleryThumbnailQuality, required this.imagedata,
   }) : super(key: key);
+
 
   @override
   _MainViewState createState() => _MainViewState();
@@ -164,7 +165,7 @@ class _MainViewState extends State<MainView> {
       var _control = Provider.of<ControlNotifier>(context, listen: false);
       var _item = Provider.of<DraggableWidgetNotifier>(context, listen: false);
 
-      _control.mediaPath = widget.imagedata!.path;
+       _control.mediaPath = widget.imagedata.path;
       if (_control.mediaPath.isNotEmpty) {
         _item.draggableWidget.insert(
             0,
@@ -479,9 +480,9 @@ class _MainViewState extends State<MainView> {
                           // onlyVideos: true,
                           gridViewController: scrollProvider.gridController,
                           thumbnailQuality: widget.galleryThumbnailQuality,
-                          singlePick: true,
+                          // singlePick: true,
+                          maxPickImages: 2,
                           // onlyImages: true,
-
                           appBarColor:
                               widget.editorBackgroundColor ?? Colors.black,
                           gridViewPhysics: itemProvider.draggableWidget.isEmpty
@@ -544,6 +545,7 @@ class _MainViewState extends State<MainView> {
                           ),
                         ),
                       ),
+
                       const RenderingIndicator()
                     ],
                   ),

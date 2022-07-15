@@ -1,5 +1,5 @@
 class ViewStoryModel {
-  List<User>? user;
+  List<User_view>? user;
   bool? error;
   String? statusCode;
   String? message;
@@ -8,9 +8,9 @@ class ViewStoryModel {
 
   ViewStoryModel.fromJson(Map<String, dynamic> json) {
     if (json['user'] != null) {
-      user = <User>[];
+      user = <User_view>[];
       json['user'].forEach((v) {
-        user!.add(new User.fromJson(v));
+        user!.add(new User_view.fromJson(v));
       });
     }
     error = json['error'];
@@ -30,13 +30,13 @@ class ViewStoryModel {
   }
 }
 
-class User {
+class User_view {
   String? stID;
   String? viewCount;
 
-  User({this.stID, this.viewCount});
+  User_view({this.stID, this.viewCount});
 
-  User.fromJson(Map<String, dynamic> json) {
+  User_view.fromJson(Map<String, dynamic> json) {
     stID = json['stID'];
     viewCount = json['viewCount'];
   }

@@ -468,17 +468,17 @@ class _MyApp_videoState extends State<MyApp_video>
         print(er);
       });
     } else {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => StoriesEditor(
-                    // fontFamilyList: font_family,
-                    giphyKey: '',
-                    imageData: File(filePath),
-                    onDone: (String) {},
-                    // filePath:
-                    //     imgFile!.path,
-                  )));
+      // Navigator.push(
+      //     context,
+      //     MaterialPageRoute(
+      //         builder: (context) => StoriesEditor(
+      //               // fontFamilyList: font_family,
+      //               giphyKey: '',
+      //               imageData: File(filePath),
+      //               onDone: (String) {},
+      //               // filePath:
+      //               //     imgFile!.path,
+      //             )));
     }
     ;
     print("----------------------------------");

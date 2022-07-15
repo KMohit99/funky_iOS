@@ -9,6 +9,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:funky_new/custom_widget/page_loader.dart';
 import 'package:funky_new/profile_screen/story_view/storyView.dart';
 import 'package:funky_new/profile_screen/video_viewer.dart';
+import 'package:funky_new/profile_screen/view_selected_image.dart';
 
 // import 'package:funky_project/Authentication/creator_login/model/creator_loginModel.dart';
 // import 'package:funky_project/Utils/asset_utils.dart';
@@ -641,7 +642,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                                         .image!
                                                         .isNotEmpty
                                                     ? Image.network(
-                                                        'http://foxyserver.com/funky/images/${_creator_login_screen_controller.userInfoModel_email!.data![0].image!}',
+                                                        'https://foxytechnologies.com/funky/images/${_creator_login_screen_controller.userInfoModel_email!.data![0].image!}',
                                                         fit: BoxFit.fitWidth,
                                                       )
                                                     : Image.asset(
@@ -1041,15 +1042,16 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                                                       .storyPhoto!
                                                                       .isEmpty
                                                                   ? Image.file(
-                                                                  test_thumb[index]
+                                                                      test_thumb[
+                                                                          index]
                                                                       // 'assets/images/Funky_App_Icon.png'
-                                                              )
+                                                                      )
                                                                   : FadeInImage
                                                                       .assetNetwork(
                                                                       fit: BoxFit
                                                                           .cover,
                                                                       image:
-                                                                          "http://foxyserver.com/funky/images/${story_info[index].storyPhoto!}",
+                                                                          "https://foxytechnologies.com/funky/images/${story_info[index].storyPhoto!}",
                                                                       placeholder:
                                                                           'assets/images/Funky_App_Icon.png',
                                                                       // color: HexColor(CommonColor.pinkFont),
@@ -1759,14 +1761,13 @@ class _Profile_ScreenState extends State<Profile_Screen>
             '2-2-2-2-2-2 Inside the Get UserInfo Controller Details ${getStoryModel!.data!.length}');
         story_info = getStoryModel!.data!;
 
-
         // test = File(uint8list!);
 
         for (int i = 0; i < story_info.length; i++) {
           if (story_info[i].isVideo == 'true') {
             final uint8list = await VideoThumbnail.thumbnailFile(
               video:
-              ("http://foxyserver.com/funky/video/${story_info[i].uploadVideo}"),
+                  ("http://foxyserver.com/funky/video/${story_info[i].uploadVideo}"),
               thumbnailPath: (await getTemporaryDirectory()).path,
               imageFormat: ImageFormat.JPEG,
               maxHeight: 64,
@@ -1775,7 +1776,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
             );
             test_thumb.add(File(uint8list!));
             // print(test_thumb[i].path);
-          }else if(story_info[i].isVideo == 'false'){
+          } else if (story_info[i].isVideo == 'false') {
             test_thumb.add(File(story_info[i].image!));
             // print(story_info[i].image);
           }
@@ -1884,8 +1885,20 @@ class _Profile_ScreenState extends State<Profile_Screen>
         });
   }
 
+  List<File> imgFile_list = [];
+
   void openGallery() async {
-    var imgCamera = await imgPicker.getImage(source: ImageSource.gallery);
+    var imgCamera = await imgPicker.pickImage(source: ImageSource.gallery);
+    // final List<XFile>? images = await imgPicker.pickMultiImage();
+    // print("images.length ${images!.length}");
+    // for (var i = 0; i < images.length; i++) {
+    //   // print(images[i].path);
+    //   imgFile_list.add(File(images[i].path));
+    //   // imgFile_list[i] = File(images[i].path);
+    //   print("image_list[i]${imgFile_list[i]}");
+    // }
+    // Navigator.push(
+    //     context, MaterialPageRoute(builder: (context) => ViewImageSelected(imageData: imgFile_list,)));
     setState(() {
       imgFile = File(imgCamera!.path);
       // _creator_signup_controller.photoBase64 =

@@ -245,6 +245,7 @@ class _Story_image_previewState extends State<Story_image_preview> {
     var url = (URLConstants.base_url + URLConstants.StoryPostApi);
     var request = http.MultipartRequest('POST', Uri.parse(url));
 
+    print("IIIiiiiIIIIII ${widget.ImageFile.path}");
     var files = (widget.isImage
         ? await http.MultipartFile.fromPath(
             'story_photo', widget.ImageFile.path)

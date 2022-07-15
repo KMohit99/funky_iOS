@@ -1,14 +1,18 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert' as convert;
 
 import '../../Utils/App_utils.dart';
+import '../../chat/constants/firestore_constants.dart';
+import '../../chat/models/user_chat.dart';
 import '../../dashboard/dashboard_screen.dart';
 import '../../homepage/model/UserInfoModel.dart';
 import '../../sharePreference.dart';
@@ -46,6 +50,8 @@ class InstagramView extends StatelessWidget {
       );
     });
   }
+
+  final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
   Future<dynamic> social_group_login({
     required BuildContext context,
@@ -112,6 +118,49 @@ class InstagramView extends StatelessWidget {
             .setPref(URLConstants.id, loginModel!.user![0].id!);
 
         await getUserInfo_social();
+
+        /// Firebase database messaging method
+        final QuerySnapshot result = await firebaseFirestore
+            .collection(FirestoreConstants.pathUserCollection)
+            .where(FirestoreConstants.id, isEqualTo: loginModel!.user![0].id)
+            .get();
+        final List<DocumentSnapshot> documents = result.docs;
+        if (documents.isEmpty) {
+          print("new user created");
+          // Writing data to server because here is a new user
+          firebaseFirestore
+              .collection(FirestoreConstants.pathUserCollection)
+              .doc(loginModel!.user![0].id)
+              .set({
+            FirestoreConstants.nickname: fullname,
+            FirestoreConstants.photoUrl: "",
+            FirestoreConstants.id: loginModel!.user![0].id,
+            'createdAt': DateTime.now().millisecondsSinceEpoch.toString(),
+            FirestoreConstants.chattingWith: null
+          });
+
+          // Write data to local storage
+          // User? currentUser = firebaseUser;
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setString(
+              FirestoreConstants.id, loginModel!.user![0].id!);
+          await prefs.setString(FirestoreConstants.nickname,
+              fullname ?? "");
+          await prefs.setString(FirestoreConstants.photoUrl, "");
+        } else {
+          print("user existed");
+          DocumentSnapshot documentSnapshot = documents[0];
+          UserChat userChat = UserChat.fromDocument(documentSnapshot);
+          // Write data to local
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setString(FirestoreConstants.id, userChat.id);
+          await prefs.setString(
+              FirestoreConstants.nickname, userChat.nickname);
+          await prefs.setString(
+              FirestoreConstants.photoUrl, userChat.photoUrl);
+          await prefs.setString(FirestoreConstants.aboutMe, userChat.aboutMe);
+        }
+        ///
         await Get.to(Dashboard(page: 0,));
       } else {
         print('Please try again');

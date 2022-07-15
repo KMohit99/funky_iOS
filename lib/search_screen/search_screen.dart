@@ -4,6 +4,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:funky_new/search_screen/searchModel.dart';
 import 'package:funky_new/search_screen/search__screen_controller.dart';
 import 'package:funky_new/search_screen/search_screen_user_profile.dart';
+
 // import 'package:funky_project/Utils/colorUtils.dart';
 // import 'package:funky_project/search_screen/searchModel.dart';
 // import 'package:funky_project/search_screen/search__screen_controller.dart';
@@ -18,8 +19,9 @@ import '../Utils/custom_textfeild.dart';
 import '../drawerScreen.dart';
 
 class SearchScreen extends StatefulWidget {
-
-  const SearchScreen({Key? key,}) : super(key: key);
+  const SearchScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();
@@ -54,7 +56,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
       },
       child: Scaffold(
@@ -208,40 +210,66 @@ class _SearchScreenState extends State<SearchScreen> {
                                   search_user_data: blahh,
                                 ));
                               },
-                              leading: (_search_screen_controller.searchlistModel!
-                                      .data![index].profileUrl!.isNotEmpty
-                                  ? Container(
-                                      height: 50,
-                                      width: 50,
-                                      child: IconButton(
-                                        icon: Image.asset(
-                                          AssetUtils.user_icon3,
-                                          fit: BoxFit.fill,
-                                        ),
-                                        onPressed: () {},
-                                      ))
-                                  // Container(
-                                  //   height: 50,
-                                  //   width: 50,
-                                  //   child: ClipRRect(
-                                  //     borderRadius: BorderRadius.circular(50),
-                                  //     child: Image.network(
-                                  //       _search_screen_controller
-                                  //           .searchlistModel!
-                                  //           .data![index]
-                                  //           .profileUrl!, fit: BoxFit.fill,),
-                                  //   ),
-                                  // )
-                                  : Container(
-                                      height: 50,
-                                      width: 50,
-                                      child: IconButton(
-                                        icon: Image.asset(
-                                          AssetUtils.user_icon3,
-                                          fit: BoxFit.fill,
-                                        ),
-                                        onPressed: () {},
-                                      ))),
+                              leading: Container(
+                                height: 50,
+                                width: 50,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(50),
+                                  child: (_search_screen_controller
+                                          .searchlistModel!
+                                          .data![index]
+                                          .profileUrl!
+                                          .isNotEmpty
+                                      ? FadeInImage.assetNetwork(
+                                          height: 80,
+                                          width: 80,
+                                          fit: BoxFit.cover,
+                                          placeholder:
+                                              'assets/images/Funky_App_Icon.png',
+                                          image: _search_screen_controller
+                                              .searchlistModel!
+                                              .data![index]
+                                              .profileUrl!,
+                                        )
+                                      :
+                                      // Container(
+                                      //   height: 50,
+                                      //   width: 50,
+                                      //   child: ClipRRect(
+                                      //     borderRadius: BorderRadius.circular(50),
+                                      //     child: Image.network(
+                                      //       _search_screen_controller
+                                      //           .searchlistModel!
+                                      //           .data![index]
+                                      //           .profileUrl!, fit: BoxFit.fill,),
+                                      //   ),
+                                      // )
+                                      (_search_screen_controller
+                                              .searchlistModel!
+                                              .data![index]
+                                              .image!
+                                              .isNotEmpty
+                                          ? FadeInImage.assetNetwork(
+                                              height: 80,
+                                              width: 80,
+                                              fit: BoxFit.cover,
+                                              image:
+                                                  "https://foxytechnologies.com/funky/images/${_search_screen_controller.searchlistModel!.data![index].image!}",
+                                              placeholder:
+                                                  'assets/images/Funky_App_Icon.png',
+                                            )
+                                          : Container(
+                                              height: 50,
+                                              width: 50,
+                                              child: IconButton(
+                                                icon: Image.asset(
+                                                  AssetUtils.user_icon3,
+                                                  fit: BoxFit.fill,
+                                                ),
+                                                onPressed: () {},
+                                              )))),
+                                ),
+                              ),
                               title: Text(
                                 _search_screen_controller
                                     .searchlistModel!.data![index].fullName!,

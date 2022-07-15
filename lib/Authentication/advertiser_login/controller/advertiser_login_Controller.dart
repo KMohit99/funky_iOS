@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 // import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 // import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
@@ -13,10 +14,13 @@ import 'package:get/get.dart';
 
 // import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:twitter_login/twitter_login.dart';
 
 import '../../../Utils/App_utils.dart';
 import '../../../Utils/toaster_widget.dart';
+import '../../../chat/constants/firestore_constants.dart';
+import '../../../chat/models/user_chat.dart';
 import '../../../custom_widget/page_loader.dart';
 import '../../../dashboard/dashboard_screen.dart';
 import '../../../sharePreference.dart';
@@ -31,6 +35,8 @@ class Advertiser_Login_screen_controller extends GetxController {
   final Creator_Login_screen_controller _creator_login_screen_controller =
       Get.put(Creator_Login_screen_controller(),
           tag: Creator_Login_screen_controller().toString());
+
+  final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
   Future<dynamic> checkLogin(
       {required BuildContext context, required String login_type}) async {
@@ -90,8 +96,27 @@ class Advertiser_Login_screen_controller extends GetxController {
 
         await clear();
 
+        ///firebase calls
+        final QuerySnapshot result = await firebaseFirestore
+            .collection(FirestoreConstants.pathUserCollection)
+            .where(FirestoreConstants.id, isEqualTo: loginModel!.user![0].id)
+            .get();
+        final List<DocumentSnapshot> documents = result.docs;
+
+        DocumentSnapshot documentSnapshot = documents[0];
+        UserChat userChat = UserChat.fromDocument(documentSnapshot);
+        // Write data to local
+        SharedPreferences prefs =
+        await SharedPreferences.getInstance();
+        await prefs.setString(FirestoreConstants.id, userChat.id);
+        await prefs.setString(FirestoreConstants.nickname, userChat.nickname);
+        await prefs.setString(FirestoreConstants.photoUrl, userChat.photoUrl);
+        await prefs.setString(FirestoreConstants.aboutMe, userChat.aboutMe);
+
+        hideLoader(context);
         await Get.to(Dashboard(page: 0,));
       } else {
+        hideLoader(context);
         print('Please try again');
       }
     } else {

@@ -9,7 +9,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:funky_new/dashboard/post_image_preview.dart';
-import 'package:funky_new/dashboard/story_/stories_editor.dart';
 
 // import 'package:funky_new/dashboard/story_/story_designer.dart';
 import 'package:funky_new/dashboard/video_editor.dart';
@@ -451,7 +450,8 @@ class _DashboardState extends State<Dashboard> {
                     children: [
                       InkWell(
                         onTap: () async {
-                            SharedPreferences prefs = await SharedPreferences.getInstance();
+                          SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
                           Get.to(chat_(prefs: prefs));
                         },
                         child: Padding(
@@ -980,8 +980,8 @@ class _DashboardState extends State<Dashboard> {
                                                                             onTap:
                                                                                 () {
                                                                               // image_upload();
-                                                                                  Navigator.pop(context);
-                                                                                  image_Gallery();
+                                                                              Navigator.pop(context);
+                                                                              image_Gallery();
                                                                             },
                                                                             child:
                                                                                 Column(

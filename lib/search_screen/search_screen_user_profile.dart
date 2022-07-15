@@ -20,6 +20,7 @@ import '../Utils/App_utils.dart';
 import '../Utils/asset_utils.dart';
 import '../Utils/colorUtils.dart';
 import '../Utils/toaster_widget.dart';
+import '../chat/pages/chat_page.dart';
 import '../homepage/model/UserInfoModel.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
@@ -741,6 +742,7 @@ class _SearchUserProfileState extends State<SearchUserProfile>
                                             .profileUrl!,
                                         height: 80,
                                         width: 80,
+                                        fit: BoxFit.cover,
                                       )
                                           : Image.asset(
                                         AssetUtils.image1,
@@ -1179,30 +1181,52 @@ class _SearchUserProfileState extends State<SearchUserProfile>
                                       SizedBox(
                                         width: 10,
                                       ),
-                                      Container(
-                                        margin:
-                                        const EdgeInsets.symmetric(
-                                            horizontal: 0),
-                                        // height: 45,
-                                        // width:(width ?? 300) ,
-                                        decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                            BorderRadius.circular(
-                                                25)),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ChatPage(
+                                                    arguments: ChatPageArguments(
+                                                      peerId: widget
+                                                          .search_user_data.id!,
+                                                      peerAvatar: widget
+                                                          .search_user_data
+                                                          .image!,
+                                                      peerNickname: widget
+                                                          .search_user_data
+                                                          .fullName!,
+                                                    ),
+                                                  ),
+                                            ),
+                                          );
+                                        },
                                         child: Container(
-                                            alignment: Alignment.center,
-                                            margin: const EdgeInsets
-                                                .symmetric(
-                                                vertical: 8,
-                                                horizontal: 20),
-                                            child: const Text(
-                                              'Chat',
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontFamily: 'PR',
-                                                  fontSize: 16),
-                                            )),
+                                          margin:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 0),
+                                          // height: 45,
+                                          // width:(width ?? 300) ,
+                                          decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                              BorderRadius.circular(
+                                                  25)),
+                                          child: Container(
+                                              alignment: Alignment.center,
+                                              margin: const EdgeInsets
+                                                  .symmetric(
+                                                  vertical: 8,
+                                                  horizontal: 20),
+                                              child: const Text(
+                                                'Chat',
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontFamily: 'PR',
+                                                    fontSize: 16),
+                                              )),
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -1276,6 +1300,7 @@ class _SearchUserProfileState extends State<SearchUserProfile>
                                   //     )
                                   //   ],
                                   // ),
+                                  (story_info.length > 0 ?
                                   Expanded(
                                     child: SizedBox(
                                       height: 85,
@@ -1296,7 +1321,9 @@ class _SearchUserProfileState extends State<SearchUserProfile>
                                                   GestureDetector(
                                                     onTap: () {
                                                       print(index);
-                                                      view_story(story_id: story_info[index].stID!);
+                                                      // view_story(
+                                                      //     story_id: story_info[index]
+                                                      //         .stID!);
                                                       Get.to(() =>
                                                           StoryScreen(
                                                             stories:
@@ -1341,7 +1368,8 @@ class _SearchUserProfileState extends State<SearchUserProfile>
                                                     height: 20,
                                                     width: 40,
                                                     child: Marquee(
-                                                      text: '${story_info[index].title}',
+                                                      text: '${story_info[index]
+                                                          .title}',
                                                       style: TextStyle(
                                                           color:
                                                           Colors.white,
@@ -1372,6 +1400,16 @@ class _SearchUserProfileState extends State<SearchUserProfile>
                                           }),
                                     ),
                                   )
+                                      : Container(
+                                      alignment: Alignment.center,
+                                      margin: EdgeInsets.symmetric(
+                                          vertical: 12, horizontal: 20),
+                                      child: Text(
+                                        'No Stories available',
+                                        style: TextStyle(color: Colors.white,
+                                            fontFamily: 'PR',
+                                            fontSize: 16),
+                                      )))
                                 ],
                               ),
                             ),
@@ -1798,57 +1836,5 @@ class _SearchUserProfileState extends State<SearchUserProfile>
     }
   }
 
-  ViewStoryModel? viewStoryModel;
-
-  Future<dynamic> view_story({required String story_id}) async {
-    debugPrint('0-0-0-0-0-0-0 username');
-
-    String id_user = await PreferenceManager().getPref(URLConstants.id);
-
-    // isLikeLoading(true);
-
-    Map data = {
-      'stID': story_id,
-    };
-    print(data);
-    // String body = json.encode(data);
-
-    var url = (URLConstants.base_url + URLConstants.StoryViewApi);
-    print("url : $url");
-    print("body : $data");
-
-    var response = await http.post(
-      Uri.parse(url),
-      body: data,
-    );
-    print(response.body);
-    print(response.request);
-    print(response.statusCode);
-    // var final_data = jsonDecode(response.body);
-
-    // print('final data $final_data');
-
-    if (response.statusCode == 200) {
-      // isLikeLoading(false);
-      var data = jsonDecode(response.body);
-      viewStoryModel = ViewStoryModel.fromJson(data);
-      print(viewStoryModel!.message);
-      if (viewStoryModel!.error == false) {
-        // CommonWidget().showToaster(msg: data["message"]);
-        // feedlikeStatus = feedLikeUnlikeModel!.user![0].feedlikeStatus!;
-        // feedlikeCount = feedLikeUnlikeModel!.user![0].feedLikeCount!;
-        // await getAllNewsFeedList();
-        // Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //         builder: (context) => Dashboard(page: 3,)));
-      } else {
-        print('Please try again');
-        CommonWidget().showErrorToaster(msg: 'Enter valid Otp');
-      }
-    } else {
-      print('Please try again');
-    }
-  }
 
 }

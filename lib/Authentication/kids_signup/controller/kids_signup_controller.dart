@@ -1,6 +1,9 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+
 // import 'package:funky_project/Authentication/kids_signup/ui/kids_otp_verification.dart';
 import 'package:get/get.dart';
 import 'dart:convert';
@@ -11,10 +14,13 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../Utils/App_utils.dart';
 import '../../../Utils/toaster_widget.dart';
+
 // import '../../../homepage/model/UserInfoModel.dart';
+import '../../../chat/constants/firestore_constants.dart';
 import '../../../dashboard/dashboard_screen.dart';
 import '../../../sharePreference.dart';
 import '../../creator_login/controller/creator_login_controller.dart';
@@ -39,9 +45,10 @@ class Kids_signup_controller extends GetxController {
     isPasswordVisible = value;
     update();
   }
+
   final Creator_Login_screen_controller _creator_login_screen_controller =
-  Get.put(Creator_Login_screen_controller(),
-      tag: Creator_Login_screen_controller().toString());
+      Get.put(Creator_Login_screen_controller(),
+          tag: Creator_Login_screen_controller().toString());
 
   TextEditingController fullname_controller = new TextEditingController();
   TextEditingController username_controller = new TextEditingController();
@@ -55,7 +62,6 @@ class Kids_signup_controller extends GetxController {
   TextEditingController countryCode_controller = new TextEditingController();
   TextEditingController aboutMe_controller = new TextEditingController();
 
-
   RxBool isLoading = false.obs;
   LoginModel? loginModel;
   File? imgFile;
@@ -63,7 +69,6 @@ class Kids_signup_controller extends GetxController {
   String selected_gender = 'male';
   String? selected_country;
   String? selected_country_code = '+91';
-
 
   // Future<dynamic> kids_signup(BuildContext context) async {
   //   debugPrint('0-0-0-0-0-0-0 username');
@@ -128,6 +133,8 @@ class Kids_signup_controller extends GetxController {
   //     print('Please try again');
   //   }
   // }
+  final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+  final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
 
   Future<dynamic> kids_signup({required BuildContext context}) async {
     // showLoader(context);
@@ -172,13 +179,47 @@ class Kids_signup_controller extends GetxController {
       loginModel = LoginModel.fromJson(data);
       print(loginModel);
       if (loginModel!.error == false) {
-        if(loginModel!.message == 'User Already Exists'){
+        if (loginModel!.message == 'User Already Exists') {
           CommonWidget().showErrorToaster(msg: loginModel!.message!);
-        }else{
+        } else {
           CommonWidget().showToaster(msg: loginModel!.message!);
           await PreferenceManager()
               .setPref(URLConstants.type, loginModel!.user![0].type!);
-          await Get.to(Dashboard(page: 0,));
+
+          final QuerySnapshot result = await firebaseFirestore
+              .collection(FirestoreConstants.pathUserCollection)
+              .where(FirestoreConstants.id, isEqualTo: loginModel!.user![0].id)
+              .get();
+          final List<DocumentSnapshot> documents = result.docs;
+          if (documents.isEmpty) {
+            // Writing data to server because here is a new user
+            firebaseFirestore
+                .collection(FirestoreConstants.pathUserCollection)
+                .doc(loginModel!.user![0].id)
+                .set({
+              FirestoreConstants.nickname: fullname_controller.text,
+              FirestoreConstants.photoUrl:
+                  "https://foxytechnologies.com/funky/images/${imgFile!.path}",
+              FirestoreConstants.id: loginModel!.user![0].id,
+              'createdAt': DateTime.now().millisecondsSinceEpoch.toString(),
+              FirestoreConstants.chattingWith: null
+            });
+
+            // Write data to local storage
+            // User? currentUser = firebaseUser;
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            await prefs.setString(
+                FirestoreConstants.id, loginModel!.user![0].id!);
+            await prefs.setString(
+                FirestoreConstants.nickname, fullname_controller.text ?? "");
+            await prefs.setString(
+                FirestoreConstants.photoUrl,
+                "https://foxytechnologies.com/funky/images/${imgFile!.path}" ??
+                    "");
+          }
+          await Get.to(Dashboard(
+            page: 0,
+          ));
         }
         // Get.to(Dashboard());
       } else {
@@ -199,7 +240,7 @@ class Kids_signup_controller extends GetxController {
     isotpLoading(true);
     Map data = {
       'email': email_controller.text,
-      'phone' : selected_country_code! + phone_controller.text
+      'phone': selected_country_code! + phone_controller.text
     };
     print(data);
     // String body = json.encode(data);
@@ -228,7 +269,6 @@ class Kids_signup_controller extends GetxController {
         CommonWidget().showToaster(msg: 'Enter Otp');
         // Get.to(OtpScreen(received_otp: otpModel!.user![0].body!,));
         Get.to(KidsOtpVerification());
-
       } else {
         print('Please try again');
         CommonWidget().showErrorToaster(msg: 'Enter valid Phone Number');
@@ -276,7 +316,7 @@ class Kids_signup_controller extends GetxController {
         CommonWidget().showToaster(msg: 'Signed Up');
         // _creator_login_screen_controller.CreatorgetUserInfo_Email(
         //     UserId: loginModel!.user![0].id!);
-        await  Get.to(kids_signup_Email_verification());
+        await Get.to(kids_signup_Email_verification());
 
         // await kids_signup(context: context);
         // Get.to(Dashboard());
@@ -288,7 +328,6 @@ class Kids_signup_controller extends GetxController {
       print('Please try again');
     }
   }
-
 
   Future<dynamic> ParentEmailVerification(BuildContext context) async {
     debugPrint('0-0-0-0-0-0-0 username');
@@ -337,7 +376,6 @@ class Kids_signup_controller extends GetxController {
     }
   }
 
-
   Future<dynamic> ParentsVerifyOtp(
       {required BuildContext context, required String otp_controller}) async {
     debugPrint('0-0-0-0-0-0-0 username');
@@ -384,8 +422,6 @@ class Kids_signup_controller extends GetxController {
       print('Please try again');
     }
   }
-
-
 
   countryModel? countrymodelList;
   var getAllCountriesModelList = countryModel().obs;

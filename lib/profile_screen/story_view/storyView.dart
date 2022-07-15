@@ -14,6 +14,7 @@ import '../../Utils/colorUtils.dart';
 import '../../Utils/toaster_widget.dart';
 import '../../custom_widget/common_buttons.dart';
 import '../../dashboard/dashboard_screen.dart';
+import '../../search_screen/ViewStoryModel.dart';
 import '../../sharePreference.dart';
 import '../model/getStoryCountModel.dart';
 import '../model/getStoryModel.dart';
@@ -110,7 +111,7 @@ class _StoryScreenState extends State<StoryScreen>
                             margin: EdgeInsets.symmetric(vertical: 90),
                             child: FadeInImage.assetNetwork(
                               image:
-                                  "http://foxyserver.com/funky/images/${story.storyPhoto!}",
+                                  "https://foxytechnologies.com/funky/images/${story.storyPhoto!}",
                               fit: BoxFit.contain,
                               placeholder: 'assets/images/Funky_App_Icon.png',
                             ),
@@ -304,10 +305,14 @@ class _StoryScreenState extends State<StoryScreen>
     //     break;
     // }
     if (story.isVideo == 'false') {
+      print('imageeeeeeee');
+      view_story(story_id: story.stID!);
       _animController!.duration = Duration(seconds: 10);
       _animController!.forward();
     } else {
       // _videoController = null;
+      print('videooo');
+      view_story(story_id: story.stID!);
       _videoController = VideoPlayerController.network(
           "http://foxyserver.com/funky/video/${story.uploadVideo!}")
         ..initialize().then((_) {
@@ -515,6 +520,60 @@ class _StoryScreenState extends State<StoryScreen>
       // CommonService().unAuthorizedUser();
     } else {
       // CommonWidget().showToaster(msg: msg.toString());
+    }
+  }
+
+
+  ViewStoryModel? viewStoryModel;
+
+  Future<dynamic> view_story({required String story_id}) async {
+    debugPrint('0-0-0-0-0-0-0 username');
+
+    String id_user = await PreferenceManager().getPref(URLConstants.id);
+
+    // isLikeLoading(true);
+
+    Map data = {
+      'stID': story_id,
+    };
+    print(data);
+    // String body = json.encode(data);
+
+    var url = (URLConstants.base_url + URLConstants.StoryViewApi);
+    print("url : $url");
+    print("body : $data");
+
+    var response = await http.post(
+      Uri.parse(url),
+      body: data,
+    );
+    print(response.body);
+    print(response.request);
+    print(response.statusCode);
+    // var final_data = jsonDecode(response.body);
+
+    // print('final data $final_data');
+
+    if (response.statusCode == 200) {
+      // isLikeLoading(false);
+      var data = jsonDecode(response.body);
+      viewStoryModel = ViewStoryModel.fromJson(data);
+      print(viewStoryModel!.message);
+      if (viewStoryModel!.error == false) {
+        // CommonWidget().showToaster(msg: data["message"]);
+        // feedlikeStatus = feedLikeUnlikeModel!.user![0].feedlikeStatus!;
+        // feedlikeCount = feedLikeUnlikeModel!.user![0].feedLikeCount!;
+        // await getAllNewsFeedList();
+        // Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //         builder: (context) => Dashboard(page: 3,)));
+      } else {
+        print('Please try again');
+        CommonWidget().showErrorToaster(msg: 'Enter valid Otp');
+      }
+    } else {
+      print('Please try again');
     }
   }
 

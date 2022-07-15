@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
@@ -17,10 +18,13 @@ import 'package:funky_new/custom_widget/page_loader.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:twitter_login/twitter_login.dart';
 import 'dart:convert' as convert;
 
 import '../../../Utils/App_utils.dart';
+import '../../../chat/constants/firestore_constants.dart';
+import '../../../chat/models/user_chat.dart';
 import '../../../dashboard/dashboard_screen.dart';
 import '../../../homepage/model/UserInfoModel.dart';
 import '../../../sharePreference.dart';
@@ -32,6 +36,8 @@ class Creator_Login_screen_controller extends GetxController {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   LoginModel? loginModel;
+
+  final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
   Future<dynamic> checkLogin(
       {required BuildContext context, required String login_type}) async {
@@ -84,6 +90,22 @@ class Creator_Login_screen_controller extends GetxController {
         await PreferenceManager().setPref(URLConstants.social_type, "");
         await CreatorgetUserInfo_Email(UserId: loginModel!.user![0].id!);
 
+        ///firebase calls
+        final QuerySnapshot result = await firebaseFirestore
+            .collection(FirestoreConstants.pathUserCollection)
+            .where(FirestoreConstants.id, isEqualTo: loginModel!.user![0].id)
+            .get();
+        final List<DocumentSnapshot> documents = result.docs;
+
+        DocumentSnapshot documentSnapshot = documents[0];
+        UserChat userChat = UserChat.fromDocument(documentSnapshot);
+        // Write data to local
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString(FirestoreConstants.id, userChat.id);
+        await prefs.setString(FirestoreConstants.nickname, userChat.nickname);
+        await prefs.setString(FirestoreConstants.photoUrl, userChat.photoUrl);
+        await prefs.setString(FirestoreConstants.aboutMe, userChat.aboutMe);
+
         await Fluttertoast.showToast(
           msg: "login successfully",
           textColor: Colors.white,
@@ -93,7 +115,9 @@ class Creator_Login_screen_controller extends GetxController {
         );
         hideLoader(context);
         await clear();
-        await Get.to(Dashboard(page: 0,));
+        await Get.to(Dashboard(
+          page: 0,
+        ));
       } else {
         hideLoader(context);
         CommonWidget().showErrorToaster(msg: "Invalid Details");
@@ -367,17 +391,68 @@ class Creator_Login_screen_controller extends GetxController {
               .setPref(URLConstants.type, loginModel!.user![0].type!);
           await PreferenceManager()
               .setPref(URLConstants.social_type, socail_type);
+
+          CommonWidget().showToaster(msg: loginModel!.message!);
+
+          /// Firebase database messaging method
+          final QuerySnapshot result = await firebaseFirestore
+              .collection(FirestoreConstants.pathUserCollection)
+              .where(FirestoreConstants.id, isEqualTo: loginModel!.user![0].id)
+              .get();
+          final List<DocumentSnapshot> documents = result.docs;
+          if (documents.isEmpty) {
+            print("new user created");
+            // Writing data to server because here is a new user
+            firebaseFirestore
+                .collection(FirestoreConstants.pathUserCollection)
+                .doc(loginModel!.user![0].id)
+                .set({
+              FirestoreConstants.nickname: userCredential!.user!.displayName,
+              FirestoreConstants.photoUrl: userCredential!.user!.photoURL,
+              FirestoreConstants.id: loginModel!.user![0].id,
+              'createdAt': DateTime.now().millisecondsSinceEpoch.toString(),
+              FirestoreConstants.chattingWith: null
+            });
+
+            // Write data to local storage
+            // User? currentUser = firebaseUser;
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            await prefs.setString(
+                FirestoreConstants.id, loginModel!.user![0].id!);
+            await prefs.setString(FirestoreConstants.nickname,
+                userCredential!.user!.displayName ?? "");
+            await prefs.setString(FirestoreConstants.photoUrl,
+                userCredential!.user!.photoURL ?? "");
+          } else {
+            print("user existed");
+            DocumentSnapshot documentSnapshot = documents[0];
+            UserChat userChat = UserChat.fromDocument(documentSnapshot);
+            // Write data to local
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            await prefs.setString(FirestoreConstants.id, userChat.id);
+            await prefs.setString(
+                FirestoreConstants.nickname, userChat.nickname);
+            await prefs.setString(
+                FirestoreConstants.photoUrl, userChat.photoUrl);
+            await prefs.setString(FirestoreConstants.aboutMe, userChat.aboutMe);
+          }
+          ///
+
+          await Get.to(Dashboard(
+            page: 0,
+          ));
+
           await getUserInfo_social();
 
-          Fluttertoast.showToast(
-            msg: "login successfully",
-            textColor: Colors.white,
-            backgroundColor: Colors.black,
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.BOTTOM,
-          );
+          // Fluttertoast.showToast(
+          //   msg: "login successfully",
+          //   textColor: Colors.white,
+          //   backgroundColor: Colors.black,
+          //   toastLength: Toast.LENGTH_LONG,
+          //   gravity: ToastGravity.BOTTOM,
+          // );
           hideLoader(context);
-          await Get.to(Dashboard(page: 0,));
+          // await Get.to(Dashboard(page: 0,));
         } else {
           print('Please try again');
         }
@@ -463,7 +538,9 @@ class Creator_Login_screen_controller extends GetxController {
             gravity: ToastGravity.BOTTOM,
           );
           hideLoader(context);
-          await Get.to(Dashboard(page: 0,));
+          await Get.to(Dashboard(
+            page: 0,
+          ));
         } else {
           print('Please try again');
         }

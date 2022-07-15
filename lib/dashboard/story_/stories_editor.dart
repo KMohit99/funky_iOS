@@ -115,7 +115,7 @@ class _StoriesEditorState extends State<StoriesEditor> {
         ChangeNotifierProvider(create: (_) => RenderingNotifier()),
       ],
       child: MainView(
-        imagedata: widget.imageData,
+        imagedata: widget.imageData!,
         giphyKey: widget.giphyKey,
         onDone: widget.onDone,
         fontFamilyList: widget.fontFamilyList,
