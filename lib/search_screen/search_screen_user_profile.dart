@@ -1183,24 +1183,34 @@ class _SearchUserProfileState extends State<SearchUserProfile>
                                       ),
                                       GestureDetector(
                                         onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ChatPage(
-                                                    arguments: ChatPageArguments(
-                                                      peerId: widget
-                                                          .search_user_data.id!,
-                                                      peerAvatar: widget
-                                                          .search_user_data
-                                                          .image!,
-                                                      peerNickname: widget
-                                                          .search_user_data
-                                                          .fullName!,
+                                          if (_search_screen_controller
+                                              .is_follower !=
+                                              null ||
+                                              _search_screen_controller
+                                                  .is_following !=
+                                                  null) {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ChatPage(
+                                                      arguments: ChatPageArguments(
+                                                        peerId: widget
+                                                            .search_user_data
+                                                            .id!,
+                                                        peerAvatar: widget
+                                                            .search_user_data
+                                                            .image!,
+                                                        peerNickname: widget
+                                                            .search_user_data
+                                                            .fullName!,
+                                                      ),
                                                     ),
-                                                  ),
-                                            ),
-                                          );
+                                              ),
+                                            );
+                                          }else{
+                                            CommonWidget().showToaster(msg: 'Need to follow the user');
+                                          }
                                         },
                                         child: Container(
                                           margin:
@@ -1305,7 +1315,7 @@ class _SearchUserProfileState extends State<SearchUserProfile>
                                     child: SizedBox(
                                       height: 85,
                                       child: ListView.builder(
-                                          itemCount: story_info.length,
+                                          itemCount: story_.length,
                                           shrinkWrap: true,
                                           scrollDirection:
                                           Axis.horizontal,
@@ -1324,12 +1334,16 @@ class _SearchUserProfileState extends State<SearchUserProfile>
                                                       // view_story(
                                                       //     story_id: story_info[index]
                                                       //         .stID!);
+                                                      print(index);
+                                                      story_info = getStoryModel!.data![index].storys!;
+
                                                       Get.to(() =>
                                                           StoryScreen(
                                                             stories:
                                                             story_info,
                                                             story_no:
                                                             index,
+                                                            stories_title: story_,
                                                           ));
                                                       // Get.to(StoryScreen(stories: story_info));
                                                     },
@@ -1368,7 +1382,7 @@ class _SearchUserProfileState extends State<SearchUserProfile>
                                                     height: 20,
                                                     width: 40,
                                                     child: Marquee(
-                                                      text: '${story_info[index]
+                                                      text: '${story_[index]
                                                           .title}',
                                                       style: TextStyle(
                                                           color:
@@ -1780,7 +1794,8 @@ class _SearchUserProfileState extends State<SearchUserProfile>
 
   bool isStoryLoading = true;
   GetStoryModel? getStoryModel;
-  List<Data_story> story_info = [];
+  List<Storys> story_info = [];
+  List<Data_story> story_ = [];
 
   // List<String> thumb = [];
   // String? filePath;
@@ -1815,7 +1830,9 @@ class _SearchUserProfileState extends State<SearchUserProfile>
         debugPrint(
             '2-2-2-2-2-2 Inside the Get UserInfo Controller Details ${getStoryModel!
                 .data!.length}');
-        story_info = getStoryModel!.data!;
+        story_ = getStoryModel!.data!;
+        story_info = getStoryModel!.data![0].storys!;
+
         setState(() {
           isStoryLoading = false;
         });

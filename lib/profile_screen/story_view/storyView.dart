@@ -23,10 +23,11 @@ import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 
 class StoryScreen extends StatefulWidget {
-  final List<Data_story> stories;
+  final List<Storys> stories;
+  final List<Data_story> stories_title;
   int story_no;
 
-  StoryScreen({required this.stories, required this.story_no});
+  StoryScreen({required this.stories, required this.story_no, required this.stories_title});
 
   @override
   _StoryScreenState createState() => _StoryScreenState();
@@ -46,7 +47,7 @@ class _StoryScreenState extends State<StoryScreen>
     _pageController = PageController();
     _animController = AnimationController(vsync: this);
 
-    final Data_story firstStory = widget.stories.first;
+    final Storys firstStory = widget.stories.first;
     _loadStory(story: firstStory, animateToPage: false);
 
     _animController!.addStatusListener((status) {
@@ -79,7 +80,7 @@ class _StoryScreenState extends State<StoryScreen>
 
   @override
   Widget build(BuildContext context) {
-    final Data_story story = widget.stories[widget.story_no];
+    final Storys story = widget.stories[widget.story_no];
     return Scaffold(
       backgroundColor: Colors.black,
       body: GestureDetector(
@@ -99,11 +100,11 @@ class _StoryScreenState extends State<StoryScreen>
                     physics: NeverScrollableScrollPhysics(),
                     itemCount: widget.stories.length,
                     itemBuilder: (context, i) {
-                      final Data_story story = widget.stories[widget.story_no];
-                      get_story_count(story_id: story.stID!);
-                      if (story.isVideo == 'false') {
+                      final Storys story = widget.stories[widget.story_no];
+                      get_story_count(story_id: story.id!);
+                      if (story.storyPhoto!.isNotEmpty) {
                         print(
-                            "http://foxyserver.com/funky/images/${story.storyPhoto!}");
+                            "https://foxytechnologies.com/funky/images/${story.storyPhoto!}");
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 0.0),
                           child: Container(
@@ -182,7 +183,7 @@ class _StoryScreenState extends State<StoryScreen>
                                 : FadeInImage.assetNetwork(
                                     fit: BoxFit.cover,
                                     image:
-                                        "http://foxyserver.com/funky/images/${story.storyPhoto!}",
+                                        "https://foxytechnologies.com/funky/images/${story.storyPhoto!}",
                                     placeholder:
                                         'assets/images/Funky_App_Icon.png',
                                     // color: HexColor(CommonColor.pinkFont),
@@ -192,7 +193,7 @@ class _StoryScreenState extends State<StoryScreen>
                         const SizedBox(width: 10.0),
                         Expanded(
                           child: Text(
-                            '${story.title}',
+                            '${widget.stories_title[widget.story_no].title}',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontFamily: 'PM',
@@ -210,7 +211,8 @@ class _StoryScreenState extends State<StoryScreen>
                           },
                         ),
                         Text(
-                          '${story.viewCount}',
+                          // '${story.viewCount}',
+                          '0',
                           style: TextStyle(
                               color: Colors.white,
                               fontFamily: 'PM',
@@ -223,15 +225,17 @@ class _StoryScreenState extends State<StoryScreen>
                             color: Colors.white,
                           ),
                           onPressed: () {
-                            print(story.stID!);
+                            print(story.id!);
                             // share_icon(story_id: story.stID!);
                             pop_up(
-                                story_id: story.stID!,
+                                story_id: story.id!,
                                 story_image: (story.storyPhoto!.isEmpty
                                     ? 'assets/images/Funky_App_Icon.png'
                                     : story.storyPhoto!),
-                                story_title: story.title!,
-                                is_video: story.isVideo!);
+                                story_title: widget.stories_title[widget.story_no].title!,
+                                is_video: (story.storyPhoto!.isEmpty
+                                    ? 'true'
+                                    : 'false'));
                             // delete_story(story_id: story.stID!);
                           },
                         ),
@@ -247,7 +251,7 @@ class _StoryScreenState extends State<StoryScreen>
     );
   }
 
-  void _onTapDown(TapDownDetails details, Data_story story) {
+  void _onTapDown(TapDownDetails details, Storys story) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double dx = details.globalPosition.dx;
     if (dx < screenWidth / 3) {
@@ -270,7 +274,7 @@ class _StoryScreenState extends State<StoryScreen>
         }
       });
     } else {
-      if (story.isVideo == 'true') {
+      if (story.storyPhoto!.isEmpty) {
         if (_videoController!.value.isPlaying) {
           _videoController!.pause();
           _animController!.stop();
@@ -282,7 +286,7 @@ class _StoryScreenState extends State<StoryScreen>
     }
   }
 
-  void _loadStory({required Data_story story, bool animateToPage = true}) {
+  void _loadStory({required Storys story, bool animateToPage = true}) {
     _animController!.stop();
     _animController!.reset();
     // switch (story.media) {
@@ -304,15 +308,15 @@ class _StoryScreenState extends State<StoryScreen>
     //       });
     //     break;
     // }
-    if (story.isVideo == 'false') {
+    if (story.storyPhoto!.isNotEmpty) {
       print('imageeeeeeee');
-      view_story(story_id: story.stID!);
+      view_story(story_id: story.id!);
       _animController!.duration = Duration(seconds: 10);
       _animController!.forward();
     } else {
       // _videoController = null;
       print('videooo');
-      view_story(story_id: story.stID!);
+      view_story(story_id: story.id!);
       _videoController = VideoPlayerController.network(
           "http://foxyserver.com/funky/video/${story.uploadVideo!}")
         ..initialize().then((_) {

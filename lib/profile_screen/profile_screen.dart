@@ -74,7 +74,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
         ? await _creator_login_screen_controller.CreatorgetUserInfo_Email(
             UserId: id_user)
         : await _creator_login_screen_controller.getUserInfo_social());
-    await get_story_list();
+    await get_story_list(index: 0);
     await get_video_list(context);
 
     await get_gallery_list(context);
@@ -1020,12 +1020,15 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                                         GestureDetector(
                                                           onTap: () {
                                                             print(index);
+                                                            story_info = getStoryModel!.data![index].storys!;
+
                                                             Get.to(() =>
                                                                 StoryScreen(
                                                                   stories:
                                                                       story_info,
                                                                   story_no:
                                                                       index,
+                                                                   stories_title: story_,
                                                                 ));
                                                             // Get.to(StoryScreen(stories: story_info));
                                                           },
@@ -1041,10 +1044,10 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                                                           index]
                                                                       .storyPhoto!
                                                                       .isEmpty
-                                                                  ? Image.file(
-                                                                      test_thumb[
-                                                                          index]
-                                                                      // 'assets/images/Funky_App_Icon.png'
+                                                                  ? Image.asset(
+                                                                      // test_thumb[
+                                                                      //     index]
+                                                                      'assets/images/Funky_App_Icon.png'
                                                                       )
                                                                   : FadeInImage
                                                                       .assetNetwork(
@@ -1062,7 +1065,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                                         SizedBox(
                                                           height: 5,
                                                         ),
-                                                        (story_info[index]
+                                                        (story_[index]
                                                                     .title!
                                                                     .length >=
                                                                 5
@@ -1071,7 +1074,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                                                 width: 40,
                                                                 child: Marquee(
                                                                   text:
-                                                                      '${story_info[index].title}',
+                                                                      '${story_[index].title}',
                                                                   style: TextStyle(
                                                                       color: Colors
                                                                           .white,
@@ -1111,7 +1114,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                                                 ),
                                                               )
                                                             : Text(
-                                                                '${story_info[index].title}',
+                                                                '${story_[index].title}',
                                                                 style: TextStyle(
                                                                     color: Colors
                                                                         .white,
@@ -1724,14 +1727,15 @@ class _Profile_ScreenState extends State<Profile_Screen>
 
   bool isStoryLoading = true;
   GetStoryModel? getStoryModel;
-  List<Data_story> story_info = [];
+  List<Storys> story_info = [];
+  List<Data_story> story_ = [];
 
   List<File> test_thumb = [];
 
   // List<String> thumb = [];
   // String? filePath;
 
-  Future<dynamic> get_story_list() async {
+  Future<dynamic> get_story_list({required int index}) async {
     print('Inside Story get email');
     setState(() {
       isStoryLoading = true;
@@ -1759,29 +1763,30 @@ class _Profile_ScreenState extends State<Profile_Screen>
       if (getStoryModel!.error == false) {
         debugPrint(
             '2-2-2-2-2-2 Inside the Get UserInfo Controller Details ${getStoryModel!.data!.length}');
-        story_info = getStoryModel!.data!;
+        story_ = getStoryModel!.data!;
+        story_info = getStoryModel!.data![0].storys!;
 
         // test = File(uint8list!);
 
-        for (int i = 0; i < story_info.length; i++) {
-          if (story_info[i].isVideo == 'true') {
-            final uint8list = await VideoThumbnail.thumbnailFile(
-              video:
-                  ("http://foxyserver.com/funky/video/${story_info[i].uploadVideo}"),
-              thumbnailPath: (await getTemporaryDirectory()).path,
-              imageFormat: ImageFormat.JPEG,
-              maxHeight: 64,
-              // specify the height of the thumbnail, let the width auto-scaled to keep the source aspect ratio
-              quality: 75,
-            );
-            test_thumb.add(File(uint8list!));
-            // print(test_thumb[i].path);
-          } else if (story_info[i].isVideo == 'false') {
-            test_thumb.add(File(story_info[i].image!));
-            // print(story_info[i].image);
-          }
-          print("test----------${test_thumb[i].path}");
-        }
+        // for (int i = 0; i < story_info.length; i++) {
+        //   if (story_info[i].isVideo == 'true') {
+        //     final uint8list = await VideoThumbnail.thumbnailFile(
+        //       video:
+        //           ("http://foxyserver.com/funky/video/${story_info[i].uploadVideo}"),
+        //       thumbnailPath: (await getTemporaryDirectory()).path,
+        //       imageFormat: ImageFormat.JPEG,
+        //       maxHeight: 64,
+        //       // specify the height of the thumbnail, let the width auto-scaled to keep the source aspect ratio
+        //       quality: 75,
+        //     );
+        //     test_thumb.add(File(uint8list!));
+        //     // print(test_thumb[i].path);
+        //   } else if (story_info[i].isVideo == 'false') {
+        //     test_thumb.add(File(story_info[i].image!));
+        //     // print(story_info[i].image);
+        //   }
+        //   print("test----------${test_thumb[i].path}");
+        // }
         setState(() {
           isStoryLoading = false;
         });

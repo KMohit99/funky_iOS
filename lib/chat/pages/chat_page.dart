@@ -896,7 +896,7 @@ class ChatPageState extends State<ChatPage> {
                   listMessage = snapshot.data!.docs;
                   if (listMessage.length > 0) {
                     return ListView.builder(
-                      padding: EdgeInsets.all(10),
+                      padding: EdgeInsets.only(left: 10,right: 10,bottom: 10,top: 110),
                       itemBuilder: (context, index) =>
                           buildItem(index, snapshot.data?.docs[index]),
                       itemCount: snapshot.data?.docs.length,

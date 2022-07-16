@@ -42,6 +42,7 @@ class Data_story {
   String? viewCount;
   String? dateTime;
   User? user;
+  List<Storys>? storys;
 
   Data_story(
       {this.stID,
@@ -54,7 +55,8 @@ class Data_story {
         this.isVideo,
         this.viewCount,
         this.dateTime,
-        this.user});
+        this.user,
+        this.storys});
 
   Data_story.fromJson(Map<String, dynamic> json) {
     stID = json['stID'];
@@ -68,6 +70,12 @@ class Data_story {
     viewCount = json['viewCount'];
     dateTime = json['dateTime'];
     user = json['user'] != null ? new User.fromJson(json['user']) : null;
+    if (json['storys'] != null) {
+      storys = <Storys>[];
+      json['storys'].forEach((v) {
+        storys!.add(new Storys.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -84,6 +92,9 @@ class Data_story {
     data['dateTime'] = this.dateTime;
     if (this.user != null) {
       data['user'] = this.user!.toJson();
+    }
+    if (this.storys != null) {
+      data['storys'] = this.storys!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -178,6 +189,43 @@ class User {
     data['follower_number'] = this.followerNumber;
     data['following_number'] = this.followingNumber;
     data['createdDate'] = this.createdDate;
+    return data;
+  }
+}
+
+class Storys {
+  String? id;
+  String? userId;
+  String? storyPhoto;
+  String? uploadVideo;
+  String? isVideo;
+  String? type;
+
+  Storys(
+      {this.id,
+        this.userId,
+        this.storyPhoto,
+        this.uploadVideo,
+        this.isVideo,
+        this.type});
+
+  Storys.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    userId = json['userId'];
+    storyPhoto = json['story_photo'];
+    uploadVideo = json['uploadVideo'];
+    isVideo = json['isVideo'];
+    type = json['type'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['userId'] = this.userId;
+    data['story_photo'] = this.storyPhoto;
+    data['uploadVideo'] = this.uploadVideo;
+    data['isVideo'] = this.isVideo;
+    data['type'] = this.type;
     return data;
   }
 }

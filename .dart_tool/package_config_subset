@@ -146,6 +146,10 @@ dbus
 2.15
 file:///Users/technologies/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/dbus-0.7.6/
 file:///Users/technologies/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/dbus-0.7.6/lib/
+dio
+2.12
+file:///Users/technologies/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/dio-4.0.6/
+file:///Users/technologies/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/dio-4.0.6/lib/
 drag_ball
 2.12
 file:///Users/technologies/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/drag_ball-0.5.2/
@@ -310,6 +314,10 @@ gallery_media_picker
 2.15
 file:///Users/technologies/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/gallery_media_picker-0.0.7/
 file:///Users/technologies/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/gallery_media_picker-0.0.7/lib/
+gallery_saver
+2.12
+file:///Users/technologies/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/gallery_saver-2.3.2/
+file:///Users/technologies/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/gallery_saver-2.3.2/lib/
 get
 2.15
 file:///Users/technologies/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/get-4.6.5/

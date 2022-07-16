@@ -248,14 +248,14 @@ class _Story_image_previewState extends State<Story_image_preview> {
     print("IIIiiiiIIIIII ${widget.ImageFile.path}");
     var files = (widget.isImage
         ? await http.MultipartFile.fromPath(
-            'story_photo', widget.ImageFile.path)
+            'story_photo[]', widget.ImageFile.path)
         : await http.MultipartFile.fromPath(
             'uploadVideo', widget.ImageFile.path));
     request.files.add(files);
     request.fields['userId'] = id_user;
     request.fields['title'] = title_controller.text;
     // request.fields['uploadVideo'] = '';
-    request.fields['isVideo'] = (widget.isImage ? 'false' : 'true');
+    request.fields['isVideo'] = '';
 
     //userId,tagLine,description,address,postImage,uploadVideo,isVideo
     // request.files.add(await http.MultipartFile.fromPath(

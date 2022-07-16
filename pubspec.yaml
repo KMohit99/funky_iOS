@@ -107,6 +107,8 @@ dependencies:
     # permission
   permission_handler: ^9.2.0
   marquee: ^2.2.3
+  gallery_saver: ^2.3.2
+  dio: ^4.0.5
 
     # toast
 #  fluttertoast: ^8.0.9
