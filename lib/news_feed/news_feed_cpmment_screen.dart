@@ -96,7 +96,7 @@ class _NewsFeedCommantScreenState extends State<NewsFeedCommantScreen> {
                                                   .image!
                                                   .isNotEmpty
                                               ? Image.network(
-                                                  "http://foxyserver.com/funky/images/${_newsFeed_screen_controller.newsFeedCommnetModel!.data![index].user!.image!}",
+                                                  "https://foxytechnologies.com/funky/images/${_newsFeed_screen_controller.newsFeedCommnetModel!.data![index].user!.image!}",
                                                   fit: BoxFit.fill,
                                                 )
                                               : Container(
@@ -302,7 +302,7 @@ class _NewsFeedCommantScreenState extends State<NewsFeedCommantScreen> {
                                                           .image!
                                                           .isNotEmpty
                                                       ? Image.network(
-                                                          "http://foxyserver.com/funky/images/${_newsFeed_screen_controller.newsFeedCommnetModel!.data![index].replies![idx].user!.image!}",
+                                                          "https://foxytechnologies.com/funky/images/${_newsFeed_screen_controller.newsFeedCommnetModel!.data![index].replies![idx].user!.image!}",
                                                           fit: BoxFit.fill,
                                                         )
                                                       : Container(

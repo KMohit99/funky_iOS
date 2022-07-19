@@ -1497,18 +1497,17 @@ class _AdvertiserSignUpScreenState extends State<AdvertiserSignUpScreen> {
                           if(username_error == true &&
                               email_error == true &&
                               phone_error == true){
-                                if (_creator_signup_controller
+                                if (_advertiser_signup_controller
                                     .phone_controller.text.length <
                                     10) {
                                       CommonWidget().showErrorToaster(
                                           msg: "Enter valid number");
                                       return;
                                 }
-                                _creator_signup_controller.CreatorsendOtp(
+                                _advertiser_signup_controller.AdvertisorsendOtp(
                                     context);
                           }
-                          _advertiser_signup_controller.AdvertisorsendOtp(
-                               context);
+
                           // Get.toNamed(BindingUtils.signupOption);
                         },
                         backgroud_color: Colors.black,

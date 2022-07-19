@@ -655,37 +655,58 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                         Expanded(
                                           flex: 3,
                                           child: Container(
-                                            child: Row(
+                                            margin: EdgeInsets.symmetric(horizontal: 15),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      (_creator_login_screen_controller
+                                                              .userInfoModel_email!
+                                                              .data![0]
+                                                              .fullName!
+                                                              .isNotEmpty
+                                                          ? '${_creator_login_screen_controller.userInfoModel_email!.data![0].fullName}'
+                                                          : 'Please update profile'),
+                                                      style: TextStyle(
+                                                          fontSize: 16,
+                                                          color: HexColor(
+                                                              CommonColor
+                                                                  .pinkFont)),
+                                                    ),
+                                                    IconButton(
+                                                        visualDensity:
+                                                            VisualDensity(
+                                                                vertical: -4),
+                                                        padding: EdgeInsets.only(
+                                                            left: 5.0),
+                                                        icon: Icon(
+                                                          Icons.edit,
+                                                          color: Colors.grey,
+                                                          size: 15,
+                                                        ),
+                                                        onPressed: () {
+                                                          Get.to(
+                                                              EditProfileScreen());
+                                                        }),
+                                                  ],
+                                                ),
                                                 Text(
                                                   (_creator_login_screen_controller
-                                                          .userInfoModel_email!
-                                                          .data![0]
-                                                          .fullName!
-                                                          .isNotEmpty
-                                                      ? '${_creator_login_screen_controller.userInfoModel_email!.data![0].fullName}'
-                                                      : 'Please update profile'),
+                                                      .userInfoModel_email!
+                                                      .data![0]
+                                                      .about!
+                                                      .isNotEmpty
+                                                      ? '${_creator_login_screen_controller
+                                                      .userInfoModel_email!.data![0]
+                                                      .about}'
+                                                      : ' '),
                                                   style: TextStyle(
-                                                      fontSize: 14,
-                                                      color: HexColor(
-                                                          CommonColor
-                                                              .pinkFont)),
+                                                      fontSize: 16,
+                                                      color: HexColor(CommonColor
+                                                          .subHeaderColor)),
                                                 ),
-                                                IconButton(
-                                                    visualDensity:
-                                                        VisualDensity(
-                                                            vertical: -4),
-                                                    padding: EdgeInsets.only(
-                                                        left: 5.0),
-                                                    icon: Icon(
-                                                      Icons.edit,
-                                                      color: Colors.grey,
-                                                      size: 15,
-                                                    ),
-                                                    onPressed: () {
-                                                      Get.to(
-                                                          EditProfileScreen());
-                                                    }),
                                               ],
                                             ),
                                           ),

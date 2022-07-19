@@ -360,7 +360,7 @@ class NewsFeed_screen_controller extends GetxController {
     isReplyCommentPostLoading(true);
 
     Map data = {
-      'userid': idUser,
+      'userId': idUser,
       'comId': Replying_comment_id,
       'comment': "@$Replyname_controller ${comment_controller.text}",
     };

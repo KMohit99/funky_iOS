@@ -795,7 +795,7 @@ class _SearchUserProfileState extends State<SearchUserProfile>
                                               .isNotEmpty
                                               ? '${_search_screen_controller
                                               .userInfoModel_email!.data![0]
-                                              .fullName}'
+                                              .about}'
                                               : ' '),
                                           style: TextStyle(
                                               fontSize: 14,

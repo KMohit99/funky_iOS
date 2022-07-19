@@ -121,7 +121,7 @@ class Advertiser_signup_controller extends GetxController {
 
   Future<dynamic> Advertiser_signup({required BuildContext context}) async {
     // showLoader(context);
-    var url = 'http://foxyserver.com/funky/api/signup.php';
+    var url = 'https://foxytechnologies.com/funky/api/signup.php';
     var request = http.MultipartRequest('POST', Uri.parse(url));
     // List<int> imageBytes = imgFile!.readAsBytesSync();
     // String baseimage = base64Encode(imageBytes);
@@ -166,6 +166,9 @@ class Advertiser_signup_controller extends GetxController {
         }else{
           CommonWidget().showToaster(msg: loginModel!.message!);
 
+          print(loginModel!.user![0].id);
+          print(loginModel!.user![0].id);
+          print(loginModel!.user![0].id);
           final QuerySnapshot result = await firebaseFirestore
               .collection(FirestoreConstants.pathUserCollection)
               .where(FirestoreConstants.id, isEqualTo: loginModel!.user![0].id)

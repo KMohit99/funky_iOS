@@ -29,6 +29,7 @@ class _PostImageCommentScreenState extends State<PostImageCommentScreen> {
   }
 
   init() {
+    homepageController.Replyname_controller = '';
     homepageController.getPostCommments(
         newsfeedID: widget.PostID, context: context);
   }
@@ -91,7 +92,7 @@ class _PostImageCommentScreenState extends State<PostImageCommentScreen> {
                                                   .image!
                                                   .isNotEmpty
                                               ? Image.network(
-                                                  "http://foxyserver.com/funky/images/${homepageController.postcommentModel!.data![index].user!.image!}",
+                                                  "https://foxytechnologies.com/funky/images/${homepageController.postcommentModel!.data![index].user!.image!}",
                                                   fit: BoxFit.fill,
                                                 )
                                               : Container(
@@ -206,12 +207,14 @@ class _PostImageCommentScreenState extends State<PostImageCommentScreen> {
                                           "name : ${homepageController.Replyname_controller.length}");
                                       print(
                                           "id : ${homepageController.Replying_comment_id.length}");
-                                      homepageController.Replyname_controller =
-                                          homepageController.postcommentModel!
-                                              .data![index].userName!;
-                                      homepageController.Replying_comment_id =
-                                          homepageController.postcommentModel!
-                                              .data![index].cmID!;
+                                      setState(() {
+                                        homepageController.Replyname_controller =
+                                            homepageController.postcommentModel!
+                                                .data![index].userName!;
+                                        homepageController.Replying_comment_id =
+                                            homepageController.postcommentModel!
+                                                .data![index].cmID!;
+                                      });
                                       print(
                                           "name : ${homepageController.Replyname_controller}");
                                       print(
@@ -277,7 +280,7 @@ class _PostImageCommentScreenState extends State<PostImageCommentScreen> {
                                                           .image!
                                                           .isNotEmpty
                                                       ? Image.network(
-                                                          "http://foxyserver.com/funky/images/${homepageController.postcommentModel!.data![index].replies![idx].user!.image!}",
+                                                          "https://foxytechnologies.com/funky/images/${homepageController.postcommentModel!.data![index].replies![idx].user!.image!}",
                                                           fit: BoxFit.fill,
                                                         )
                                                       : Container(

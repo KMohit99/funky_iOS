@@ -68,7 +68,7 @@ class _VideoWidgetState extends State<VideoWidget> {
     print('image video_like_count ${widget.video_like_count}');
     print('image video_like_status ${widget.video_like_status}');
     controller_last = VideoPlayerController.network(
-        "http://foxyserver.com/funky/video/${widget.url}");
+        "https://foxytechnologies.com/funky/video/${widget.url}");
 
     controller_last!.setLooping(true);
     controller_last!.initialize().then((_) {
