@@ -266,6 +266,30 @@
       <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/gallery_saver/example/build" />
       <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/gallery_saver/example/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/gallery_saver/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/open_file/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/open_file/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/open_file/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/windows/flutter/ephemeral/.plugin_symlinks/syncfusion_pdfviewer_windows/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/windows/flutter/ephemeral/.plugin_symlinks/syncfusion_pdfviewer_windows/build" />
+      <excludeFolder url="file://$MODULE_DIR$/windows/flutter/ephemeral/.plugin_symlinks/syncfusion_pdfviewer_windows/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/windows/flutter/ephemeral/.plugin_symlinks/syncfusion_pdfviewer_windows/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/windows/flutter/ephemeral/.plugin_symlinks/syncfusion_pdfviewer_windows/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/windows/flutter/ephemeral/.plugin_symlinks/syncfusion_pdfviewer_windows/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/file_picker/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/file_picker/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/file_picker/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/syncfusion_flutter_pdfviewer/build" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/syncfusion_flutter_pdfviewer/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/syncfusion_flutter_pdfviewer/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/file_picker/build" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/file_picker/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/file_picker/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/open_file/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/open_file/build" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/open_file/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/syncfusion_flutter_pdfviewer/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/syncfusion_flutter_pdfviewer/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/syncfusion_flutter_pdfviewer/example/.dart_tool" />
     </content>
     <orderEntry type="jdk" jdkName="Android API 32 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />

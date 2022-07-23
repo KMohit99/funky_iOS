@@ -28,7 +28,7 @@ class SplashPageState extends State<SplashPage> {
     if (isLoggedIn) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomePage()),
+        MaterialPageRoute(builder: (context) => HomePage_chat()),
       );
       return;
     }

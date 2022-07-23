@@ -188,6 +188,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "convert",
+      "rootUri": "file:///Users/technologies/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/convert-3.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "crop",
       "rootUri": "file:///Users/technologies/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/crop-0.5.2",
       "packageUri": "lib/",
@@ -219,7 +225,7 @@
     },
     {
       "name": "dbus",
-      "rootUri": "file:///Users/technologies/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/dbus-0.7.6",
+      "rootUri": "file:///Users/technologies/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/dbus-0.7.4",
       "packageUri": "lib/",
       "languageVersion": "2.15"
     },
@@ -267,9 +273,9 @@
     },
     {
       "name": "ffi",
-      "rootUri": "file:///Users/technologies/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/ffi-2.0.1",
+      "rootUri": "file:///Users/technologies/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/ffi-1.2.1",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "2.12"
     },
     {
       "name": "ffmpeg_kit_flutter_min_gpl",
@@ -286,6 +292,12 @@
     {
       "name": "file",
       "rootUri": "file:///Users/technologies/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/file-6.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "file_picker",
+      "rootUri": "file:///Users/technologies/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/file_picker-4.6.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -746,6 +758,12 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "open_file",
+      "rootUri": "file:///Users/technologies/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/open_file-3.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "path",
       "rootUri": "file:///Users/technologies/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/path-1.8.1",
       "packageUri": "lib/",
@@ -801,9 +819,9 @@
     },
     {
       "name": "path_provider_windows",
-      "rootUri": "file:///Users/technologies/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_windows-2.1.0",
+      "rootUri": "file:///Users/technologies/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_windows-2.0.7",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "2.12"
     },
     {
       "name": "pedantic",
@@ -1082,6 +1100,48 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "syncfusion_flutter_core",
+      "rootUri": "file:///Users/technologies/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/syncfusion_flutter_core-20.2.39",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "syncfusion_flutter_pdf",
+      "rootUri": "file:///Users/technologies/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/syncfusion_flutter_pdf-20.2.39",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "syncfusion_flutter_pdfviewer",
+      "rootUri": "file:///Users/technologies/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/syncfusion_flutter_pdfviewer-20.2.39-beta",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "syncfusion_pdfviewer_macos",
+      "rootUri": "file:///Users/technologies/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/syncfusion_pdfviewer_macos-20.2.39-beta",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "syncfusion_pdfviewer_platform_interface",
+      "rootUri": "file:///Users/technologies/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/syncfusion_pdfviewer_platform_interface-20.2.39-beta",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "syncfusion_pdfviewer_web",
+      "rootUri": "file:///Users/technologies/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/syncfusion_pdfviewer_web-20.2.39-beta",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "syncfusion_pdfviewer_windows",
+      "rootUri": "file:///Users/technologies/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/syncfusion_pdfviewer_windows-20.2.39-beta",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "synchronized",
       "rootUri": "file:///Users/technologies/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/synchronized-3.0.0+2",
       "packageUri": "lib/",
@@ -1233,7 +1293,7 @@
     },
     {
       "name": "win32",
-      "rootUri": "file:///Users/technologies/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/win32-2.7.0",
+      "rootUri": "file:///Users/technologies/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/win32-2.6.1",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
@@ -1268,7 +1328,7 @@
       "languageVersion": "2.17"
     }
   ],
-  "generated": "2022-07-16T05:08:01.831301Z",
+  "generated": "2022-07-23T06:06:45.707797Z",
   "generator": "pub",
   "generatorVersion": "2.17.5"
 }

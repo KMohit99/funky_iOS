@@ -14,6 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'chat/providers/auth_provider.dart';
 import 'chat/providers/chat_provider.dart';
+import 'chat/providers/home_provider.dart';
 import 'getx_pagination/Bindings_class.dart';
 import 'getx_pagination/binding_utils.dart';
 import 'getx_pagination/page_route.dart';
@@ -57,11 +58,11 @@ class MyApp extends StatelessWidget {
         //     firebaseStorage: this.firebaseStorage,
         //   ),
         // ),
-        // Provider<HomeProvider>(
-        //   create: (_) => HomeProvider(
-        //     firebaseFirestore: this.firebaseFirestore,
-        //   ),
-        // ),
+        Provider<HomeProvider>(
+          create: (_) => HomeProvider(
+            firebaseFirestore: this.firebaseFirestore,
+          ),
+        ),
         Provider<ChatProvider>(
           create: (_) => ChatProvider(
             prefs: prefs,

@@ -199,7 +199,7 @@ class Kids_signup_controller extends GetxController {
                 .set({
               FirestoreConstants.nickname: fullname_controller.text,
               FirestoreConstants.photoUrl:
-                  "https://foxytechnologies.com/funky/images/${imgFile!.path}",
+                  "https://foxytechnologies.com/funky/images/${imgFile!.path.split('/').last}",
               FirestoreConstants.id: loginModel!.user![0].id,
               'createdAt': DateTime.now().millisecondsSinceEpoch.toString(),
               FirestoreConstants.chattingWith: null

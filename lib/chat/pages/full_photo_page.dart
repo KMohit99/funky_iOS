@@ -109,8 +109,6 @@ class _FullPhotoPageState extends State<FullPhotoPage> {
      CommonWidget().showToaster(msg: 'Image Saved');
 
 
-
-
     // //comment out the next two lines to prevent the device from getting
     // // the image from the web in order to prove that the picture is
     // // coming from the device instead of the web.
@@ -129,27 +127,5 @@ class _FullPhotoPageState extends State<FullPhotoPage> {
     //
     // });
   }
-    Future<void> _download() async {
-      final response = await http.get(Uri.parse(widget.url));
-
-      // Get the image name
-      final imageName = path.basename(widget.url);
-      // Get the document directory path
-      final appDir = await path_provider.getApplicationDocumentsDirectory();
-
-      // This is the saved image path
-      // You can use it to display the saved image later
-      final localPath = path.join(appDir.path, imageName);
-
-      // Downloading
-      final imageFile = File(localPath);
-      await imageFile.writeAsBytes(response.bodyBytes);
-
-      setState(() {
-        print(imageFile.path);
-        // _displayImage = imageFile;
-      });
-    }
-
 
 }

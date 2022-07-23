@@ -7,6 +7,7 @@ class MessageChat {
   String idTo;
   String timestamp;
   String content;
+  String filename;
   int type;
 
   MessageChat({
@@ -15,6 +16,7 @@ class MessageChat {
     required this.timestamp,
     required this.content,
     required this.type,
+    required this.filename,
   });
 
   Map<String, dynamic> toJson() {
@@ -24,6 +26,7 @@ class MessageChat {
       FirestoreConstants.timestamp: this.timestamp,
       FirestoreConstants.content: this.content,
       FirestoreConstants.type: this.type,
+      FirestoreConstants.filename: this.filename,
     };
   }
 
@@ -32,7 +35,8 @@ class MessageChat {
     String idTo = doc.get(FirestoreConstants.idTo);
     String timestamp = doc.get(FirestoreConstants.timestamp);
     String content = doc.get(FirestoreConstants.content);
+    String filename = doc.get(FirestoreConstants.filename);
     int type = doc.get(FirestoreConstants.type);
-    return MessageChat(idFrom: idFrom, idTo: idTo, timestamp: timestamp, content: content, type: type);
+    return MessageChat(idFrom: idFrom, idTo: idTo, timestamp: timestamp, content: content, type: type, filename: filename);
   }
 }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:funky_new/Utils/colorUtils.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 import '../constants/color_constants.dart';
 
@@ -8,10 +10,10 @@ class LoadingView extends StatelessWidget {
     return Container(
       child: Center(
         child: CircularProgressIndicator(
-          color: ColorConstants.themeColor,
+          color:HexColor(CommonColor.pinkFont),
         ),
       ),
-      color: Colors.white.withOpacity(0.8),
+      color: Colors.black.withOpacity(0.8),
     );
   }
 }

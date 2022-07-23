@@ -77,6 +77,11 @@ class Creator_OtpVerification extends State<CreatorOtpVerification> {
     startTimer();
     super.initState();
   }
+  @override
+  void dispose() {
+    countdownTimer!.cancel();
+    super.dispose();
+  }
 
   final Creator_signup_controller _creator_signup_controller = Get.put(
       Creator_signup_controller(),

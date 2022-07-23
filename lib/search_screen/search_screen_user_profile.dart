@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:funky_new/custom_widget/page_loader.dart';
@@ -14,12 +15,15 @@ import 'package:funky_new/search_screen/search__screen_controller.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:marquee/marquee.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Authentication/creator_login/controller/creator_login_controller.dart';
 import '../Utils/App_utils.dart';
 import '../Utils/asset_utils.dart';
 import '../Utils/colorUtils.dart';
 import '../Utils/toaster_widget.dart';
+import '../chat/constants/firestore_constants.dart';
+import '../chat/models/user_chat.dart';
 import '../chat/pages/chat_page.dart';
 import '../homepage/model/UserInfoModel.dart';
 import 'package:http/http.dart' as http;
@@ -367,6 +371,8 @@ class _SearchUserProfileState extends State<SearchUserProfile>
       ),
     ),
   ];
+
+  final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -765,7 +771,7 @@ class _SearchUserProfileState extends State<SearchUserProfile>
                                     child: Column(
                                       mainAxisSize: MainAxisSize.max,
                                       mainAxisAlignment:
-                                      MainAxisAlignment.center,
+                                      MainAxisAlignment.start,
                                       crossAxisAlignment:
                                       CrossAxisAlignment.start,
                                       children: [
@@ -1182,13 +1188,56 @@ class _SearchUserProfileState extends State<SearchUserProfile>
                                         width: 10,
                                       ),
                                       GestureDetector(
-                                        onTap: () {
+                                        onTap: () async {
                                           if (_search_screen_controller
                                               .is_follower !=
                                               null ||
                                               _search_screen_controller
                                                   .is_following !=
                                                   null) {
+
+                                            // final QuerySnapshot result = await firebaseFirestore
+                                            //     .collection(FirestoreConstants.pathUserCollection)
+                                            //     .where(FirestoreConstants.id, isEqualTo: widget.search_user_data.id)
+                                            //     .get();
+                                            // final List<DocumentSnapshot> documents = result.docs;
+                                            // if (documents.isEmpty) {
+                                            //   // Writing data to server because here is a new user
+                                            //   firebaseFirestore
+                                            //       .collection(FirestoreConstants.pathUserCollection)
+                                            //       .doc(widget.search_user_data.id)
+                                            //       .set({
+                                            //     FirestoreConstants.nickname: widget.search_user_data.fullName,
+                                            //     FirestoreConstants.photoUrl:
+                                            //     "https://foxytechnologies.com/funky/images/${widget.search_user_data.image}",
+                                            //     FirestoreConstants.id: widget.search_user_data.id,
+                                            //     'createdAt': DateTime.now().millisecondsSinceEpoch.toString(),
+                                            //     FirestoreConstants.chattingWith: null
+                                            //   });
+                                            //   // Write data to local storage
+                                            //   // User? currentUser = firebaseUser;
+                                            //   SharedPreferences prefs = await SharedPreferences.getInstance();
+                                            //   await prefs.setString(
+                                            //       FirestoreConstants.id, widget.search_user_data.id!);
+                                            //   await prefs.setString(
+                                            //       FirestoreConstants.nickname, widget.search_user_data.fullName ?? "");
+                                            //   await prefs.setString(
+                                            //       FirestoreConstants.photoUrl,
+                                            //       widget.search_user_data.image ??
+                                            //           "");
+                                            // }
+                                            // else{
+                                            //   DocumentSnapshot documentSnapshot = documents[0];
+                                            //   UserChat userChat = UserChat.fromDocument(documentSnapshot);
+                                            //   // Write data to local
+                                            //   SharedPreferences prefs = await SharedPreferences.getInstance();
+                                            //   await prefs.setString(FirestoreConstants.id, userChat.id);
+                                            //   await prefs.setString(FirestoreConstants.nickname, userChat.nickname);
+                                            //   await prefs.setString(FirestoreConstants.photoUrl, userChat.photoUrl);
+                                            //   await prefs.setString(FirestoreConstants.aboutMe, userChat.aboutMe);
+                                            //
+                                            // }
+
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(

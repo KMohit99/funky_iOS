@@ -8,6 +8,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:funky_new/chat/pages/pages.dart';
 import 'package:funky_new/dashboard/post_image_preview.dart';
 
 // import 'package:funky_new/dashboard/story_/story_designer.dart';
@@ -450,9 +451,9 @@ class _DashboardState extends State<Dashboard> {
                     children: [
                       InkWell(
                         onTap: () async {
-                          SharedPreferences prefs =
-                              await SharedPreferences.getInstance();
-                          Get.to(chat_(prefs: prefs));
+                          // SharedPreferences prefs =
+                          //     await SharedPreferences.getInstance();
+                          // Get.to(chat_(prefs: prefs));
                         },
                         child: Padding(
                           padding: const EdgeInsets.only(
@@ -468,6 +469,12 @@ class _DashboardState extends State<Dashboard> {
                         ),
                       ),
                       InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HomePage_chat()));
+                        },
                         child: Padding(
                           padding: const EdgeInsets.only(
                               right: 20.0, top: 0.0, bottom: 5.0),
