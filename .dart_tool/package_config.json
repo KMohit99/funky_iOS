@@ -932,6 +932,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "quickblox_sdk",
+      "rootUri": "file:///Users/technologies/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/quickblox_sdk-0.6.7-beta",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "quiver",
       "rootUri": "file:///Users/technologies/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/quiver-3.1.0",
       "packageUri": "lib/",
@@ -1328,7 +1334,7 @@
       "languageVersion": "2.17"
     }
   ],
-  "generated": "2022-07-23T06:06:45.707797Z",
+  "generated": "2022-07-27T09:27:15.084696Z",
   "generator": "pub",
   "generatorVersion": "2.17.5"
 }
