@@ -112,7 +112,7 @@ class _StoryScreenState extends State<StoryScreen>
                             margin: EdgeInsets.symmetric(vertical: 90),
                             child: FadeInImage.assetNetwork(
                               image:
-                                  "https://foxytechnologies.com/funky/images/${story.storyPhoto!}",
+                                  "${URLConstants.base_data_url}images/${story.storyPhoto!}",
                               fit: BoxFit.contain,
                               placeholder: 'assets/images/Funky_App_Icon.png',
                             ),
@@ -183,7 +183,7 @@ class _StoryScreenState extends State<StoryScreen>
                                 : FadeInImage.assetNetwork(
                                     fit: BoxFit.cover,
                                     image:
-                                        "https://foxytechnologies.com/funky/images/${story.storyPhoto!}",
+                                        "${URLConstants.base_data_url}images/${story.storyPhoto!}",
                                     placeholder:
                                         'assets/images/Funky_App_Icon.png',
                                     // color: HexColor(CommonColor.pinkFont),
@@ -318,7 +318,7 @@ class _StoryScreenState extends State<StoryScreen>
       print('videooo');
       view_story(story_id: story.id!);
       _videoController = VideoPlayerController.network(
-          "http://foxyserver.com/funky/video/${story.uploadVideo!}")
+          "${URLConstants.base_data_url}video/${story.uploadVideo!}")
         ..initialize().then((_) {
           setState(() {});
           if (_videoController!.value.isInitialized) {
@@ -443,7 +443,7 @@ class _StoryScreenState extends State<StoryScreen>
                                     ? Image.network(storyCountModel!
                                         .data![index].user!.profileUrl!)
                                     : Image.network(
-                                        'http://foxyserver.com/funky/images/${storyCountModel!.data![index].user!.image!}')),
+                                        '${URLConstants.base_data_url}images/${storyCountModel!.data![index].user!.image!}')),
                               ),
                             ),
                             title: Text(storyCountModel!.data![index].fullName!,
@@ -941,7 +941,7 @@ class UserInfo extends StatelessWidget {
           radius: 20.0,
           backgroundColor: Colors.grey[300],
           backgroundImage: CachedNetworkImageProvider(
-            "http://foxyserver.com/funky/images/${stories.storyPhoto!}",
+            "${URLConstants.base_data_url}images/${stories.storyPhoto!}",
           ),
         ),
         const SizedBox(width: 10.0),

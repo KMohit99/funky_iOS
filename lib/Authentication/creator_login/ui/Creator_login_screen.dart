@@ -2,29 +2,34 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 // import 'package:funky_project/dashboard/dashboard_screen.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
+
 import '../../../Utils/App_utils.dart';
 import '../../../Utils/asset_utils.dart';
-import '../../../Utils/custom_textfeild.dart';
-import '../../../controller/controllers_class.dart';
-import '../../../controller/controllers_class.dart';
-import '../../../custom_widget/common_buttons.dart';
+import '../../../chat_quickblox/bloc/login/login_screen_bloc.dart';
+import '../../../chat_quickblox/bloc/login/login_screen_events.dart';
+import '../../../chat_quickblox/bloc/login/login_screen_states.dart';
+import '../../../chat_quickblox/bloc/stream_builder_with_listener.dart';
+import '../../../chat_quickblox/presentation/screens/base_screen_state.dart';
+import '../../../chat_quickblox/presentation/screens/login/login_text_field.dart';
+import '../../../chat_quickblox/presentation/screens/login/user_name_text_field.dart';
+import '../../../chat_quickblox/presentation/utils/notification_utils.dart';
+import '../../../dashboard/dashboard_screen.dart';
 import '../../../getx_pagination/binding_utils.dart';
-import '../../instagram/instagram_constanr.dart';
 import '../../instagram/instagram_view.dart';
 import '../controller/creator_login_controller.dart';
+import '../model/creator_loginModel.dart';
 
 class CreatorLoginScreen extends StatefulWidget {
   CreatorLoginScreen({Key? key}) : super(key: key);
 
   @override
-  State<CreatorLoginScreen> createState() => _CreatorLoginScreenState();
+  _CreatorLoginScreenState createState() => _CreatorLoginScreenState();
 }
 
-class _CreatorLoginScreenState extends State<CreatorLoginScreen> {
+class _CreatorLoginScreenState extends BaseScreenState<LoginScreenBloc> {
   final Creator_Login_screen_controller _loginScreenController = Get.put(
       Creator_Login_screen_controller(),
       tag: Creator_Login_screen_controller().toString());
@@ -87,8 +92,22 @@ class _CreatorLoginScreenState extends State<CreatorLoginScreen> {
     super.initState();
   }
 
+  LoginScreenBloc? loginBloc;
+
+  LoginTextField? _loginTextField;
+  UserNameTextField? _userNameTextField;
+
   @override
   Widget build(BuildContext context) {
+    initBloc(context);
+
+    _loginTextField = LoginTextField(
+        txtController: _loginScreenController.passwordController,
+        loginBloc: bloc as LoginScreenBloc);
+    _userNameTextField = UserNameTextField(
+        txtController: _loginScreenController.usernameController,
+        loginBloc: bloc as LoginScreenBloc);
+
     final screenwidth = MediaQuery.of(context).size.width;
     final screenheight = MediaQuery.of(context).size.height;
     return GestureDetector(
@@ -168,41 +187,125 @@ class _CreatorLoginScreenState extends State<CreatorLoginScreen> {
                         SizedBox(
                           height: 41,
                         ),
-                        CommonTextFormField(
-                          controller: _loginScreenController.usernameController,
-                          title: 'Username',
-                          labelText: 'Username',
-                          image_path: AssetUtils.msg_icon,
+                        Container(
+                          child: this._userNameTextField,
                         ),
+                        // CommonTextFormField(
+                        //   controller: _loginScreenController.usernameController,
+                        //   title: 'Username',
+                        //   labelText: 'Username',
+                        //   image_path: AssetUtils.msg_icon,
+                        //   onChanged: (login) {
+                        //     // if (login.contains(' ')) {
+                        //     //   login = login.replaceAll(' ', '');
+                        //     //   _loginScreenController.usernameController
+                        //     //     ..text = login
+                        //     //     ..selection = TextSelection.collapsed(offset: login.length);
+                        //     // } else {
+                        //       loginBloc?.events?.add(ChangedUsernameFieldEvent(login));
+                        //     // }
+                        //   },
+                        // ),
                         SizedBox(
                           height: 21,
                         ),
-                        CommonTextFormField(
-                            controller:
-                                _loginScreenController.passwordController,
-                            title: 'Password',
-                            labelText: 'Password',
-                            isObscure: _obscureText,
-                            maxLines: 1,
-                            image_path: (_obscureText
-                                ? AssetUtils.eye_open_icon
-                                : AssetUtils.eye_close_icon),
-                            onpasswordTap: () {
-                              _toggle();
-                            }),
+                        Container(
+                          child: this._loginTextField,
+                        ),
+                        // CommonTextFormField(
+                        //     controller:
+                        //         _loginScreenController.passwordController,
+                        //     title: 'Password',
+                        //     labelText: 'Password',
+                        //     isObscure: _obscureText,
+                        //     maxLines: 1,
+                        //     onChanged: (userName){
+                        //       // if (userName.contains('  ')) {
+                        //       //   userName = userName.replaceAll('  ', ' ');
+                        //       //   _loginScreenController.passwordController
+                        //       //     ..text = userName
+                        //       //     ..selection = TextSelection.collapsed(offset: userName.length);
+                        //       // } else {
+                        //         loginBloc?.events?.add(ChangedPasswordFieldEvent(userName));
+                        //       // }
+                        //     },
+                        //     image_path: (_obscureText
+                        //         ? AssetUtils.eye_open_icon
+                        //         : AssetUtils.eye_close_icon),
+                        //     onpasswordTap: () {
+                        //       _toggle();
+                        //     }),
+
                         SizedBox(
                           height: 22,
                         ),
-                        common_button(
-                          onTap: () {
-                            _loginScreenController.checkLogin(
-                                context: context,
-                                login_type: TxtUtils.Login_type_creator);
+                        // common_button(
+                        //   onTap: () {
+                        //     _loginScreenController.checkLogin(
+                        //         context: context,
+                        //         login_type: TxtUtils.Login_type_creator);
+                        //
+                        //   },
+                        //   backgroud_color: Colors.black,
+                        //   lable_text: 'Login',
+                        //   lable_text_color: Colors.white,
+                        // ),
+                        Container(
+                            child: StreamBuilderWithListener<LoginScreenStates>(
+                          stream:
+                              bloc?.states?.stream as Stream<LoginScreenStates>,
+                          listener: (state) {
+                            if (state is LoginSuccessState) {
+                              print("Login succesfullllllll");
+
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          Dashboard(page: 0)));
+                              // NavigationService()
+                              //     .pushReplacementNamed(DialogsScreenRoute);
+                            }
+                            if (state is LoginErrorState) {
+                              print("Login failed");
+
+                              NotificationBarUtils.showSnackBarError(
+                                  this.context, state.error);
+                            }
                           },
-                          backgroud_color: Colors.black,
-                          lable_text: 'Login',
-                          lable_text_color: Colors.white,
-                        ),
+                          builder: (context, state) {
+                            if (state.data is LoginInProgressState) {
+                              return CircularProgressIndicator();
+                            }
+                            return GestureDetector(
+                                onTap: () async {
+                                  await _loginScreenController.checkLogin(
+                                      context: context,
+                                      login_type: TxtUtils.Login_type_creator);
+                                  await checkLogin();
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 30),
+                                  // height: 45,
+                                  // width:(width ?? 300) ,
+                                  decoration: BoxDecoration(
+                                      color: Colors.black,
+                                      borderRadius: BorderRadius.circular(25)),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    margin: EdgeInsets.symmetric(
+                                      vertical: 12,
+                                    ),
+                                    child: Text(
+                                      'Login',
+                                      style: TextStyle(
+                                          fontSize: 17, color: Colors.white),
+                                    ),
+                                  ),
+                                ));
+                          },
+                        )),
                         SizedBox(
                           height: 22,
                         ),
@@ -251,7 +354,8 @@ class _CreatorLoginScreenState extends State<CreatorLoginScreen> {
                                       //     login_type: 'creator', context: context);
                                       //
                                       _loginScreenController.signInWithFacebook(
-                                          login_type: 'creator', context: context);
+                                          login_type: 'creator',
+                                          context: context);
                                     },
                                   ),
                                 ),
@@ -276,7 +380,10 @@ class _CreatorLoginScreenState extends State<CreatorLoginScreen> {
                                     ),
                                     onPressed: () {
                                       // _loginAndGetData();
-                                      Get.to(InstagramView(context: context,login_type: 'Creator',));
+                                      Get.to(InstagramView(
+                                        context: context,
+                                        login_type: 'Creator',
+                                      ));
                                     },
                                   ),
                                 ),
@@ -301,8 +408,10 @@ class _CreatorLoginScreenState extends State<CreatorLoginScreen> {
                                     ),
                                     onPressed: () async {
                                       try {
-                                        await _loginScreenController.signInwithGoogle(
-                                            context: context, login_type: 'Creator');
+                                        await _loginScreenController
+                                            .signInwithGoogle(
+                                                context: context,
+                                                login_type: 'Creator');
                                         // Get.to(Dashboard());
                                       } catch (e) {
                                         if (e is FirebaseAuthException) {
@@ -338,7 +447,9 @@ class _CreatorLoginScreenState extends State<CreatorLoginScreen> {
                                       width: 32,
                                     ),
                                     onPressed: () {
-                                      _loginScreenController.signInWithTwitter(context: context, login_type: 'Creator');
+                                      _loginScreenController.signInWithTwitter(
+                                          context: context,
+                                          login_type: 'Creator');
                                     },
                                   ),
                                 ),
@@ -380,5 +491,12 @@ class _CreatorLoginScreenState extends State<CreatorLoginScreen> {
         },
       ),
     );
+  }
+
+  LoginModel? loginModel;
+
+  Future checkLogin() async {
+    print("Inside event");
+    bloc?.events?.add(LoginPressedEvent());
   }
 }

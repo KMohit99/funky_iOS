@@ -60,7 +60,7 @@ class Kids_Login_screen_controller extends GetxController {
     print(data);
     // String body = json.encode(data);
 
-    var url = ("https://foxytechnologies.com/funky/api/login.php");
+    var url = ("${URLConstants.base_url}login.php");
     print("url : $url");
     print("body : $data");
 
@@ -115,7 +115,7 @@ class Kids_Login_screen_controller extends GetxController {
         clear();
         hideLoader(context);
 
-        await  Get.to(kids_Email_verification());
+        // await  Get.to(kids_Email_verification());
       } else {
         hideLoader(context);
         CommonWidget().showErrorToaster(msg: "Invalid Details");

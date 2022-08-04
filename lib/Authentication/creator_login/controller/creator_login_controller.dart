@@ -18,6 +18,7 @@ import 'package:funky_new/custom_widget/page_loader.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
+import 'package:quickblox_sdk/auth/module.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:twitter_login/twitter_login.dart';
 import 'dart:convert' as convert;
@@ -25,8 +26,14 @@ import 'dart:convert' as convert;
 import '../../../Utils/App_utils.dart';
 import '../../../chat/constants/firestore_constants.dart';
 import '../../../chat/models/user_chat.dart';
+import '../../../chat_quickblox/bloc/login/login_screen_bloc.dart';
+import '../../../chat_quickblox/bloc/login/login_screen_events.dart';
+import '../../../chat_quickblox/data/auth_repository.dart';
+import '../../../chat_quickblox/data/storage_repository.dart';
+import '../../../chat_quickblox/data/users_repository.dart';
 import '../../../dashboard/dashboard_screen.dart';
 import '../../../homepage/model/UserInfoModel.dart';
+import '../../../main.dart';
 import '../../../sharePreference.dart';
 import '../../instagram/instagram_constanr.dart';
 import '../model/creator_loginModel.dart';
@@ -38,6 +45,7 @@ class Creator_Login_screen_controller extends GetxController {
   LoginModel? loginModel;
 
   final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+  LoginScreenBloc? loginBloc;
 
   Future<dynamic> checkLogin(
       {required BuildContext context, required String login_type}) async {
@@ -89,22 +97,23 @@ class Creator_Login_screen_controller extends GetxController {
 
         await PreferenceManager().setPref(URLConstants.social_type, "");
         await CreatorgetUserInfo_Email(UserId: loginModel!.user![0].id!);
-
-        ///firebase calls
-        final QuerySnapshot result = await firebaseFirestore
-            .collection(FirestoreConstants.pathUserCollection)
-            .where(FirestoreConstants.id, isEqualTo: loginModel!.user![0].id)
-            .get();
-        final List<DocumentSnapshot> documents = result.docs;
-
-        DocumentSnapshot documentSnapshot = documents[0];
-        UserChat userChat = UserChat.fromDocument(documentSnapshot);
-        // Write data to local
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString(FirestoreConstants.id, userChat.id);
-        await prefs.setString(FirestoreConstants.nickname, userChat.nickname);
-        await prefs.setString(FirestoreConstants.photoUrl, userChat.photoUrl);
-        await prefs.setString(FirestoreConstants.aboutMe, userChat.aboutMe);
+        //
+        //
+        // ///firebase calls
+        // final QuerySnapshot result = await firebaseFirestore
+        //     .collection(FirestoreConstants.pathUserCollection)
+        //     .where(FirestoreConstants.id, isEqualTo: loginModel!.user![0].id)
+        //     .get();
+        // final List<DocumentSnapshot> documents = result.docs;
+        //
+        // DocumentSnapshot documentSnapshot = documents[0];
+        // UserChat userChat = UserChat.fromDocument(documentSnapshot);
+        // // Write data to local
+        // SharedPreferences prefs = await SharedPreferences.getInstance();
+        // await prefs.setString(FirestoreConstants.id, userChat.id);
+        // await prefs.setString(FirestoreConstants.nickname, userChat.nickname);
+        // await prefs.setString(FirestoreConstants.photoUrl, userChat.photoUrl);
+        // await prefs.setString(FirestoreConstants.aboutMe, userChat.aboutMe);
 
         await Fluttertoast.showToast(
           msg: "login successfully",
@@ -113,11 +122,12 @@ class Creator_Login_screen_controller extends GetxController {
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.BOTTOM,
         );
+       // await loginBloc!.events?.add(LoginPressedEvent());
         hideLoader(context);
-        await clear();
-        await Get.to(Dashboard(
-          page: 0,
-        ));
+        // await clear();
+        // await Get.to(Dashboard(
+        //   page: 0,
+        // ));
       } else {
         hideLoader(context);
         CommonWidget().showErrorToaster(msg: "Invalid Details");
@@ -126,6 +136,41 @@ class Creator_Login_screen_controller extends GetxController {
       }
     } else {}
   }
+
+  final AuthRepository _authRepository = AuthRepository();
+  final UsersRepository _usersRepository = UsersRepository();
+  final StorageRepository _storageRepository = StorageRepository();
+
+  // void _loginQB() async {
+  //   // _login = _login.trim();
+  //   usernameController.text = usernameController.text.trim();
+  //   passwordController.text = passwordController.text.trim();
+  //
+  //   try {
+  //     QBLoginResult qbLoginResult = await _authRepository.login(usernameController.text, passwordController.text);
+  //     if (qbLoginResult.qbUser?.id != null) {
+  //       _storageRepository.saveUserId(qbLoginResult.qbUser!.id!);
+  //       _storageRepository.saveUserLogin(userInfoModel_email!.data![0].email!);
+  //       _storageRepository.saveUserFullName(usernameController.text);
+  //       _storageRepository.saveUserPassword(DEFAULT_USER_PASSWORD);
+  //
+  //       if (qbLoginResult.qbUser!.fullName != usernameController.text) {
+  //         _updateUser();
+  //       } else {
+  //         states?.add(LoginSuccessState(qbLoginResult.qbUser!));
+  //       }
+  //     } else {
+  //       states?.add(LoginErrorState("User is null"));
+  //     }
+  //   } on PlatformException catch (e) {
+  //     if (e.code == "Unauthorized" || e.code.contains('401')) {
+  //       _createUser();
+  //     } else {
+  //       states?.add(LoginErrorState(makeErrorMessage(e)));
+  //     }
+  //   }
+  // }
+
 
   clear() {
     usernameController.clear();
@@ -436,6 +481,7 @@ class Creator_Login_screen_controller extends GetxController {
                 FirestoreConstants.photoUrl, userChat.photoUrl);
             await prefs.setString(FirestoreConstants.aboutMe, userChat.aboutMe);
           }
+
           ///
 
           await Get.to(Dashboard(

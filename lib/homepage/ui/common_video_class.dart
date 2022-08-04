@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:funky_new/Utils/App_utils.dart';
 import 'package:funky_new/homepage/ui/post_image_commet_scren.dart';
 import 'package:get/get.dart';
 
@@ -68,7 +69,7 @@ class _VideoWidgetState extends State<VideoWidget> {
     print('image video_like_count ${widget.video_like_count}');
     print('image video_like_status ${widget.video_like_status}');
     controller_last = VideoPlayerController.network(
-        "https://foxytechnologies.com/funky/video/${widget.url}");
+        "${URLConstants.base_data_url}video/${widget.url}");
 
     controller_last!.setLooping(true);
     controller_last!.initialize().then((_) {

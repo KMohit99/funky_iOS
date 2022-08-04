@@ -1,19 +1,12 @@
-import 'package:get/get.dart';
-
-import '../Utils/App_utils.dart';
-import 'model/getStoryCountModel.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
-import 'package:helpers/helpers.dart';
-import 'package:hexcolor/hexcolor.dart';
-import 'package:video_player/video_player.dart';
-
-import '../../Utils/App_utils.dart';
-import '../../Utils/colorUtils.dart';
-import '../../sharePreference.dart';
 import 'dart:convert' as convert;
 
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+
+import '../../Utils/App_utils.dart';
+import '../Utils/App_utils.dart';
+import 'model/getStoryCountModel.dart';
 
 class Profile_screen_controller extends GetxController {
 

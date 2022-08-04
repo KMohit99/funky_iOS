@@ -31,8 +31,9 @@ class TxtUtils {
 
 }
 class URLConstants{
-  // static const String base_url = "http://foxyserver.com/funky/api/";
-  static const String base_url = "https://foxytechnologies.com/funky/api/";
+  static const String base_url = "http://foxyserver.com/funky/api/";
+  static const String base_data_url = "http://foxyserver.com/funky/";
+  // static const String base_url = "https://foxytechnologies.com/funky/api/";
   static const loginApi = "login.php";
   static const SignUpApi = "signup.php";
   static const socailsignUpApi = "social-signup.php";

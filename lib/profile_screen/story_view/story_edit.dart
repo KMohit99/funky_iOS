@@ -328,7 +328,7 @@ class _StoryEditState extends State<StoryEdit> {
                           : FadeInImage.assetNetwork(
                               fit: BoxFit.cover,
                               image:
-                                  "http://foxyserver.com/funky/images/${widget.ImageFile}",
+                                  "${URLConstants.base_data_url}images/${widget.ImageFile}",
                               placeholder: 'assets/images/Funky_App_Icon.png',
                               // color: HexColor(CommonColor.pinkFont),
                             )),

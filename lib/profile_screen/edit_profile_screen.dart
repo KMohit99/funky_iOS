@@ -227,7 +227,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                       )
                                     : (imgFile == null
                                         ? Image.network(
-                                            "https://foxytechnologies.com/funky//images/${_creator_login_screen_controller.userInfoModel_email!.data![0].image!}",
+                                            "${URLConstants.base_data_url}images/${_creator_login_screen_controller.userInfoModel_email!.data![0].image!}",
                                             height: 80,
                                             width: 80,
                                             fit: BoxFit.fill,

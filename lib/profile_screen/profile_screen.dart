@@ -642,7 +642,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                                         .image!
                                                         .isNotEmpty
                                                     ? Image.network(
-                                                        'https://foxytechnologies.com/funky/images/${_creator_login_screen_controller.userInfoModel_email!.data![0].image!}',
+                                                        '${URLConstants.base_data_url}images/${_creator_login_screen_controller.userInfoModel_email!.data![0].image!}',
                                                         fit: BoxFit.fitWidth,
                                                       )
                                                     : Image.asset(
@@ -1075,7 +1075,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                                                       fit: BoxFit
                                                                           .cover,
                                                                       image:
-                                                                          "https://foxytechnologies.com/funky/images/${story_info[index].storyPhoto!}",
+                                                                          "${URLConstants.base_data_url}images/${story_info[index].storyPhoto!}",
                                                                       placeholder:
                                                                           'assets/images/Funky_App_Icon.png',
                                                                       // color: HexColor(CommonColor.pinkFont),
@@ -1458,7 +1458,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                           .data![index].postImage!.isEmpty
                                       ? Image.asset(AssetUtils.logo)
                                       : Image.network(
-                                          'http://foxyserver.com/funky/images/${_galleryModelList!.data![index].postImage}',
+                                          '${URLConstants.base_data_url}images/${_galleryModelList!.data![index].postImage}',
                                           fit: BoxFit.fill,
                                           loadingBuilder: (context, child,
                                               loadingProgress) {
@@ -1520,7 +1520,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
     print(data);
     // String body = json.encode(data);
 
-    var url = ('https://foxytechnologies.com/funky/api/galleryList.php');
+    var url = ('${URLConstants.base_url}galleryList.php');
     print("url : $url");
     print("body : $data");
     var response = await http.post(
@@ -1579,7 +1579,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
     print(data);
     // String body = json.encode(data);
 
-    var url = ('https://foxytechnologies.com/funky/api/post-videoList.php');
+    var url = ('${URLConstants.base_url}post-videoList.php');
     print("url : $url");
     print("body : $data");
     var response = await http.post(

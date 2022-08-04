@@ -121,7 +121,7 @@ class Advertiser_signup_controller extends GetxController {
 
   Future<dynamic> Advertiser_signup({required BuildContext context}) async {
     // showLoader(context);
-    var url = 'https://foxytechnologies.com/funky/api/signup.php';
+    var url = '${URLConstants.base_url}signup.php';
     var request = http.MultipartRequest('POST', Uri.parse(url));
     // List<int> imageBytes = imgFile!.readAsBytesSync();
     // String baseimage = base64Encode(imageBytes);
@@ -200,7 +200,7 @@ class Advertiser_signup_controller extends GetxController {
                 "https://foxytechnologies.com/funky/images/${imgFile!.path}" ??
                     "");
           }
-          await Get.to(Dashboard(page: 0,));
+          await Get.to(Dashboard(page: 0));
         }
         // Get.to(Dashboard());
       } else {

@@ -18,6 +18,7 @@ import 'package:flutter_facebook_auth_web/flutter_facebook_auth_web.dart';
 import 'package:fluttertoast/fluttertoast_web.dart';
 import 'package:google_sign_in_web/google_sign_in_web.dart';
 import 'package:image_picker_for_web/image_picker_for_web.dart';
+import 'package:package_info_plus_web/package_info_plus_web.dart';
 import 'package:share_plus_web/share_plus_web.dart';
 import 'package:shared_preferences_web/shared_preferences_web.dart';
 import 'package:syncfusion_pdfviewer_web/pdfviewer_web.dart';
@@ -40,6 +41,7 @@ void registerPlugins(Registrar registrar) {
   FluttertoastWebPlugin.registerWith(registrar);
   GoogleSignInPlugin.registerWith(registrar);
   ImagePickerPlugin.registerWith(registrar);
+  PackageInfoPlugin.registerWith(registrar);
   SharePlusPlugin.registerWith(registrar);
   SharedPreferencesPlugin.registerWith(registrar);
   SyncfusionFlutterPdfViewerPlugin.registerWith(registrar);

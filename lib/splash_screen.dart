@@ -13,6 +13,9 @@ import 'package:get/get.dart';
 
 import 'Utils/App_utils.dart';
 import 'Utils/asset_utils.dart';
+import 'chat_quickblox/bloc/splash/splash_screen_bloc.dart';
+import 'chat_quickblox/bloc/splash/splash_screen_events.dart';
+import 'chat_quickblox/presentation/screens/base_screen_state.dart';
 import 'controller/controllers_class.dart';
 import 'getx_pagination/binding_utils.dart';
 
@@ -20,10 +23,10 @@ class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends BaseScreenState<SplashScreenBloc> {
   SplashScreenController _splashController =
       Get.find(tag: SplashScreenController().toString());
 
@@ -50,6 +53,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    initBloc(context);
+    bloc?.events?.add(AuthEvent());
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: Center(

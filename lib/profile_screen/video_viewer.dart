@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
+import '../Utils/App_utils.dart';
+
 class VideoViewer extends StatefulWidget {
   final String url;
 
@@ -24,7 +26,7 @@ class _VideoViewerState extends State<VideoViewer> {
     super.initState();
     print('image urlllllllllllll ${widget.url}');
     _controller = VideoPlayerController.network(
-        "http://foxyserver.com/funky/video/${widget.url}");
+        "${URLConstants.base_data_url}video/${widget.url}");
 
     _controller!.setLooping(true);
     _controller!.initialize().then((_) {

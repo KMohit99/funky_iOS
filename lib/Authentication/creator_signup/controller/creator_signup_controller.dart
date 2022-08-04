@@ -283,7 +283,7 @@ class Creator_signup_controller extends GetxController {
     //   print('Please try again');
     // }
 
-    var url = 'https://foxytechnologies.com/funky/api/editProfile.php';
+    var url = '${URLConstants.base_url}editProfile.php';
     var request = http.MultipartRequest('POST', Uri.parse(url));
     // List<int> imageBytes = imgFile!.readAsBytesSync();
     // String baseimage = base64Encode(imageBytes);

@@ -30,6 +30,8 @@ import 'package:video_player/video_player.dart';
 import '../Utils/asset_utils.dart';
 import '../Utils/colorUtils.dart';
 import '../chat/main.dart';
+import '../chat_quickblox/presentation/screens/dialogs/dialogs_screen.dart';
+import '../chat_quickblox/presentation/screens/login/login_screen.dart';
 import '../custom_widget/common_buttons.dart';
 import '../drawerScreen.dart';
 import '../getx_pagination/binding_utils.dart';
@@ -58,7 +60,6 @@ class _DashboardState extends State<Dashboard> {
 
   // int widget.page = 0;
   String? appbar_name;
-
   Future<bool> _onWillPop() async {
     return (await showDialog(
           context: context,
@@ -470,10 +471,19 @@ class _DashboardState extends State<Dashboard> {
                       ),
                       InkWell(
                         onTap: () {
-                          Navigator.push(
+
+                          // Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) => HomePage_chat()));
+                          Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => HomePage_chat()));
+                                  builder: (context) => DialogsScreen()));
+                          // Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) => LoginScreen()));
                         },
                         child: Padding(
                           padding: const EdgeInsets.only(

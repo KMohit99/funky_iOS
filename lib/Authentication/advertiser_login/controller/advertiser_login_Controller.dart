@@ -96,22 +96,22 @@ class Advertiser_Login_screen_controller extends GetxController {
 
         await clear();
 
-        ///firebase calls
-        final QuerySnapshot result = await firebaseFirestore
-            .collection(FirestoreConstants.pathUserCollection)
-            .where(FirestoreConstants.id, isEqualTo: loginModel!.user![0].id)
-            .get();
-        final List<DocumentSnapshot> documents = result.docs;
-
-        DocumentSnapshot documentSnapshot = documents[0];
-        UserChat userChat = UserChat.fromDocument(documentSnapshot);
-        // Write data to local
-        SharedPreferences prefs =
-        await SharedPreferences.getInstance();
-        await prefs.setString(FirestoreConstants.id, userChat.id);
-        await prefs.setString(FirestoreConstants.nickname, userChat.nickname);
-        await prefs.setString(FirestoreConstants.photoUrl, userChat.photoUrl);
-        await prefs.setString(FirestoreConstants.aboutMe, userChat.aboutMe);
+        // ///firebase calls
+        // final QuerySnapshot result = await firebaseFirestore
+        //     .collection(FirestoreConstants.pathUserCollection)
+        //     .where(FirestoreConstants.id, isEqualTo: loginModel!.user![0].id)
+        //     .get();
+        // final List<DocumentSnapshot> documents = result.docs;
+        //
+        // DocumentSnapshot documentSnapshot = documents[0];
+        // UserChat userChat = UserChat.fromDocument(documentSnapshot);
+        // // Write data to local
+        // SharedPreferences prefs =
+        // await SharedPreferences.getInstance();
+        // await prefs.setString(FirestoreConstants.id, userChat.id);
+        // await prefs.setString(FirestoreConstants.nickname, userChat.nickname);
+        // await prefs.setString(FirestoreConstants.photoUrl, userChat.photoUrl);
+        // await prefs.setString(FirestoreConstants.aboutMe, userChat.aboutMe);
 
         hideLoader(context);
         await Get.to(Dashboard(page: 0,));

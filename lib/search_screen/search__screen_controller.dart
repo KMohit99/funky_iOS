@@ -106,7 +106,7 @@ class Search_screen_controller extends GetxController {
     print(data);
     // String body = json.encode(data);
 
-    var url = ("https://foxytechnologies.com/funky/api/blockUser.php");
+    var url = ("${URLConstants.base_url}blockUser.php");
     print("url : $url");
     print("body : $data");
 
@@ -151,9 +151,7 @@ class Search_screen_controller extends GetxController {
   Future<List<Data_followers>> getFollowersList() async {
     String id_user = await PreferenceManager().getPref(URLConstants.id);
 
-    String url = (URLConstants.base_url +
-        URLConstants.FollowersListApi +
-        '?id=$id_user');
+    String url = ('${URLConstants.base_url}${URLConstants.FollowersListApi}?id=$id_user');
     http.Response response = await http.get(Uri.parse(url));
     print(response);
     List books = [];
@@ -169,9 +167,7 @@ class Search_screen_controller extends GetxController {
   Future<List<Data_followers>> getFollowingList() async {
     String id_user = await PreferenceManager().getPref(URLConstants.id);
 
-    String url = (URLConstants.base_url +
-        URLConstants.followingListApi +
-        '?id=$id_user');
+    String url = ('${URLConstants.base_url}${URLConstants.followingListApi}?id=$id_user');
     http.Response response = await http.get(Uri.parse(url));
     print(response);
     List books = [];
@@ -250,9 +246,7 @@ class Search_screen_controller extends GetxController {
   Future<dynamic> CreatorgetUserInfo_Email({required String UserId}) async {
     print('inside searche userinfo email----------');
     isuserinfoLoading(true);
-    String url = (URLConstants.base_url +
-        URLConstants.user_info_email_Api +
-        "?id=${UserId}");
+    String url = ("${URLConstants.base_url}${URLConstants.user_info_email_Api}?id=${UserId}");
     // debugPrint('Get Sales Token ${tokens.toString()}');
     // try {
     // } catch (e) {
@@ -296,9 +290,7 @@ class Search_screen_controller extends GetxController {
     // String id_user = await PreferenceManager().getPref(URLConstants.id);
 
     // print("UserID $id_user");
-    String url = (URLConstants.base_url +
-        URLConstants.user_info_social_Api +
-        "?id=$UserId");
+    String url = ("${URLConstants.base_url}${URLConstants.user_info_social_Api}?id=$UserId");
     // debugPrint('Get Sales Token ${tokens.toString()}');
     // try {
     // } catch (e) {
@@ -362,7 +354,7 @@ class Search_screen_controller extends GetxController {
       'social_type': type_social,
     }; // String body = json.encode(data);
 
-    var url = ("https://foxytechnologies.com/funky/api/followUnfollow.php");
+    var url = ("${URLConstants.base_url}followUnfollow.php");
     print("url : $url");
     print("body : $data");
 

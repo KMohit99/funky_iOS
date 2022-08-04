@@ -177,9 +177,7 @@ class InstagramView extends StatelessWidget {
     _loginScreenController.isuserinfoLoading(true);
     String id_user = await PreferenceManager().getPref(URLConstants.id);
     print("UserID $id_user");
-    String url = (URLConstants.base_url +
-        URLConstants.user_info_social_Api +
-        "?id=$id_user");
+    String url = ("${URLConstants.base_url}${URLConstants.user_info_social_Api}?id=$id_user");
     // debugPrint('Get Sales Token ${tokens.toString()}');
     // try {
     // } catch (e) {
@@ -214,7 +212,6 @@ class InstagramView extends StatelessWidget {
       // CommonWidget().showToaster(msg: msg.toString());
     }
   }
-
 
   Future<void> buildRedirectToHome(FlutterWebviewPlugin webview,
       InstagramModel instagram, BuildContext context) async {

@@ -613,7 +613,7 @@ PODS:
   - camerawesome (0.0.1):
     - Flutter
   - cloud_firestore (3.1.9):
-    - Firebase/Firestore (= 9.2.0)
+    - Firebase/Firestore (= 9.3.0)
     - firebase_core
     - Flutter
   - connectivity_plus (0.0.1):
@@ -668,43 +668,43 @@ PODS:
   - file_picker (0.0.1):
     - DKImagePickerController/PhotoGallery
     - Flutter
-  - Firebase/Auth (9.2.0):
+  - Firebase/Auth (9.3.0):
     - Firebase/CoreOnly
-    - FirebaseAuth (~> 9.2.0)
-  - Firebase/CoreOnly (9.2.0):
-    - FirebaseCore (= 9.2.0)
-  - Firebase/Firestore (9.2.0):
+    - FirebaseAuth (~> 9.3.0)
+  - Firebase/CoreOnly (9.3.0):
+    - FirebaseCore (= 9.3.0)
+  - Firebase/Firestore (9.3.0):
     - Firebase/CoreOnly
-    - FirebaseFirestore (~> 9.2.0)
-  - Firebase/Messaging (9.2.0):
+    - FirebaseFirestore (~> 9.3.0)
+  - Firebase/Messaging (9.3.0):
     - Firebase/CoreOnly
-    - FirebaseMessaging (~> 9.2.0)
-  - Firebase/Storage (9.2.0):
+    - FirebaseMessaging (~> 9.3.0)
+  - Firebase/Storage (9.3.0):
     - Firebase/CoreOnly
-    - FirebaseStorage (~> 9.2.0)
-  - firebase_auth (3.4.2):
-    - Firebase/Auth (= 9.2.0)
+    - FirebaseStorage (~> 9.3.0)
+  - firebase_auth (3.6.2):
+    - Firebase/Auth (= 9.3.0)
     - firebase_core
     - Flutter
-  - firebase_core (1.19.2):
-    - Firebase/CoreOnly (= 9.2.0)
+  - firebase_core (1.20.0):
+    - Firebase/CoreOnly (= 9.3.0)
     - Flutter
   - firebase_messaging (11.4.4):
-    - Firebase/Messaging (= 9.2.0)
+    - Firebase/Messaging (= 9.3.0)
     - firebase_core
     - Flutter
-  - firebase_storage (10.3.2):
-    - Firebase/Storage (= 9.2.0)
+  - firebase_storage (10.3.4):
+    - Firebase/Storage (= 9.3.0)
     - firebase_core
     - Flutter
   - FirebaseAppCheckInterop (9.3.0)
-  - FirebaseAuth (9.2.0):
+  - FirebaseAuth (9.3.0):
     - FirebaseCore (~> 9.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.7)
     - GoogleUtilities/Environment (~> 7.7)
     - GTMSessionFetcher/Core (< 3.0, >= 1.7)
   - FirebaseAuthInterop (9.3.0)
-  - FirebaseCore (9.2.0):
+  - FirebaseCore (9.3.0):
     - FirebaseCoreDiagnostics (~> 9.0)
     - FirebaseCoreInternal (~> 9.0)
     - GoogleUtilities/Environment (~> 7.7)
@@ -718,7 +718,7 @@ PODS:
     - FirebaseCore (~> 9.0)
   - FirebaseCoreInternal (9.3.0):
     - "GoogleUtilities/NSData+zlib (~> 7.7)"
-  - FirebaseFirestore (9.2.0):
+  - FirebaseFirestore (9.3.0):
     - abseil/algorithm (~> 1.20211102.0)
     - abseil/base (~> 1.20211102.0)
     - abseil/container/flat_hash_map (~> 1.20211102.0)
@@ -736,7 +736,7 @@ PODS:
     - GoogleUtilities/Environment (~> 7.7)
     - GoogleUtilities/UserDefaults (~> 7.7)
     - PromisesObjC (~> 2.1)
-  - FirebaseMessaging (9.2.0):
+  - FirebaseMessaging (9.3.0):
     - FirebaseCore (~> 9.0)
     - FirebaseInstallations (~> 9.0)
     - GoogleDataTransport (< 10.0.0, >= 9.1.4)
@@ -745,7 +745,7 @@ PODS:
     - GoogleUtilities/Reachability (~> 7.7)
     - GoogleUtilities/UserDefaults (~> 7.7)
     - nanopb (< 2.30910.0, >= 2.30908.0)
-  - FirebaseStorage (9.2.0):
+  - FirebaseStorage (9.3.0):
     - FirebaseAppCheckInterop (~> 9.0)
     - FirebaseAuthInterop (~> 9.0)
     - FirebaseCore (~> 9.0)
@@ -773,7 +773,7 @@ PODS:
   - google_sign_in_ios (0.0.1):
     - Flutter
     - GoogleSignIn (~> 6.2)
-  - GoogleDataTransport (9.1.4):
+  - GoogleDataTransport (9.2.0):
     - GoogleUtilities/Environment (~> 7.7)
     - nanopb (< 2.30910.0, >= 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
@@ -855,7 +855,7 @@ PODS:
   - GTMSessionFetcher/Core (1.7.2)
   - hexcolor (0.0.1):
     - Flutter
-  - image_editor (0.0.1):
+  - image_editor (1.0.0):
     - Flutter
   - image_gallery_saver (1.5.0):
     - Flutter
@@ -887,6 +887,8 @@ PODS:
     - Flutter
   - open_file (0.0.1):
     - Flutter
+  - package_info_plus (0.4.5):
+    - Flutter
   - path_provider_ios (0.0.1):
     - Flutter
   - permission_handler_apple (9.0.4):
@@ -898,10 +900,17 @@ PODS:
   - qr_code_scanner (0.2.0):
     - Flutter
     - MTBBarcodeScanner
+  - QuickBlox (2.17.11)
+  - Quickblox-WebRTC (2.7.6):
+    - QuickBlox (>= 2.7)
+  - quickblox_sdk (0.0.1-alpha):
+    - Flutter
+    - QuickBlox (~> 2.17.11)
+    - Quickblox-WebRTC (~> 2.7.6)
   - ReachabilitySwift (5.0.0)
-  - SDWebImage (5.13.1):
-    - SDWebImage/Core (= 5.13.1)
-  - SDWebImage/Core (5.13.1)
+  - SDWebImage (5.13.2):
+    - SDWebImage/Core (= 5.13.2)
+  - SDWebImage/Core (5.13.2)
   - share_plus (0.0.1):
     - Flutter
   - shared_preferences_ios (0.0.1):
@@ -949,10 +958,12 @@ DEPENDENCIES:
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - nb_utils (from `.symlinks/plugins/nb_utils/ios`)
   - open_file (from `.symlinks/plugins/open_file/ios`)
+  - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - photo_manager (from `.symlinks/plugins/photo_manager/ios`)
   - qr_code_scanner (from `.symlinks/plugins/qr_code_scanner/ios`)
+  - quickblox_sdk (from `.symlinks/plugins/quickblox_sdk/ios`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
@@ -1002,6 +1013,8 @@ SPEC REPOS:
     - MTBBarcodeScanner
     - nanopb
     - PromisesObjC
+    - QuickBlox
+    - Quickblox-WebRTC
     - ReachabilitySwift
     - SDWebImage
     - SwiftyGif
@@ -1054,6 +1067,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/nb_utils/ios"
   open_file:
     :path: ".symlinks/plugins/open_file/ios"
+  package_info_plus:
+    :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider_ios:
     :path: ".symlinks/plugins/path_provider_ios/ios"
   permission_handler_apple:
@@ -1062,6 +1077,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/photo_manager/ios"
   qr_code_scanner:
     :path: ".symlinks/plugins/qr_code_scanner/ios"
+  quickblox_sdk:
+    :path: ".symlinks/plugins/quickblox_sdk/ios"
   share_plus:
     :path: ".symlinks/plugins/share_plus/ios"
   shared_preferences_ios:
@@ -1087,7 +1104,7 @@ SPEC CHECKSUMS:
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
   camera_avfoundation: 07c77549ea54ad95d8581be86617c094a46280d9
   camerawesome: 0f8628efae993cb064ec4f36322e89c237e1064f
-  cloud_firestore: 7282d9314f8b71c537c0c2989aae8bfcad1bb504
+  cloud_firestore: 1467a1fb5109ce041aab0cb07268e5431291d5ce
   connectivity_plus: 413a8857dd5d9f1c399a39130850d02fe0feaf7e
   DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
@@ -1098,22 +1115,22 @@ SPEC CHECKSUMS:
   ffmpeg-kit-ios-min-gpl: da951b00628916702be2a90918181ebdcdd569ff
   ffmpeg_kit_flutter_min_gpl: 3c3266c6284c29340ac8bea41613efcdd7aea3e4
   file_picker: 817ab1d8cd2da9d2da412a417162deee3500fc95
-  Firebase: 4ba896cb8e5105d4b9e247e1c1b6222b548df55a
-  firebase_auth: 103ce6040b7f0a67bffb8f317544fc9f877c1cd2
-  firebase_core: ada8be870601fe3c2684dae2356f634189bd598f
-  firebase_messaging: 405f36f22122866761e7ba7aa1dcecbae09ef836
-  firebase_storage: 8395cf3326eb54c0fa1a826d37ce165eb536433e
+  Firebase: ef75abb1cdbc746d5a38f4e26c422c807b189b8c
+  firebase_auth: e4bd9a01f6c45764bf3bfb0cea4d5ce3673a92a2
+  firebase_core: 96214f90497b808a2cf2a24517084c5f6de37b53
+  firebase_messaging: 24112f219663060db68ef803f20166d374138b6e
+  firebase_storage: e95ec41580e311cb30b1ed7459b9e94fb4bbe672
   FirebaseAppCheckInterop: f6b9670fb1360cf12006ca426e9c3b9a35317d17
-  FirebaseAuth: 1c574ab64a051dd86dbe7fd5a3f86b58155b3482
+  FirebaseAuth: 9ebc3577fe0acf9092df21ac314024b70aebf21e
   FirebaseAuthInterop: 79826b4edc64e1d10135947866ad4437657e8696
-  FirebaseCore: 0e27f2a15d8f7b7ef11e7d93e23b1cbab55d748c
+  FirebaseCore: c088995ece701a021a48a1348ea0174877de2a6a
   FirebaseCoreDiagnostics: 060eb57cc56dfaf40b1b1b5874a5c17c41ce79f8
   FirebaseCoreExtension: 900b065a4970c31ce8de4e966cee910188e3a07b
   FirebaseCoreInternal: 635d1c9a612a6502b6377a0c92af83758076ffff
-  FirebaseFirestore: de27d96de10596ebc114adf25c6aa7d36dd91f2f
+  FirebaseFirestore: 5a72aa925528f67469b16a54a6cfc369467197e4
   FirebaseInstallations: 54b40022cb06e462740c9f2b9fbe38b5e78a825a
-  FirebaseMessaging: 4eaf1b8a7464b2c5e619ad66e9b20ee3e3206b24
-  FirebaseStorage: b47b4a04062ab07911063571241c103a8a2a2332
+  FirebaseMessaging: 2f6e38b6133059eb796ec224104f09379298a8c3
+  FirebaseStorage: 1414d27e15fa04f6350ef6602accef0e951c8bca
   FirebaseStorageInternal: f1a6d64cace780580d2b8ffa0a0c8cf3c376f3f8
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   flutter_facebook_auth: 8992ef870d441b8403a3b6b9859e7932605407cf
@@ -1123,7 +1140,7 @@ SPEC CHECKSUMS:
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   gallery_saver: 9fc173c9f4fcc48af53b2a9ebea1b643255be542
   google_sign_in_ios: 4f85eb9f937450765c8573bb85fd8cd6a5af675c
-  GoogleDataTransport: 5fffe35792f8b96ec8d6775f5eccd83c998d5a3b
+  GoogleDataTransport: 1c8145da7117bd68bbbed00cf304edb6a24de00f
   GoogleSignIn: 3c68388ac221f379676e8f1cb115df3aaf73b93f
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
   "gRPC-C++": 9675f953ace2b3de7c506039d77be1f2e77a8db2
@@ -1131,7 +1148,7 @@ SPEC CHECKSUMS:
   GTMAppAuth: 4d8f864896f3646f0c33baf38a28362f4c601e15
   GTMSessionFetcher: 5595ec75acf5be50814f81e9189490412bad82ba
   hexcolor: fdfb9c4258ad96e949c2dbcdf790a62194b8aa89
-  image_editor: c1d038630eedea60d2dee9c14f36aa66c7f9cfab
+  image_editor: eab82a302a6623a866da5145b7c4c0ee8a4ffbb4
   image_gallery_saver: 259eab68fb271cfd57d599904f7acdc7832e7ef2
   image_picker_ios: b786a5dcf033a8336a657191401bfdf12017dabb
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
@@ -1141,13 +1158,17 @@ SPEC CHECKSUMS:
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   nb_utils: ada4338858d8827ec92fdab2a545206b4ba4cfb1
   open_file: 02eb5cb6b21264bd3a696876f5afbfb7ca4f4b7d
+  package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
   path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
   permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
   photo_manager: 84fa94fbeb82e607333ea9a13c43b58e0903a463
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
   qr_code_scanner: bb67d64904c3b9658ada8c402e8b4d406d5d796e
+  QuickBlox: 37d2eb7d791782469ba14fa40122633185944c01
+  Quickblox-WebRTC: 162d2421d91cfb3d4f7e01f87e095633ca52bb1d
+  quickblox_sdk: 183b78fa64f4d1ba46b3ca4e5bc65dc9f572e5b9
   ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
-  SDWebImage: fb26a455eeda4c7a55e4dcb6172dbb258af7a4ca
+  SDWebImage: 72f86271a6f3139cc7e4a89220946489d4b9a866
   share_plus: 056a1e8ac890df3e33cb503afffaf1e9b4fbae68
   shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904

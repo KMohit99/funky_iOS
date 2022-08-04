@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../Utils/App_utils.dart';
 import '../Utils/asset_utils.dart';
 import '../Utils/colorUtils.dart';
 import '../Utils/custom_appbar.dart';
@@ -103,7 +104,7 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
                                       child: CircleAvatar(
                                         radius: 48, // Image radius
                                         backgroundImage: NetworkImage(
-                                          "http://foxyserver.com/funky/images/${news_feed_controller.newsfeedModel!.data![index].logo!}",
+                                          "${URLConstants.base_data_url}images/${news_feed_controller.newsfeedModel!.data![index].logo!}",
                                         ),
                                       ),
                                     ),
@@ -206,7 +207,7 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
                                               ? FadeInImage.assetNetwork(
                                                   fit: BoxFit.contain,
                                                   image:
-                                                      "http://foxyserver.com/funky/images/${news_feed_controller.newsfeedModel!.data![index].postImage}",
+                                                      "${URLConstants.base_data_url}images/${news_feed_controller.newsfeedModel!.data![index].postImage}",
                                                   placeholder:
                                                       'assets/images/Funky_App_Icon.png',
                                                 )
@@ -409,7 +410,7 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
                                             _onShare(
                                                 context: context,
                                                 link:
-                                                    "http://foxyserver.com/funky/images/${news_feed_controller.newsfeedModel!.data![index].postImage}");
+                                                    "${URLConstants.base_data_url}images/${news_feed_controller.newsfeedModel!.data![index].postImage}");
                                           }),
                                     ],
                                   ),

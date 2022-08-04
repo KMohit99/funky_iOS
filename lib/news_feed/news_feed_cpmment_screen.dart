@@ -3,6 +3,7 @@ import 'package:funky_new/Utils/colorUtils.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
+import '../Utils/App_utils.dart';
 import '../Utils/asset_utils.dart';
 import 'controller/news_feed_controller.dart';
 
@@ -96,7 +97,7 @@ class _NewsFeedCommantScreenState extends State<NewsFeedCommantScreen> {
                                                   .image!
                                                   .isNotEmpty
                                               ? Image.network(
-                                                  "https://foxytechnologies.com/funky/images/${_newsFeed_screen_controller.newsFeedCommnetModel!.data![index].user!.image!}",
+                                                  "${URLConstants.base_data_url}images/${_newsFeed_screen_controller.newsFeedCommnetModel!.data![index].user!.image!}",
                                                   fit: BoxFit.fill,
                                                 )
                                               : Container(
@@ -302,7 +303,7 @@ class _NewsFeedCommantScreenState extends State<NewsFeedCommantScreen> {
                                                           .image!
                                                           .isNotEmpty
                                                       ? Image.network(
-                                                          "https://foxytechnologies.com/funky/images/${_newsFeed_screen_controller.newsFeedCommnetModel!.data![index].replies![idx].user!.image!}",
+                                                          "${URLConstants.base_data_url}images/${_newsFeed_screen_controller.newsFeedCommnetModel!.data![index].replies![idx].user!.image!}",
                                                           fit: BoxFit.fill,
                                                         )
                                                       : Container(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
+import '../../Utils/App_utils.dart';
 import '../../Utils/asset_utils.dart';
 import '../../Utils/colorUtils.dart';
 import '../controller/homepage_controller.dart';
@@ -92,7 +93,7 @@ class _PostImageCommentScreenState extends State<PostImageCommentScreen> {
                                                   .image!
                                                   .isNotEmpty
                                               ? Image.network(
-                                                  "https://foxytechnologies.com/funky/images/${homepageController.postcommentModel!.data![index].user!.image!}",
+                                                  "${URLConstants.base_data_url}images/${homepageController.postcommentModel!.data![index].user!.image!}",
                                                   fit: BoxFit.fill,
                                                 )
                                               : Container(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
+import '../Utils/App_utils.dart';
 import '../Utils/asset_utils.dart';
 import '../Utils/colorUtils.dart';
 import '../my_flutter_app_icons.dart';
@@ -118,7 +119,7 @@ class _ImageNewsFeedState extends State<ImageNewsFeed> {
                 child: CircleAvatar(
                   radius: 48, // Image radius
                   backgroundImage: NetworkImage(
-                    "http://foxyserver.com/funky/images/${widget.logo}",
+                    "${URLConstants.base_data_url}images/${widget.logo}",
                   ),
                 ),
               ),

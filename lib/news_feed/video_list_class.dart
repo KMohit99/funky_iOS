@@ -8,6 +8,7 @@ import 'package:video_compress/video_compress.dart';
 import 'package:video_player/video_player.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
+import '../Utils/App_utils.dart';
 import '../Utils/asset_utils.dart';
 import '../Utils/colorUtils.dart';
 
@@ -61,7 +62,7 @@ class _VideonewsState extends State<Videonews> {
     //       });
     print(widget.url);
     _controller = VideoPlayerController.network(
-        "http://foxyserver.com/funky/video/${widget.url}")
+        "${URLConstants.base_data_url}video/${widget.url}")
       ..initialize().then((_) {
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
         setState(() {});
@@ -83,7 +84,7 @@ class _VideonewsState extends State<Videonews> {
                 child: CircleAvatar(
                   radius: 48, // Image radius
                   backgroundImage: NetworkImage(
-                    "http://foxyserver.com/funky/images/${widget.logo}",
+                    "${URLConstants.base_data_url}images/${widget.logo}",
                   ),
                 ),
               ),

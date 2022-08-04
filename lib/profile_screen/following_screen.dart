@@ -377,9 +377,7 @@ class _FollowingScreenState extends State<FollowingScreen> {
   static Future<List<Data_followers>> getFollowingList(String query) async {
     String id_user = await PreferenceManager().getPref(URLConstants.id);
 
-    String url = (URLConstants.base_url +
-        URLConstants.followingListApi +
-        '?id=$id_user');
+    String url = ('${URLConstants.base_url}${URLConstants.followingListApi}?id=$id_user');
     http.Response response = await http.get(Uri.parse(url));
     print("response status${response.statusCode}");
     print("response request${response.request}");

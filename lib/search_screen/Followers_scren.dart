@@ -343,8 +343,7 @@ class _SearchUserFollowrsState extends State<SearchUserFollowrs> {
 
   Future<List<Data_followers>> getFollowersList(String query) async {
 
-    String url = (URLConstants.base_url + URLConstants.FollowersListApi +
-        '?id=${widget.searchUserid}');
+    String url = ('${URLConstants.base_url}${URLConstants.FollowersListApi}?id=${widget.searchUserid}');
     http.Response response = await http.get(Uri.parse(url));
     print(response);
     List books = [];

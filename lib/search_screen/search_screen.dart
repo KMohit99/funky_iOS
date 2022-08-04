@@ -12,6 +12,7 @@ import 'package:funky_new/search_screen/search_screen_user_profile.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
+import '../Utils/App_utils.dart';
 import '../Utils/asset_utils.dart';
 import '../Utils/colorUtils.dart';
 import '../Utils/custom_appbar.dart';
@@ -254,7 +255,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                               width: 80,
                                               fit: BoxFit.cover,
                                               image:
-                                                  "https://foxytechnologies.com/funky/images/${_search_screen_controller.searchlistModel!.data![index].image!}",
+                                                  "${URLConstants.base_data_url}images/${_search_screen_controller.searchlistModel!.data![index].image!}",
                                               placeholder:
                                                   'assets/images/Funky_App_Icon.png',
                                             )

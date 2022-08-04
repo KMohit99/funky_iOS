@@ -377,9 +377,7 @@ class _FollowersListState extends State<FollowersList> {
   static Future<List<Data_followers>> getFollowersList(String query) async {
     String id_user = await PreferenceManager().getPref(URLConstants.id);
 
-    String url = (URLConstants.base_url +
-        URLConstants.FollowersListApi +
-        '?id=$id_user');
+    String url = ('${URLConstants.base_url}${URLConstants.FollowersListApi}?id=$id_user');
     http.Response response = await http.get(Uri.parse(url));
     print(response);
     List books = [];

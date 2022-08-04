@@ -1,27 +1,23 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-// import 'package:funky_project/Authentication/advertiser_login/controller/advertiser_login_Controller.dart';
-import 'package:get/get.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
-// import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
-// import 'package:funky_project/dashboard/dashboard_screen.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 import '../../../Utils/App_utils.dart';
 import '../../../Utils/asset_utils.dart';
 import '../../../Utils/custom_textfeild.dart';
-import '../../../controller/controllers_class.dart';
-import '../../../controller/controllers_class.dart';
+import '../../../chat_quickblox/bloc/login/login_screen_bloc.dart';
+import '../../../chat_quickblox/bloc/login/login_screen_events.dart';
+import '../../../chat_quickblox/bloc/login/login_screen_states.dart';
+import '../../../chat_quickblox/bloc/stream_builder_with_listener.dart';
+import '../../../chat_quickblox/presentation/screens/base_screen_state.dart';
+import '../../../chat_quickblox/presentation/screens/login/login_text_field.dart';
+import '../../../chat_quickblox/presentation/screens/login/user_name_text_field.dart';
+import '../../../chat_quickblox/presentation/utils/notification_utils.dart';
 import '../../../custom_widget/common_buttons.dart';
+import '../../../dashboard/dashboard_screen.dart';
 import '../../../getx_pagination/binding_utils.dart';
-
 import '../../creator_login/controller/creator_login_controller.dart';
 import '../../instagram/instagram_view.dart';
 import '../controller/advertiser_login_Controller.dart';
@@ -30,10 +26,10 @@ class AdvertiserLoginScreen extends StatefulWidget {
   const AdvertiserLoginScreen({Key? key}) : super(key: key);
 
   @override
-  State<AdvertiserLoginScreen> createState() => _AdvertiserLoginScreenState();
+  _AdvertiserLoginScreenState createState() => _AdvertiserLoginScreenState();
 }
 
-class _AdvertiserLoginScreenState extends State<AdvertiserLoginScreen> {
+class _AdvertiserLoginScreenState extends BaseScreenState<LoginScreenBloc> {
   final Advertiser_Login_screen_controller _advertiser_login_screen_controller =
       Get.put(Advertiser_Login_screen_controller(),
           tag: Advertiser_Login_screen_controller().toString());
@@ -51,9 +47,25 @@ class _AdvertiserLoginScreenState extends State<AdvertiserLoginScreen> {
       _obscureText = !_obscureText;
     });
   }
+  LoginScreenBloc? loginBloc;
+
+  LoginTextField? _loginTextField;
+  UserNameTextField? _userNameTextField;
+
 
   @override
   Widget build(BuildContext context) {
+    initBloc(context);
+
+    _loginTextField = LoginTextField(
+        txtController: _advertiser_login_screen_controller.passwordController,
+        loginBloc: bloc as LoginScreenBloc);
+    _userNameTextField = UserNameTextField(
+        txtController: _advertiser_login_screen_controller
+            .usernameController,
+        loginBloc: bloc as LoginScreenBloc);
+
+
     final screenwidth = MediaQuery.of(context).size.width;
     final screenheight = MediaQuery.of(context).size.height;
     return GetBuilder<Advertiser_Login_screen_controller>(
@@ -133,29 +145,35 @@ class _AdvertiserLoginScreenState extends State<AdvertiserLoginScreen> {
                         SizedBox(
                           height: 41,
                         ),
-                        CommonTextFormField(
-                          controller: _advertiser_login_screen_controller
-                              .usernameController,
-                          title: 'Username',
-                          labelText: 'Username',
-                          image_path: AssetUtils.msg_icon,
+                        Container(
+                          child: this._userNameTextField,
                         ),
+                        // CommonTextFormField(
+                        //   controller: _advertiser_login_screen_controller
+                        //       .usernameController,
+                        //   title: 'Username',
+                        //   labelText: 'Username',
+                        //   image_path: AssetUtils.msg_icon,
+                        // ),
                         SizedBox(
                           height: 21,
                         ),
-                        CommonTextFormField(
-                            controller: _advertiser_login_screen_controller
-                                .passwordController,
-                            title: 'Password',
-                            labelText: 'Password',
-                            isObscure: _obscureText,
-                            maxLines: 1,
-                            image_path: (_obscureText
-                                ? AssetUtils.eye_open_icon
-                                : AssetUtils.eye_close_icon),
-                            onpasswordTap: () {
-                              _toggle();
-                            }),
+                        Container(
+                          child: this._loginTextField,
+                        ),
+                        // CommonTextFormField(
+                        //     controller: _advertiser_login_screen_controller
+                        //         .passwordController,
+                        //     title: 'Password',
+                        //     labelText: 'Password',
+                        //     isObscure: _obscureText,
+                        //     maxLines: 1,
+                        //     image_path: (_obscureText
+                        //         ? AssetUtils.eye_open_icon
+                        //         : AssetUtils.eye_close_icon),
+                        //     onpasswordTap: () {
+                        //       _toggle();
+                        //     }),
                         SizedBox(
                           height: 22,
                         ),
@@ -169,6 +187,63 @@ class _AdvertiserLoginScreenState extends State<AdvertiserLoginScreen> {
                           lable_text: 'Login',
                           lable_text_color: Colors.white,
                         ),
+                        Container(
+                            child: StreamBuilderWithListener<LoginScreenStates>(
+                              stream:
+                              bloc?.states?.stream as Stream<LoginScreenStates>,
+                              listener: (state) {
+                                if (state is LoginSuccessState) {
+                                  print("Login succesfullllllll");
+
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              Dashboard(page: 0)));
+                                  // NavigationService()
+                                  //     .pushReplacementNamed(DialogsScreenRoute);
+                                }
+                                if (state is LoginErrorState) {
+                                  print("Login failed");
+
+                                  NotificationBarUtils.showSnackBarError(
+                                      this.context, state.error);
+                                }
+                              },
+                              builder: (context, state) {
+                                if (state.data is LoginInProgressState) {
+                                  return CircularProgressIndicator();
+                                }
+                                return GestureDetector(
+                                    onTap: () async {
+                                      _advertiser_login_screen_controller.checkLogin(
+                                          context: context,
+                                          login_type: TxtUtils.Login_type_advertiser);
+                                      await checkLogin();
+                                    },
+                                    child: Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 30),
+                                      // height: 45,
+                                      // width:(width ?? 300) ,
+                                      decoration: BoxDecoration(
+                                          color: Colors.black,
+                                          borderRadius: BorderRadius.circular(25)),
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        margin: EdgeInsets.symmetric(
+                                          vertical: 12,
+                                        ),
+                                        child: Text(
+                                          'Login',
+                                          style: TextStyle(
+                                              fontSize: 17, color: Colors.white),
+                                        ),
+                                      ),
+                                    ));
+                              },
+                            )),
+
                         SizedBox(
                           height: 22,
                         ),
@@ -337,5 +412,10 @@ class _AdvertiserLoginScreenState extends State<AdvertiserLoginScreen> {
         );
       },
     );
+  }
+
+  Future checkLogin() async {
+    print("Inside event");
+    bloc?.events?.add(LoginPressedEvent());
   }
 }

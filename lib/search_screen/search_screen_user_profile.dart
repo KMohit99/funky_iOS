@@ -172,7 +172,7 @@ class _SearchUserProfileState extends State<SearchUserProfile>
   ];
   TabController? _tabController;
 
-  static List<Tab> _tabs = [
+  static final List<Tab> _tabs = [
     Tab(
       iconMargin: EdgeInsets.all(5),
       height: 75,
@@ -729,7 +729,7 @@ class _SearchUserProfileState extends State<SearchUserProfile>
                                           .image!
                                           .isNotEmpty
                                           ? Image.network(
-                                        "https://foxytechnologies.com/funky/images/${_search_screen_controller
+                                        "${URLConstants.base_data_url}images/${_search_screen_controller
                                             .userInfoModel_email!.data![0]
                                             .image!}",
                                         height: 80,
@@ -1408,7 +1408,7 @@ class _SearchUserProfileState extends State<SearchUserProfile>
                                                             .assetNetwork(
                                                           fit: BoxFit
                                                               .cover,
-                                                          image: "https://foxytechnologies.com/funky/images/${story_info[index]
+                                                          image: "${URLConstants.base_data_url}images/${story_info[index]
                                                               .storyPhoto!}",
                                                           placeholder: 'assets/images/Funky_App_Icon.png',
                                                           // color: HexColor(CommonColor.pinkFont),
@@ -1531,7 +1531,7 @@ class _SearchUserProfileState extends State<SearchUserProfile>
     print(data);
     // String body = json.encode(data);
 
-    var url = ('https://foxytechnologies.com/funky/api/post-videoList.php');
+    var url = ('${URLConstants.base_url}post-videoList.php');
     print("url : $url");
     print("body : $data");
     var response = await http.post(
@@ -1644,7 +1644,7 @@ class _SearchUserProfileState extends State<SearchUserProfile>
                         ));
                       },
                       child: Image.network(
-                        'https://foxytechnologies.com/funky/images/${_videoModelList!
+                        '${URLConstants.base_data_url}images/${_videoModelList!
                             .data![index].image}',
                       ),
                     ))),
@@ -1740,7 +1740,7 @@ class _SearchUserProfileState extends State<SearchUserProfile>
                         .data![index].postImage!.isEmpty
                         ? Image.asset(AssetUtils.logo)
                         : Image.network(
-                      'https://foxytechnologies.com/funky/images/${_galleryModelList!
+                      '${URLConstants.base_data_url}images/${_galleryModelList!
                           .data![index].postImage}',
                       loadingBuilder:
                           (context, child, loadingProgress) {
@@ -1802,7 +1802,7 @@ class _SearchUserProfileState extends State<SearchUserProfile>
     print(data);
     // String body = json.encode(data);
 
-    var url = ('https://foxytechnologies.com/funky/api/galleryList.php');
+    var url = ('${URLConstants.base_url}galleryList.php');
     print("url : $url");
     print("body : $data");
     var response = await http.post(
