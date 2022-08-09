@@ -16,6 +16,7 @@ import '../../Utils/colorUtils.dart';
 import '../../custom_widget/common_buttons.dart';
 import '../../news_feed/heart_animation_widget.dart';
 import '../controller/homepage_controller.dart';
+import '../model/VideoList_model.dart';
 
 class VideoWidget extends StatefulWidget {
   final bool play;
@@ -27,6 +28,7 @@ class VideoWidget extends StatefulWidget {
 
   final String video_id;
   final String comment_count;
+  final Data_video? videoListModel;
 
   String video_like_count;
   String video_like_status;
@@ -45,7 +47,7 @@ class VideoWidget extends StatefulWidget {
     required this.video_like_count,
     required this.video_like_status,
     this.onDoubleTap,
-    required this.comment_count,
+    required this.comment_count, this.videoListModel,
   }) : super(key: key);
 
   @override
@@ -318,19 +320,45 @@ class _VideoWidgetState extends State<VideoWidget> {
                                             false) {
                                           print(
                                               "mmmmm${widget.video_like_count}");
-                                          setState(() {
-                                            widget.video_like_count =
-                                                homepageController
-                                                    .postLikeUnlikeModel!
-                                                    .user![0]
-                                                    .likes!;
+                                          if(widget.video_like_status ==
+                                              "false"){
+                                            setState(() {
+                                              widget.video_like_status =
+                                              homepageController
+                                                  .postLikeUnlikeModel!
+                                                  .user![0]
+                                                  .likeStatus!;
 
-                                            widget.video_like_status =
-                                                homepageController
-                                                    .postLikeUnlikeModel!
-                                                    .user![0]
-                                                    .likeStatus!;
-                                          });
+                                              widget.video_like_count =
+                                              homepageController
+                                                  .postLikeUnlikeModel!
+                                                  .user![0]
+                                                  .likes!;
+                                            });
+                                          }else{
+                                            setState(() {
+                                              widget.video_like_status = 'false';
+
+                                              widget.video_like_count =
+                                              homepageController
+                                                  .postLikeUnlikeModel!
+                                                  .user![0]
+                                                  .likes!;
+                                            });
+                                          }
+                                          // setState(() {
+                                          //   widget.video_like_count =
+                                          //       homepageController
+                                          //           .postLikeUnlikeModel!
+                                          //           .user![0]
+                                          //           .likes!;
+                                          //
+                                          //   widget.video_like_status =
+                                          //       homepageController
+                                          //           .postLikeUnlikeModel!
+                                          //           .user![0]
+                                          //           .likeStatus!;
+                                          // });
                                           print(
                                               "mmmmm${widget.video_like_count}");
                                         }

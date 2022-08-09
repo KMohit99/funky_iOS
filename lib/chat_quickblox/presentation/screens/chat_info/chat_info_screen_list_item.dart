@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:get/get_utils/src/extensions/string_extensions.dart';
 import 'package:quickblox_sdk/models/qb_user.dart';
 
 import '../../utils/color_util.dart';
@@ -30,50 +31,53 @@ class _ChatInfoListItemState extends State<ChatInfoListItem> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 60,
-        color: Color(0x00FFFFFF),
-        child: Container(
-          padding: EdgeInsets.only(left: 15, right: 11),
-          child: Row(
-            children: <Widget>[
-              Container(
-                width: 50,
-                height: 50,
-                alignment: Alignment.centerLeft,
-                margin: EdgeInsets.only(top: 12),
-                child: CircleAvatar(
-                  radius: 200,
-                  backgroundColor:
-                      Color(ColorUtil.getColor(widget._user.fullName)),
-                  child: Text(
-                    '${userName(this.widget._user).substring(0, 1).toUpperCase()}',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-              SizedBox(width: 9),
-              Expanded(
-                  child: Container(
-                padding: EdgeInsets.only(top: 12),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Text(userName(this.widget._user),
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontFamily: 'PM',
-                            color: isCurrentUser()
-                                ? Colors.white60
-                                : Colors.white),
-                        overflow: TextOverflow.ellipsis),
-                  ],
-                ),
-              )),
-            ],
+      padding: EdgeInsets.only(left: 0, right:0),
+      child: ListTile(
+        visualDensity: VisualDensity(horizontal: -4),
+        leading: Container(
+          width: 50,
+          height: 50,
+          alignment: Alignment.centerLeft,
+          margin: EdgeInsets.only(top: 0,right: 5),
+          child: CircleAvatar(
+            radius: 200,
+            backgroundColor:
+            Color(ColorUtil.getColor(widget._user.fullName)),
+            child: Text(
+              '${userName(this.widget._user).substring(0, 1).toUpperCase()}',
+              style: TextStyle(color: Colors.white),
+            ),
           ),
-        ));
+        ),
+        title:   Text(userName(this.widget._user).capitalize!,
+            style: TextStyle(
+                fontSize: 14,
+                fontFamily: 'POPM',
+                color: isCurrentUser()
+                    ? Colors.white60
+                    : Colors.white),
+            overflow: TextOverflow.ellipsis),
+      ),
+    );
   }
-
+// SizedBox(width: 9),
+  // Expanded(
+  //     child: Container(
+  //   padding: EdgeInsets.only(top: 12),
+  //   child: Row(
+  //     mainAxisAlignment: MainAxisAlignment.start,
+  //     children: <Widget>[
+  //       Text(userName(this.widget._user),
+  //           style: TextStyle(
+  //               fontSize: 16,
+  //               fontFamily: 'PM',
+  //               color: isCurrentUser()
+  //                   ? Colors.white60
+  //                   : Colors.white),
+  //           overflow: TextOverflow.ellipsis),
+  //     ],
+  //   ),
+  // )),
   bool isCurrentUser() {
     return this.widget._user.id == _currentUserId;
   }

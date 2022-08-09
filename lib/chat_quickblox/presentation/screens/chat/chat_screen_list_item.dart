@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:funky_new/Utils/colorUtils.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -56,7 +57,7 @@ class _ChatListItemState extends State<ChatListItem> {
         alignment: Alignment.center,
         child: Text(_message.qbMessage.body!,
             maxLines: null,
-            style: TextStyle(fontSize: 13, color: Color(0xff6c7a92)),
+            style: TextStyle(fontSize: 13, color: Color(0xff6c7a92),fontFamily: 'POPR'),
             overflow: TextOverflow.clip),
         constraints: BoxConstraints(maxWidth: 250),
       );
@@ -77,7 +78,7 @@ class _ChatListItemState extends State<ChatListItem> {
           Padding(padding: EdgeInsets.only(left: _dialogType == 3 ? 0 : 16)),
           Expanded(
               child: Padding(
-            padding: EdgeInsets.only(top: 15),
+            padding: EdgeInsets.only(top: 0),
             child: Column(
               crossAxisAlignment: _message.isIncoming
                   ? CrossAxisAlignment.start
@@ -87,6 +88,9 @@ class _ChatListItemState extends State<ChatListItem> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
+
+                      _buildMessageBody(),
+                      SizedBox(height: 5,),
                       Container(
                         // color: Colors.white60,
                         child: Row(
@@ -95,7 +99,6 @@ class _ChatListItemState extends State<ChatListItem> {
                           children: _buildNameTimeHeader(),
                         ),
                       ),
-                      _buildMessageBody()
                     ],
                   ),
                 ),
@@ -110,11 +113,11 @@ class _ChatListItemState extends State<ChatListItem> {
   List<Widget> _buildNameTimeHeader() {
     return <Widget>[
       // _buildSenderName(),
-      Padding(padding: EdgeInsets.only(left: 7)),
-      _message.isIncoming ? SizedBox.shrink() : _buildMessageStatus(),
+
       Padding(padding: EdgeInsets.only(left: 3)),
       _buildDateSent(),
-      Padding(padding: EdgeInsets.only(left: 16))
+      Padding(padding: EdgeInsets.only(left: 7)),
+      _message.isIncoming ? SizedBox.shrink() : _buildMessageStatus(),
     ];
   }
 
@@ -125,7 +128,7 @@ class _ChatListItemState extends State<ChatListItem> {
       return SizedBox.shrink();
     }
     if (readIds != null && readIds.length > 1) {
-      return SvgPicture.asset('assets/icons/read.svg');
+      return SvgPicture.asset('assets/icons/read.svg',color: HexColor(CommonColor.pinkFont),);
     } else if (deliveredIds != null && deliveredIds.length > 1) {
       return SvgPicture.asset('assets/icons/delivered.svg');
     } else {
@@ -170,14 +173,31 @@ class _ChatListItemState extends State<ChatListItem> {
           //       offset: _message.isIncoming ? Offset(0, 3) : Offset(5, 12))
           // ]
     ),
-      padding: EdgeInsets.only(left: 16, right: 16, top: 13, bottom: 13),
-      child: Text(_message.qbMessage.body ?? "[Attachment]",
-          maxLines: null,
-          style: TextStyle(
-              fontSize: 14,
-              color: _message.isIncoming ? Colors.white : Colors.black,
-              fontFamily: _message.isIncoming ? 'PR' : 'PB'),
-          overflow: TextOverflow.clip),
+      padding: EdgeInsets.only(left: 16, right: 16, top: 5, bottom: 13),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+              child:
+              _message.isIncoming && _dialogType != QBChatDialogTypes.CHAT
+                  ? Text(_message.senderName!,
+                  maxLines: null,
+                  style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.white60,
+                      fontFamily: 'POPM'),
+                  overflow: TextOverflow.clip)
+                  : null),
+          SizedBox(height: 3,),
+          Text(_message.qbMessage.body ?? "[Attachment]",
+              maxLines: null,
+              style: TextStyle(
+                  fontSize: 14,
+                  color: _message.isIncoming ? Colors.white : Colors.black,
+                  fontFamily: _message.isIncoming ? 'POPR' : 'POPM'),
+              overflow: TextOverflow.clip),
+        ],
+      ),
     );
   }
 
@@ -193,7 +213,7 @@ class _ChatListItemState extends State<ChatListItem> {
           borderRadius: new BorderRadius.all(Radius.circular(20))),
       child: Center(
         child: Text(
-          '${name.substring(0, 1).toUpperCase()}',
+          name.substring(0, 1).toUpperCase(),
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),

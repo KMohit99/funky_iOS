@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -14,8 +15,11 @@ import 'package:funky_new/search_screen/search__screen_controller.dart';
 // import 'package:funky_project/search_screen/search__screen_controller.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:hive/hive.dart';
 import 'package:marquee/marquee.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 import '../Authentication/creator_login/controller/creator_login_controller.dart';
 import '../Utils/App_utils.dart';
@@ -25,6 +29,7 @@ import '../Utils/toaster_widget.dart';
 import '../chat/constants/firestore_constants.dart';
 import '../chat/models/user_chat.dart';
 import '../chat/pages/chat_page.dart';
+import '../chat_quickblox/presentation/screens/dialogs/dialogs_screen.dart';
 import '../homepage/model/UserInfoModel.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
@@ -729,7 +734,8 @@ class _SearchUserProfileState extends State<SearchUserProfile>
                                           .image!
                                           .isNotEmpty
                                           ? Image.network(
-                                        "${URLConstants.base_data_url}images/${_search_screen_controller
+                                        "${URLConstants
+                                            .base_data_url}images/${_search_screen_controller
                                             .userInfoModel_email!.data![0]
                                             .image!}",
                                         height: 80,
@@ -1195,7 +1201,6 @@ class _SearchUserProfileState extends State<SearchUserProfile>
                                               _search_screen_controller
                                                   .is_following !=
                                                   null) {
-
                                             // final QuerySnapshot result = await firebaseFirestore
                                             //     .collection(FirestoreConstants.pathUserCollection)
                                             //     .where(FirestoreConstants.id, isEqualTo: widget.search_user_data.id)
@@ -1238,27 +1243,31 @@ class _SearchUserProfileState extends State<SearchUserProfile>
                                             //
                                             // }
 
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ChatPage(
-                                                      arguments: ChatPageArguments(
-                                                        peerId: widget
-                                                            .search_user_data
-                                                            .id!,
-                                                        peerAvatar: widget
-                                                            .search_user_data
-                                                            .image!,
-                                                        peerNickname: widget
-                                                            .search_user_data
-                                                            .fullName!,
-                                                      ),
-                                                    ),
-                                              ),
-                                            );
-                                          }else{
-                                            CommonWidget().showToaster(msg: 'Need to follow the user');
+                                            // Navigator.push(
+                                            //   context,
+                                            //   MaterialPageRoute(
+                                            //     builder: (context) =>
+                                            //         ChatPage(
+                                            //           arguments: ChatPageArguments(
+                                            //             peerId: widget
+                                            //                 .search_user_data
+                                            //                 .id!,
+                                            //             peerAvatar: widget
+                                            //                 .search_user_data
+                                            //                 .image!,
+                                            //             peerNickname: widget
+                                            //                 .search_user_data
+                                            //                 .fullName!,
+                                            //           ),
+                                            //         ),
+                                            //   ),
+                                            // );
+                                            // Navigator.pushReplacement(
+                                            //     context,
+                                            //     MaterialPageRoute(
+                                            //         builder: (context) => DialogsScreen()));
+                                          } else {
+                                            // CommonWidget().showToaster(msg: 'Need to follow the user');
                                           }
                                         },
                                         child: Container(
@@ -1384,10 +1393,13 @@ class _SearchUserProfileState extends State<SearchUserProfile>
                                                       //     story_id: story_info[index]
                                                       //         .stID!);
                                                       print(index);
-                                                      story_info = getStoryModel!.data![index].storys!;
+                                                      story_info =
+                                                      getStoryModel!
+                                                          .data![index].storys!;
 
                                                       Get.to(() =>
                                                           StoryScreen(
+                                                            thumbnail: test_thumb[index],
                                                             stories:
                                                             story_info,
                                                             story_no:
@@ -1400,19 +1412,20 @@ class _SearchUserProfileState extends State<SearchUserProfile>
                                                       height: 60,
                                                       width: 60,
                                                       child: ClipRRect(
-                                                        borderRadius:
-                                                        BorderRadius
-                                                            .circular(
-                                                            50),
-                                                        child: FadeInImage
-                                                            .assetNetwork(
-                                                          fit: BoxFit
-                                                              .cover,
-                                                          image: "${URLConstants.base_data_url}images/${story_info[index]
-                                                              .storyPhoto!}",
-                                                          placeholder: 'assets/images/Funky_App_Icon.png',
-                                                          // color: HexColor(CommonColor.pinkFont),
-                                                        ),
+                                                          borderRadius:
+                                                          BorderRadius
+                                                              .circular(
+                                                              50),
+                                                          child: Image.file(
+                                                              test_thumb[index])
+                                                        // FadeInImage
+                                                        //     .assetNetwork(
+                                                        //   fit: BoxFit
+                                                        //       .cover,
+                                                        //   image: "${URLConstants.base_data_url}images/${story_[index].storys![0].storyPhoto}",
+                                                        //   placeholder: 'assets/images/Funky_App_Icon.png',
+                                                        //   // color: HexColor(CommonColor.pinkFont),
+                                                        // ),
                                                       ),
                                                     ),
                                                   ),
@@ -1627,6 +1640,10 @@ class _SearchUserProfileState extends State<SearchUserProfile>
                 ClipRRect(
                   borderRadius: BorderRadius.circular(30),
                   child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        border: Border.all(
+                            color: HexColor(CommonColor.pinkFont), width: 0.5)),
                     height: 120.0,
                     // width: 120.0,
                     child: (isvideoLoading == true
@@ -1643,9 +1660,18 @@ class _SearchUserProfileState extends State<SearchUserProfile>
                               .data![index].uploadVideo!,
                         ));
                       },
-                      child: Image.network(
-                        '${URLConstants.base_data_url}images/${_videoModelList!
-                            .data![index].image}',
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Image.network(
+                            '${URLConstants
+                                .base_data_url}images/${_videoModelList!
+                                .data![index].image}',
+                            fit: BoxFit.contain,
+                          ),
+                          // Icon(Icons.play_circle,
+                          //   color: HexColor(CommonColor.pinkFont),)
+                        ],
                       ),
                     ))),
                   ),
@@ -1848,6 +1874,7 @@ class _SearchUserProfileState extends State<SearchUserProfile>
 
   // List<String> thumb = [];
   // String? filePath;
+  List<File> test_thumb = [];
 
   Future<dynamic> get_story_list() async {
     print('Inside creator get email');
@@ -1881,6 +1908,27 @@ class _SearchUserProfileState extends State<SearchUserProfile>
                 .data!.length}');
         story_ = getStoryModel!.data!;
         story_info = getStoryModel!.data![0].storys!;
+        for (int i = 0; i < story_info.length; i++) {
+          if (story_info[i].isVideo == 'true') {
+            final uint8list = await VideoThumbnail.thumbnailFile(
+              video:
+              ("${URLConstants.base_data_url}images/${story_info[i]
+                  .storyPhoto}"),
+              thumbnailPath: (await getTemporaryDirectory()).path,
+              imageFormat: ImageFormat.JPEG,
+              maxHeight: 64,
+              // specify the height of the thumbnail, let the width auto-scaled to keep the source aspect ratio
+              quality: 75,
+            );
+            test_thumb.add(File(uint8list!));
+            print("test_thumb[i].path");
+            print(test_thumb[i].path);
+          } else if (story_info[i].isVideo == 'false') {
+            test_thumb.add(File(story_info[i].storyPhoto!));
+            // print(story_info[i].image);
+          }
+          print("test----------${test_thumb[i].path}");
+        }
 
         setState(() {
           isStoryLoading = false;

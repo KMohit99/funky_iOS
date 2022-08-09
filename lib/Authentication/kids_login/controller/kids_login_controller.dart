@@ -90,21 +90,21 @@ class Kids_Login_screen_controller extends GetxController {
         await PreferenceManager()
             .setPref(URLConstants.social_type, "");
         ///firebase calls
-        final QuerySnapshot result = await firebaseFirestore
-            .collection(FirestoreConstants.pathUserCollection)
-            .where(FirestoreConstants.id, isEqualTo: loginModel!.user![0].id)
-            .get();
-        final List<DocumentSnapshot> documents = result.docs;
-
-        DocumentSnapshot documentSnapshot = documents[0];
-        UserChat userChat = UserChat.fromDocument(documentSnapshot);
-        // Write data to local
-        SharedPreferences prefs =
-        await SharedPreferences.getInstance();
-        await prefs.setString(FirestoreConstants.id, userChat.id);
-        await prefs.setString(FirestoreConstants.nickname, userChat.nickname);
-        await prefs.setString(FirestoreConstants.photoUrl, userChat.photoUrl);
-        await prefs.setString(FirestoreConstants.aboutMe, userChat.aboutMe);
+        // final QuerySnapshot result = await firebaseFirestore
+        //     .collection(FirestoreConstants.pathUserCollection)
+        //     .where(FirestoreConstants.id, isEqualTo: loginModel!.user![0].id)
+        //     .get();
+        // final List<DocumentSnapshot> documents = result.docs;
+        //
+        // DocumentSnapshot documentSnapshot = documents[0];
+        // UserChat userChat = UserChat.fromDocument(documentSnapshot);
+        // // Write data to local
+        // SharedPreferences prefs =
+        // await SharedPreferences.getInstance();
+        // await prefs.setString(FirestoreConstants.id, userChat.id);
+        // await prefs.setString(FirestoreConstants.nickname, userChat.nickname);
+        // await prefs.setString(FirestoreConstants.photoUrl, userChat.photoUrl);
+        // await prefs.setString(FirestoreConstants.aboutMe, userChat.aboutMe);
 
         // CommonService().setStoreKey(
         //     setKey: 'type', setValue: loginModel!.user![0].type!.toString());

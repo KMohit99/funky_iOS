@@ -184,39 +184,41 @@ class Kids_signup_controller extends GetxController {
         } else {
           CommonWidget().showToaster(msg: loginModel!.message!);
           await PreferenceManager()
+              .setPref(URLConstants.id, loginModel!.user![0].id!);
+          await PreferenceManager()
               .setPref(URLConstants.type, loginModel!.user![0].type!);
 
-          final QuerySnapshot result = await firebaseFirestore
-              .collection(FirestoreConstants.pathUserCollection)
-              .where(FirestoreConstants.id, isEqualTo: loginModel!.user![0].id)
-              .get();
-          final List<DocumentSnapshot> documents = result.docs;
-          if (documents.isEmpty) {
-            // Writing data to server because here is a new user
-            firebaseFirestore
-                .collection(FirestoreConstants.pathUserCollection)
-                .doc(loginModel!.user![0].id)
-                .set({
-              FirestoreConstants.nickname: fullname_controller.text,
-              FirestoreConstants.photoUrl:
-                  "https://foxytechnologies.com/funky/images/${imgFile!.path.split('/').last}",
-              FirestoreConstants.id: loginModel!.user![0].id,
-              'createdAt': DateTime.now().millisecondsSinceEpoch.toString(),
-              FirestoreConstants.chattingWith: null
-            });
-
-            // Write data to local storage
-            // User? currentUser = firebaseUser;
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            await prefs.setString(
-                FirestoreConstants.id, loginModel!.user![0].id!);
-            await prefs.setString(
-                FirestoreConstants.nickname, fullname_controller.text ?? "");
-            await prefs.setString(
-                FirestoreConstants.photoUrl,
-                "https://foxytechnologies.com/funky/images/${imgFile!.path}" ??
-                    "");
-          }
+          // final QuerySnapshot result = await firebaseFirestore
+          //     .collection(FirestoreConstants.pathUserCollection)
+          //     .where(FirestoreConstants.id, isEqualTo: loginModel!.user![0].id)
+          //     .get();
+          // final List<DocumentSnapshot> documents = result.docs;
+          // if (documents.isEmpty) {
+          //   // Writing data to server because here is a new user
+          //   firebaseFirestore
+          //       .collection(FirestoreConstants.pathUserCollection)
+          //       .doc(loginModel!.user![0].id)
+          //       .set({
+          //     FirestoreConstants.nickname: fullname_controller.text,
+          //     FirestoreConstants.photoUrl:
+          //         "https://foxytechnologies.com/funky/images/${imgFile!.path.split('/').last}",
+          //     FirestoreConstants.id: loginModel!.user![0].id,
+          //     'createdAt': DateTime.now().millisecondsSinceEpoch.toString(),
+          //     FirestoreConstants.chattingWith: null
+          //   });
+          //
+          //   // Write data to local storage
+          //   // User? currentUser = firebaseUser;
+          //   SharedPreferences prefs = await SharedPreferences.getInstance();
+          //   await prefs.setString(
+          //       FirestoreConstants.id, loginModel!.user![0].id!);
+          //   await prefs.setString(
+          //       FirestoreConstants.nickname, fullname_controller.text ?? "");
+          //   await prefs.setString(
+          //       FirestoreConstants.photoUrl,
+          //       "https://foxytechnologies.com/funky/images/${imgFile!.path}" ??
+          //           "");
+          // }
           await Get.to(Dashboard(
             page: 0,
           ));

@@ -16,6 +16,7 @@ import 'package:funky_new/profile_screen/view_selected_image.dart';
 // import 'package:funky_project/profile_screen/edit_profile_screen.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:marquee/marquee.dart';
 import 'package:path_provider/path_provider.dart';
@@ -299,7 +300,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.black,
         extendBodyBehindAppBar: true,
         // appBar: AppBar(
         //   backgroundColor: Colors.transparent,
@@ -482,6 +483,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                                                             0),
                                                                 // height: 122,
                                                                 width: 150,
+                                                                height: 120,
                                                                 // padding: const EdgeInsets.all(8.0),
                                                                 decoration:
                                                                     BoxDecoration(
@@ -520,92 +522,81 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                                                           10,
                                                                       horizontal:
                                                                           5),
-                                                                  child: Column(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .center,
-                                                                    children: [
-                                                                      Text(
-                                                                        'Report',
-                                                                        textAlign:
-                                                                            TextAlign.center,
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                15,
-                                                                            fontFamily:
-                                                                                'PR',
-                                                                            color:
-                                                                                Colors.white),
-                                                                      ),
-                                                                      Container(
-                                                                        margin: EdgeInsets.symmetric(
-                                                                            horizontal:
-                                                                                20),
-                                                                        child:
-                                                                            Divider(
-                                                                          color:
-                                                                              Colors.black,
-                                                                          height:
-                                                                              20,
+                                                                  child:
+                                                                      SingleChildScrollView(
+                                                                    child:
+                                                                        Column(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .center,
+                                                                      children: [
+                                                                        Text(
+                                                                          'Report',
+                                                                          textAlign:
+                                                                              TextAlign.center,
+                                                                          style: TextStyle(
+                                                                              fontSize: 15,
+                                                                              fontFamily: 'PR',
+                                                                              color: Colors.white),
                                                                         ),
-                                                                      ),
-                                                                      Text(
-                                                                        'Block',
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                15,
-                                                                            fontFamily:
-                                                                                'PR',
+                                                                        Container(
+                                                                          margin:
+                                                                              EdgeInsets.symmetric(horizontal: 20),
+                                                                          child:
+                                                                              Divider(
                                                                             color:
-                                                                                Colors.white),
-                                                                      ),
-                                                                      Container(
-                                                                        margin: EdgeInsets.symmetric(
-                                                                            horizontal:
-                                                                                20),
-                                                                        child:
-                                                                            Divider(
-                                                                          color:
-                                                                              Colors.black,
-                                                                          height:
-                                                                              20,
+                                                                                Colors.black,
+                                                                            height:
+                                                                                20,
+                                                                          ),
                                                                         ),
-                                                                      ),
-                                                                      Text(
-                                                                        'Remove follower',
-                                                                        textAlign:
-                                                                            TextAlign.center,
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                15,
-                                                                            fontFamily:
-                                                                                'PR',
-                                                                            color:
-                                                                                Colors.white),
-                                                                      ),
-                                                                      Container(
-                                                                        margin: EdgeInsets.symmetric(
-                                                                            horizontal:
-                                                                                20),
-                                                                        child:
-                                                                            Divider(
-                                                                          color:
-                                                                              Colors.black,
-                                                                          height:
-                                                                              20,
+                                                                        Text(
+                                                                          'Block',
+                                                                          style: TextStyle(
+                                                                              fontSize: 15,
+                                                                              fontFamily: 'PR',
+                                                                              color: Colors.white),
                                                                         ),
-                                                                      ),
-                                                                      Text(
-                                                                        'Share Profile ',
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                15,
-                                                                            fontFamily:
-                                                                                'PR',
+                                                                        Container(
+                                                                          margin:
+                                                                              EdgeInsets.symmetric(horizontal: 20),
+                                                                          child:
+                                                                              Divider(
                                                                             color:
-                                                                                Colors.white),
-                                                                      ),
-                                                                    ],
+                                                                                Colors.black,
+                                                                            height:
+                                                                                20,
+                                                                          ),
+                                                                        ),
+                                                                        Text(
+                                                                          'Remove follower',
+                                                                          textAlign:
+                                                                              TextAlign.center,
+                                                                          style: TextStyle(
+                                                                              fontSize: 15,
+                                                                              fontFamily: 'PR',
+                                                                              color: Colors.white),
+                                                                        ),
+                                                                        Container(
+                                                                          margin:
+                                                                              EdgeInsets.symmetric(horizontal: 20),
+                                                                          child:
+                                                                              Divider(
+                                                                            color:
+                                                                                Colors.black,
+                                                                            height:
+                                                                                20,
+                                                                          ),
+                                                                        ),
+                                                                        Text(
+                                                                          'Share Profile ',
+                                                                          style: TextStyle(
+                                                                              fontSize: 15,
+                                                                              fontFamily: 'PR',
+                                                                              color: Colors.white),
+                                                                        ),
+                                                                      ],
+                                                                    ),
                                                                   ),
                                                                 ),
                                                               ),
@@ -655,9 +646,11 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                         Expanded(
                                           flex: 3,
                                           child: Container(
-                                            margin: EdgeInsets.symmetric(horizontal: 15),
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 15),
                                             child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 Row(
                                                   children: [
@@ -679,8 +672,9 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                                         visualDensity:
                                                             VisualDensity(
                                                                 vertical: -4),
-                                                        padding: EdgeInsets.only(
-                                                            left: 5.0),
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                left: 5.0),
                                                         icon: Icon(
                                                           Icons.edit,
                                                           color: Colors.grey,
@@ -694,18 +688,17 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                                 ),
                                                 Text(
                                                   (_creator_login_screen_controller
-                                                      .userInfoModel_email!
-                                                      .data![0]
-                                                      .about!
-                                                      .isNotEmpty
-                                                      ? '${_creator_login_screen_controller
-                                                      .userInfoModel_email!.data![0]
-                                                      .about}'
+                                                          .userInfoModel_email!
+                                                          .data![0]
+                                                          .about!
+                                                          .isNotEmpty
+                                                      ? '${_creator_login_screen_controller.userInfoModel_email!.data![0].about}'
                                                       : ' '),
                                                   style: TextStyle(
                                                       fontSize: 16,
-                                                      color: HexColor(CommonColor
-                                                          .subHeaderColor)),
+                                                      color: HexColor(
+                                                          CommonColor
+                                                              .subHeaderColor)),
                                                 ),
                                               ],
                                             ),
@@ -1025,7 +1018,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                           child: SizedBox(
                                             height: 85,
                                             child: ListView.builder(
-                                                itemCount: story_info.length,
+                                                itemCount: story_.length,
                                                 shrinkWrap: true,
                                                 scrollDirection:
                                                     Axis.horizontal,
@@ -1041,15 +1034,23 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                                         GestureDetector(
                                                           onTap: () {
                                                             print(index);
-                                                            story_info = getStoryModel!.data![index].storys!;
-
+                                                            story_info =
+                                                                getStoryModel!
+                                                                    .data![
+                                                                        index]
+                                                                    .storys!;
+                                                            print(story_info);
                                                             Get.to(() =>
                                                                 StoryScreen(
+                                                                  thumbnail:
+                                                                      test_thumb[
+                                                                          index],
                                                                   stories:
                                                                       story_info,
                                                                   story_no:
                                                                       index,
-                                                                   stories_title: story_,
+                                                                  stories_title:
+                                                                      story_,
                                                                 ));
                                                             // Get.to(StoryScreen(stories: story_info));
                                                           },
@@ -1061,21 +1062,22 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                                                   BorderRadius
                                                                       .circular(
                                                                           50),
-                                                              child: (story_info[
+                                                              child: (story_[
                                                                           index]
+                                                                      .storys![
+                                                                          0]
                                                                       .storyPhoto!
                                                                       .isEmpty
                                                                   ? Image.asset(
                                                                       // test_thumb[
                                                                       //     index]
-                                                                      'assets/images/Funky_App_Icon.png'
-                                                                      )
+                                                                      'assets/images/Funky_App_Icon.png')
                                                                   : FadeInImage
                                                                       .assetNetwork(
                                                                       fit: BoxFit
                                                                           .cover,
                                                                       image:
-                                                                          "${URLConstants.base_data_url}images/${story_info[index].storyPhoto!}",
+                                                                          "${URLConstants.base_data_url}images/${story_[index].storys![0].storyPhoto!}",
                                                                       placeholder:
                                                                           'assets/images/Funky_App_Icon.png',
                                                                       // color: HexColor(CommonColor.pinkFont),
@@ -1462,8 +1464,9 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                           fit: BoxFit.fill,
                                           loadingBuilder: (context, child,
                                               loadingProgress) {
-                                            if (loadingProgress == null)
+                                            if (loadingProgress == null) {
                                               return child;
+                                            }
 
                                             return Center(
                                                 child: SizedBox(
@@ -1542,8 +1545,8 @@ class _Profile_ScreenState extends State<Profile_Screen>
         setState(() {
           ispostLoading = false;
         });
-        print(_galleryModelList!.data![0].postImage);
-        print(_galleryModelList!.data![1].postImage);
+        // print(_galleryModelList!.data![0].postImage);
+        // print(_galleryModelList!.data![1].postImage);
 
         // hideLoader(context);
         // Get.to(Dashboard());
@@ -1560,8 +1563,8 @@ class _Profile_ScreenState extends State<Profile_Screen>
 
   bool isvideoLoading = true;
   VideoModelList? _videoModelList;
-  List<String> thumb = [];
   String? filePath;
+  List<File> imgFile_list = [];
 
   Future<dynamic> get_video_list(BuildContext context) async {
     setState(() {
@@ -1598,50 +1601,28 @@ class _Profile_ScreenState extends State<Profile_Screen>
       if (_videoModelList!.error == false) {
         CommonWidget().showToaster(msg: 'Succesful');
         // print(_videoModelList);
-        setState(() {
-          isvideoLoading = false;
-        });
+
+        print("_videoModelList!.data!.length");
         print(_videoModelList!.data!.length);
-        // for (var i = 0; i < _videoModelList!.data!.length; i++) {
-        //   final thumbnail = await VideoThumbnail.thumbnailFile(
-        //       video:
-        //           "http://foxyserver.com/funky/video/${_videoModelList!.data![i].uploadVideo}",
-        //       thumbnailPath: (await getTemporaryDirectory()).path,
-        //       imageFormat: ImageFormat.WEBP,
-        //       maxHeight: 100,
-        //       maxWidth: 100,
-        //       quality: 75);
-        //   setState(() {
-        //     final file = File(thumbnail!);
-        //     filePath = file.path;
-        //   });
-        //
-        //   thumb.add(filePath!);
-        // }
-        print("thumbaaaa ;; $thumb");
 
-        // for(var i = 0 ; i<= _videoModelList!.data!.length ; i++){
-        //   Directory tempDir = await getTemporaryDirectory();
-        //   String tempPath = tempDir.path;
-        //
-        //   try {
-        //     thumbnail = await VideoThumbnail.thumbnailFile(
-        //       video: 'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
-        //       imageFormat: ImageFormat.PNG,
-        //       maxWidth: 256,
-        //       maxHeight: 256,
-        //       thumbnailPath: tempPath,
-        //       quality: 50,
-        //     );
-        //     return thumbnail;
-        //   } catch (e) {
-        //     print(e);
-        //     return null;
-        //   }
-        // }
-
-        // hideLoader(context);
-        // Get.to(Dashboard());
+        for (int i = 0; i < _videoModelList!.data!.length; i++) {
+          final uint8list = await VideoThumbnail.thumbnailFile(
+            video:
+                ("http://foxyserver.com/funky/video/${_videoModelList!.data![i].uploadVideo}"),
+            thumbnailPath: (await getTemporaryDirectory()).path,
+            imageFormat: ImageFormat.JPEG,
+            maxHeight: 64,
+            // specify the height of the thumbnail, let the width auto-scaled to keep the source aspect ratio
+            quality: 75,
+          );
+          imgFile_list.add(File(uint8list!));
+          // print(test_thumb[i].path);
+          setState(() {
+            isvideoLoading = false;
+          });
+          print("test----------${imgFile_list[i].path}");
+        }
+        print("thumbaaaa ;; $imgFile_list");
       } else {
         setState(() {
           isvideoLoading = false;
@@ -1690,43 +1671,45 @@ class _Profile_ScreenState extends State<Profile_Screen>
                       padding: EdgeInsets.zero,
                       physics: NeverScrollableScrollPhysics(),
                       crossAxisCount: 4,
-                      itemCount: _videoModelList!.data!.length,
+                      itemCount: imgFile_list.length,
                       itemBuilder: (BuildContext context, int index) =>
-                          ClipRRect(
-                        borderRadius: BorderRadius.circular(30),
-                        child: Container(
-                          // height: 120.0,
-                          color: Colors.white,
-                          // width: 120.0,
-                          child: (isvideoLoading == true
-                              ? CircularProgressIndicator(
-                                  color: HexColor(CommonColor.pinkFont),
-                                )
-                              : (_videoModelList!
-                                      .data![index].uploadVideo!.isEmpty
-                                  ? Image.asset(
-                                      AssetUtils.logo,
+                          Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(30),
+                                  border: Border.all(
+                                      color: HexColor(CommonColor.pinkFont), width: 0.5)),
+                              child: (isvideoLoading == true
+                                  ? CircularProgressIndicator(
+                                      color: HexColor(CommonColor.pinkFont),
                                     )
-                                  : GestureDetector(
-                                      onTap: () {
-                                        print('data');
-                                        Get.to(VideoViewer(
-                                          url: _videoModelList!
-                                              .data![index].uploadVideo!,
-                                        ));
-                                      },
-                                      child: Image.asset(
-                                        AssetUtils.logo,
-                                      )
-                                      // Image.network(
-                                      //   'http://foxyserver.com/funky/images/${_videoModelList!.data![index].uploadVideo}',
-                                      //   fit: BoxFit.cover,
-                                      // ),
-                                      ))),
-                        ),
-                      ),
+                                  : (_videoModelList!.data![index].image!.isEmpty
+                                      ? Image.asset(AssetUtils.logo)
+                                      : GestureDetector(
+                                          onTap: () {
+                                            print('data');
+                                            Get.to(VideoViewer(
+                                              url: _videoModelList!
+                                                  .data![index].uploadVideo!,
+                                            ));
+                                          },
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(30),
+
+                                            // height: MediaQuery.of(context).size.aspectRatio,
+                                            child: Image.memory(
+                                              imgFile_list[index].readAsBytesSync(),
+                                              fit: BoxFit.fitHeight,
+                                            ),
+                                          )
+                                          // Image.network(
+                                          //   'http://foxyserver.com/funky/images/${_videoModelList!.data![index].uploadVideo}',
+                                          //   fit: BoxFit.cover,
+                                          // ),
+                                          )))),
                       staggeredTileBuilder: (int index) =>
-                          new StaggeredTile.count(2, index.isEven ? 3 : 2),
+                          const StaggeredTile.fit(
+                        2,
+                      ),
                       mainAxisSpacing: 4.0,
                       crossAxisSpacing: 4.0,
                     )
@@ -1789,25 +1772,25 @@ class _Profile_ScreenState extends State<Profile_Screen>
 
         // test = File(uint8list!);
 
-        // for (int i = 0; i < story_info.length; i++) {
-        //   if (story_info[i].isVideo == 'true') {
-        //     final uint8list = await VideoThumbnail.thumbnailFile(
-        //       video:
-        //           ("http://foxyserver.com/funky/video/${story_info[i].uploadVideo}"),
-        //       thumbnailPath: (await getTemporaryDirectory()).path,
-        //       imageFormat: ImageFormat.JPEG,
-        //       maxHeight: 64,
-        //       // specify the height of the thumbnail, let the width auto-scaled to keep the source aspect ratio
-        //       quality: 75,
-        //     );
-        //     test_thumb.add(File(uint8list!));
-        //     // print(test_thumb[i].path);
-        //   } else if (story_info[i].isVideo == 'false') {
-        //     test_thumb.add(File(story_info[i].image!));
-        //     // print(story_info[i].image);
-        //   }
-        //   print("test----------${test_thumb[i].path}");
-        // }
+        for (int i = 0; i < story_info.length; i++) {
+          if (story_info[i].isVideo == 'true') {
+            final uint8list = await VideoThumbnail.thumbnailFile(
+              video:
+                  ("http://foxyserver.com/funky/video/${story_info[i].storyPhoto}"),
+              thumbnailPath: (await getTemporaryDirectory()).path,
+              imageFormat: ImageFormat.JPEG,
+              maxHeight: 64,
+              // specify the height of the thumbnail, let the width auto-scaled to keep the source aspect ratio
+              quality: 75,
+            );
+            test_thumb.add(File(uint8list!));
+            // print(test_thumb[i].path);
+          } else if (story_info[i].isVideo == 'false') {
+            test_thumb.add(File(story_info[i].storyPhoto!));
+            // print(story_info[i].image);
+          }
+          print("test----------${test_thumb[i].path}");
+        }
         setState(() {
           isStoryLoading = false;
         });
@@ -1910,8 +1893,6 @@ class _Profile_ScreenState extends State<Profile_Screen>
           );
         });
   }
-
-  List<File> imgFile_list = [];
 
   void openGallery() async {
     var imgCamera = await imgPicker.pickImage(source: ImageSource.gallery);

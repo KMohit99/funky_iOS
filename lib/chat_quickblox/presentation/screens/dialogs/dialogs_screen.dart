@@ -38,77 +38,85 @@ class _DialogsScreenState extends BaseScreenState<DialogsScreenBloc> {
   Widget build(BuildContext context) {
     initBloc(context);
 
-    return Scaffold(
-        backgroundColor: Colors.black,
-        appBar: DecoratedAppBar(appBar: _buildAppBar()),
-        body: Stack(
-          children: [
-            StreamProvider<DialogsScreenStates>(
-              create: (context) =>
-                  bloc?.states?.stream as Stream<DialogsScreenStates>,
-              initialData: ChatConnectingState(),
-              child: Selector<DialogsScreenStates, DialogsScreenStates>(
-                selector: (_, state) => state,
-                shouldRebuild: (previous, next) {
-                  return next is UpdateChatsSuccessState;
-                },
-                builder: (_, state, __) {
-                  if (state is UpdateChatsSuccessState) {
-                    NotificationBarUtils.hideSnackBar(context);
-                    List<QBDialog?> dialogs = state.dialogs;
-                    return RefreshIndicator(
-                      color: Colors.blue,
-                      backgroundColor: Colors.white,
-                      onRefresh: () {
-                        bloc?.events?.add(UpdateChatsEvent());
-                        return Future(() {});
-                      },
-                      child: ListView.builder(
-                        keyboardDismissBehavior:
-                            ScrollViewKeyboardDismissBehavior.onDrag,
-                        itemCount: dialogs.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          if (dialogs[index] == null ||
-                              dialogs[index]!.id == null) {
-                            return SizedBox.shrink();
-                          }
-
-                          return GestureDetector(
-                            child: DialogsListItem(
-                                Key(RandomUtil.getRandomString(10)),
-                                dialogs[index]!,
-                                _deleteState),
-                            onLongPress: () {
-                              bloc?.events?.add(ModeDeleteChatsEvent());
-                            },
-                            onTap: () async {
-                              if (!_deleteState) {
-                                NotificationBarUtils.hideSnackBar(context);
-                                bloc?.events?.add(LeaveDialogsScreenEvent());
-                                var result = await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ChatScreen(
-                                          dialogs[index]!.id!, false),
-                                    ));
-                                if (result == DialogsScreen.FLAG_UPDATE) {
-                                  bloc?.events?.add(UpdateChatsEvent());
-                                  bloc?.events?.add(ReturnDialogsScreenEvent());
-                                }
-                              }
-                            },
-                          );
+    return WillPopScope(
+        onWillPop: ()async {
+          if (Navigator.of(context).userGestureInProgress)
+            return false;
+          else
+            return true;
+        },
+      child: Scaffold(
+          backgroundColor: Colors.black,
+          appBar: DecoratedAppBar(appBar: _buildAppBar()),
+          body: Stack(
+            children: [
+              StreamProvider<DialogsScreenStates>(
+                create: (context) =>
+                    bloc?.states?.stream as Stream<DialogsScreenStates>,
+                initialData: ChatConnectingState(),
+                child: Selector<DialogsScreenStates, DialogsScreenStates>(
+                  selector: (_, state) => state,
+                  shouldRebuild: (previous, next) {
+                    return next is UpdateChatsSuccessState;
+                  },
+                  builder: (_, state, __) {
+                    if (state is UpdateChatsSuccessState) {
+                      NotificationBarUtils.hideSnackBar(context);
+                      List<QBDialog?> dialogs = state.dialogs;
+                      return RefreshIndicator(
+                        color: Colors.blue,
+                        backgroundColor: Colors.white,
+                        onRefresh: () {
+                          bloc?.events?.add(UpdateChatsEvent());
+                          return Future(() {});
                         },
-                      ),
-                    );
-                  }
-                  return Text("");
-                },
+                        child: ListView.builder(
+                          keyboardDismissBehavior:
+                              ScrollViewKeyboardDismissBehavior.onDrag,
+                          itemCount: dialogs.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            if (dialogs[index] == null ||
+                                dialogs[index]!.id == null) {
+                              return SizedBox.shrink();
+                            }
+
+                            return GestureDetector(
+                              child: DialogsListItem(
+                                  Key(RandomUtil.getRandomString(10)),
+                                  dialogs[index]!,
+                                  _deleteState),
+                              onLongPress: () {
+                                bloc?.events?.add(ModeDeleteChatsEvent());
+                              },
+                              onTap: () async {
+                                if (!_deleteState) {
+                                  NotificationBarUtils.hideSnackBar(context);
+                                  bloc?.events?.add(LeaveDialogsScreenEvent());
+                                  var result = await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ChatScreen(
+                                            dialogs[index]!.id!, false),
+                                      ));
+                                  if (result == DialogsScreen.FLAG_UPDATE) {
+                                    bloc?.events?.add(UpdateChatsEvent());
+                                    bloc?.events?.add(ReturnDialogsScreenEvent());
+                                  }
+                                }
+                              },
+                            );
+                          },
+                        ),
+                      );
+                    }
+                    return Text("");
+                  },
+                ),
               ),
-            ),
-            _buildProgress()
-          ],
-        ));
+              _buildProgress()
+            ],
+          )),
+    );
   }
 
   Widget _buildProgress() {
@@ -194,8 +202,9 @@ class _DialogsScreenState extends BaseScreenState<DialogsScreenBloc> {
             color: Colors.white,
           ),
           onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => Dashboard(page: 0)));
+            Navigator.pop(context);
+            // Navigator.push(context,
+            //     MaterialPageRoute(builder: (context) => Dashboard(page: 0)));
             // Navigator.pop(context);
             // _showDialogLogout(context);
           }),

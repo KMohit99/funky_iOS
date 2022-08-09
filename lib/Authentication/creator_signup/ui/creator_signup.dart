@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:funky_new/Utils/colorUtils.dart';
 
 // import 'package:funky_project/Authentication/creator_signup/model/countryModelclass.dart';
 // import 'package:funky_project/controller/controllers_class.dart';
@@ -19,6 +20,15 @@ import '../../../Utils/asset_utils.dart';
 import '../../../Utils/custom_textfeild.dart';
 import '../../../Utils/App_utils.dart';
 import '../../../Utils/toaster_widget.dart';
+import '../../../chat_quickblox/bloc/login/login_screen_bloc.dart';
+import '../../../chat_quickblox/bloc/login/login_screen_events.dart';
+import '../../../chat_quickblox/bloc/login/login_screen_states.dart';
+import '../../../chat_quickblox/bloc/stream_builder_with_listener.dart';
+import '../../../chat_quickblox/presentation/screens/base_screen_state.dart';
+import '../../../chat_quickblox/presentation/screens/login/email_text_feild.dart';
+import '../../../chat_quickblox/presentation/screens/login/password_text_field.dart';
+import '../../../chat_quickblox/presentation/screens/login/user_name_text_field.dart';
+import '../../../chat_quickblox/presentation/utils/notification_utils.dart';
 import '../../../custom_widget/common_buttons.dart';
 import '../../creator_login/model/creator_loginModel.dart';
 import '../controller/creator_signup_controller.dart';
@@ -29,10 +39,10 @@ class Creator_signup extends StatefulWidget {
   const Creator_signup({Key? key}) : super(key: key);
 
   @override
-  State<Creator_signup> createState() => _Creator_signupState();
+  _Creator_signupState createState() => _Creator_signupState();
 }
 
-class _Creator_signupState extends State<Creator_signup> {
+class _Creator_signupState extends BaseScreenState<LoginScreenBloc> {
   final Creator_signup_controller _creator_signup_controller = Get.put(
       Creator_signup_controller(),
       tag: Creator_signup_controller().toString());
@@ -104,8 +114,22 @@ class _Creator_signupState extends State<Creator_signup> {
   // Image.memory(bytes),
   bool valuefirst = false;
 
+  LoginScreenBloc? loginBloc;
+
+  EmailTextFeild? _emailTextFeild;
+  UserNameTextField? _userNameTextField;
+
   @override
   Widget build(BuildContext context) {
+    initBloc(context);
+
+    _emailTextFeild = EmailTextFeild(
+        txtController: _creator_signup_controller.email_controller,
+        loginBloc: bloc as LoginScreenBloc);
+    _userNameTextField = UserNameTextField(
+        txtController: _creator_signup_controller.username_controller,
+        loginBloc: bloc as LoginScreenBloc);
+
     final screenwidth = MediaQuery.of(context).size.width;
     final screenheight = MediaQuery.of(context).size.height;
     return GestureDetector(
@@ -287,24 +311,27 @@ class _Creator_signupState extends State<Creator_signup> {
                         SizedBox(
                           height: 12,
                         ),
-                        CommonTextFormField(
-                          height: 45,
-                          title: TxtUtils.UserName,
-                          controller:
-                              _creator_signup_controller.username_controller,
-                          labelText: "Enter username",
-                          image_path: AssetUtils.human_icon,
-                          onChanged: (value) {
-                            value = _creator_signup_controller
-                                .username_controller.text;
-                            CheckUserName(context);
-                            setState(() {});
-                          },
-                          // errorText: checkUserModel!.message,
-                          tap: () {
-                            CheckUserName(context);
-                          },
+                        Container(
+                          child: this._userNameTextField,
                         ),
+                        // CommonTextFormField(
+                        //   height: 45,
+                        //   title: TxtUtils.UserName,
+                        //   controller:
+                        //       _creator_signup_controller.username_controller,
+                        //   labelText: "Enter username",
+                        //   image_path: AssetUtils.human_icon,
+                        //   onChanged: (value) {
+                        //     value = _creator_signup_controller
+                        //         .username_controller.text;
+                        //     CheckUserName(context);
+                        //     setState(() {});
+                        //   },
+                        //   // errorText: checkUserModel!.message,
+                        //   tap: () {
+                        //     CheckUserName(context);
+                        //   },
+                        // ),
                         (username_error == false
                             ? Container(
                                 margin: const EdgeInsets.symmetric(
@@ -323,23 +350,27 @@ class _Creator_signupState extends State<Creator_signup> {
                         SizedBox(
                           height: 12,
                         ),
-                        CommonTextFormField(
-                          height: 45,
-                          title: TxtUtils.Email,
-                          controller:
-                              _creator_signup_controller.email_controller,
-                          labelText: "Enter Email",
-                          onChanged: (value) {
-                            value = _creator_signup_controller
-                                .email_controller.text;
-                            CheckEmailName(context);
-                            setState(() {});
-                          },
-                          // errorText: checkUserModel!.message,
-                          tap: () {
-                            CheckEmailName(context);
-                          },
-                          image_path: AssetUtils.msg_icon,
+
+                        // CommonTextFormField(
+                        //   height: 45,
+                        //   title: TxtUtils.Email,
+                        //   controller:
+                        //       _creator_signup_controller.email_controller,
+                        //   labelText: "Enter Email",
+                        //   onChanged: (value) {
+                        //     value = _creator_signup_controller
+                        //         .email_controller.text;
+                        //     CheckEmailName(context);
+                        //     setState(() {});
+                        //   },
+                        //   // errorText: checkUserModel!.message,
+                        //   tap: () {
+                        //     CheckEmailName(context);
+                        //   },
+                        //   image_path: AssetUtils.msg_icon,
+                        // ),
+                        Container(
+                          child: this._emailTextFeild,
                         ),
                         (email_error == false
                             ? Container(
@@ -608,7 +639,7 @@ class _Creator_signupState extends State<Creator_signup> {
                                   children: [
                                     Container(
                                       margin: EdgeInsets.only(left: 18),
-                                      child: Text(
+                                      child: const Text(
                                         'Location',
                                         style: TextStyle(
                                           fontSize: 14,
@@ -1286,29 +1317,90 @@ class _Creator_signupState extends State<Creator_signup> {
                         SizedBox(
                           height: 10,
                         ),
-                        common_button(
-                          onTap: () {
-                            if (username_error == true &&
-                                email_error == true &&
-                                phone_error == true) {
-                              if (_creator_signup_controller
-                                      .phone_controller.text.length <
-                                  10) {
-                                CommonWidget().showErrorToaster(
-                                    msg: "Enter valid number");
-                                return;
-                              }
-                              _creator_signup_controller.CreatorsendOtp(
-                                  context);
-                            }
-                            // Get.toNamed(BindingUtils.signupOption);
-                          },
-                          backgroud_color: Colors.black,
-                          lable_text: 'Next',
-                          lable_text_color: Colors.white,
-                        ),
+                        // common_button(
+                        //   onTap: () {
+                        //     if (username_error == true &&
+                        //         email_error == true &&
+                        //         phone_error == true) {
+                        //       if (_creator_signup_controller
+                        //               .phone_controller.text.length <
+                        //           10) {
+                        //         CommonWidget().showErrorToaster(
+                        //             msg: "Enter valid number");
+                        //         return;
+                        //       }
+                        //       _creator_signup_controller.CreatorsendOtp(
+                        //           context);
+                        //     }
+                        //     // Get.toNamed(BindingUtils.signupOption);
+                        //   },
+                        //   backgroud_color: Colors.black,
+                        //   lable_text: 'Next',
+                        //   lable_text_color: Colors.white,
+                        // ),
+                        Container(
+                            child: StreamBuilderWithListener<LoginScreenStates>(
+                              stream:
+                              bloc?.states?.stream as Stream<LoginScreenStates>,
+                              listener: (state) {
+                                if (state is LoginSuccessState) {
+                                  print("Login succesfullllllll");
+                                  _creator_signup_controller.CreatorsendOtp(
+                                      context);
+                                  // Navigator.pushReplacement(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //         builder: (context) =>
+                                  //             Dashboard(page: 0)));
+                                  // NavigationService()
+                                  //     .pushReplacementNamed(DialogsScreenRoute);
+                                }
+                                if (state is LoginErrorState) {
+                                  print("Login failed");
+
+                                  NotificationBarUtils.showSnackBarError(
+                                      this.context, state.error);
+                                }
+                              },
+                              builder: (context, state) {
+                                if (state.data is LoginInProgressState) {
+                                  return CircularProgressIndicator(color: HexColor(CommonColor.pinkFont),);
+                                }
+                                return GestureDetector(
+                                    onTap: () async {
+                                      print('inside login');
+                                      // await _loginScreenController.checkLogin(
+                                      //     context: context,
+                                      //     login_type: TxtUtils.Login_type_creator);
+                                      // await checkLogin();
+                                      bloc?.events?.add(LoginPressedEvent());
+
+                                    },
+                                    child: Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 30),
+                                      // height: 45,
+                                      // width:(width ?? 300) ,
+                                      decoration: BoxDecoration(
+                                          color: Colors.black,
+                                          borderRadius: BorderRadius.circular(25)),
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        margin: EdgeInsets.symmetric(
+                                          vertical: 12,
+                                        ),
+                                        child: Text(
+                                          'Next',
+                                          style: TextStyle(
+                                              fontSize: 17, color: Colors.white),
+                                        ),
+                                      ),
+                                    ));
+                              },
+                            )),
+
                         SizedBox(
-                          height: 20,
+                          height: 40,
                         ),
                       ],
                     ),

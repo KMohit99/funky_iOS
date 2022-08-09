@@ -31,8 +31,10 @@ class HomepageController extends GetxController {
 
   Future<dynamic> getAllVideosList() async {
     isVideoLoading(true);
-    String url = (URLConstants.base_url + URLConstants.VideoListApi);
+    String id_user = await PreferenceManager().getPref(URLConstants.id);
+    String url = ('${URLConstants.base_url}${URLConstants.VideoListApi}?isVideo=true&userId=$id_user');
     String msg = '';
+
 
     // debugPrint('Get Sales Token ${tokens.toString()}');
     // try {
@@ -75,7 +77,9 @@ class HomepageController extends GetxController {
 
   Future<dynamic> getAllImagesList() async {
     isimageLoading(true);
-    String url = (URLConstants.base_url + URLConstants.ImagewListApi);
+    String id_user = await PreferenceManager().getPref(URLConstants.id);
+
+    String url = ("${URLConstants.base_url}${URLConstants.ImagewListApi}?isVideo=false&userId=$id_user");
     String msg = '';
 
     // debugPrint('Get Sales Token ${tokens.toString()}');
@@ -101,6 +105,7 @@ class HomepageController extends GetxController {
         // CommonWidget().showToaster(msg: data["success"].toString());
         return imageListModel;
       } else {
+        isimageLoading(false);
         // CommonWidget().showToaster(msg: msg.toString());
         return null;
       }
@@ -128,7 +133,7 @@ class HomepageController extends GetxController {
     isLikeLoading(true);
 
     Map data = {
-      'userid': id_user,
+      'userId': id_user,
       'postid': post_id,
       'type': post_id_type,
       'likeStatus': post_likeStatus

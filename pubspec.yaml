@@ -167,6 +167,26 @@ flutter:
     - family: PR
       fonts:
         - asset: assets/fonts/Product Sans Regular.ttf
+
+    - family: POPB
+      fonts:
+        - asset: assets/fonts/Poppins-Bold.ttf
+    - family: POPL
+      fonts:
+        - asset: assets/fonts/Poppins-Light.ttf
+    - family: POPM
+      fonts:
+        - asset: assets/fonts/Poppins-Medium.ttf
+    - family: POPR
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+    - family: POPSB
+      fonts:
+        - asset: assets/fonts/Poppins-SemiBold.ttf
+
+
+
+
     - family: customHeart
       fonts:
         - asset: assets/fonts/MyFlutterApp.ttf

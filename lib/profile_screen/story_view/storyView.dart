@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -25,9 +26,10 @@ import 'package:http/http.dart' as http;
 class StoryScreen extends StatefulWidget {
   final List<Storys> stories;
   final List<Data_story> stories_title;
+  final File thumbnail;
   int story_no;
 
-  StoryScreen({required this.stories, required this.story_no, required this.stories_title});
+  StoryScreen({required this.stories, required this.story_no, required this.stories_title, required this.thumbnail});
 
   @override
   _StoryScreenState createState() => _StoryScreenState();
@@ -80,7 +82,7 @@ class _StoryScreenState extends State<StoryScreen>
 
   @override
   Widget build(BuildContext context) {
-    final Storys story = widget.stories[widget.story_no];
+    final Storys story = widget.stories[0];
     return Scaffold(
       backgroundColor: Colors.black,
       body: GestureDetector(
@@ -100,11 +102,11 @@ class _StoryScreenState extends State<StoryScreen>
                     physics: NeverScrollableScrollPhysics(),
                     itemCount: widget.stories.length,
                     itemBuilder: (context, i) {
-                      final Storys story = widget.stories[widget.story_no];
-                      get_story_count(story_id: story.id!);
-                      if (story.storyPhoto!.isNotEmpty) {
+                      final Storys story = widget.stories[0];
+                      get_story_count(story_id: story.stID!);
+                      if (story.isVideo == 'false') {
                         print(
-                            "https://foxytechnologies.com/funky/images/${story.storyPhoto!}");
+                            "${URLConstants.base_data_url}images/${story.storyPhoto!}");
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 0.0),
                           child: Container(
@@ -177,9 +179,9 @@ class _StoryScreenState extends State<StoryScreen>
                           width: 40,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(50),
-                            child: (story.storyPhoto!.isEmpty
-                                ? Image.asset(
-                                    'assets/images/Funky_App_Icon.png')
+                            child: (story.isVideo == 'true'
+                                ? Image.file(
+                                    widget.thumbnail)
                                 : FadeInImage.assetNetwork(
                                     fit: BoxFit.cover,
                                     image:
@@ -187,7 +189,8 @@ class _StoryScreenState extends State<StoryScreen>
                                     placeholder:
                                         'assets/images/Funky_App_Icon.png',
                                     // color: HexColor(CommonColor.pinkFont),
-                                  )),
+                                  )
+                            ),
                           ),
                         ),
                         const SizedBox(width: 10.0),
@@ -225,10 +228,10 @@ class _StoryScreenState extends State<StoryScreen>
                             color: Colors.white,
                           ),
                           onPressed: () {
-                            print(story.id!);
+                            print(story.stID!);
                             // share_icon(story_id: story.stID!);
                             pop_up(
-                                story_id: story.id!,
+                                story_id: story.stID!,
                                 story_image: (story.storyPhoto!.isEmpty
                                     ? 'assets/images/Funky_App_Icon.png'
                                     : story.storyPhoto!),
@@ -308,17 +311,17 @@ class _StoryScreenState extends State<StoryScreen>
     //       });
     //     break;
     // }
-    if (story.storyPhoto!.isNotEmpty) {
+    if (story.isVideo == 'false') {
       print('imageeeeeeee');
-      view_story(story_id: story.id!);
+      view_story(story_id: story.stID!);
       _animController!.duration = Duration(seconds: 10);
       _animController!.forward();
     } else {
       // _videoController = null;
       print('videooo');
-      view_story(story_id: story.id!);
+      view_story(story_id: story.stID!);
       _videoController = VideoPlayerController.network(
-          "${URLConstants.base_data_url}video/${story.uploadVideo!}")
+          "${URLConstants.base_data_url}images/${story.storyPhoto!}")
         ..initialize().then((_) {
           setState(() {});
           if (_videoController!.value.isInitialized) {
@@ -941,7 +944,7 @@ class UserInfo extends StatelessWidget {
           radius: 20.0,
           backgroundColor: Colors.grey[300],
           backgroundImage: CachedNetworkImageProvider(
-            "${URLConstants.base_data_url}images/${stories.storyPhoto!}",
+            "${URLConstants.base_data_url}images/${stories.image!}",
           ),
         ),
         const SizedBox(width: 10.0),

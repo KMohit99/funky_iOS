@@ -1,5 +1,5 @@
 class VideoListModel {
-  List<Data>? data;
+  List<Data_video>? data;
   bool? error;
   String? statusCode;
   String? message;
@@ -8,9 +8,9 @@ class VideoListModel {
 
   VideoListModel.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
-      data = <Data>[];
+      data = <Data_video>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(new Data_video.fromJson(v));
       });
     }
     error = json['error'];
@@ -30,7 +30,7 @@ class VideoListModel {
   }
 }
 
-class Data {
+class Data_video {
   String? iD;
   String? fullName;
   String? userName;
@@ -52,7 +52,7 @@ class Data {
   String? createdDate;
   User? user;
 
-  Data(
+  Data_video(
       {this.iD,
         this.fullName,
         this.userName,
@@ -74,7 +74,7 @@ class Data {
         this.createdDate,
         this.user});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  Data_video.fromJson(Map<String, dynamic> json) {
     iD = json['ID'];
     fullName = json['fullName'];
     userName = json['userName'];

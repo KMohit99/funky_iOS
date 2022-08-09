@@ -14,7 +14,7 @@ import '../../widgets/decorated_app_bar.dart';
 import '../../widgets/progress.dart';
 import '../base_screen_state.dart';
 import '../dialogs/dialogs_screen.dart';
-import 'login_text_field.dart';
+import 'password_text_field.dart';
 
 /// Created by Injoit in 2021.
 /// Copyright © 2021 Quickblox. All rights reserved.
@@ -25,7 +25,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends BaseScreenState<LoginScreenBloc> {
-  LoginTextField? _loginTextField;
+  passwordTextField? _loginTextField;
   UserNameTextField? _userNameTextField;
   TextEditingController? newe_Email;
   TextEditingController? newe_Username;
@@ -33,7 +33,7 @@ class _LoginScreenState extends BaseScreenState<LoginScreenBloc> {
   Widget build(BuildContext context) {
     initBloc(context);
 
-    _loginTextField = LoginTextField(txtController : newe_Email! ,loginBloc: bloc as LoginScreenBloc);
+    _loginTextField = passwordTextField(txtController : newe_Email! ,loginBloc: bloc as LoginScreenBloc);
     _userNameTextField = UserNameTextField(txtController: newe_Username!,loginBloc: bloc as LoginScreenBloc);
 
     return Scaffold(

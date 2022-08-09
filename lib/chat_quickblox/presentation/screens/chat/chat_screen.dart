@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:funky_new/Utils/colorUtils.dart';
+import 'package:get/get_utils/src/extensions/string_extensions.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
@@ -107,8 +109,7 @@ class _ChatScreenState extends BaseScreenState<ChatScreenBloc> {
           body: Column(
             children: [
               Expanded(
-                child: Stack(
-                    children: [
+                child: Stack(children: [
                   Container(
                       color: Colors.transparent,
                       child: RawScrollbar(
@@ -159,14 +160,15 @@ class _ChatScreenState extends BaseScreenState<ChatScreenBloc> {
                                               top: 3,
                                               bottom: 3),
                                           decoration: BoxDecoration(
-                                              color: Color(0xffd9e3f7),
+                                              color: HexColor(CommonColor.pinkFont),
                                               borderRadius: BorderRadius.all(
                                                   Radius.circular(11))),
                                           child: Text(
                                               _buildHeaderDate(
                                                   message.qbMessage.dateSent),
                                               style: TextStyle(
-                                                  color: Colors.black54,
+                                                  color: Colors.white,
+                                                  fontFamily: 'POPM',
                                                   fontSize: 13)),
                                         )
                                       ]),
@@ -191,30 +193,37 @@ class _ChatScreenState extends BaseScreenState<ChatScreenBloc> {
 
                                             List<PopupMenuItem>
                                                 messageMenuItems = [
-                                              PopupMenuItem(
+                                              const PopupMenuItem(
+                                                  value:
+                                                      FORWARD_MESSAGE_MENU_ITEM,
                                                   child: Text("Forward",
                                                       style: TextStyle(
+                                                          fontFamily: 'POPM',
+                                                          fontSize: 16,
                                                           color:
-                                                              Colors.black54)),
-                                                  value:
-                                                      FORWARD_MESSAGE_MENU_ITEM),
+                                                              Colors.white60))),
                                             ];
 
                                             List<PopupMenuItem>
                                                 ownMessageMenuItems = [
-                                              PopupMenuItem(
+                                              const PopupMenuItem(
+                                                  value:
+                                                      DELIVERED_TO_MENU_ITEM,
                                                   child: Text("Delivered to",
                                                       style: TextStyle(
+                                                          fontFamily: 'POPM',
+                                                          fontSize: 16,
+
                                                           color:
-                                                              Colors.black54)),
-                                                  value:
-                                                      DELIVERED_TO_MENU_ITEM),
-                                              PopupMenuItem(
+                                                              Colors.white60))),
+                                              const PopupMenuItem(
+                                                  value: VIEWED_BY_MENU_ITEM,
                                                   child: Text("Viewed by",
                                                       style: TextStyle(
+                                                          fontFamily: 'POPM',
+                                                          fontSize: 16,
                                                           color:
-                                                              Colors.black54)),
-                                                  value: VIEWED_BY_MENU_ITEM),
+                                                              Colors.white60))),
                                             ];
 
                                             if (!message.isIncoming) {
@@ -224,11 +233,12 @@ class _ChatScreenState extends BaseScreenState<ChatScreenBloc> {
                                             showMenu(
                                                     context: context,
                                                     shape: RoundedRectangleBorder(
+                                                      side: BorderSide(color: Colors.white60),
                                                         borderRadius:
                                                             BorderRadius.all(
                                                                 Radius.circular(
                                                                     15.0))),
-                                                    color: Colors.white,
+                                                    color: HexColor("#330417"),
                                                     position:
                                                         RelativeRect.fromRect(
                                                             tapPosition &
@@ -294,7 +304,10 @@ class _ChatScreenState extends BaseScreenState<ChatScreenBloc> {
               }
               if (state is ChatConnectingState ||
                   state is LoadMessagesInProgressState) {
-                return Progress(Alignment.center,color: HexColor(CommonColor.pinkFont),);
+                return Progress(
+                  Alignment.center,
+                  color: HexColor(CommonColor.pinkFont),
+                );
               } else {
                 return SizedBox.shrink();
               }
@@ -320,9 +333,8 @@ class _ChatScreenState extends BaseScreenState<ChatScreenBloc> {
                     HexColor("#FFFFFF"),
                   ],
                 ),
-                border: Border.all(color: Colors.white,width: 1),
-                borderRadius: BorderRadius.circular(33)
-            ),
+                border: Border.all(color: Colors.white, width: 1),
+                borderRadius: BorderRadius.circular(33)),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -332,7 +344,10 @@ class _ChatScreenState extends BaseScreenState<ChatScreenBloc> {
                   width: 50,
                   height: 50,
                   child: IconButton(
-                      icon: SvgPicture.asset('assets/icons/attachment.svg',color: Colors.white,),
+                      icon: SvgPicture.asset(
+                        'assets/icons/attachment.svg',
+                        color: Colors.white,
+                      ),
                       onPressed: () {
                         NotificationBarUtils.showSnackBarError(
                             context, "This feature is not available now");
@@ -358,12 +373,16 @@ class _ChatScreenState extends BaseScreenState<ChatScreenBloc> {
                       keyboardType: TextInputType.multiline,
                       minLines: 1,
                       maxLines: 4,
-                      style: TextStyle(fontSize: 15.0, color: Colors.white,fontFamily: 'PR'),
+                      style: TextStyle(
+                          fontSize: 14.0,
+                          color: Colors.white,
+                          fontFamily: 'PR'),
                       decoration: InputDecoration(
                           focusedBorder: UnderlineInputBorder(
                               borderSide:
                                   BorderSide(color: Colors.transparent)),
-                          hintStyle: TextStyle(color: Colors.white60,fontFamily: 'PR'),
+                          hintStyle: TextStyle(
+                              color: Colors.white60, fontFamily: 'POPR'),
                           hintText: "Send message..."),
                     ),
                   ),
@@ -372,7 +391,10 @@ class _ChatScreenState extends BaseScreenState<ChatScreenBloc> {
                   width: 50,
                   height: 50,
                   child: IconButton(
-                    icon: Icon(Icons.send,color: Colors.black,),
+                    icon: Icon(
+                      Icons.send,
+                      color: Colors.black,
+                    ),
                     onPressed: () {
                       TypingStatusManager.cancelTimer();
                       bloc?.events
@@ -403,7 +425,7 @@ class _ChatScreenState extends BaseScreenState<ChatScreenBloc> {
             builder: (_, state, __) {
               if (state is OpponentIsTypingState) {
                 return Container(
-                  color: Color(0xfff1f1f1),
+                  color: Color(0xff000000),
                   height: 35,
                   child: Row(
                       mainAxisSize: MainAxisSize.max,
@@ -414,7 +436,8 @@ class _ChatScreenState extends BaseScreenState<ChatScreenBloc> {
                         Text(_makeTypingStatus(state.typingNames),
                             style: TextStyle(
                                 fontSize: 13,
-                                color: Color(0xff6c7a92),
+                                fontFamily: 'POPR',
+                                color: Colors.white60,
                                 fontStyle: FontStyle.italic))
                       ]),
                 );
@@ -500,7 +523,8 @@ class _ChatScreenState extends BaseScreenState<ChatScreenBloc> {
                 child: SizedBox(
                     height: 15,
                     width: 15,
-                    child: Progress(Alignment.center, color: HexColor(CommonColor.pinkFont))),
+                    child: Progress(Alignment.center,
+                        color: HexColor(CommonColor.pinkFont))),
               );
             }
 
@@ -516,7 +540,8 @@ class _ChatScreenState extends BaseScreenState<ChatScreenBloc> {
                   //         ? _generateAvatarFromName(dialogName)
                   //         : null),
                   // SizedBox(width: 4),
-                  Text(dialogName, style: TextStyle(fontSize: 17,fontFamily: 'PM'))
+                  Text(dialogName.capitalize!,
+                      style: TextStyle(fontSize: 17, fontFamily: 'POPR'))
                 ],
               );
             }
@@ -529,7 +554,8 @@ class _ChatScreenState extends BaseScreenState<ChatScreenBloc> {
     bloc?.events?.add(LeaveChatScreenEvent());
     NotificationBarUtils.hideSnackBar(context);
     if (_isNewChat) {
-      NavigationService().pushReplacementNamed(DialogsScreenRoute);
+      Navigator.pop(context);
+      // NavigationService().pushReplacementNamed(DialogsScreenRoute);
     } else {
       Navigator.pop(context, DialogsScreen.FLAG_UPDATE);
     }
@@ -552,29 +578,34 @@ class _ChatScreenState extends BaseScreenState<ChatScreenBloc> {
               case QBChatDialogTypes.GROUP_CHAT:
                 menuItems = [
                   PopupMenuItem(
+                      value: CHAT_INFO_MENU_ITEM,
                       child: Text("Chat Info",
-                          style: TextStyle(color: Colors.black54)),
-                      value: CHAT_INFO_MENU_ITEM),
+                          style: TextStyle(
+                              color: Colors.white60, fontSize: 16,fontFamily: 'POPM'))),
                   PopupMenuItem(
+                      value: LEAVE_CHAT_MENU_ITEM,
                       child: Text("Leave Chat",
-                          style: TextStyle(color: Colors.black54)),
-                      value: LEAVE_CHAT_MENU_ITEM)
+                          style: TextStyle(
+                              color: Colors.white60, fontSize: 16, fontFamily: 'POPM')))
                 ];
                 break;
               case QBChatDialogTypes.CHAT:
                 menuItems = [
                   PopupMenuItem(
+                      value: DELETE_CHAT_MENU_ITEM,
                       child: Text("Delete Chat",
-                          style: TextStyle(color: Colors.black54)),
-                      value: DELETE_CHAT_MENU_ITEM)
+                          style: TextStyle(
+                              color: Colors.white60, fontSize: 16, fontFamily: 'POPM')))
                 ];
                 break;
               default:
                 menuItems = null;
             }
             Widget popupMenu = PopupMenuButton(
-                color: Colors.white,
+              padding: EdgeInsets.zero,
+                color: HexColor("#330417"),
                 shape: RoundedRectangleBorder(
+                    side: BorderSide(color: Colors.white60),
                     borderRadius: BorderRadius.all(Radius.circular(15.0))),
                 onSelected: (item) {
                   switch (item) {

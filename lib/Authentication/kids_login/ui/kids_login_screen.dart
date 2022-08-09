@@ -18,7 +18,7 @@ import '../../../chat_quickblox/bloc/login/login_screen_events.dart';
 import '../../../chat_quickblox/bloc/login/login_screen_states.dart';
 import '../../../chat_quickblox/bloc/stream_builder_with_listener.dart';
 import '../../../chat_quickblox/presentation/screens/base_screen_state.dart';
-import '../../../chat_quickblox/presentation/screens/login/login_text_field.dart';
+import '../../../chat_quickblox/presentation/screens/login/password_text_field.dart';
 import '../../../chat_quickblox/presentation/screens/login/user_name_text_field.dart';
 import '../../../chat_quickblox/presentation/utils/notification_utils.dart';
 import '../../../controller/controllers_class.dart';
@@ -60,14 +60,14 @@ class _KidsLoginScreenState extends BaseScreenState<LoginScreenBloc> {
   }
   LoginScreenBloc? loginBloc;
 
-  LoginTextField? _loginTextField;
+  passwordTextField? _loginTextField;
   UserNameTextField? _userNameTextField;
 
   @override
   Widget build(BuildContext context) {
     initBloc(context);
 
-    _loginTextField = LoginTextField(
+    _loginTextField = passwordTextField(
         txtController: _kids_loginScreenController.passwordController,
         loginBloc: bloc as LoginScreenBloc);
     _userNameTextField = UserNameTextField(

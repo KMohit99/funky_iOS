@@ -83,7 +83,8 @@ class NewsFeed_screen_controller extends GetxController {
 
     Map data = {
       'userId': id_user,
-      'postid': news_post_id,
+      // 'postid': news_post_id,
+      'nePostid': news_post_id,
       'type': news_post_id_type,
       'feedlikeStatus': news_post_feedlikeStatus
     };

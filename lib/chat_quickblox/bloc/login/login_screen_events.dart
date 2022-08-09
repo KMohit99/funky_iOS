@@ -6,10 +6,10 @@ abstract class LoginScreenEvents {}
 
 class LoginPressedEvent extends LoginScreenEvents {}
 
-class ChangedLoginFieldEvent extends LoginScreenEvents {
-  final String login;
+class ChangedEmailFieldEvent extends LoginScreenEvents {
+  final String email;
 
-  ChangedLoginFieldEvent(this.login);
+  ChangedEmailFieldEvent(this.email);
 }
 
 class ChangedUsernameFieldEvent extends LoginScreenEvents {

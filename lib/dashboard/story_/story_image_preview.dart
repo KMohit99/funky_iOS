@@ -250,12 +250,14 @@ class _Story_image_previewState extends State<Story_image_preview> {
         ? await http.MultipartFile.fromPath(
             'story_photo[]', widget.ImageFile.path)
         : await http.MultipartFile.fromPath(
-            'uploadVideo', widget.ImageFile.path));
+            'story_photo[]', widget.ImageFile.path));
     request.files.add(files);
     request.fields['userId'] = id_user;
     request.fields['title'] = title_controller.text;
     // request.fields['uploadVideo'] = '';
-    request.fields['isVideo'] = '';
+    request.fields['isVideo'] = (widget.isImage ? 'false' : 'true');
+
+    // request.fields['isVideo'] = '';
 
     //userId,tagLine,description,address,postImage,uploadVideo,isVideo
     // request.files.add(await http.MultipartFile.fromPath(
@@ -264,6 +266,8 @@ class _Story_image_previewState extends State<Story_image_preview> {
     var response = await request.send();
     var responsed = await http.Response.fromStream(response);
     final responseData = json.decode(responsed.body);
+    print("response.statusCode");
+    print(response.statusCode);
 
     if (response.statusCode == 200) {
       print("SUCCESS");

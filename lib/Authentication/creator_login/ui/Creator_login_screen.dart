@@ -13,7 +13,7 @@ import '../../../chat_quickblox/bloc/login/login_screen_events.dart';
 import '../../../chat_quickblox/bloc/login/login_screen_states.dart';
 import '../../../chat_quickblox/bloc/stream_builder_with_listener.dart';
 import '../../../chat_quickblox/presentation/screens/base_screen_state.dart';
-import '../../../chat_quickblox/presentation/screens/login/login_text_field.dart';
+import '../../../chat_quickblox/presentation/screens/login/password_text_field.dart';
 import '../../../chat_quickblox/presentation/screens/login/user_name_text_field.dart';
 import '../../../chat_quickblox/presentation/utils/notification_utils.dart';
 import '../../../dashboard/dashboard_screen.dart';
@@ -94,14 +94,14 @@ class _CreatorLoginScreenState extends BaseScreenState<LoginScreenBloc> {
 
   LoginScreenBloc? loginBloc;
 
-  LoginTextField? _loginTextField;
+  passwordTextField? _loginTextField;
   UserNameTextField? _userNameTextField;
 
   @override
   Widget build(BuildContext context) {
     initBloc(context);
 
-    _loginTextField = LoginTextField(
+    _loginTextField = passwordTextField(
         txtController: _loginScreenController.passwordController,
         loginBloc: bloc as LoginScreenBloc);
     _userNameTextField = UserNameTextField(
@@ -354,7 +354,7 @@ class _CreatorLoginScreenState extends BaseScreenState<LoginScreenBloc> {
                                       //     login_type: 'creator', context: context);
                                       //
                                       _loginScreenController.signInWithFacebook(
-                                          login_type: 'creator',
+                                          login_type: TxtUtils.Login_type_creator,
                                           context: context);
                                     },
                                   ),
@@ -382,7 +382,7 @@ class _CreatorLoginScreenState extends BaseScreenState<LoginScreenBloc> {
                                       // _loginAndGetData();
                                       Get.to(InstagramView(
                                         context: context,
-                                        login_type: 'Creator',
+                                        login_type: TxtUtils.Login_type_creator,
                                       ));
                                     },
                                   ),
@@ -411,7 +411,7 @@ class _CreatorLoginScreenState extends BaseScreenState<LoginScreenBloc> {
                                         await _loginScreenController
                                             .signInwithGoogle(
                                                 context: context,
-                                                login_type: 'Creator');
+                                                login_type: TxtUtils.Login_type_creator);
                                         // Get.to(Dashboard());
                                       } catch (e) {
                                         if (e is FirebaseAuthException) {
@@ -493,7 +493,7 @@ class _CreatorLoginScreenState extends BaseScreenState<LoginScreenBloc> {
     );
   }
 
-  LoginModel? loginModel;
+  // LoginModel? loginModel;
 
   Future checkLogin() async {
     print("Inside event");

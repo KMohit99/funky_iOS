@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:funky_new/homepage/ui/post_image_commet_scren.dart';
 import 'package:get/get.dart';
 
 // import 'package:funky_project/Utils/colorUtils.dart';
@@ -68,8 +69,7 @@ class _ImageWidgetState extends State<ImageWidget> {
     return Scaffold(
         backgroundColor: Colors.transparent,
         extendBodyBehindAppBar: true,
-        body:
-        GestureDetector(
+        body: GestureDetector(
           onDoubleTap: () async {
             setState(() {
               isLiked = true;
@@ -205,35 +205,63 @@ class _ImageWidgetState extends State<ImageWidget> {
                                       onPressed: () async {
                                         await homepageController
                                             .PostLikeUnlikeApi(
-                                                context: context,
-                                                post_id: widget.image_id,
-                                                post_id_type:
-                                                    (widget.image_like_status ==
-                                                            "true"
-                                                        ? 'unliked'
-                                                        : 'liked'),
-                                                post_likeStatus:
-                                                    (widget.image_like_status ==
-                                                            "true"
-                                                        ? 'false'
-                                                        : 'true'));
+                                            context: context,
+                                            post_id: widget.image_id,
+                                            post_id_type:
+                                            (widget.image_like_status ==
+                                                "true"
+                                                ? 'unliked'
+                                                : 'liked'),
+                                            post_likeStatus:
+                                            (widget.image_like_status ==
+                                                "true"
+                                                ? 'false'
+                                                : 'true'));
 
                                         if (homepageController
-                                                .postLikeUnlikeModel!.error ==
+                                            .postLikeUnlikeModel!.error ==
                                             false) {
                                           print(
                                               "mmmmm${widget.image_like_count}");
-                                            widget.image_like_count =
-                                                homepageController
-                                                    .postLikeUnlikeModel!
-                                                    .user![0]
-                                                    .likes!;
+                                          if(widget.image_like_status ==
+                                              "false"){
+                                            setState(() {
+                                              widget.image_like_status =
+                                              homepageController
+                                                  .postLikeUnlikeModel!
+                                                  .user![0]
+                                                  .likeStatus!;
 
-                                            widget.image_like_status =
-                                                homepageController
-                                                    .postLikeUnlikeModel!
-                                                    .user![0]
-                                                    .likeStatus!;
+                                              widget.image_like_count =
+                                              homepageController
+                                                  .postLikeUnlikeModel!
+                                                  .user![0]
+                                                  .likes!;
+                                            });
+                                          }else{
+                                            setState(() {
+                                              widget.image_like_status = 'false';
+
+                                              widget.image_like_count =
+                                              homepageController
+                                                  .postLikeUnlikeModel!
+                                                  .user![0]
+                                                  .likes!;
+                                            });
+                                          }
+                                          // setState(() {
+                                          //   widget.video_like_count =
+                                          //       homepageController
+                                          //           .postLikeUnlikeModel!
+                                          //           .user![0]
+                                          //           .likes!;
+                                          //
+                                          //   widget.video_like_status =
+                                          //       homepageController
+                                          //           .postLikeUnlikeModel!
+                                          //           .user![0]
+                                          //           .likeStatus!;
+                                          // });
                                           print(
                                               "mmmmm${widget.image_like_count}");
                                         }
@@ -258,9 +286,16 @@ class _ImageWidgetState extends State<ImageWidget> {
                                       scale: 3,
                                     ),
                                     onPressed: () {
-                                      setState(() {
-                                        // _myPage.jumpToPage(0);
-                                      });
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  PostImageCommentScreen(
+                                                    PostID: widget.image_id,
+                                                  )));
+                                      // setState(() {
+                                      //   // _myPage.jumpToPage(0);
+                                      // });
                                     },
                                   ),
                                   Container(
@@ -357,9 +392,9 @@ class _ImageWidgetState extends State<ImageWidget> {
                                           child: Container(
                                             height: 50,
                                             width: 50,
-                                            color: Colors.red,
                                             child: Image.network(
                                               "http://foxyserver.com/funky/images/${widget.ProfileUrl}",
+                                              fit: BoxFit.fill,
                                             ),
                                           ),
                                         )

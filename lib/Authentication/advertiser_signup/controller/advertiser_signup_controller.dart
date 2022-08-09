@@ -20,6 +20,7 @@ import '../../../Utils/App_utils.dart';
 import '../../../Utils/toaster_widget.dart';
 import '../../../chat/constants/firestore_constants.dart';
 import '../../../dashboard/dashboard_screen.dart';
+import '../../../sharePreference.dart';
 import '../../creator_login/controller/creator_login_controller.dart';
 import '../../creator_login/model/creator_loginModel.dart';
 import 'package:http/http.dart' as http;
@@ -166,40 +167,44 @@ class Advertiser_signup_controller extends GetxController {
         }else{
           CommonWidget().showToaster(msg: loginModel!.message!);
 
-          print(loginModel!.user![0].id);
-          print(loginModel!.user![0].id);
-          print(loginModel!.user![0].id);
-          final QuerySnapshot result = await firebaseFirestore
-              .collection(FirestoreConstants.pathUserCollection)
-              .where(FirestoreConstants.id, isEqualTo: loginModel!.user![0].id)
-              .get();
-          final List<DocumentSnapshot> documents = result.docs;
-          if (documents.isEmpty) {
-            // Writing data to server because here is a new user
-            firebaseFirestore
-                .collection(FirestoreConstants.pathUserCollection)
-                .doc(loginModel!.user![0].id)
-                .set({
-              FirestoreConstants.nickname: fullname_controller.text,
-              FirestoreConstants.photoUrl:
-              "https://foxytechnologies.com/funky/images/${imgFile!.path.split('/').last}",
-              FirestoreConstants.id: loginModel!.user![0].id,
-              'createdAt': DateTime.now().millisecondsSinceEpoch.toString(),
-              FirestoreConstants.chattingWith: null
-            });
+          // print(loginModel!.user![0].id);
+          // print(loginModel!.user![0].id);
+          // print(loginModel!.user![0].id);
+          // final QuerySnapshot result = await firebaseFirestore
+          //     .collection(FirestoreConstants.pathUserCollection)
+          //     .where(FirestoreConstants.id, isEqualTo: loginModel!.user![0].id)
+          //     .get();
+          // final List<DocumentSnapshot> documents = result.docs;
+          // if (documents.isEmpty) {
+          //   // Writing data to server because here is a new user
+          //   firebaseFirestore
+          //       .collection(FirestoreConstants.pathUserCollection)
+          //       .doc(loginModel!.user![0].id)
+          //       .set({
+          //     FirestoreConstants.nickname: fullname_controller.text,
+          //     FirestoreConstants.photoUrl:
+          //     "https://foxytechnologies.com/funky/images/${imgFile!.path.split('/').last}",
+          //     FirestoreConstants.id: loginModel!.user![0].id,
+          //     'createdAt': DateTime.now().millisecondsSinceEpoch.toString(),
+          //     FirestoreConstants.chattingWith: null
+          //   });
+          //   // Write data to local storage
+          //   // User? currentUser = firebaseUser;
+          //   SharedPreferences prefs = await SharedPreferences.getInstance();
+          //   await prefs.setString(
+          //       FirestoreConstants.id, loginModel!.user![0].id!);
+          //   await prefs.setString(
+          //       FirestoreConstants.nickname, fullname_controller.text ?? "");
+          //   await prefs.setString(
+          //       FirestoreConstants.photoUrl,
+          //       "https://foxytechnologies.com/funky/images/${imgFile!.path}" ??
+          //           "");
+          // }
+          await PreferenceManager()
+              .setPref(URLConstants.id, loginModel!.user![0].id!);
+          await PreferenceManager()
+              .setPref(URLConstants.type, loginModel!.user![0].type!);
 
-            // Write data to local storage
-            // User? currentUser = firebaseUser;
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            await prefs.setString(
-                FirestoreConstants.id, loginModel!.user![0].id!);
-            await prefs.setString(
-                FirestoreConstants.nickname, fullname_controller.text ?? "");
-            await prefs.setString(
-                FirestoreConstants.photoUrl,
-                "https://foxytechnologies.com/funky/images/${imgFile!.path}" ??
-                    "");
-          }
           await Get.to(Dashboard(page: 0));
         }
         // Get.to(Dashboard());

@@ -50,11 +50,11 @@ class LoginScreenBloc extends Bloc<LoginScreenEvents, LoginScreenStates, void> {
       states?.add(LoginInProgressState());
       _handleLogin();
     }
-    if (receivedEvent is ChangedLoginFieldEvent) {
+    if (receivedEvent is ChangedEmailFieldEvent) {
       print("inside password event");
 
-      _email = receivedEvent.login;
-      // _handleLoginField();
+      _email = receivedEvent.email;
+      _handleEmailField();
     }
     if (receivedEvent is ChangedUsernameFieldEvent) {
       _userName = receivedEvent.userName;
@@ -85,6 +85,16 @@ class LoginScreenBloc extends Bloc<LoginScreenEvents, LoginScreenStates, void> {
       states?.add(AllowLoginState());
     }
   }
+  void _handleEmailField() {
+    if (_validEmail()) {
+      states?.add(LoginFieldValidState());
+    } else {
+      states?.add(LoginFieldInvalidState());
+    }
+    if (_allowLogin()) {
+      states?.add(AllowLoginState());
+    }
+  }
 
   void _handleUserNameField() {
     if (_validUserName()) {
@@ -98,13 +108,24 @@ class LoginScreenBloc extends Bloc<LoginScreenEvents, LoginScreenStates, void> {
   }
 
   bool _allowLogin() {
-    return _validLogin() && _validUserName();
+    return _validLogin() || _validUserName()|| _validEmail();
   }
 
   bool _validLogin() {
     print("inside password validate");
 
     if (_password.isEmpty) {
+      print("inside _validLogin validate empty");
+      return false;
+    }
+    bool validLogin = true;
+    // bool validEmail = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(_email);
+    return validLogin;
+  }
+  bool _validEmail() {
+    print("inside password validate");
+
+    if (_email.isEmpty) {
       print("inside _validLogin validate empty");
       return false;
     }
@@ -125,7 +146,11 @@ class LoginScreenBloc extends Bloc<LoginScreenEvents, LoginScreenStates, void> {
   }
 
   void _loginQB() async {
-    _email = _loginScreenController.userInfoModel_email!.data![0].email!;
+    if(_loginScreenController.userInfoModel_email == null){
+      _email = _email.trim();
+    }else{
+      _email = _loginScreenController.userInfoModel_email!.data![0].email!;
+    }
     _userName = _userName.trim();
     try {
       print("inside login tryyy state");
@@ -144,7 +169,7 @@ class LoginScreenBloc extends Bloc<LoginScreenEvents, LoginScreenStates, void> {
         _storageRepository.saveUserId(qbLoginResult.qbUser!.id!);
         _storageRepository.saveUserLogin(_email);
         _storageRepository.saveUserFullName(_userName);
-        _storageRepository.saveUserPassword(_password);
+        _storageRepository.saveUserPassword(DEFAULT_USER_PASSWORD);
 
         if (qbLoginResult.qbUser!.fullName != _userName) {
           _updateUser();

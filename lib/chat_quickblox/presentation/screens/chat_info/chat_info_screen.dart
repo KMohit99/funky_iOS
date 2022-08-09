@@ -169,7 +169,7 @@ class _ChatInfoScreenState extends BaseScreenState<ChatInfoScreenBloc> {
                   Text(
                     dialogName.capitalize!,
                     style: TextStyle(
-                        fontFamily: "PM", fontSize: 18, color: Colors.white),
+                        fontFamily: "POPM", fontSize: 18, color: Colors.white),
                   ),
                   SizedBox(
                     height: 2,
@@ -188,7 +188,7 @@ class _ChatInfoScreenState extends BaseScreenState<ChatInfoScreenBloc> {
     String subtitle = number.toString() + " member" + (number != 1 ? "s" : "");
     return Text(
       '$subtitle',
-      style: TextStyle(fontFamily: "PM", fontSize: 13, color: Colors.white60),
+      style: TextStyle(fontFamily: "POPM", fontSize: 13, color: Colors.white60),
     );
   }
 }

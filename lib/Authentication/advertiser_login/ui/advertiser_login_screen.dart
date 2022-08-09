@@ -12,7 +12,7 @@ import '../../../chat_quickblox/bloc/login/login_screen_events.dart';
 import '../../../chat_quickblox/bloc/login/login_screen_states.dart';
 import '../../../chat_quickblox/bloc/stream_builder_with_listener.dart';
 import '../../../chat_quickblox/presentation/screens/base_screen_state.dart';
-import '../../../chat_quickblox/presentation/screens/login/login_text_field.dart';
+import '../../../chat_quickblox/presentation/screens/login/password_text_field.dart';
 import '../../../chat_quickblox/presentation/screens/login/user_name_text_field.dart';
 import '../../../chat_quickblox/presentation/utils/notification_utils.dart';
 import '../../../custom_widget/common_buttons.dart';
@@ -49,7 +49,7 @@ class _AdvertiserLoginScreenState extends BaseScreenState<LoginScreenBloc> {
   }
   LoginScreenBloc? loginBloc;
 
-  LoginTextField? _loginTextField;
+  passwordTextField? _loginTextField;
   UserNameTextField? _userNameTextField;
 
 
@@ -57,7 +57,7 @@ class _AdvertiserLoginScreenState extends BaseScreenState<LoginScreenBloc> {
   Widget build(BuildContext context) {
     initBloc(context);
 
-    _loginTextField = LoginTextField(
+    _loginTextField = passwordTextField(
         txtController: _advertiser_login_screen_controller.passwordController,
         loginBloc: bloc as LoginScreenBloc);
     _userNameTextField = UserNameTextField(
@@ -177,16 +177,16 @@ class _AdvertiserLoginScreenState extends BaseScreenState<LoginScreenBloc> {
                         SizedBox(
                           height: 22,
                         ),
-                        common_button(
-                          onTap: () {
-                            _advertiser_login_screen_controller.checkLogin(
-                                context: context,
-                                login_type: TxtUtils.Login_type_advertiser);
-                          },
-                          backgroud_color: Colors.black,
-                          lable_text: 'Login',
-                          lable_text_color: Colors.white,
-                        ),
+                        // common_button(
+                        //   onTap: () {
+                        //     _advertiser_login_screen_controller.checkLogin(
+                        //         context: context,
+                        //         login_type: TxtUtils.Login_type_advertiser);
+                        //   },
+                        //   backgroud_color: Colors.black,
+                        //   lable_text: 'Login',
+                        //   lable_text_color: Colors.white,
+                        // ),
                         Container(
                             child: StreamBuilderWithListener<LoginScreenStates>(
                               stream:
@@ -289,7 +289,7 @@ class _AdvertiserLoginScreenState extends BaseScreenState<LoginScreenBloc> {
                                     ),
                                     onPressed: () {
                                       _creator_login_screen_controller.signInWithFacebook(
-                                          login_type: 'creator', context: context);
+                                          login_type: TxtUtils.Login_type_advertiser, context: context);
                                     },
                                   ),
                                 ),
@@ -313,7 +313,7 @@ class _AdvertiserLoginScreenState extends BaseScreenState<LoginScreenBloc> {
                                       width: 32,
                                     ),
                                     onPressed: () {
-                                      Get.to(InstagramView(context: context,login_type: 'Advertiser',));
+                                      Get.to(InstagramView(context: context, login_type: TxtUtils.Login_type_advertiser,));
                                     },
                                   ),
                                 ),
@@ -341,7 +341,7 @@ class _AdvertiserLoginScreenState extends BaseScreenState<LoginScreenBloc> {
                                         await _creator_login_screen_controller
                                             .signInwithGoogle(
                                                 context: context,
-                                                login_type: 'Advertiser');
+                                                login_type: TxtUtils.Login_type_advertiser);
                                         // Get.to(Dashboard());
                                       } catch (e) {
                                         if (e is FirebaseAuthException) {

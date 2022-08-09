@@ -221,17 +221,18 @@ class _SearchScreenState extends State<SearchScreen> {
                                           .data![index]
                                           .profileUrl!
                                           .isNotEmpty
-                                      ? FadeInImage.assetNetwork(
-                                          height: 80,
-                                          width: 80,
-                                          fit: BoxFit.cover,
-                                          placeholder:
-                                              'assets/images/Funky_App_Icon.png',
-                                          image: _search_screen_controller
-                                              .searchlistModel!
-                                              .data![index]
-                                              .profileUrl!,
-                                        )
+                                      ? Image.asset('assets/images/Funky_App_Icon.png')
+                                  // FadeInImage.assetNetwork(
+                                  //         height: 80,
+                                  //         width: 80,
+                                  //         fit: BoxFit.cover,
+                                  //         placeholder:
+                                  //             'assets/images/Funky_App_Icon.png',
+                                  //         image: _search_screen_controller
+                                  //             .searchlistModel!
+                                  //             .data![index]
+                                  //             .profileUrl!,
+                                  //       )
                                       :
                                       // Container(
                                       //   height: 50,

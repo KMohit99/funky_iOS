@@ -56,7 +56,6 @@ class password_reset_controller extends GetxController {
       // print(loginModel);
       if(Forgot_passwordModel!.error == false){
         CommonWidget().showToaster(msg: 'Enter Otp');
-
       }
       else{
         print('Please try again');

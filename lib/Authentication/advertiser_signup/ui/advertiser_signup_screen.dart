@@ -15,8 +15,17 @@ import 'package:http/http.dart' as http;
 
 import '../../../Utils/App_utils.dart';
 import '../../../Utils/asset_utils.dart';
+import '../../../Utils/colorUtils.dart';
 import '../../../Utils/custom_textfeild.dart';
 import '../../../Utils/toaster_widget.dart';
+import '../../../chat_quickblox/bloc/login/login_screen_bloc.dart';
+import '../../../chat_quickblox/bloc/login/login_screen_events.dart';
+import '../../../chat_quickblox/bloc/login/login_screen_states.dart';
+import '../../../chat_quickblox/bloc/stream_builder_with_listener.dart';
+import '../../../chat_quickblox/presentation/screens/base_screen_state.dart';
+import '../../../chat_quickblox/presentation/screens/login/email_text_feild.dart';
+import '../../../chat_quickblox/presentation/screens/login/user_name_text_field.dart';
+import '../../../chat_quickblox/presentation/utils/notification_utils.dart';
 import '../../../custom_widget/common_buttons.dart';
 import '../../creator_login/model/creator_loginModel.dart';
 import '../../creator_signup/controller/creator_signup_controller.dart';
@@ -28,10 +37,10 @@ class AdvertiserSignUpScreen extends StatefulWidget {
   const AdvertiserSignUpScreen({Key? key}) : super(key: key);
 
   @override
-  State<AdvertiserSignUpScreen> createState() => _AdvertiserSignUpScreenState();
+  _AdvertiserSignUpScreenState createState() => _AdvertiserSignUpScreenState();
 }
 
-class _AdvertiserSignUpScreenState extends State<AdvertiserSignUpScreen> {
+class _AdvertiserSignUpScreenState extends BaseScreenState<LoginScreenBloc> {
   final Advertiser_signup_controller _advertiser_signup_controller = Get.put(
       Advertiser_signup_controller(),
       tag: Advertiser_signup_controller().toString());
@@ -100,8 +109,22 @@ class _AdvertiserSignUpScreenState extends State<AdvertiserSignUpScreen> {
   // Uint8List bytes = BASE64.decode(_base64);
   // Image.memory(bytes),
 
+  LoginScreenBloc? loginBloc;
+
+  EmailTextFeild? _emailTextFeild;
+  UserNameTextField? _userNameTextField;
+
   @override
   Widget build(BuildContext context) {
+    initBloc(context);
+
+    _emailTextFeild = EmailTextFeild(
+        txtController: _creator_signup_controller.email_controller,
+        loginBloc: bloc as LoginScreenBloc);
+    _userNameTextField = UserNameTextField(
+        txtController: _creator_signup_controller.username_controller,
+        loginBloc: bloc as LoginScreenBloc);
+
     final screenwidth = MediaQuery.of(context).size.width;
     final screenheight = MediaQuery.of(context).size.height;
     return GetBuilder<Advertiser_signup_controller>(
@@ -232,23 +255,26 @@ class _AdvertiserSignUpScreenState extends State<AdvertiserSignUpScreen> {
                       SizedBox(
                         height: 12,
                       ),
-                      CommonTextFormField(
-                        title: TxtUtils.UserName,
-                        controller:
-                            _advertiser_signup_controller.username_controller,
-                        labelText: "Enter username",
-                        image_path: AssetUtils.human_icon,
-                        onChanged: (value) {
-                          value = _advertiser_signup_controller
-                              .username_controller.text;
-                          CheckUserName(context);
-                          setState(() {});
-                        },
-                        // errorText: checkUserModel!.message,
-                        tap: () {
-                          CheckUserName(context);
-                        },
+                      Container(
+                        child: this._userNameTextField,
                       ),
+                      // CommonTextFormField(
+                      //   title: TxtUtils.UserName,
+                      //   controller:
+                      //       _advertiser_signup_controller.username_controller,
+                      //   labelText: "Enter username",
+                      //   image_path: AssetUtils.human_icon,
+                      //   onChanged: (value) {
+                      //     value = _advertiser_signup_controller
+                      //         .username_controller.text;
+                      //     CheckUserName(context);
+                      //     setState(() {});
+                      //   },
+                      //   // errorText: checkUserModel!.message,
+                      //   tap: () {
+                      //     CheckUserName(context);
+                      //   },
+                      // ),
                       (username_error == false
                           ? Container(
                         margin: const EdgeInsets.symmetric(
@@ -267,23 +293,26 @@ class _AdvertiserSignUpScreenState extends State<AdvertiserSignUpScreen> {
                       SizedBox(
                         height: 12,
                       ),
-                      CommonTextFormField(
-                        title: TxtUtils.Email,
-                        controller:
-                            _advertiser_signup_controller.email_controller,
-                        labelText: "Enter Email",
-                        image_path: AssetUtils.msg_icon,
-                        onChanged: (value) {
-                          value = _advertiser_signup_controller
-                              .email_controller.text;
-                          CheckEmailName(context);
-                          setState(() {});
-                        },
-                        // errorText: checkUserModel!.message,
-                        tap: () {
-                          CheckEmailName(context);
-                        },
+                      Container(
+                        child: this._emailTextFeild,
                       ),
+                      // CommonTextFormField(
+                      //   title: TxtUtils.Email,
+                      //   controller:
+                      //       _advertiser_signup_controller.email_controller,
+                      //   labelText: "Enter Email",
+                      //   image_path: AssetUtils.msg_icon,
+                      //   onChanged: (value) {
+                      //     value = _advertiser_signup_controller
+                      //         .email_controller.text;
+                      //     CheckEmailName(context);
+                      //     setState(() {});
+                      //   },
+                      //   // errorText: checkUserModel!.message,
+                      //   tap: () {
+                      //     CheckEmailName(context);
+                      //   },
+                      // ),
                       (email_error == false
                           ? Container(
                         margin: const EdgeInsets.symmetric(
@@ -1492,28 +1521,90 @@ class _AdvertiserSignUpScreenState extends State<AdvertiserSignUpScreen> {
                       SizedBox(
                         height: 10,
                       ),
-                      common_button(
-                        onTap: () {
-                          if(username_error == true &&
-                              email_error == true &&
-                              phone_error == true){
-                                if (_advertiser_signup_controller
-                                    .phone_controller.text.length <
-                                    10) {
-                                      CommonWidget().showErrorToaster(
-                                          msg: "Enter valid number");
-                                      return;
-                                }
+                      // common_button(
+                      //   onTap: () {
+                      //     if(username_error == true &&
+                      //         email_error == true &&
+                      //         phone_error == true){
+                      //           if (_advertiser_signup_controller
+                      //               .phone_controller.text.length <
+                      //               10) {
+                      //                 CommonWidget().showErrorToaster(
+                      //                     msg: "Enter valid number");
+                      //                 return;
+                      //           }
+                      //           _advertiser_signup_controller.AdvertisorsendOtp(
+                      //               context);
+                      //     }
+                      //
+                      //     // Get.toNamed(BindingUtils.signupOption);
+                      //   },
+                      //   backgroud_color: Colors.black,
+                      //   lable_text: 'Next',
+                      //   lable_text_color: Colors.white,
+                      // ),
+                      Container(
+                          child: StreamBuilderWithListener<LoginScreenStates>(
+                            stream:
+                            bloc?.states?.stream as Stream<LoginScreenStates>,
+                            listener: (state) {
+                              if (state is LoginSuccessState) {
+                                print("Login succesfullllllll");
                                 _advertiser_signup_controller.AdvertisorsendOtp(
                                     context);
-                          }
+                                // Navigator.pushReplacement(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (context) =>
+                                //             Dashboard(page: 0)));
+                                // NavigationService()
+                                //     .pushReplacementNamed(DialogsScreenRoute);
+                              }
+                              if (state is LoginErrorState) {
+                                print("Login failed");
 
-                          // Get.toNamed(BindingUtils.signupOption);
-                        },
-                        backgroud_color: Colors.black,
-                        lable_text: 'Next',
-                        lable_text_color: Colors.white,
-                      ),
+                                NotificationBarUtils.showSnackBarError(
+                                    this.context, state.error);
+                              }
+                            },
+                            builder: (context, state) {
+                              if (state.data is LoginInProgressState) {
+                                return CircularProgressIndicator(color: HexColor(CommonColor.pinkFont),);
+                              }
+                              return GestureDetector(
+                                  onTap: () async {
+                                    print('inside login');
+                                    // await _loginScreenController.checkLogin(
+                                    //     context: context,
+                                    //     login_type: TxtUtils.Login_type_creator);
+                                    // await checkLogin();
+
+                                    bloc?.events?.add(LoginPressedEvent());
+
+                                  },
+                                  child: Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 30),
+                                    // height: 45,
+                                    // width:(width ?? 300) ,
+                                    decoration: BoxDecoration(
+                                        color: Colors.black,
+                                        borderRadius: BorderRadius.circular(25)),
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      margin: EdgeInsets.symmetric(
+                                        vertical: 12,
+                                      ),
+                                      child: Text(
+                                        'Next',
+                                        style: TextStyle(
+                                            fontSize: 17, color: Colors.white),
+                                      ),
+                                    ),
+                                  ));
+                            },
+                          )),
+
                       SizedBox(
                         height: 20,
                       ),

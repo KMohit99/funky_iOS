@@ -42,65 +42,47 @@ class _DialogsListItemState extends State<DialogsListItem> {
     }
 
     return Container(
-        height: 60,
-        color: Color(0x00FFFFFF),
-        child: Container(
-          padding: EdgeInsets.only(left: 15, right: 11),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                width: 50,
-                height: 50,
-                alignment: Alignment.centerLeft,
-                margin: EdgeInsets.only(top: 12),
-                child: CircleAvatar(
-                  radius: 200,
-                  backgroundColor: Color(ColorUtil.getColor(_dialog.name)),
-                  child: Text(
-                    _buildAvatarSymbol(),
-                    style: TextStyle(color: Colors.white, fontFamily: "PB"),
-                  ),
-                ),
-              ),
-              Container(padding: EdgeInsets.only(left: 9)),
-              Expanded(
-                  child: Container(
-                padding: EdgeInsets.only(top: 12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      _formatString(_dialog.name!),
-                      style: const TextStyle(
-                          fontSize: 15,
-                          color: Colors.white,
-                          fontFamily: 'PB',
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Padding(padding: EdgeInsets.only(top: 2)),
-                    Text(
-                        _dialog.lastMessage != null
-                            ? _formatString(_dialog.lastMessage!)
-                            : "",
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: HexColor("#747474"),
-                            fontFamily: 'PR'),
-                        overflow: TextOverflow.ellipsis),
-                    Padding(
-                      padding: EdgeInsets.only(top: 1),
-                    ),
-                  ],
-                ),
-              )),
-              Container(
-                  width: 85,
-                  child: _deleteState ? buildCheckboxItem() : buildChatItem())
-            ],
+      padding: EdgeInsets.only(left:0, right:0),
+      child: ListTile(
+        visualDensity: VisualDensity(horizontal: -4),
+        leading: Container(
+          width: 50,
+          height: 50,
+          alignment: Alignment.centerLeft,
+          margin: EdgeInsets.only(top: 0,right: 5),
+          child: CircleAvatar(
+            radius: 200,
+            backgroundColor: Color(ColorUtil.getColor(_dialog.name)),
+            child: Text(
+              _buildAvatarSymbol(),
+              style: TextStyle(color: Colors.white, fontFamily: "POPB"),
+            ),
           ),
-        ));
+        ),
+        title: Text(
+          _formatString(_dialog.name!),
+          style: const TextStyle(
+            fontSize: 15,
+            color: Colors.white,
+            fontFamily: 'POPM',
+          ),
+          overflow: TextOverflow.ellipsis,
+        ),
+        subtitle:  Text(
+            _dialog.lastMessage != null
+                ? _formatString(_dialog.lastMessage!)
+                : "",
+            style: TextStyle(
+                fontSize: 12,
+                color: HexColor("#747474"),
+                fontFamily: 'POPM'),
+            overflow: TextOverflow.ellipsis),
+        trailing:   Container(
+
+            width: 85,
+            child: _deleteState ? buildCheckboxItem() : buildChatItem()),
+      ),
+    );
   }
 
   String _buildAvatarSymbol() {

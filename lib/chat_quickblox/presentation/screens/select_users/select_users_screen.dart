@@ -106,52 +106,55 @@ class _SelectUsersScreenState extends BaseScreenState<SelectUsersScreenBloc> {
                   return SizedBox.shrink();
                 },
               ),
-              Column(
-                  children: [
+              Column(children: [
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 15),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(33),
-                    border: Border.all(color: Colors.white60,width: 1)
-                  ),
+                      borderRadius: BorderRadius.circular(33),
+                      border: Border.all(color: Colors.white60, width: 1)),
                   child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                    Container(
-                        padding: EdgeInsets.only(left: 12, right: 10),
-                        child: SizedBox(
-                            child: SvgPicture.asset('assets/icons/search.svg',color: Colors.pink,),
-                            height: 28,
-                            width: 28)),
-                    Expanded(
-                        child: TextFormField(
-                      keyboardType: TextInputType.text,
-                      maxLines: 1,
-                      minLines: 1,
-                      maxLength: 25,
-                      onChanged: (text) {
-                        if (text.length >= 3) {
-                          _search = true;
-                          _searchDelay.run(
-                              () => bloc?.events?.add(SearchUsersEvent(text)));
-                        }
+                        Container(
+                            padding: EdgeInsets.only(left: 12, right: 10),
+                            child: SizedBox(
+                                child: SvgPicture.asset(
+                                  'assets/icons/search.svg',
+                                  color: Colors.pink,
+                                ),
+                                height: 28,
+                                width: 28)),
+                        Expanded(
+                            child: TextFormField(
+                          keyboardType: TextInputType.text,
+                          maxLines: 1,
+                          minLines: 1,
+                          maxLength: 25,
+                          onChanged: (text) {
+                            if (text.length >= 3) {
+                              _search = true;
+                              _searchDelay.run(() =>
+                                  bloc?.events?.add(SearchUsersEvent(text)));
+                            }
 
-                        if (text.length == 0) {
-                          _search = false;
-                          bloc?.events?.add(LoadUsersEvent());
-                        }
-                      },
-                      decoration: const InputDecoration(
-                          focusedBorder: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          errorBorder: InputBorder.none,
-                          disabledBorder: InputBorder.none,
-                          hintText: "Search",
-                          hintStyle:
-                              TextStyle(fontSize: 15, color: Color(0xFF6C7A92)),
-                          counterText: ""),
-                    ))
-                  ]),
+                            if (text.length == 0) {
+                              _search = false;
+                              bloc?.events?.add(LoadUsersEvent());
+                            }
+                          },
+                          style:
+                              TextStyle(fontSize: 15, fontFamily: 'PM',color: Color(0xFFFFFFFF)),
+                          decoration: const InputDecoration(
+                              focusedBorder: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              disabledBorder: InputBorder.none,
+                              hintText: "Search",
+                              hintStyle: TextStyle(
+                                  fontSize: 15, color: Color(0xFF6C7A92)),
+                              counterText: ""),
+                        ))
+                      ]),
                 ),
                 Expanded(
                     child: RawScrollbar(

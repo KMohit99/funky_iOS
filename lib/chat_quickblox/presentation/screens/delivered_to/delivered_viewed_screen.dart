@@ -48,6 +48,7 @@ class _DeliveredViewedScreenState extends BaseScreenState<DeliveredViewedScreenB
     bloc?.events?.add(MessageDetailsEvent());
 
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: DecoratedAppBar(appBar: _buildAppBar()),
       body: StreamProvider<DeliveredViewedScreenStates>(
         create: (context) => bloc?.states?.stream as Stream<DeliveredViewedScreenStates>,
@@ -102,12 +103,13 @@ class _DeliveredViewedScreenState extends BaseScreenState<DeliveredViewedScreenB
   }
 
   AppBar _buildAppBar() {
+
     String title = "Message" + (_isDeliveredScreen ? " delivered to" : " viewed by");
     return AppBar(
       centerTitle: true,
-      backgroundColor: Color(0xff3978fc),
+      backgroundColor: Color(0xff000000),
       leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
+          icon: Icon(Icons.arrow_back),
           onPressed: () {
             NotificationBarUtils.hideSnackBar(context);
             bloc?.events?.add(MessageDetailCloseEvent());
@@ -116,7 +118,7 @@ class _DeliveredViewedScreenState extends BaseScreenState<DeliveredViewedScreenB
       actions: <Widget>[Text("")],
       title: Column(
         children: <Widget>[
-          Text(title, style: TextStyle(fontSize: 17)),
+          Text(title, style: TextStyle(fontSize: 16,fontFamily: 'POPM',)),
           _buildMembersCountSubtitle()
         ],
       ),
@@ -139,7 +141,7 @@ class _DeliveredViewedScreenState extends BaseScreenState<DeliveredViewedScreenB
             subtitle = number.toString() + " member" + (number != 1 ? "s" : "");
           }
           return Text('$subtitle',
-              style: TextStyle(fontSize: 13, color: Colors.white60, fontWeight: FontWeight.normal));
+              style: TextStyle(fontSize: 13, color: Colors.white60, fontFamily: "POPM"));
         },
       ),
     );

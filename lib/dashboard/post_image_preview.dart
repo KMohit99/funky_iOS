@@ -4,6 +4,7 @@ import 'dart:io' as Io;
 
 import 'package:flutter/material.dart';
 import 'package:funky_new/custom_widget/page_loader.dart';
+import 'package:funky_new/dashboard/dashboard_screen.dart';
 import 'package:funky_new/profile_screen/profile_screen.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -390,7 +391,7 @@ class _PostImagePreviewScreenState extends State<PostImagePreviewScreen> {
       print(widget.ImageFile.path);
       print(responseData);
       hideLoader(context);
-      await Get.to(Profile_Screen());
+      await Get.to(Dashboard(page: 3));
     } else {
       print("ERROR");
     }

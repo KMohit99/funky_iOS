@@ -112,7 +112,7 @@ class _UserNameTextFieldState extends State<UserNameTextField> {
                 suffixIcon: Container(
                   child: IconButton(
                     icon: Image.asset(
-                      AssetUtils.msg_icon,
+                      AssetUtils.human_icon,
                       color: Colors.black,
                       height: 20,
                       width: 20,
