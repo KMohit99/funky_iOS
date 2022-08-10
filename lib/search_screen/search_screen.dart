@@ -11,12 +11,18 @@ import 'package:funky_new/search_screen/search_screen_user_profile.dart';
 // import 'package:funky_project/search_screen/search_screen_user_profile.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:provider/provider.dart';
+import 'package:quickblox_sdk/models/qb_dialog.dart';
 
 import '../Utils/App_utils.dart';
 import '../Utils/asset_utils.dart';
 import '../Utils/colorUtils.dart';
 import '../Utils/custom_appbar.dart';
 import '../Utils/custom_textfeild.dart';
+import '../chat_quickblox/bloc/dialogs/dialogs_screen_bloc.dart';
+import '../chat_quickblox/bloc/dialogs/dialogs_screen_events.dart';
+import '../chat_quickblox/bloc/dialogs/dialogs_screen_states.dart';
+import '../chat_quickblox/presentation/screens/base_screen_state.dart';
 import '../drawerScreen.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -25,10 +31,10 @@ class SearchScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<SearchScreen> createState() => _SearchScreenState();
+  _SearchScreenState createState() => _SearchScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen> {
+class _SearchScreenState extends BaseScreenState<DialogsScreenBloc> {
   List image_list = [
     AssetUtils.image1,
     AssetUtils.image2,
@@ -42,6 +48,8 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   void initState() {
+    bloc?.events?.add(ModeDeleteChatsEvent());
+
     super.initState();
   }
 
@@ -56,6 +64,8 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    initBloc(context);
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
@@ -182,110 +192,158 @@ class _SearchScreenState extends State<SearchScreen> {
                   ? (_search_screen_controller.searchlistModel == null
                       ? const SizedBox.shrink()
                       : Expanded(
-                          child: ListView.builder(
-                          padding: const EdgeInsets.all(0),
-                          shrinkWrap: true,
-                          itemCount: _search_screen_controller
-                              .searchlistModel!.data!.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return ListTile(
-                              onTap: () {
-                                String id = _search_screen_controller
-                                    .searchlistModel!.data![index].id!;
-                                print("id $id");
+                          child: StreamProvider<DialogsScreenStates>(
+                          create: (context) => bloc?.states?.stream
+                              as Stream<DialogsScreenStates>,
+                          initialData: ChatConnectingState(),
+                          child: Selector<DialogsScreenStates,
+                              DialogsScreenStates>(
+                            selector: (_, state) => state,
+                            shouldRebuild: (previous, next) {
+                              return next is UpdateChatsSuccessState;
+                            },
+                            builder: (_, state, __) {
+                              if (state is UpdateChatsSuccessState) {
+                                List<QBDialog?> dialogs = state.dialogs;
+                                return ListView.builder(
+                                  padding: const EdgeInsets.all(0),
+                                  shrinkWrap: true,
+                                  itemCount: _search_screen_controller
+                                      .searchlistModel!.data!.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return ListTile(
+                                      onTap: () {
+                                        String id = _search_screen_controller
+                                            .searchlistModel!.data![index].id!;
+                                        String username =
+                                            _search_screen_controller
+                                                .searchlistModel!
+                                                .data![index]
+                                                .userName!;
 
-                                Data_searchApi last_out =
-                                    _search_screen_controller
-                                        .searchlistModel!.data!
-                                        .firstWhere(
-                                            (element) => element.id == id);
-                                Data_searchApi blahh = last_out;
+                                        print("id $id");
 
-                                print("blahhh id ${blahh.id}");
+                                        Data_searchApi last_out =
+                                            _search_screen_controller
+                                                .searchlistModel!.data!
+                                                .firstWhere((element) =>
+                                                    element.id == id);
+                                        Data_searchApi blahh = last_out;
 
-                                print(_search_screen_controller
-                                    .searchlistModel!.data![index].id);
-                                Get.to(SearchUserProfile(
-                                  // UserId: _search_screen_controller
-                                  //     .searchlistModel!.data![index].id!,
-                                  search_user_data: blahh,
-                                ));
-                              },
-                              leading: Container(
-                                height: 50,
-                                width: 50,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(50),
-                                  child: (_search_screen_controller
-                                          .searchlistModel!
-                                          .data![index]
-                                          .profileUrl!
-                                          .isNotEmpty
-                                      ? Image.asset('assets/images/Funky_App_Icon.png')
-                                  // FadeInImage.assetNetwork(
-                                  //         height: 80,
-                                  //         width: 80,
-                                  //         fit: BoxFit.cover,
-                                  //         placeholder:
-                                  //             'assets/images/Funky_App_Icon.png',
-                                  //         image: _search_screen_controller
-                                  //             .searchlistModel!
-                                  //             .data![index]
-                                  //             .profileUrl!,
-                                  //       )
-                                      :
-                                      // Container(
-                                      //   height: 50,
-                                      //   width: 50,
-                                      //   child: ClipRRect(
-                                      //     borderRadius: BorderRadius.circular(50),
-                                      //     child: Image.network(
-                                      //       _search_screen_controller
-                                      //           .searchlistModel!
-                                      //           .data![index]
-                                      //           .profileUrl!, fit: BoxFit.fill,),
-                                      //   ),
-                                      // )
-                                      (_search_screen_controller
-                                              .searchlistModel!
-                                              .data![index]
-                                              .image!
-                                              .isNotEmpty
-                                          ? FadeInImage.assetNetwork(
-                                              height: 80,
-                                              width: 80,
-                                              fit: BoxFit.cover,
-                                              image:
-                                                  "${URLConstants.base_data_url}images/${_search_screen_controller.searchlistModel!.data![index].image!}",
-                                              placeholder:
-                                                  'assets/images/Funky_App_Icon.png',
-                                            )
-                                          : Container(
-                                              height: 50,
-                                              width: 50,
-                                              child: IconButton(
-                                                icon: Image.asset(
-                                                  AssetUtils.user_icon3,
-                                                  fit: BoxFit.fill,
-                                                ),
-                                                onPressed: () {},
-                                              )))),
-                                ),
-                              ),
-                              title: Text(
-                                _search_screen_controller
-                                    .searchlistModel!.data![index].fullName!,
-                                style: const TextStyle(
-                                    color: Colors.white, fontFamily: 'PR'),
-                              ),
-                              subtitle: Text(
-                                _search_screen_controller
-                                    .searchlistModel!.data![index].userName!,
-                                style: const TextStyle(
-                                    color: Colors.grey, fontFamily: 'PR'),
-                              ),
-                            );
-                          },
+                                        QBDialog? qb_user = dialogs.firstWhere(
+                                            (element) =>
+                                                element!.name == username);
+                                        if(qb_user == null){
+                                          print("no data found");
+                                        }else
+                                        {
+                                          print(
+                                              "quickblox username ${qb_user.name}");
+                                          print("quickblox id ${qb_user.id}");
+                                        }
+                                        print("blahhh id ${blahh.id}");
+
+                                        print(_search_screen_controller
+                                            .searchlistModel!.data![index].id);
+
+                                        print(dialogs);
+                                        Get.to(SearchUserProfile(
+                                          quickBlox_id: qb_user!.id!,
+                                          // UserId: _search_screen_controller
+                                          //     .searchlistModel!.data![index].id!,
+                                          search_user_data: blahh,
+                                        ));
+                                      },
+                                      leading: Container(
+                                        height: 50,
+                                        width: 50,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(50),
+                                          child: (_search_screen_controller
+                                                  .searchlistModel!
+                                                  .data![index]
+                                                  .profileUrl!
+                                                  .isNotEmpty
+                                              ? Image.asset(
+                                                  'assets/images/Funky_App_Icon.png')
+                                              // FadeInImage.assetNetwork(
+                                              //         height: 80,
+                                              //         width: 80,
+                                              //         fit: BoxFit.cover,
+                                              //         placeholder:
+                                              //             'assets/images/Funky_App_Icon.png',
+                                              //         image: _search_screen_controller
+                                              //             .searchlistModel!
+                                              //             .data![index]
+                                              //             .profileUrl!,
+                                              //       )
+                                              :
+                                              // Container(
+                                              //   height: 50,
+                                              //   width: 50,
+                                              //   child: ClipRRect(
+                                              //     borderRadius: BorderRadius.circular(50),
+                                              //     child: Image.network(
+                                              //       _search_screen_controller
+                                              //           .searchlistModel!
+                                              //           .data![index]
+                                              //           .profileUrl!, fit: BoxFit.fill,),
+                                              //   ),
+                                              // )
+                                              (_search_screen_controller
+                                                      .searchlistModel!
+                                                      .data![index]
+                                                      .image!
+                                                      .isNotEmpty
+                                                  ? FadeInImage.assetNetwork(
+                                                      height: 80,
+                                                      width: 80,
+                                                      fit: BoxFit.cover,
+                                                      image:
+                                                          "${URLConstants.base_data_url}images/${_search_screen_controller.searchlistModel!.data![index].image!}",
+                                                      placeholder:
+                                                          'assets/images/Funky_App_Icon.png',
+                                                    )
+                                                  : Container(
+                                                      height: 50,
+                                                      width: 50,
+                                                      child: IconButton(
+                                                        icon: Image.asset(
+                                                          AssetUtils.user_icon3,
+                                                          fit: BoxFit.fill,
+                                                        ),
+                                                        onPressed: () {},
+                                                      )))),
+                                        ),
+                                      ),
+                                      title: Text(
+                                        _search_screen_controller
+                                            .searchlistModel!
+                                            .data![index]
+                                            .fullName!,
+                                        style: const TextStyle(
+                                            color: Colors.white,
+                                            fontFamily: 'PR'),
+                                      ),
+                                      subtitle: Text(
+                                        _search_screen_controller
+                                            .searchlistModel!
+                                            .data![index]
+                                            .userName!,
+                                        style: const TextStyle(
+                                            color: Colors.grey,
+                                            fontFamily: 'PR'),
+                                      ),
+                                    );
+                                  },
+                                );
+                              }
+
+                              return Text('');
+                            },
+                          ),
                         )))
                   : Expanded(
                       child: Container(
@@ -399,6 +457,133 @@ class _SearchScreenState extends State<SearchScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  // List<QBDialog?> dialogs = [];
+  QBDialog? qb;
+
+  StreamProvider get_user() {
+    return StreamProvider<DialogsScreenStates>(
+      create: (context) => bloc?.states?.stream as Stream<DialogsScreenStates>,
+      initialData: ChatConnectingState(),
+      child: Selector<DialogsScreenStates, DialogsScreenStates>(
+        selector: (_, state) => state,
+        shouldRebuild: (previous, next) {
+          return next is UpdateChatsSuccessState;
+        },
+        builder: (_, state, __) {
+          if (state is UpdateChatsSuccessState) {
+            List<QBDialog?> dialogs = state.dialogs;
+            return ListView.builder(
+              padding: const EdgeInsets.all(0),
+              shrinkWrap: true,
+              itemCount:
+                  _search_screen_controller.searchlistModel!.data!.length,
+              itemBuilder: (BuildContext context, int index) {
+                return ListTile(
+                  onTap: () {
+                    String id = _search_screen_controller
+                        .searchlistModel!.data![index].id!;
+                    String username = _search_screen_controller
+                        .searchlistModel!.data![index].userName!;
+
+                    print("id $id");
+
+                    Data_searchApi last_out = _search_screen_controller
+                        .searchlistModel!.data!
+                        .firstWhere((element) => element.id == id);
+                    Data_searchApi blahh = last_out;
+
+                    QBDialog? qb_user = dialogs
+                        .firstWhere((element) => element!.name == username);
+                    print("quickblox username ${qb_user!.name}");
+                    print("blahhh id ${blahh.id}");
+
+                    print(_search_screen_controller
+                        .searchlistModel!.data![index].id);
+
+                    print(dialogs);
+                    // Get.to(SearchUserProfile(
+                    //   // UserId: _search_screen_controller
+                    //   //     .searchlistModel!.data![index].id!,
+                    //   search_user_data: blahh,
+                    // ));
+                  },
+                  leading: Container(
+                    height: 50,
+                    width: 50,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(50),
+                      child: (_search_screen_controller.searchlistModel!
+                              .data![index].profileUrl!.isNotEmpty
+                          ? Image.asset('assets/images/Funky_App_Icon.png')
+                          // FadeInImage.assetNetwork(
+                          //         height: 80,
+                          //         width: 80,
+                          //         fit: BoxFit.cover,
+                          //         placeholder:
+                          //             'assets/images/Funky_App_Icon.png',
+                          //         image: _search_screen_controller
+                          //             .searchlistModel!
+                          //             .data![index]
+                          //             .profileUrl!,
+                          //       )
+                          :
+                          // Container(
+                          //   height: 50,
+                          //   width: 50,
+                          //   child: ClipRRect(
+                          //     borderRadius: BorderRadius.circular(50),
+                          //     child: Image.network(
+                          //       _search_screen_controller
+                          //           .searchlistModel!
+                          //           .data![index]
+                          //           .profileUrl!, fit: BoxFit.fill,),
+                          //   ),
+                          // )
+                          (_search_screen_controller.searchlistModel!
+                                  .data![index].image!.isNotEmpty
+                              ? FadeInImage.assetNetwork(
+                                  height: 80,
+                                  width: 80,
+                                  fit: BoxFit.cover,
+                                  image:
+                                      "${URLConstants.base_data_url}images/${_search_screen_controller.searchlistModel!.data![index].image!}",
+                                  placeholder:
+                                      'assets/images/Funky_App_Icon.png',
+                                )
+                              : Container(
+                                  height: 50,
+                                  width: 50,
+                                  child: IconButton(
+                                    icon: Image.asset(
+                                      AssetUtils.user_icon3,
+                                      fit: BoxFit.fill,
+                                    ),
+                                    onPressed: () {},
+                                  )))),
+                    ),
+                  ),
+                  title: Text(
+                    _search_screen_controller
+                        .searchlistModel!.data![index].fullName!,
+                    style:
+                        const TextStyle(color: Colors.white, fontFamily: 'PR'),
+                  ),
+                  subtitle: Text(
+                    _search_screen_controller
+                        .searchlistModel!.data![index].userName!,
+                    style:
+                        const TextStyle(color: Colors.grey, fontFamily: 'PR'),
+                  ),
+                );
+              },
+            );
+          }
+          return Text("");
+        },
       ),
     );
   }

@@ -40,10 +40,11 @@ class _DialogsScreenState extends BaseScreenState<DialogsScreenBloc> {
 
     return WillPopScope(
         onWillPop: ()async {
-          if (Navigator.of(context).userGestureInProgress)
+          if (Navigator.of(context).userGestureInProgress) {
             return false;
-          else
+          } else {
             return true;
+          }
         },
       child: Scaffold(
           backgroundColor: Colors.black,
@@ -92,6 +93,8 @@ class _DialogsScreenState extends BaseScreenState<DialogsScreenBloc> {
                                 if (!_deleteState) {
                                   NotificationBarUtils.hideSnackBar(context);
                                   bloc?.events?.add(LeaveDialogsScreenEvent());
+                                  debugPrint("idididididididididididididididid");
+                                  debugPrint(dialogs[index]!.id!);
                                   var result = await Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -202,9 +205,9 @@ class _DialogsScreenState extends BaseScreenState<DialogsScreenBloc> {
             color: Colors.white,
           ),
           onPressed: () {
-            Navigator.pop(context);
-            // Navigator.push(context,
-            //     MaterialPageRoute(builder: (context) => Dashboard(page: 0)));
+            // Navigator.pop(context);
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => Dashboard(page: 0)));
             // Navigator.pop(context);
             // _showDialogLogout(context);
           }),

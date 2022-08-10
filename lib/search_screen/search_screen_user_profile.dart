@@ -29,6 +29,7 @@ import '../Utils/toaster_widget.dart';
 import '../chat/constants/firestore_constants.dart';
 import '../chat/models/user_chat.dart';
 import '../chat/pages/chat_page.dart';
+import '../chat_quickblox/presentation/screens/chat/chat_screen.dart';
 import '../chat_quickblox/presentation/screens/dialogs/dialogs_screen.dart';
 import '../homepage/model/UserInfoModel.dart';
 import 'package:http/http.dart' as http;
@@ -48,10 +49,12 @@ import 'ViewStoryModel.dart';
 
 class SearchUserProfile extends StatefulWidget {
   final Data_searchApi search_user_data;
+  final String quickBlox_id;
 
   // final String UserId;
 
-  const SearchUserProfile({Key? key, required this.search_user_data})
+  const SearchUserProfile(
+      {Key? key, required this.search_user_data, required this.quickBlox_id})
       : super(key: key);
 
   @override
@@ -1195,12 +1198,12 @@ class _SearchUserProfileState extends State<SearchUserProfile>
                                       ),
                                       GestureDetector(
                                         onTap: () async {
-                                          if (_search_screen_controller
-                                              .is_follower !=
-                                              null ||
-                                              _search_screen_controller
-                                                  .is_following !=
-                                                  null) {
+                                          // if (_search_screen_controller
+                                          //     .is_follower !=
+                                          //     null ||
+                                          //     _search_screen_controller
+                                          //         .is_following !=
+                                          //         null) {
                                             // final QuerySnapshot result = await firebaseFirestore
                                             //     .collection(FirestoreConstants.pathUserCollection)
                                             //     .where(FirestoreConstants.id, isEqualTo: widget.search_user_data.id)
@@ -1266,9 +1269,15 @@ class _SearchUserProfileState extends State<SearchUserProfile>
                                             //     context,
                                             //     MaterialPageRoute(
                                             //         builder: (context) => DialogsScreen()));
-                                          } else {
-                                            // CommonWidget().showToaster(msg: 'Need to follow the user');
-                                          }
+                                          // } else {
+                                          //   // CommonWidget().showToaster(msg: 'Need to follow the user');
+                                          // }
+                                          await Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => ChatScreen(
+                                                    widget.quickBlox_id, false),
+                                              ));
                                         },
                                         child: Container(
                                           margin:
@@ -1526,6 +1535,7 @@ class _SearchUserProfileState extends State<SearchUserProfile>
 
   bool isvideoLoading = true;
   VideoModelList? _videoModelList;
+  List<File> imgFile_list = [];
 
   Future<dynamic> get_video_list(BuildContext context) async {
     setState(() {
@@ -1568,6 +1578,23 @@ class _SearchUserProfileState extends State<SearchUserProfile>
         });
         print(_videoModelList!.data![index].image!.length);
 
+        // for (int i = 0; i < _videoModelList!.data!.length; i++) {
+        //   final uint8list = await VideoThumbnail.thumbnailFile(
+        //     video:
+        //     ("http://foxyserver.com/funky/video/${_videoModelList!.data![i].uploadVideo}"),
+        //     thumbnailPath: (await getTemporaryDirectory()).path,
+        //     imageFormat: ImageFormat.JPEG,
+        //     maxHeight: 64,
+        //     // specify the height of the thumbnail, let the width auto-scaled to keep the source aspect ratio
+        //     quality: 75,
+        //   );
+        //   imgFile_list.add(File(uint8list!));
+        //   // print(test_thumb[i].path);
+        //   setState(() {
+        //     isvideoLoading = false;
+        //   });
+        //   print("test----------${imgFile_list[i].path}");
+        // }
         // hideLoader(context);
         // Get.to(Dashboard());
       } else {

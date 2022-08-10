@@ -634,7 +634,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                                         .isNotEmpty
                                                     ? Image.network(
                                                         '${URLConstants.base_data_url}images/${_creator_login_screen_controller.userInfoModel_email!.data![0].image!}',
-                                                        fit: BoxFit.fitWidth,
+                                                        fit: BoxFit.cover,
                                                       )
                                                     : Image.asset(
                                                         AssetUtils.image1)),

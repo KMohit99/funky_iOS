@@ -373,7 +373,7 @@ class _ChatScreenState extends BaseScreenState<ChatScreenBloc> {
                       keyboardType: TextInputType.multiline,
                       minLines: 1,
                       maxLines: 4,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 14.0,
                           color: Colors.white,
                           fontFamily: 'PR'),

@@ -388,6 +388,9 @@ class _AdvertiserLoginScreenState extends BaseScreenState<LoginScreenBloc> {
                             ),
                           ),
                         ),
+                        SizedBox(
+                          height: 22,
+                        ),
                         GestureDetector(
                           onTap: () {
                             Get.toNamed(BindingUtils.ageVerification);
