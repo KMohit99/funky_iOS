@@ -20,7 +20,7 @@ class TxtUtils {
   static const CountryCode = 'Country code';
   static const AboutMe = 'About Me';
 //drawer
-  static const photos = 'My Photos';
+  static const photos = 'Visit Website';
   static const settings = 'Settings';
   static const qr_code = 'My Qr';
   static const analytics = 'Anlytics';

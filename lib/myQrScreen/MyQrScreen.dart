@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui';
 
@@ -59,7 +60,7 @@ class _MyQrScreenState extends State<MyQrScreen> {
 
   List gradientColor = [gradientBlue, gradientRed];
 
-  List colors_grad = [
+  List<dynamic> colors_grad = [
     LinearGradient(
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
@@ -540,6 +541,7 @@ class _MyQrScreenState extends State<MyQrScreen> {
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -569,188 +571,194 @@ class _MyQrScreenState extends State<MyQrScreen> {
                   )),
           ),
         ),
-        Scaffold(
-          backgroundColor: Colors.transparent,
-          resizeToAvoidBottomInset: false,
-          appBar: AppBar(
+        GestureDetector(
+          onTap: (){
+            print('hellocolor');
+            print(colors_grad[Random().nextInt(colors_grad.length)]);
+          },
+          child: Scaffold(
             backgroundColor: Colors.transparent,
-            title: Text(
-              'Scan',
-              style: TextStyle(
-                  fontSize: 16, color: Colors.white, fontFamily: 'PB'),
-            ),
-            centerTitle: true,
-            leadingWidth: 100,
-            leading: Padding(
-              padding: const EdgeInsets.only(
-                right: 20.0,
-                top: 0.0,
-                bottom: 5.0,
+            resizeToAvoidBottomInset: false,
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              title: Text(
+                'Scan',
+                style: TextStyle(
+                    fontSize: 16, color: Colors.white, fontFamily: 'PB'),
               ),
-              child: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: Icon(Icons.arrow_back),
-              ),
-            ),
-            actions: [
-              Padding(
+              centerTitle: true,
+              leadingWidth: 100,
+              leading: Padding(
                 padding: const EdgeInsets.only(
                   right: 20.0,
                   top: 0.0,
                   bottom: 5.0,
                 ),
-                child: GestureDetector(
-                  onTap: () {
-                    _captureAndSharePng(context);
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
                   },
-                  child: Container(
-                    height: 20.0,
-                    width: 20.0,
-                    child: Image.asset(AssetUtils.share_icon2),
-                  ),
+                  icon: Icon(Icons.arrow_back),
                 ),
-              )
-            ],
-          ),
-          body: Obx(() =>
-              (_creator_login_screen_controller.isuserinfoLoading.value == true
-                  ? Center(
-                      child: Container(
-                          height: 80,
-                          width: 100,
-                          color: Colors.transparent,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+              ),
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                    right: 20.0,
+                    top: 0.0,
+                    bottom: 5.0,
+                  ),
+                  child: GestureDetector(
+                    onTap: () {
+                      _captureAndSharePng(context);
+                    },
+                    child: Container(
+                      height: 20.0,
+                      width: 20.0,
+                      child: Image.asset(AssetUtils.share_icon2),
+                    ),
+                  ),
+                )
+              ],
+            ),
+            body: Obx(() =>
+                (_creator_login_screen_controller.isuserinfoLoading.value == true
+                    ? Center(
+                        child: Container(
+                            height: 80,
+                            width: 100,
+                            color: Colors.transparent,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                CircularProgressIndicator(
+                                  color: HexColor('#FFFFFF'),
+                                ),
+                              ],
+                            )
+                            // Material(
+                            //   color: Colors.transparent,
+                            //   child: LoadingIndicator(
+                            //     backgroundColor: Colors.transparent,
+                            //     indicatorType: Indicator.ballScale,
+                            //     colors: _kDefaultRainbowColors,
+                            //     strokeWidth: 4.0,
+                            //     pathBackgroundColor: Colors.yellow,
+                            //     // showPathBackground ? Colors.black45 : null,
+                            //   ),
+                            // ),
+                            ),
+                      )
+                    : SingleChildScrollView(
+                        child: Container(
+                          margin: EdgeInsets.symmetric(horizontal: 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              CircularProgressIndicator(
-                                color: HexColor('#FFFFFF'),
+                              GestureDetector(
+                                onTap: () {
+                                  popUp();
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.symmetric(vertical: 29),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(23),
+                                      color: Colors.white),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 13.0, horizontal: 29),
+                                    child: Text(
+                                      'Color',
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.black,
+                                          fontFamily: 'Pr'),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.symmetric(vertical: 29),
+                                child: Text(
+                                  'Friends can scan this to follow you.',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                      fontFamily: 'PB'),
+                                ),
+                              ),
+                              Container(
+                                child: IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(
+                                    Icons.arrow_downward,
+                                    color: Colors.white,
+                                    size: 40,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.symmetric(
+                                    vertical: 26, horizontal: 50),
+                                child: RepaintBoundary(
+                                  key: globalKey,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Container(
+                                      // color: Colors.red,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.white,width: 30)
+                                      ),
+                                      child: QrImage(
+                                        data: _creator_login_screen_controller
+                                            .userInfoModel_email!
+                                            .data![0]
+                                            .userName!,
+                                        // size: 200,
+
+                                        foregroundColor: Colors.white,
+                                        // backgroundColor: Colors.black,
+                                        padding: EdgeInsets.all(0),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Get.to(QrScanScreen());
+                                },
+                                child: Container(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.camera_alt,
+                                          color: Colors.white,
+                                        ),
+                                        SizedBox(
+                                          width: 15,
+                                        ),
+                                        Text(
+                                          'Scan QR Code',
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.white,
+                                              fontFamily: 'PB'),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
                               ),
                             ],
-                          )
-                          // Material(
-                          //   color: Colors.transparent,
-                          //   child: LoadingIndicator(
-                          //     backgroundColor: Colors.transparent,
-                          //     indicatorType: Indicator.ballScale,
-                          //     colors: _kDefaultRainbowColors,
-                          //     strokeWidth: 4.0,
-                          //     pathBackgroundColor: Colors.yellow,
-                          //     // showPathBackground ? Colors.black45 : null,
-                          //   ),
-                          // ),
                           ),
-                    )
-                  : SingleChildScrollView(
-                      child: Container(
-                        margin: EdgeInsets.symmetric(horizontal: 10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                popUp();
-                              },
-                              child: Container(
-                                margin: EdgeInsets.symmetric(vertical: 29),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(23),
-                                    color: Colors.white),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 13.0, horizontal: 29),
-                                  child: Text(
-                                    'Color',
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black,
-                                        fontFamily: 'Pr'),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.symmetric(vertical: 29),
-                              child: Text(
-                                'Friends can scan this to follow you.',
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.white,
-                                    fontFamily: 'PB'),
-                              ),
-                            ),
-                            Container(
-                              child: IconButton(
-                                onPressed: () {},
-                                icon: Icon(
-                                  Icons.arrow_downward,
-                                  color: Colors.white,
-                                  size: 40,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.symmetric(
-                                  vertical: 26, horizontal: 50),
-                              child: RepaintBoundary(
-                                key: globalKey,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Container(
-                                    // color: Colors.red,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.white,width: 30)
-                                    ),
-                                    child: QrImage(
-                                      data: _creator_login_screen_controller
-                                          .userInfoModel_email!
-                                          .data![0]
-                                          .userName!,
-                                      // size: 200,
-
-                                      foregroundColor: Colors.white,
-                                      // backgroundColor: Colors.black,
-                                      padding: EdgeInsets.all(0),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Get.to(QrScanScreen());
-                              },
-                              child: Container(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.camera_alt,
-                                        color: Colors.white,
-                                      ),
-                                      SizedBox(
-                                        width: 15,
-                                      ),
-                                      Text(
-                                        'Scan QR Code',
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.white,
-                                            fontFamily: 'PB'),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
                         ),
-                      ),
-                    ))),
+                      ))),
+          ),
         ),
       ],
     );

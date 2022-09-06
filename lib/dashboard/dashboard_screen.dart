@@ -528,7 +528,7 @@ class _DashboardState extends State<Dashboard> {
                             padding: EdgeInsets.zero,
                             onPressed: () {},
                             icon: (Image.asset(
-                              AssetUtils.user_icon3,
+                              AssetUtils.logo_trans,
                               color: Colors.pinkAccent,
                               height: 20.0,
                               width: 20.0,

@@ -47,7 +47,8 @@ class VideoWidget extends StatefulWidget {
     required this.video_like_count,
     required this.video_like_status,
     this.onDoubleTap,
-    required this.comment_count, this.videoListModel,
+    required this.comment_count,
+    this.videoListModel,
   }) : super(key: key);
 
   @override
@@ -136,7 +137,7 @@ class _VideoWidgetState extends State<VideoWidget> {
                 print("mmmmm${widget.video_like_count}");
                 setState(() {
                   widget.video_like_count =
-                      homepageController.postLikeUnlikeModel!.user![0].likes!;
+                  homepageController.postLikeUnlikeModel!.user![0].likes!;
 
                   widget.video_like_status = homepageController
                       .postLikeUnlikeModel!.user![0].likeStatus!;
@@ -156,14 +157,15 @@ class _VideoWidgetState extends State<VideoWidget> {
                 },
                 child: controller_last!.value.isInitialized
                     ? Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height,
-                        child: Center(
-                          child: AspectRatio(
-                              aspectRatio: controller_last!.value.aspectRatio,
-                              child: VideoPlayer(controller_last!)),
-                        ),
-                      )
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  child: Center(
+                    child: AspectRatio(
+                        aspectRatio: controller_last!.value.aspectRatio,
+
+                        child: VideoPlayer(controller_last!)),
+                  ),
+                )
                     : Container(),
               ),
               Opacity(
@@ -289,12 +291,12 @@ class _VideoWidgetState extends State<VideoWidget> {
                                 children: [
                                   IconButton(
                                       visualDensity:
-                                          VisualDensity(vertical: -4),
+                                      VisualDensity(vertical: -4),
                                       padding: EdgeInsets.only(left: 0.0),
                                       icon: Image.asset(
                                         AssetUtils.like_icon_filled,
                                         color: (widget.video_like_status ==
-                                                'false'
+                                            'false'
                                             ? Colors.white
                                             : HexColor(CommonColor.pinkFont)),
                                         scale: 3,
@@ -302,26 +304,26 @@ class _VideoWidgetState extends State<VideoWidget> {
                                       onPressed: () async {
                                         await homepageController
                                             .PostLikeUnlikeApi(
-                                                context: context,
-                                                post_id: widget.video_id,
-                                                post_id_type:
-                                                    (widget.video_like_status ==
-                                                            "true"
-                                                        ? 'unliked'
-                                                        : 'liked'),
-                                                post_likeStatus:
-                                                    (widget.video_like_status ==
-                                                            "true"
-                                                        ? 'false'
-                                                        : 'true'));
+                                            context: context,
+                                            post_id: widget.video_id,
+                                            post_id_type:
+                                            (widget.video_like_status ==
+                                                "true"
+                                                ? 'unliked'
+                                                : 'liked'),
+                                            post_likeStatus:
+                                            (widget.video_like_status ==
+                                                "true"
+                                                ? 'false'
+                                                : 'true'));
 
                                         if (homepageController
-                                                .postLikeUnlikeModel!.error ==
+                                            .postLikeUnlikeModel!.error ==
                                             false) {
                                           print(
                                               "mmmmm${widget.video_like_count}");
-                                          if(widget.video_like_status ==
-                                              "false"){
+                                          if (widget.video_like_status ==
+                                              "false") {
                                             setState(() {
                                               widget.video_like_status =
                                               homepageController
@@ -335,9 +337,10 @@ class _VideoWidgetState extends State<VideoWidget> {
                                                   .user![0]
                                                   .likes!;
                                             });
-                                          }else{
+                                          } else {
                                             setState(() {
-                                              widget.video_like_status = 'false';
+                                              widget.video_like_status =
+                                              'false';
 
                                               widget.video_like_count =
                                               homepageController
@@ -374,7 +377,8 @@ class _VideoWidgetState extends State<VideoWidget> {
                                     height: 10,
                                   ),
                                   IconButton(
-                                    visualDensity: VisualDensity(vertical: -4),
+                                    visualDensity:
+                                    VisualDensity(vertical: -4),
                                     iconSize: 30.0,
                                     padding: EdgeInsets.only(left: 0.0),
                                     icon: Image.asset(
@@ -406,7 +410,8 @@ class _VideoWidgetState extends State<VideoWidget> {
                                     height: 10,
                                   ),
                                   IconButton(
-                                    visualDensity: VisualDensity(vertical: -4),
+                                    visualDensity:
+                                    VisualDensity(vertical: -4),
                                     padding: EdgeInsets.only(left: 0.0),
                                     icon: Image.asset(
                                       AssetUtils.share_icon,
@@ -423,7 +428,8 @@ class _VideoWidgetState extends State<VideoWidget> {
                                     height: 10,
                                   ),
                                   IconButton(
-                                    visualDensity: VisualDensity(vertical: -4),
+                                    visualDensity:
+                                    VisualDensity(vertical: -4),
                                     iconSize: 30.0,
                                     padding: EdgeInsets.only(left: 0.0),
                                     icon: Image.asset(
@@ -441,7 +447,8 @@ class _VideoWidgetState extends State<VideoWidget> {
                                     height: 10,
                                   ),
                                   IconButton(
-                                    visualDensity: VisualDensity(vertical: -4),
+                                    visualDensity:
+                                    VisualDensity(vertical: -4),
                                     padding: EdgeInsets.only(left: 0.0),
                                     icon: Image.asset(
                                       AssetUtils.music_icon,
@@ -474,30 +481,30 @@ class _VideoWidgetState extends State<VideoWidget> {
                         ),
                         ListTile(
                           visualDensity:
-                              VisualDensity(vertical: 4, horizontal: -4),
+                          VisualDensity(vertical: 4, horizontal: -4),
                           // tileColor: Colors.white,
                           leading: (widget.image_url.length > 0
                               ? ClipRRect(
-                                  borderRadius: BorderRadius.circular(50),
-                                  child: Container(
-                                    height: 50,
-                                    width: 50,
-                                    color: Colors.red,
-                                    child: Image.network(
-                                      widget.image_url,
-                                    ),
-                                  ),
-                                )
+                            borderRadius: BorderRadius.circular(50),
+                            child: Container(
+                              height: 50,
+                              width: 50,
+                              color: Colors.red,
+                              child: Image.network(
+                                widget.image_url,
+                              ),
+                            ),
+                          )
                               : Container(
-                                  height: 50,
-                                  width: 50,
-                                  child: IconButton(
-                                    icon: Image.asset(
-                                      AssetUtils.user_icon3,
-                                      fit: BoxFit.fill,
-                                    ),
-                                    onPressed: () {},
-                                  ))),
+                              height: 50,
+                              width: 50,
+                              child: IconButton(
+                                icon: Image.asset(
+                                  AssetUtils.user_icon3,
+                                  fit: BoxFit.fill,
+                                ),
+                                onPressed: () {},
+                              ))),
                           title: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -509,7 +516,7 @@ class _VideoWidgetState extends State<VideoWidget> {
                                         minWidth: 100, maxWidth: 220),
                                     child: Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      MainAxisAlignment.spaceBetween,
                                       children: [
                                         Container(
                                           child: Text(
@@ -523,7 +530,7 @@ class _VideoWidgetState extends State<VideoWidget> {
                                         ),
                                         Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.end,
+                                          MainAxisAlignment.end,
                                           children: [
                                             Image.asset(
                                               AssetUtils.music_icon,
@@ -549,7 +556,7 @@ class _VideoWidgetState extends State<VideoWidget> {
                                   ),
                                   Container(
                                     width:
-                                        MediaQuery.of(context).size.width / 4,
+                                    MediaQuery.of(context).size.width / 4,
                                     child: ReadMoreText(
                                       widget.description,
                                       trimLines: 2,

@@ -29,10 +29,10 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
       builder: (GetxController controller) {
         return Stack(
           children: [
-            Container(
-              color: Colors.white,
-              height: MediaQuery.of(context).size.height,
-            ),
+            // Container(
+            //   color: Colors.white,
+            //   height: MediaQuery.of(context).size.height,
+            // ),
             Container(
               height: double.infinity,
               width: double.infinity,
@@ -49,20 +49,16 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                     end: Alignment.bottomCenter,
                     // stops: [0.1, 0.5, 0.7, 0.9],
                     colors: [
-                      HexColor("#000000"),
-                      HexColor("#000000"),
-                      HexColor("#C12265"),
-                      HexColor("#C12265"),
-                      HexColor("#C12265"),
-                      HexColor("#FFFFFF"),
+                      HexColor("#000000").withOpacity(0),
+                      HexColor("#000000").withOpacity(1),
                     ],
                     tileMode: TileMode.decal),
-                image: new DecorationImage(
+                image: DecorationImage(
                   fit: BoxFit.cover,
-                  colorFilter: new ColorFilter.mode(
-                      Colors.black.withOpacity(0.5), BlendMode.dstATop),
-                  image: new AssetImage(
-                    AssetUtils.backgroundImage2,
+                  // colorFilter: ColorFilter.mode(
+                  //     Colors.black.withOpacity(0.5), BlendMode.dstATop),
+                  image: const AssetImage(
+                    AssetUtils.backgroundImage,
                   ),
                 ),
               ),
@@ -70,105 +66,103 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
             Scaffold(
               backgroundColor: Colors.transparent,
               resizeToAvoidBottomInset: false,
-              body: Container(
-                width: screenwidth,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 86),
-                      child: Image.asset(
-                        AssetUtils.logo,
-                        fit: BoxFit.cover,
-                      ),
+              body: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(
+                        left: 86, right: 86, top: 50, bottom: 20),
+                    child: Image.asset(
+                      AssetUtils.logo,
+                      fit: BoxFit.cover,
                     ),
-                    Container(
+                  ),
+                  Container(
+                    child: Text(
+                      'Login As',
+                      style: TextStyle(
+                          fontSize: 16, fontFamily: 'PB', color: Colors.white),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 41,
+                  ),
+                  common_button(
+                    onTap: () {
+                      Get.toNamed(BindingUtils.creator_loginScreenRoute);
+                    },
+                    backgroud_color: Colors.black,
+                    lable_text: 'Creator',
+                    lable_text_color: Colors.white,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  common_button(
+                    onTap: () {
+                      Get.toNamed(BindingUtils.kids_loginScreenRoute);
+                    },
+                    backgroud_color: Colors.white,
+                    lable_text: 'Funky Kids',
+                    lable_text_color: Colors.black,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  common_button(
+                    onTap: () {
+                      Get.toNamed(BindingUtils.advertiser_loginScreenRoute);
+                    },
+                    backgroud_color: Colors.black,
+                    lable_text: 'Advertisor',
+                    lable_text_color: Colors.white,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(GuestScreen());
+                    },
+                    child: Container(
                       child: Text(
-                        'Login As',
+                        'Continue as guest',
                         style: TextStyle(
                             fontSize: 16,
                             fontFamily: 'PB',
                             color: Colors.white),
                       ),
                     ),
-                    SizedBox(
-                      height: 41,
-                    ),
-                    common_button(
-                      onTap: () {
-                        Get.toNamed(BindingUtils.creator_loginScreenRoute);
-                      },
-                      backgroud_color: Colors.black,
-                      lable_text: 'Creator',
-                      lable_text_color: Colors.white,
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    common_button(
-                      onTap: () {
-                        Get.toNamed(BindingUtils.kids_loginScreenRoute);
-                      },
-                      backgroud_color: Colors.white,
-                      lable_text: 'Funky Kids',
-                      lable_text_color: Colors.black,
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    common_button(
-                      onTap: () {
-                        Get.toNamed(BindingUtils.advertiser_loginScreenRoute);
-                      },
-                      backgroud_color: Colors.black,
-                      lable_text: 'Advertisor',
-                      lable_text_color: Colors.white,
-                    ),
-                    SizedBox(
-                      height: 40,
-                    ),
-                    Container(
-                      height: 100,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              Get.to(GuestScreen());
-                            },
-                            child: Container(
-                              child: Text(
-                                'Continue as guest',
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    fontFamily: 'PB',
-                                    color: Colors.white),
-                              ),
-                            ),
-                          ),
-                          // SizedBox(
-                          //   height: 61,
-                          // ),
+                  ),
+                  SizedBox(
+                    height: 40,
+                  ),
+                  Expanded(
+                    // height: 100,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
 
-                          Container(
-                            alignment: Alignment.bottomCenter,
-                            child: GestureDetector(
-                              onTap: () {
-                                Get.toNamed(BindingUtils.ageVerification);
-                              },
-                              child: Text(
-                                'Sign Up',
-                                style:
-                                    TextStyle(fontSize: 16, fontFamily: 'PB'),
-                              ),
+                        Container(
+                          alignment: Alignment.bottomCenter,
+                          child: GestureDetector(
+                            onTap: () {
+                              Get.toNamed(BindingUtils.ageVerification);
+                            },
+                            child: Text(
+                              'Sign Up',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: 'PB',
+                                  color: Colors.white),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             )
           ],
@@ -176,5 +170,4 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
       },
     );
   }
-
 }

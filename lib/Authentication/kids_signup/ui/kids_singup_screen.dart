@@ -150,24 +150,24 @@ class _KidSignupScreenState extends BaseScreenState<LoginScreenBloc> {
                 //   ),
                 // ),
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    // stops: [0.1, 0.5, 0.7, 0.9],
-
-                    colors: [
-                      HexColor("#000000").withOpacity(0.67),
-                      HexColor("#000000").withOpacity(0.67),
-                      HexColor("#C12265").withOpacity(0.67),
-                      HexColor("#FFFFFF").withOpacity(0.67),
-                    ],
-                  ),
+                  // gradient: LinearGradient(
+                  //   begin: Alignment.topCenter,
+                  //   end: Alignment.bottomCenter,
+                  //   // stops: [0.1, 0.5, 0.7, 0.9],
+                  //
+                  //   colors: [
+                  //     HexColor("#000000").withOpacity(0.67),
+                  //     HexColor("#000000").withOpacity(0.67),
+                  //     HexColor("#C12265").withOpacity(0.67),
+                  //     HexColor("#FFFFFF").withOpacity(0.67),
+                  //   ],
+                  // ),
                   image: DecorationImage(
                     fit: BoxFit.cover,
-                    colorFilter: ColorFilter.mode(
-                        Colors.black.withOpacity(0.2), BlendMode.dstATop),
+                    // colorFilter: ColorFilter.mode(
+                    //     Colors.black.withOpacity(0.2), BlendMode.dstATop),
                     image: AssetImage(
-                      AssetUtils.backgroundImage2,
+                      AssetUtils.backgroundImage5,
                     ),
                   ),
                 ),

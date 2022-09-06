@@ -116,10 +116,10 @@ class Creator_OtpVerification extends State<CreatorOtpVerification> {
             ),
             image: new DecorationImage(
               fit: BoxFit.cover,
-              colorFilter: new ColorFilter.mode(
-                  Colors.black.withOpacity(0.5), BlendMode.dstATop),
+              // colorFilter: new ColorFilter.mode(
+              //     Colors.black.withOpacity(0.5), BlendMode.dstATop),
               image: new AssetImage(
-                AssetUtils.backgroundImage4,
+                AssetUtils.backgroundImage5,
               ),
             ),
           ),
@@ -136,7 +136,7 @@ class Creator_OtpVerification extends State<CreatorOtpVerification> {
               title: Text(
                 'Verify OTP',
                 style: TextStyle(
-                    fontSize: 16, fontFamily: 'PR', color: Colors.white),
+                    fontSize: 16, fontFamily: 'PB', color: Colors.white),
               ),
               backgroundColor: Colors.transparent,
             ),
@@ -148,13 +148,13 @@ class Creator_OtpVerification extends State<CreatorOtpVerification> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SizedBox(
-                    height: 96,
+                    height: 56,
                   ),
                   Container(
                     child: Text(
-                      'Enter Parents $seconds',
+                      'Enter OTP',
                       style: TextStyle(
-                          fontSize: 16, fontFamily: 'PB', color: Colors.white),
+                          fontSize: 16, fontFamily: 'PM', color: Colors.white),
                     ),
                   ),
                     SizedBox(
@@ -211,7 +211,7 @@ class Creator_OtpVerification extends State<CreatorOtpVerification> {
                       // _kids_loginScreenController.ParentEmailVerification(context);
                     },
                     backgroud_color: Colors.black,
-                    lable_text: 'Next',
+                    lable_text: 'Verify',
                     lable_text_color: Colors.white,
                   ),
                 ],

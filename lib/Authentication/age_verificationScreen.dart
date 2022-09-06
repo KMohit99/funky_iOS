@@ -29,10 +29,10 @@ class _AgeVerificationState extends State<AgeVerification> {
       builder: (GetxController controller) {
         return Stack(
           children: [
-            Container(
-              color: Colors.black,
-              height: MediaQuery.of(context).size.height,
-            ),
+            // Container(
+            //   color: Colors.black,
+            //   height: MediaQuery.of(context).size.height,
+            // ),
             Container(
               // decoration: BoxDecoration(
               //
@@ -42,26 +42,26 @@ class _AgeVerificationState extends State<AgeVerification> {
               //   ),
               // ),
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  // stops: [0.1, 0.5, 0.7, 0.9],
-                  colors: [
-                    HexColor("#000000").withOpacity(0.67),
-                    HexColor("#000000").withOpacity(0.67),
-                    HexColor("#C12265").withOpacity(0.3),
-                    HexColor("#C12265").withOpacity(0.3),
-                    HexColor("#C12265").withOpacity(0.4),
-                    HexColor("#C12265").withOpacity(0.5),
-                    HexColor("#FFFFFF").withOpacity(0.5),
-                  ],
-                ),
+                // gradient: LinearGradient(
+                //   begin: Alignment.topCenter,
+                //   end: Alignment.bottomCenter,
+                //   // stops: [0.1, 0.5, 0.7, 0.9],
+                //   colors: [
+                //     HexColor("#000000").withOpacity(0.67),
+                //     HexColor("#000000").withOpacity(0.67),
+                //     HexColor("#C12265").withOpacity(0.3),
+                //     HexColor("#C12265").withOpacity(0.3),
+                //     HexColor("#C12265").withOpacity(0.4),
+                //     HexColor("#C12265").withOpacity(0.5),
+                //     HexColor("#FFFFFF").withOpacity(0.5),
+                //   ],
+                // ),
                 image: new DecorationImage(
                   fit: BoxFit.cover,
-                  colorFilter: new ColorFilter.mode(
-                      Colors.black.withOpacity(0.2), BlendMode.dstATop),
+                  // colorFilter: new ColorFilter.mode(
+                  //     Colors.black.withOpacity(0.2), BlendMode.dstATop),
                   image: new AssetImage(
-                    AssetUtils.backgroundImage,
+                    AssetUtils.backgroundImage5,
                   ),
                 ),
               ),
@@ -87,7 +87,7 @@ class _AgeVerificationState extends State<AgeVerification> {
                         ),
                       ),
                       SizedBox(
-                        height: 10,
+                        height: 22,
                       ),
                       Container(
                         child: Text(

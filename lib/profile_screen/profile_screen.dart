@@ -1772,23 +1772,25 @@ class _Profile_ScreenState extends State<Profile_Screen>
 
         // test = File(uint8list!);
 
-        for (int i = 0; i < story_info.length; i++) {
-          if (story_info[i].isVideo == 'true') {
-            final uint8list = await VideoThumbnail.thumbnailFile(
-              video:
-                  ("http://foxyserver.com/funky/video/${story_info[i].storyPhoto}"),
-              thumbnailPath: (await getTemporaryDirectory()).path,
-              imageFormat: ImageFormat.JPEG,
-              maxHeight: 64,
-              // specify the height of the thumbnail, let the width auto-scaled to keep the source aspect ratio
-              quality: 75,
-            );
-            test_thumb.add(File(uint8list!));
-            // print(test_thumb[i].path);
-          } else if (story_info[i].isVideo == 'false') {
-            test_thumb.add(File(story_info[i].storyPhoto!));
-            // print(story_info[i].image);
+        for (int i = 0; i < getStoryModel!.data!.length; i++) {
+
+            if (getStoryModel!.data![i].storys![0].isVideo == 'true') {
+              final uint8list = await VideoThumbnail.thumbnailFile(
+                video:
+                ("${URLConstants.base_data_url}images/${getStoryModel!.data![i].storys![0].storyPhoto}"),
+                thumbnailPath: (await getTemporaryDirectory()).path,
+                imageFormat: ImageFormat.JPEG,
+                maxHeight: 64,
+                // specify the height of the thumbnail, let the width auto-scaled to keep the source aspect ratio
+                quality: 75,
+              );
+              test_thumb.add(File(uint8list!));
+              // print(test_thumb[i].path);
+            } else if (getStoryModel!.data![i].storys![0].isVideo == 'false') {
+              test_thumb.add(File(getStoryModel!.data![i].storys![0].storyPhoto!));
+              // print(story_info[i].image);
           }
+
           print("test----------${test_thumb[i].path}");
         }
         setState(() {

@@ -126,6 +126,7 @@ dependencies:
   intl: ^0.17.0
   grouped_list: ^5.1.1
   connectivity_plus: ^2.3.2
+  url_launcher: ^6.1.5
   # toast
 #  fluttertoast: ^8.0.9
 

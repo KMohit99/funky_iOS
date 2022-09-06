@@ -28,10 +28,10 @@ class _SignupOptionState extends State<SignupOption> {
       builder: (GetxController controller) {
         return  Stack(
           children: [
-            Container(
-              color: Colors.black,
-              height: MediaQuery.of(context).size.height,
-            ),
+            // Container(
+            //   color: Colors.black,
+            //   height: MediaQuery.of(context).size.height,
+            // ),
             Container(
               // decoration: BoxDecoration(
               //
@@ -41,26 +41,26 @@ class _SignupOptionState extends State<SignupOption> {
               //   ),
               // ),
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  // stops: [0.1, 0.5, 0.7, 0.9],
-                  colors: [
-                    HexColor("#000000").withOpacity(0.5),
-                    HexColor("#000000").withOpacity(0.5),
-                    HexColor("#C12265").withOpacity(0.15),
-                    HexColor("#C12265").withOpacity(0.3),
-                    HexColor("#C12265").withOpacity(0.3),
-                    HexColor("#C12265").withOpacity(0.4),
-                    HexColor("#C12265").withOpacity(0.5),
-                    HexColor("#FFFFFF").withOpacity(0.5),
-                  ],
-                ),
+                // gradient: LinearGradient(
+                //   begin: Alignment.topCenter,
+                //   end: Alignment.bottomCenter,
+                //   // stops: [0.1, 0.5, 0.7, 0.9],
+                //   colors: [
+                //     HexColor("#000000").withOpacity(0.5),
+                //     HexColor("#000000").withOpacity(0.5),
+                //     HexColor("#C12265").withOpacity(0.15),
+                //     HexColor("#C12265").withOpacity(0.3),
+                //     HexColor("#C12265").withOpacity(0.3),
+                //     HexColor("#C12265").withOpacity(0.4),
+                //     HexColor("#C12265").withOpacity(0.5),
+                //     HexColor("#FFFFFF").withOpacity(0.5),
+                //   ],
+                // ),
                 image: new DecorationImage(
                   fit: BoxFit.cover,
-                  colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.2), BlendMode.dstATop),
+                  // colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.2), BlendMode.dstATop),
                   image: new AssetImage(
-                    AssetUtils.backgroundImage2,
+                    AssetUtils.backgroundImage5,
                   ),
                 ),
               ),
@@ -82,7 +82,7 @@ class _SignupOptionState extends State<SignupOption> {
                         child: Image.asset(AssetUtils.logo,fit: BoxFit.cover,),
                       ),
                       SizedBox(
-                        height: 42,
+                        height: 22,
                       ),
                       Container(
                         child: Text(
