@@ -83,10 +83,10 @@ class _KidsLoginScreenState extends BaseScreenState<LoginScreenBloc> {
       },
       child: Stack(
         children: [
-          // Container(
-          //   color: Colors.black,
-          //   height: MediaQuery.of(context).size.height,
-          // ),
+          Container(
+            color: Colors.black,
+            height: MediaQuery.of(context).size.height,
+          ),
           Container(
             // decoration: BoxDecoration(
             //
@@ -416,7 +416,9 @@ class _KidsLoginScreenState extends BaseScreenState<LoginScreenBloc> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Get.toNamed(BindingUtils.ageVerification);
+                            Get.toNamed(BindingUtils.kids_signup);
+
+                            // Get.toNamed(BindingUtils.ageVerification);
                           },
                           child: Container(
                             child: Text(

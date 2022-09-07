@@ -18,6 +18,7 @@ import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:image/image.dart' as imgUtils;
 import 'package:image_editor_plus/image_editor_plus.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'package:path_provider/path_provider.dart';
 import 'package:camerawesome/camerawesome_plugin.dart';
@@ -468,17 +469,17 @@ class _MyApp_videoState extends State<MyApp_video>
         print(er);
       });
     } else {
-      // Navigator.push(
-      //     context,
-      //     MaterialPageRoute(
-      //         builder: (context) => StoriesEditor(
-      //               // fontFamilyList: font_family,
-      //               giphyKey: '',
-      //               imageData: File(filePath),
-      //               onDone: (String) {},
-      //               // filePath:
-      //               //     imgFile!.path,
-      //             )));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => StoriesEditor(
+                    // fontFamilyList: font_family,
+                    giphyKey: '',
+                    imageData: File(filePath),
+                    onDone: (String) {},
+                    // filePath:
+                    //     imgFile!.path,
+                  )));
     }
     ;
     print("----------------------------------");
@@ -679,9 +680,10 @@ class _MyApp_videoState extends State<MyApp_video>
                 ),
           )
         : await Get.to(Story_image_preview(
-            ImageFile: File(mediaInfo!.path!),
-            isImage: false,
-          )));
+            ImageFile: File(mediaInfo!.path!) as List<XFile>,
+            // isImage: false,
+          ))
+    );
   }
 
   _recordVideo() async {

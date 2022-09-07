@@ -29,10 +29,10 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
       builder: (GetxController controller) {
         return Stack(
           children: [
-            // Container(
-            //   color: Colors.white,
-            //   height: MediaQuery.of(context).size.height,
-            // ),
+            Container(
+              color: Colors.white,
+              height: MediaQuery.of(context).size.height,
+            ),
             Container(
               height: double.infinity,
               width: double.infinity,

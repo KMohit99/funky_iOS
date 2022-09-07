@@ -119,10 +119,10 @@ class _CreatorLoginScreenState extends BaseScreenState<LoginScreenBloc> {
         builder: (GetxController controller) {
           return Stack(
             children: [
-              // Container(
-              //   color: Colors.black,
-              //   height: MediaQuery.of(context).size.height,
-              // ),
+              Container(
+                color: Colors.black,
+                height: MediaQuery.of(context).size.height,
+              ),
               Container(
                 // decoration: BoxDecoration(
                 //
@@ -483,7 +483,9 @@ class _CreatorLoginScreenState extends BaseScreenState<LoginScreenBloc> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              Get.toNamed(BindingUtils.ageVerification);
+                              Get.toNamed(BindingUtils.creator_signup);
+
+                              // Get.toNamed(BindingUtils.ageVerification);
                             },
                             child: Container(
                               child: Text(

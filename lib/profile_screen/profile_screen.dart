@@ -4,12 +4,14 @@ import 'dart:ui';
 import 'dart:convert' as convert;
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:funky_new/custom_widget/page_loader.dart';
 import 'package:funky_new/profile_screen/story_view/storyView.dart';
 import 'package:funky_new/profile_screen/video_viewer.dart';
-import 'package:funky_new/profile_screen/view_selected_image.dart';
+import 'package:funky_new/profile_screen/story_view/view_selected_image.dart';
+import 'package:gallery_media_picker/gallery_media_picker.dart';
 
 // import 'package:funky_project/Authentication/creator_login/model/creator_loginModel.dart';
 // import 'package:funky_project/Utils/asset_utils.dart';
@@ -32,6 +34,8 @@ import '../Utils/toaster_widget.dart';
 import '../custom_widget/common_buttons.dart';
 
 // import '../header_model.dart';
+import '../dashboard/post_screen.dart';
+import '../dashboard/story_/src/presentation/widgets/animated_onTap_button.dart';
 import '../dashboard/story_/stories_editor.dart';
 import '../dashboard/story_/story_image_preview.dart';
 import '../sharePreference.dart';
@@ -994,6 +998,8 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                                   // }
                                                   // openCamera();
                                                   pop_up();
+                                                  // Get.to(PostScreen());
+
                                                 },
                                                 icon: Icon(
                                                   Icons.add,
@@ -1042,9 +1048,8 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                                             print(story_info);
                                                             Get.to(() =>
                                                                 StoryScreen(
-                                                                  thumbnail:
-                                                                      test_thumb[
-                                                                          index],
+                                                                  // thumbnail:
+                                                                  //     test_thumb[index],
                                                                   stories:
                                                                       story_info,
                                                                   story_no:
@@ -1072,16 +1077,25 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                                                       // test_thumb[
                                                                       //     index]
                                                                       'assets/images/Funky_App_Icon.png')
-                                                                  : FadeInImage
-                                                                      .assetNetwork(
-                                                                      fit: BoxFit
-                                                                          .cover,
-                                                                      image:
-                                                                          "${URLConstants.base_data_url}images/${story_[index].storys![0].storyPhoto!}",
-                                                                      placeholder:
-                                                                          'assets/images/Funky_App_Icon.png',
-                                                                      // color: HexColor(CommonColor.pinkFont),
-                                                                    )),
+                                                                  : (story_[index]
+                                                                              .storys![
+                                                                                  0]
+                                                                              .isVideo ==
+                                                                          'false'
+                                                                      ? FadeInImage
+                                                                          .assetNetwork(
+                                                                          fit: BoxFit
+                                                                              .cover,
+                                                                          image:
+                                                                              "${URLConstants.base_data_url}images/${story_[index].storys![0].storyPhoto!}",
+                                                                          placeholder:
+                                                                              'assets/images/Funky_App_Icon.png',
+                                                                          // color: HexColor(CommonColor.pinkFont),
+                                                                        )
+                                                                      : Image.asset(
+                                                                          // test_thumb[
+                                                                          //     index]
+                                                                          'assets/images/Funky_App_Icon.png'))),
                                                             ),
                                                           ),
                                                         ),
@@ -1675,14 +1689,16 @@ class _Profile_ScreenState extends State<Profile_Screen>
                       itemBuilder: (BuildContext context, int index) =>
                           Container(
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(30),
+                                  borderRadius: BorderRadius.circular(30),
                                   border: Border.all(
-                                      color: HexColor(CommonColor.pinkFont), width: 0.5)),
+                                      color: HexColor(CommonColor.pinkFont),
+                                      width: 0)),
                               child: (isvideoLoading == true
                                   ? CircularProgressIndicator(
                                       color: HexColor(CommonColor.pinkFont),
                                     )
-                                  : (_videoModelList!.data![index].image!.isEmpty
+                                  : (_videoModelList!
+                                          .data![index].image!.isEmpty
                                       ? Image.asset(AssetUtils.logo)
                                       : GestureDetector(
                                           onTap: () {
@@ -1693,11 +1709,13 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                             ));
                                           },
                                           child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(30),
+                                            borderRadius:
+                                                BorderRadius.circular(30),
 
                                             // height: MediaQuery.of(context).size.aspectRatio,
                                             child: Image.memory(
-                                              imgFile_list[index].readAsBytesSync(),
+                                              imgFile_list[index]
+                                                  .readAsBytesSync(),
                                               fit: BoxFit.fitHeight,
                                             ),
                                           )
@@ -1773,25 +1791,25 @@ class _Profile_ScreenState extends State<Profile_Screen>
         // test = File(uint8list!);
 
         for (int i = 0; i < getStoryModel!.data!.length; i++) {
-
-            if (getStoryModel!.data![i].storys![0].isVideo == 'true') {
-              final uint8list = await VideoThumbnail.thumbnailFile(
-                video:
-                ("${URLConstants.base_data_url}images/${getStoryModel!.data![i].storys![0].storyPhoto}"),
-                thumbnailPath: (await getTemporaryDirectory()).path,
-                imageFormat: ImageFormat.JPEG,
-                maxHeight: 64,
-                // specify the height of the thumbnail, let the width auto-scaled to keep the source aspect ratio
-                quality: 75,
-              );
-              test_thumb.add(File(uint8list!));
-              // print(test_thumb[i].path);
-            } else if (getStoryModel!.data![i].storys![0].isVideo == 'false') {
-              test_thumb.add(File(getStoryModel!.data![i].storys![0].storyPhoto!));
-              // print(story_info[i].image);
+          if (getStoryModel!.data![i].storys![0].isVideo == 'true') {
+            // final uint8list = await VideoThumbnail.thumbnailFile(
+            //   video:
+            //   ("${URLConstants.base_data_url}images/${getStoryModel!.data![i].storys![0].storyPhoto}"),
+            //   thumbnailPath: (await getTemporaryDirectory()).path,
+            //   imageFormat: ImageFormat.PNG,
+            //   maxHeight: 64,
+            //   // specify the height of the thumbnail, let the width auto-scaled to keep the source aspect ratio
+            //   quality: 20,
+            // );
+            // test_thumb.add(File(uint8list!));
+            // print(test_thumb[i].path);
+          } else if (getStoryModel!.data![i].storys![0].isVideo == 'false') {
+            test_thumb
+                .add(File(getStoryModel!.data![i].storys![0].storyPhoto!));
+            // print(story_info[i].image);
           }
 
-          print("test----------${test_thumb[i].path}");
+          // print("test----------${test_thumb[i].path}");
         }
         setState(() {
           isStoryLoading = false;
@@ -1814,6 +1832,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
   }
 
   File? imgFile;
+  List<XFile>? ListimgFile_;
   final imgPicker = ImagePicker();
 
   Future image_Gallery() {
@@ -1897,49 +1916,56 @@ class _Profile_ScreenState extends State<Profile_Screen>
   }
 
   void openGallery() async {
-    var imgCamera = await imgPicker.pickImage(source: ImageSource.gallery);
-    // final List<XFile>? images = await imgPicker.pickMultiImage();
-    // print("images.length ${images!.length}");
-    // for (var i = 0; i < images.length; i++) {
-    //   // print(images[i].path);
-    //   imgFile_list.add(File(images[i].path));
-    //   // imgFile_list[i] = File(images[i].path);
-    //   print("image_list[i]${imgFile_list[i]}");
-    // }
-    // Navigator.push(
-    //     context, MaterialPageRoute(builder: (context) => ViewImageSelected(imageData: imgFile_list,)));
-    setState(() {
-      imgFile = File(imgCamera!.path);
-      // _creator_signup_controller.photoBase64 =
-      //     base64Encode(imgFile!.readAsBytesSync());
-      // print(_creator_signup_controller.photoBase64);
-    });
-    File editedFile = await Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => StoriesEditor(
-              // fontFamilyList: font_family,
-              giphyKey:
-                  'https://giphy.com/gifs/congratulations-congrats-xT0xezQGU5xCDJuCPe',
-              imageData: imgFile,
-              onDone: (String) {},
-              // filePath:
-              //     imgFile!.path,
-            )));
-    if (editedFile != null) {
-      print('editedFile: ${editedFile.path}');
+    // var imgCamera = await imgPicker.pickImage(source: ImageSource.gallery);
+    final List<XFile>? images =
+        await imgPicker.pickMultiImage(imageQuality: 50);
+    ListimgFile_ = images;
+    setState(() {});
+    print("images.length ${ListimgFile_!.length}");
+    for (var i = 0; i < ListimgFile_!.length; i++) {
+      print(ListimgFile_![i].path);
     }
+
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ViewImageSelected(
+                  imageData: ListimgFile_!,
+                )));
+    // setState(() {
+    // imgFile = File(imgCamera!.path);
+    // _creator_signup_controller.photoBase64 =
+    //     base64Encode(imgFile!.readAsBytesSync());
+    // print(_creator_signup_controller.photoBase64);
+    // });
+    ///edit story
+    // File editedFile = await Navigator.of(context).push(MaterialPageRoute(
+    //     builder: (context) => StoriesEditor(
+    //           // fontFamilyList: font_family,
+    //           giphyKey:
+    //               'https://giphy.com/gifs/congratulations-congrats-xT0xezQGU5xCDJuCPe',
+    //           imageData: imgFile,
+    //           onDone: (String) {},
+    //           // filePath:
+    //           //     imgFile!.path,
+    //         )));
+    // if (editedFile != null) {
+    //   print('editedFile: ${editedFile.path}');
+    // }
+    ///
   }
 
   void Pickvideo() async {
     var imgCamera = await imgPicker.pickVideo(source: ImageSource.gallery);
     setState(() {
       imgFile = File(imgCamera!.path);
+      ListimgFile_ = imgCamera as List<XFile>;
       // _creator_signup_controller.photoBase64 =
       //     base64Encode(imgFile!.readAsBytesSync());
       // print(_creator_signup_controller.photoBase64);
     });
     await Get.to(Story_image_preview(
-      ImageFile: File(imgFile!.path),
-      isImage: false,
+      ImageFile: ListimgFile_!,
     ));
 
     // File editedFile = await Navigator.of(context).push(MaterialPageRoute(
@@ -1955,6 +1981,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
     //   print('editedFile: ${editedFile.path}');
     // }
   }
+
 
   late double screenHeight, screenWidth;
 

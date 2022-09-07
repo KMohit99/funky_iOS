@@ -9,6 +9,7 @@ import 'package:funky_new/profile_screen/profile_screen.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../Utils/App_utils.dart';
@@ -21,11 +22,11 @@ import '../../sharePreference.dart';
 import '../dashboard_screen.dart';
 
 class Story_image_preview extends StatefulWidget {
-  final bool isImage;
-  final File ImageFile;
+  // final bool isImage;
+  final List<XFile> ImageFile;
 
   const Story_image_preview(
-      {Key? key, required this.ImageFile, required this.isImage})
+      {Key? key, required this.ImageFile,})
       : super(key: key);
 
   @override
@@ -42,13 +43,20 @@ class _Story_image_previewState extends State<Story_image_preview> {
   void initState() {
     super.initState();
     print('image urlllllllllllll ${widget.ImageFile}');
-    video_controller = VideoPlayerController.file(widget.ImageFile);
+    // video_controller = VideoPlayerController.file(widget.ImageFile);
+    init();
+    // video_controller!.setLooping(true);
+    // video_controller!.initialize().then((_) {
+    //   setState(() {});
+    // });
+    // video_controller!.pause();
+  }
 
-    video_controller!.setLooping(true);
-    video_controller!.initialize().then((_) {
-      setState(() {});
-    });
-    video_controller!.pause();
+  init(){
+    for(var i = 0; i< widget.ImageFile.length ; i++){
+      var file_format = widget.ImageFile[i].path.substring(widget.ImageFile[i].path.lastIndexOf('.'));
+      print(file_format);
+    }
   }
 
   @override
@@ -198,38 +206,65 @@ class _Story_image_previewState extends State<Story_image_preview> {
                   SizedBox(
                     height: 20,
                   ),
-                  (widget.isImage
-                      ? Container(
-                          child: Image.file(
-                            widget.ImageFile,
-                          ),
-                        )
-                      : GestureDetector(
-                          onTap: () {
-                            print('hello');
-                            isClicked = isClicked ? false : true;
-                            print(isClicked);
-                            if (video_controller!.value.isPlaying) {
-                              video_controller!.pause();
-                            } else {
-                              video_controller!.play();
-                            }
-                          },
-                          child: Container(
-                            // color: Colors.white,
-                            margin: EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 0),
-                            width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height / 1.2,
-                            child: Align(
-                              alignment: Alignment.topCenter,
-                              child: AspectRatio(
-                                  aspectRatio:
-                                      video_controller!.value.aspectRatio,
-                                  child: VideoPlayer(video_controller!)),
+                  // (widget.isImage
+                  //     ?
+                  // Container(
+                  //         child: Image.file(
+                  //           widget.ImageFile,
+                  //         ),
+                  //       ),
+                  GridView.builder(
+                    shrinkWrap: true,
+                    itemCount: widget.ImageFile.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: Stack(
+                          children: [
+                            Container(
+                              width: MediaQuery.of(context).size.width,
+                              decoration: BoxDecoration(
+                                // border: Border.all(color: Colors.white),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Image.file(
+                                File(widget.ImageFile[index].path),
+                                fit: BoxFit.cover,
+                              ),
                             ),
-                          ),
-                        )),
+                          ],
+                        ),
+                      );
+                    },
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3, childAspectRatio: 4 / 5),
+                  ),
+                      // : GestureDetector(
+                      //     onTap: () {
+                      //       print('hello');
+                      //       isClicked = isClicked ? false : true;
+                      //       print(isClicked);
+                      //       if (video_controller!.value.isPlaying) {
+                      //         video_controller!.pause();
+                      //       } else {
+                      //         video_controller!.play();
+                      //       }
+                      //     },
+                      //     child: Container(
+                      //       // color: Colors.white,
+                      //       margin: EdgeInsets.symmetric(
+                      //           horizontal: 20, vertical: 0),
+                      //       width: MediaQuery.of(context).size.width,
+                      //       height: MediaQuery.of(context).size.height / 1.2,
+                      //       child: Align(
+                      //         alignment: Alignment.topCenter,
+                      //         child: AspectRatio(
+                      //             aspectRatio:
+                      //                 video_controller!.value.aspectRatio,
+                      //             child: VideoPlayer(video_controller!)),
+                      //       ),
+                      //     ),
+                      //   )),
                 ],
               ),
             ),
@@ -245,18 +280,26 @@ class _Story_image_previewState extends State<Story_image_preview> {
     var url = (URLConstants.base_url + URLConstants.StoryPostApi);
     var request = http.MultipartRequest('POST', Uri.parse(url));
 
-    print("IIIiiiiIIIIII ${widget.ImageFile.path}");
-    var files = (widget.isImage
-        ? await http.MultipartFile.fromPath(
-            'story_photo[]', widget.ImageFile.path)
-        : await http.MultipartFile.fromPath(
-            'story_photo[]', widget.ImageFile.path));
-    request.files.add(files);
+    // print("IIIiiiiIIIIII ${widget.ImageFile.path}");
+    for(var i = 0; i< widget.ImageFile.length ; i++){
+      var file_format = widget.ImageFile[i].path.substring(widget.ImageFile[i].path.lastIndexOf('.'));
+
+      if(file_format == '.png' || file_format ==  '.jpg'){
+        var files = await http.MultipartFile.fromPath(
+            'story_photo[]', widget.ImageFile[i].path);
+        request.files.add(files);
+      }else if( file_format == '.mp4' || file_format ==  '.mov'){
+        var files = await http.MultipartFile.fromPath(
+            'uploadVideo[]', widget.ImageFile[i].path);
+        request.files.add(files);
+      }
+    }
+    // request.files.add(files);
+    // request.fields['uploadVideo'] = '';
+
     request.fields['userId'] = id_user;
     request.fields['title'] = title_controller.text;
-    // request.fields['uploadVideo'] = '';
-    request.fields['isVideo'] = (widget.isImage ? 'false' : 'true');
-
+    request.fields['isVideo'] = 'false';
     // request.fields['isVideo'] = '';
 
     //userId,tagLine,description,address,postImage,uploadVideo,isVideo
@@ -272,7 +315,7 @@ class _Story_image_previewState extends State<Story_image_preview> {
     if (response.statusCode == 200) {
       print("SUCCESS");
       print(response.reasonPhrase);
-      print(widget.ImageFile.path);
+      // print(widget.ImageFile.path);
       print(responseData);
       hideLoader(context);
       await Get.to(Dashboard(

@@ -1408,7 +1408,7 @@ class _SearchUserProfileState extends State<SearchUserProfile>
 
                                                       Get.to(() =>
                                                           StoryScreen(
-                                                            thumbnail: test_thumb[index],
+                                                            // thumbnail: test_thumb[index],
                                                             stories:
                                                             story_info,
                                                             story_no:

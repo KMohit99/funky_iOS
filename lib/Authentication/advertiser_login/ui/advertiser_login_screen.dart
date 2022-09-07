@@ -73,10 +73,10 @@ class _AdvertiserLoginScreenState extends BaseScreenState<LoginScreenBloc> {
       builder: (GetxController controller) {
         return Stack(
           children: [
-            // Container(
-            //   color: Colors.black,
-            //   height: MediaQuery.of(context).size.height,
-            // ),
+            Container(
+              color: Colors.black,
+              height: MediaQuery.of(context).size.height,
+            ),
             Container(
               // decoration: BoxDecoration(
               //
@@ -405,7 +405,9 @@ class _AdvertiserLoginScreenState extends BaseScreenState<LoginScreenBloc> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              Get.toNamed(BindingUtils.ageVerification);
+                              // Get.toNamed(BindingUtils.ageVerification);
+                              Get.toNamed(BindingUtils.advertiser_signup);
+
                             },
                             child: Container(
                               child: Text(

@@ -26,10 +26,10 @@ import 'package:http/http.dart' as http;
 class StoryScreen extends StatefulWidget {
   final List<Storys> stories;
   final List<Data_story> stories_title;
-  final File thumbnail;
+  // final File thumbnail;
   int story_no;
 
-  StoryScreen({required this.stories, required this.story_no, required this.stories_title, required this.thumbnail});
+  StoryScreen({required this.stories, required this.story_no, required this.stories_title,});
 
   @override
   _StoryScreenState createState() => _StoryScreenState();
@@ -63,9 +63,9 @@ class _StoryScreenState extends State<StoryScreen>
           } else {
             // Out of bounds - loop story
             // You can also
-            Navigator.of(context).pop();
-            // widget.story_no = 0;
-            // _loadStory(story: widget.stories[widget.story_no]);
+            // Navigator.of(context).pop();
+            widget.story_no = 0;
+            _loadStory(story: widget.stories[widget.story_no]);
           }
         });
       }
@@ -82,7 +82,7 @@ class _StoryScreenState extends State<StoryScreen>
 
   @override
   Widget build(BuildContext context) {
-    final Storys story = widget.stories[0];
+    final Data_story story = widget.stories_title[widget.story_no];
     return Scaffold(
       backgroundColor: Colors.black,
       body: GestureDetector(
@@ -179,13 +179,15 @@ class _StoryScreenState extends State<StoryScreen>
                           width: 40,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(50),
-                            child: (story.isVideo == 'true'
-                                ? Image.file(
-                                    widget.thumbnail)
+                            child: (story.storys![0].isVideo == 'true'
+                                ?Image.asset(
+                                'assets/images/Funky_App_Icon.png')
+                            // Image.file(
+                            //         widget.thumbnail)
                                 : FadeInImage.assetNetwork(
                                     fit: BoxFit.cover,
                                     image:
-                                        "${URLConstants.base_data_url}images/${story.storyPhoto!}",
+                                        "${URLConstants.base_data_url}images/${story.storys![0].storyPhoto!}",
                                     placeholder:
                                         'assets/images/Funky_App_Icon.png',
                                     // color: HexColor(CommonColor.pinkFont),
@@ -232,11 +234,11 @@ class _StoryScreenState extends State<StoryScreen>
                             // share_icon(story_id: story.stID!);
                             pop_up(
                                 story_id: story.stID!,
-                                story_image: (story.storyPhoto!.isEmpty
+                                story_image: (story.storys![0].storyPhoto!.isEmpty
                                     ? 'assets/images/Funky_App_Icon.png'
-                                    : story.storyPhoto!),
+                                    : story.storys![0].storyPhoto!),
                                 story_title: widget.stories_title[widget.story_no].title!,
-                                is_video: (story.storyPhoto!.isEmpty
+                                is_video: (story.storys![0].storyPhoto!.isEmpty
                                     ? 'true'
                                     : 'false'));
                             // delete_story(story_id: story.stID!);
@@ -254,7 +256,7 @@ class _StoryScreenState extends State<StoryScreen>
     );
   }
 
-  void _onTapDown(TapDownDetails details, Storys story) {
+  void _onTapDown(TapDownDetails details, Data_story story) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double dx = details.globalPosition.dx;
     if (dx < screenWidth / 3) {
@@ -277,7 +279,7 @@ class _StoryScreenState extends State<StoryScreen>
         }
       });
     } else {
-      if (story.storyPhoto!.isEmpty) {
+      if (story.storys![0].storyPhoto!.isEmpty) {
         if (_videoController!.value.isPlaying) {
           _videoController!.pause();
           _animController!.stop();
@@ -925,52 +927,52 @@ class AnimatedBar extends StatelessWidget {
   }
 }
 
-class UserInfo extends StatelessWidget {
-  final User user;
-  final Data_story stories;
-
-  const UserInfo({
-    Key? key,
-    required this.user,
-    required this.stories,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: <Widget>[
-        CircleAvatar(
-          radius: 20.0,
-          backgroundColor: Colors.grey[300],
-          backgroundImage: CachedNetworkImageProvider(
-            "${URLConstants.base_data_url}images/${stories.image!}",
-          ),
-        ),
-        const SizedBox(width: 10.0),
-        Expanded(
-          child: Text(
-            '${stories.title}',
-            style:
-                TextStyle(color: Colors.white, fontFamily: 'PM', fontSize: 18),
-          ),
-        ),
-        IconButton(
-          icon: Icon(
-            Icons.remove_red_eye,
-            color: Colors.white,
-          ),
-          onPressed: () {},
-        ),
-        IconButton(
-          icon: const Icon(
-            Icons.close,
-            size: 30.0,
-            color: Colors.white,
-          ),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ],
-    );
-  }
-}
+// class UserInfo extends StatelessWidget {
+//   final User user;
+//   final Data_story stories;
+//
+//   const UserInfo({
+//     Key? key,
+//     required this.user,
+//     required this.stories,
+//   }) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Row(
+//       mainAxisAlignment: MainAxisAlignment.end,
+//       children: <Widget>[
+//         CircleAvatar(
+//           radius: 20.0,
+//           backgroundColor: Colors.grey[300],
+//           backgroundImage: CachedNetworkImageProvider(
+//             "${URLConstants.base_data_url}images/${stories.image!}",
+//           ),
+//         ),
+//         const SizedBox(width: 10.0),
+//         Expanded(
+//           child: Text(
+//             '${stories.title}',
+//             style:
+//                 TextStyle(color: Colors.white, fontFamily: 'PM', fontSize: 18),
+//           ),
+//         ),
+//         IconButton(
+//           icon: Icon(
+//             Icons.remove_red_eye,
+//             color: Colors.white,
+//           ),
+//           onPressed: () {},
+//         ),
+//         IconButton(
+//           icon: const Icon(
+//             Icons.close,
+//             size: 30.0,
+//             color: Colors.white,
+//           ),
+//           onPressed: () => Navigator.of(context).pop(),
+//         ),
+//       ],
+//     );
+//   }
+// }

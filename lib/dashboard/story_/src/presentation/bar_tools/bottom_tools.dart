@@ -162,27 +162,27 @@ class BottomTools extends StatelessWidget {
                                 await renderWidget();
                               } else {
                                 debugPrint('creating image');
-                                // await takePicture(
-                                //         contentKey: contentKey,
-                                //         context: context,
-                                //         saveToGallery: false)
-                                //     .then((bytes) {
-                                //   if (bytes != null) {
-                                //     pngUri = bytes;
-                                //     onDone(pngUri);
-                                //   } else {}
-                                // });
-                                debugPrint('creating image');
-                                var response = await takePicture(
-                                    contentKey: contentKey,
-                                    context: context,
-                                    saveToGallery: true);
-                                if (response) {
-                                  Fluttertoast.showToast(
-                                      msg: 'Successfully saved');
-                                } else {
-                                  Fluttertoast.showToast(msg: 'Error');
-                                }
+                                await takePicture(
+                                        contentKey: contentKey,
+                                        context: context,
+                                        saveToGallery: false)
+                                    .then((bytes) {
+                                  if (bytes != null) {
+                                    pngUri = bytes;
+                                    onDone(pngUri);
+                                  } else {}
+                                });
+                                // debugPrint('creating image');
+                                // var response = await takePicture(
+                                //     contentKey: contentKey,
+                                //     context: context,
+                                //     saveToGallery: true);
+                                // if (response) {
+                                //   Fluttertoast.showToast(
+                                //       msg: 'Successfully saved');
+                                // } else {
+                                //   Fluttertoast.showToast(msg: 'Error');
+                                // }
                               }
                             }
                             setState(() {
