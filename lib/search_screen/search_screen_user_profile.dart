@@ -1406,15 +1406,15 @@ class _SearchUserProfileState extends State<SearchUserProfile>
                                                       getStoryModel!
                                                           .data![index].storys!;
 
-                                                      Get.to(() =>
-                                                          StoryScreen(
-                                                            // thumbnail: test_thumb[index],
-                                                            stories:
-                                                            story_info,
-                                                            story_no:
-                                                            index,
-                                                            stories_title: story_,
-                                                          ));
+                                                      // Get.to(() =>
+                                                      //     StoryScreen(
+                                                      //       // thumbnail: test_thumb[index],
+                                                      //       stories:
+                                                      //       story_info,
+                                                      //       story_no:
+                                                      //       index,
+                                                      //       stories_title: story_,
+                                                      //     ));
                                                       // Get.to(StoryScreen(stories: story_info));
                                                     },
                                                     child: SizedBox(

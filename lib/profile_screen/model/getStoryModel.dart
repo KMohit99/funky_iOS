@@ -100,7 +100,7 @@ class User {
   String? profileUrl;
   String? socialId;
   String? socialType;
-  Null? userFollowUnfollow;
+  String? userFollowUnfollow;
   String? userBlockUnblock;
   String? followerNumber;
   String? followingNumber;

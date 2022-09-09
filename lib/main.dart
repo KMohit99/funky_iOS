@@ -1,8 +1,12 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:funky_new/splash_screen.dart';
 import 'package:get/get.dart';
 import 'package:get/get.dart';
@@ -11,6 +15,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:photo_manager/photo_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -137,5 +142,127 @@ class MyApp extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  MyHomePage({Key? key,}) : super(key: key);
+
+
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  List<String> _imageList = [];
+  List<int> _selectedIndexList = [];
+  List<String> _selectedList = [];
+  bool _selectionMode = false;
+
+  @override
+  Widget build(BuildContext context) {
+    List<Widget> _buttons = [];
+    if (_selectionMode) {
+      _buttons.add(IconButton(
+          icon: Icon(Icons.delete),
+          onPressed: () {
+            _selectedIndexList.sort();
+            print('Delete ${_selectedIndexList.length} items! Index: ${_selectedIndexList.toString()}');
+          }));
+    }
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("widget.title"),
+        actions: _buttons,
+      ),
+      body: _createBody(),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _imageList.add('https://picsum.photos/800/600/?image=280');
+    _imageList.add('https://picsum.photos/800/600/?image=281');
+    _imageList.add('https://picsum.photos/800/600/?image=282');
+    _imageList.add('https://picsum.photos/800/600/?image=283');
+    _imageList.add('https://picsum.photos/800/600/?image=284');
+  }
+
+  void _changeSelection({bool? enable, int? index}) {
+    _selectionMode = enable!;
+    _selectedIndexList.add(index!);
+    if (index == -1) {
+      _selectedIndexList.clear();
+    }
+  }
+
+  Widget _createBody() {
+    return StaggeredGridView.countBuilder(
+      crossAxisCount: 2,
+      mainAxisSpacing: 4.0,
+      crossAxisSpacing: 4.0,
+      primary: false,
+      itemCount: _imageList.length,
+      itemBuilder: (BuildContext context, int index) {
+        return getGridTile(index);
+      },
+      staggeredTileBuilder: (int index) => StaggeredTile.count(1, 1),
+      padding: const EdgeInsets.all(4.0),
+    );
+  }
+
+  GridTile getGridTile(int index) {
+    if (_selectionMode) {
+      return GridTile(
+          header: GridTileBar(
+            leading: Icon(
+              _selectedIndexList.contains(index) ? Icons.check_circle_outline : Icons.radio_button_unchecked,
+              color: _selectedIndexList.contains(index) ? Colors.green : Colors.black,
+            ),
+          ),
+          child: GestureDetector(
+            child: Container(
+              decoration: BoxDecoration(border: Border.all(color: Colors.blue, width: 30.0)),
+              child: Image.network(
+                _imageList[index],
+                fit: BoxFit.cover,
+              ),
+            ),
+            onLongPress: () {
+              setState(() {
+                _changeSelection(enable: false, index: -1);
+              });
+            },
+            onTap: () {
+              setState(() {
+                if (_selectedIndexList.contains(index)) {
+                  _selectedIndexList.remove(index);
+                  _selectedList.remove(_imageList[index]);
+                } else {
+                  _selectedIndexList.add(index);
+                  _selectedList.add(_imageList[index]);
+                }
+              });
+              print(_selectedList[0]);
+            },
+          ));
+    } else {
+      return GridTile(
+        child: InkResponse(
+          child: Image.network(
+            _imageList[index],
+            fit: BoxFit.cover,
+          ),
+          onLongPress: () {
+            setState(() {
+              _changeSelection(enable: true, index: index);
+            });
+          },
+        ),
+      );
+    }
   }
 }

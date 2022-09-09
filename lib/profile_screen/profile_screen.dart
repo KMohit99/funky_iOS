@@ -998,7 +998,6 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                                   // }
                                                   // openCamera();
                                                   pop_up();
-                                                  // Get.to(PostScreen());
 
                                                 },
                                                 icon: Icon(
@@ -1048,6 +1047,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                                             print(story_info);
                                                             Get.to(() =>
                                                                 StoryScreen(
+                                                                  title: story_[index].title!,
                                                                   // thumbnail:
                                                                   //     test_thumb[index],
                                                                   stories:
@@ -2102,7 +2102,9 @@ class _Profile_ScreenState extends State<Profile_Screen>
                             // if (editedFile != null) {
                             //   print('editedFile: ${editedFile.path}');
                             // }
-                            image_Gallery();
+                            // image_Gallery();
+                            Get.to(PostScreen());
+
                           },
                           child: Column(
                             children: [
@@ -2125,7 +2127,8 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                   // if (editedFile != null) {
                                   //   print('editedFile: ${editedFile.path}');
                                   // }
-                                  image_Gallery();
+                                  // image_Gallery();
+                                  Get.to(PostScreen());
                                 },
                               ),
                               SizedBox(

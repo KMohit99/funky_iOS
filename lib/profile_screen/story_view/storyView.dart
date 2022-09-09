@@ -26,10 +26,17 @@ import 'package:http/http.dart' as http;
 class StoryScreen extends StatefulWidget {
   final List<Storys> stories;
   final List<Data_story> stories_title;
+  final String title;
+
   // final File thumbnail;
   int story_no;
 
-  StoryScreen({required this.stories, required this.story_no, required this.stories_title,});
+  StoryScreen({
+    required this.stories,
+    required this.story_no,
+    required this.stories_title,
+    required this.title,
+  });
 
   @override
   _StoryScreenState createState() => _StoryScreenState();
@@ -82,7 +89,7 @@ class _StoryScreenState extends State<StoryScreen>
 
   @override
   Widget build(BuildContext context) {
-    final Data_story story = widget.stories_title[widget.story_no];
+    final Storys story = widget.stories[0];
     return Scaffold(
       backgroundColor: Colors.black,
       body: GestureDetector(
@@ -102,7 +109,7 @@ class _StoryScreenState extends State<StoryScreen>
                     physics: NeverScrollableScrollPhysics(),
                     itemCount: widget.stories.length,
                     itemBuilder: (context, i) {
-                      final Storys story = widget.stories[0];
+                      final Storys story = widget.stories[i];
                       get_story_count(story_id: story.stID!);
                       if (story.isVideo == 'false') {
                         print(
@@ -179,26 +186,25 @@ class _StoryScreenState extends State<StoryScreen>
                           width: 40,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(50),
-                            child: (story.storys![0].isVideo == 'true'
-                                ?Image.asset(
-                                'assets/images/Funky_App_Icon.png')
-                            // Image.file(
-                            //         widget.thumbnail)
+                            child: (story.isVideo == 'true'
+                                ? Image.asset(
+                                    'assets/images/Funky_App_Icon.png')
+                                // Image.file(
+                                //         widget.thumbnail)
                                 : FadeInImage.assetNetwork(
                                     fit: BoxFit.cover,
                                     image:
-                                        "${URLConstants.base_data_url}images/${story.storys![0].storyPhoto!}",
+                                        "${URLConstants.base_data_url}images/${story.storyPhoto!}",
                                     placeholder:
                                         'assets/images/Funky_App_Icon.png',
                                     // color: HexColor(CommonColor.pinkFont),
-                                  )
-                            ),
+                                  )),
                           ),
                         ),
                         const SizedBox(width: 10.0),
                         Expanded(
                           child: Text(
-                            '${widget.stories_title[widget.story_no].title}',
+                            '${widget.title}',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontFamily: 'PM',
@@ -234,11 +240,13 @@ class _StoryScreenState extends State<StoryScreen>
                             // share_icon(story_id: story.stID!);
                             pop_up(
                                 story_id: story.stID!,
-                                story_image: (story.storys![0].storyPhoto!.isEmpty
-                                    ? 'assets/images/Funky_App_Icon.png'
-                                    : story.storys![0].storyPhoto!),
-                                story_title: widget.stories_title[widget.story_no].title!,
-                                is_video: (story.storys![0].storyPhoto!.isEmpty
+                                story_image:
+                                    (story.storyPhoto!.isEmpty
+                                        ? 'assets/images/Funky_App_Icon.png'
+                                        : story.storyPhoto!),
+                                story_title: widget
+                                    .stories_title[widget.story_no].title!,
+                                is_video: (story.storyPhoto!.isEmpty
                                     ? 'true'
                                     : 'false'));
                             // delete_story(story_id: story.stID!);
@@ -256,7 +264,7 @@ class _StoryScreenState extends State<StoryScreen>
     );
   }
 
-  void _onTapDown(TapDownDetails details, Data_story story) {
+  void _onTapDown(TapDownDetails details,Storys story) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double dx = details.globalPosition.dx;
     if (dx < screenWidth / 3) {
@@ -279,7 +287,7 @@ class _StoryScreenState extends State<StoryScreen>
         }
       });
     } else {
-      if (story.storys![0].storyPhoto!.isEmpty) {
+      if (story.storyPhoto!.isEmpty) {
         if (_videoController!.value.isPlaying) {
           _videoController!.pause();
           _animController!.stop();
@@ -531,7 +539,6 @@ class _StoryScreenState extends State<StoryScreen>
       // CommonWidget().showToaster(msg: msg.toString());
     }
   }
-
 
   ViewStoryModel? viewStoryModel;
 
@@ -790,7 +797,7 @@ class _StoryScreenState extends State<StoryScreen>
                                   ImageFile: story_image,
                                   storyId: story_id,
                                   story_title: story_title,
-                                  isvideo:  is_video,
+                                  isvideo: is_video,
                                 ));
                                 // File editedFile = await Navigator.of(context)
                                 //     .push(MaterialPageRoute(

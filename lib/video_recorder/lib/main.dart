@@ -50,7 +50,9 @@ class _MyApp_videoState extends State<MyApp_video>
     with TickerProviderStateMixin {
   String _lastPhotoPath = 'path';
   String _lastVideoPath = 'path';
-  bool _focus = false, _fullscreen = true, _isRecordingVideo = false;
+  bool _focus = false,
+      _fullscreen = true,
+      _isRecordingVideo = false;
 
   ValueNotifier<CameraFlashes> _switchFlash = ValueNotifier(CameraFlashes.NONE);
   ValueNotifier<double> _zoomNotifier = ValueNotifier(0);
@@ -59,7 +61,7 @@ class _MyApp_videoState extends State<MyApp_video>
   ValueNotifier<CaptureModes> _captureMode = ValueNotifier(CaptureModes.PHOTO);
   ValueNotifier<bool> _enableAudio = ValueNotifier(true);
   ValueNotifier<CameraOrientations> _orientation =
-      ValueNotifier(CameraOrientations.PORTRAIT_UP);
+  ValueNotifier(CameraOrientations.PORTRAIT_UP);
 
   /// use this to call a take picture
   PictureController _pictureController = PictureController();
@@ -124,38 +126,38 @@ class _MyApp_videoState extends State<MyApp_video>
           _buildInterface(),
           (!_isRecordingVideo)
               ? PreviewCardWidget(
-                  lastPhotoPath: _lastPhotoPath,
-                  orientation: _orientation,
-                  previewAnimation: _previewAnimation,
-                )
+            lastPhotoPath: _lastPhotoPath,
+            orientation: _orientation,
+            previewAnimation: _previewAnimation,
+          )
               : (instopvideo
-                  ? Center(
-                      child: Container(
-                          height: 80,
-                          width: 100,
-                          color: Colors.transparent,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              CircularProgressIndicator(
-                                color: HexColor(CommonColor.pinkFont),
-                              ),
-                            ],
-                          )
-                          // Material(
-                          //   color: Colors.transparent,
-                          //   child: LoadingIndicator(
-                          //     backgroundColor: Colors.transparent,
-                          //     indicatorType: Indicator.ballScale,
-                          //     colors: _kDefaultRainbowColors,
-                          //     strokeWidth: 4.0,
-                          //     pathBackgroundColor: Colors.yellow,
-                          //     // showPathBackground ? Colors.black45 : null,
-                          //   ),
-                          // ),
-                          ),
-                    )
-                  : Container()),
+              ? Center(
+            child: Container(
+                height: 80,
+                width: 100,
+                color: Colors.transparent,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    CircularProgressIndicator(
+                      color: HexColor(CommonColor.pinkFont),
+                    ),
+                  ],
+                )
+              // Material(
+              //   color: Colors.transparent,
+              //   child: LoadingIndicator(
+              //     backgroundColor: Colors.transparent,
+              //     indicatorType: Indicator.ballScale,
+              //     colors: _kDefaultRainbowColors,
+              //     strokeWidth: 4.0,
+              //     pathBackgroundColor: Colors.yellow,
+              //     // showPathBackground ? Colors.black45 : null,
+              //   ),
+              // ),
+            ),
+          )
+              : Container()),
         ],
       ),
     );
@@ -424,9 +426,11 @@ class _MyApp_videoState extends State<MyApp_video>
   _takePhoto() async {
     final Directory extDir = await getTemporaryDirectory();
     final testDir =
-        await Directory('${extDir.path}/test').create(recursive: true);
+    await Directory('${extDir.path}/test').create(recursive: true);
     final String filePath = widget.randomPhotoName
-        ? '${testDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg'
+        ? '${testDir.path}/${DateTime
+        .now()
+        .millisecondsSinceEpoch}.jpg'
         : '${testDir.path}/photo_test.jpg';
     await _pictureController.takePicture(filePath);
     // lets just make our phone vibrate
@@ -445,9 +449,10 @@ class _MyApp_videoState extends State<MyApp_video>
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ImageEditor(
-            image: imageData,
-          ),
+          builder: (context) =>
+              ImageEditor(
+                image: imageData,
+              ),
         ),
       ).then((editedImage) {
         if (editedImage != null) {
@@ -457,7 +462,9 @@ class _MyApp_videoState extends State<MyApp_video>
             final decodedBytes = base64Decode(base64String);
             var file = Io.File(imgFile!.path);
             file.writeAsBytesSync(decodedBytes);
-            print(file.path.split('/').last);
+            print(file.path
+                .split('/')
+                .last);
             imgFile = file;
             Get.to(PostImagePreviewScreen(
               ImageFile: editedImage!,
@@ -469,17 +476,33 @@ class _MyApp_videoState extends State<MyApp_video>
         print(er);
       });
     } else {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => StoriesEditor(
-                    // fontFamilyList: font_family,
-                    giphyKey: '',
-                    imageData: File(filePath),
-                    onDone: (String) {},
-                    // filePath:
-                    //     imgFile!.path,
-                  )));
+      // Navigator.push(
+      //     context,
+      //     MaterialPageRoute(
+      //         builder: (context) => StoriesEditor(
+      //               // fontFamilyList: font_family,
+      //               giphyKey: '',
+      //               imageData: File(filePath),
+      //               onDone: (String) {},
+      //               // filePath:
+      //               //     imgFile!.path,
+      //             )));
+      File editedFile = await Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) =>
+              StoriesEditor(
+                // fontFamilyList: font_family,
+                giphyKey:
+                'https://giphy.com/gifs/congratulations-congrats-xT0xezQGU5xCDJuCPe',
+                imageData: imgFile,
+                onDone: (String) {},
+                // filePath:
+                //     imgFile!.path,
+              )));
+      if (editedFile != null) {
+        print('editedFile: ${editedFile.path}');
+        await Get.to(
+            Story_image_preview(single_image: editedFile, single: true,));
+      }
     }
     ;
     print("----------------------------------");
@@ -669,20 +692,21 @@ class _MyApp_videoState extends State<MyApp_video>
     });
     (widget.story == false
         ? await Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => VideoEditor(
-                      file: File(mediaInfo!.path!),
-                    )
-                //     CameraPreview(
-                //   videoPath: _lastVideoPath,
-                // ),
-                ),
-          )
-        : await Get.to(Story_image_preview(
-            ImageFile: File(mediaInfo!.path!) as List<XFile>,
-            // isImage: false,
-          ))
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              VideoEditor(
+                file: File(mediaInfo!.path!),
+              )
+        //     CameraPreview(
+        //   videoPath: _lastVideoPath,
+        // ),
+      ),
+    )
+        :
+    await Get.to(Story_image_preview(
+      single_image: File(mediaInfo!.path!), single: true,))
+
     );
   }
 
@@ -741,9 +765,11 @@ class _MyApp_videoState extends State<MyApp_video>
     // }
     final Directory extDir = await getTemporaryDirectory();
     final testDir =
-        await Directory('${extDir.path}/test').create(recursive: true);
+    await Directory('${extDir.path}/test').create(recursive: true);
     final String filePath = widget.randomPhotoName
-        ? '${testDir.path}/${DateTime.now().millisecondsSinceEpoch}.mp4'
+        ? '${testDir.path}/${DateTime
+        .now()
+        .millisecondsSinceEpoch}.mp4'
         : '${testDir.path}/video_test.mp4';
     // await VideoCompress.setLogLevel(0);
     // final mediaInfo = await VideoCompress.compressVideo(
@@ -776,21 +802,24 @@ class _MyApp_videoState extends State<MyApp_video>
   _buildChangeResolutionDialog() {
     showModalBottomSheet(
       context: context,
-      builder: (context) => ListView.separated(
-        itemBuilder: (context, index) => ListTile(
-          key: ValueKey("resOption"),
-          onTap: () {
-            this._photoSize.value = _availableSizes![index];
-            setState(() {});
-            Navigator.of(context).pop();
-          },
-          leading: Icon(Icons.aspect_ratio),
-          title: Text(
-              "${_availableSizes![index].width}/${_availableSizes![index].height}"),
-        ),
-        separatorBuilder: (context, index) => Divider(),
-        itemCount: _availableSizes!.length,
-      ),
+      builder: (context) =>
+          ListView.separated(
+            itemBuilder: (context, index) =>
+                ListTile(
+                  key: ValueKey("resOption"),
+                  onTap: () {
+                    this._photoSize.value = _availableSizes![index];
+                    setState(() {});
+                    Navigator.of(context).pop();
+                  },
+                  leading: Icon(Icons.aspect_ratio),
+                  title: Text(
+                      "${_availableSizes![index]
+                          .width}/${_availableSizes![index].height}"),
+                ),
+            separatorBuilder: (context, index) => Divider(),
+            itemCount: _availableSizes!.length,
+          ),
     );
   }
 
@@ -906,7 +935,10 @@ class _MyApp_videoState extends State<MyApp_video>
         child: Center(
           child: Container(
             height: 300,
-            width: MediaQuery.of(context).size.width,
+            width: MediaQuery
+                .of(context)
+                .size
+                .width,
             child: CameraAwesome(
               onPermissionsResult: _onPermissionsResult,
               selectDefaultSize: (availableSizes) {

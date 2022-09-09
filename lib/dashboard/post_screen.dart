@@ -2,13 +2,17 @@ import 'dart:collection';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:funky_new/custom_widget/page_loader.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:video_player/video_player.dart';
 
+import '../profile_screen/story_view/view_selected_image.dart';
 import 'controller/post_screen_controller.dart';
 
 class PostScreen extends StatefulWidget {
@@ -46,6 +50,7 @@ class PostScreenState extends State<PostScreen> {
   //     child: Text('Open Gallery'),
   //   );
   // }
+  List<Course> corcess = new List.empty(growable: true);
 
   List<AssetEntity> assets = [];
 
@@ -108,6 +113,24 @@ class PostScreenState extends State<PostScreen> {
     });
   }
 
+  List<String> _imageList = [];
+  List<XFile> file_list = [];
+
+  List<int> _selectedIndexList = [];
+  List<Future<File?>> _selectedList = [];
+
+  bool _selectionMode = false;
+
+  void _changeSelection({bool? enable, int? index}) {
+    _selectionMode = enable!;
+    _selectedIndexList.add(index!);
+    _selectedList.add(assets[index].file);
+
+    if (index == -1) {
+      _selectedIndexList.clear();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
@@ -134,12 +157,18 @@ class PostScreenState extends State<PostScreen> {
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(50),
             child: AppBar(
+              // flexibleSpace: Container(
+              //   decoration: const BoxDecoration(
+              //    color: Colors.black
+              //   ),
+              // ),
               leadingWidth: 400,
               elevation: 0.0,
               leading: Center(
                 // margin: EdgeInsets.only(left: 20,top: 30),
                 child: GestureDetector(
                   onTap: () {
+                    Navigator.pop(context);
                     // Get.to(Dashboard());
                   },
                   child: Text(
@@ -228,7 +257,7 @@ class PostScreenState extends State<PostScreen> {
               actions: [
                 Center(
                   child: GestureDetector(
-                    onTap: () {
+                    onTap: () async {
                       // _post_screen_controller.pageIndexUpdate('02');
                       // _pageController!.jumpToPage(1);
                       ///
@@ -268,6 +297,20 @@ class PostScreenState extends State<PostScreen> {
                       // }).catchError((er) {
                       //   print(er);
                       // });
+                      // showLoader(context);
+                      for (var i = 0; i < _selectedList.length; i++) {
+                        await _selectedList[i].then((value) {
+                          file_list.add(XFile(value!.path));
+                        });
+                        // print(file_list);
+                      }
+                      // hideLoader(context);
+                      await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ViewImageSelected(
+                                    imageData: file_list,
+                                  )));
                     },
                     child: Container(
                       margin: EdgeInsets.only(right: 20),
@@ -353,15 +396,110 @@ class PostScreenState extends State<PostScreen> {
                               ),
                               itemCount: assets.length,
                               itemBuilder: (_, index) {
-                                bool _selectItem = false;
-
                                 return FutureBuilder<Uint8List?>(
                                   future: (assets[index].type == AssetType.image
-                                      ? assets[index].originBytes
+                                      ? assets[index].thumbData
                                       : assets[index].thumbData),
                                   builder: (widget, snapshot) {
                                     final bytes = snapshot.data;
                                     // If we have no data, display a spinner
+                                    // if (bytes == null) {
+                                    //   return const SizedBox(
+                                    //     height: 20,
+                                    //     width: 20,
+                                    //     child: Padding(
+                                    //       padding: EdgeInsets.all(25.0),
+                                    //       child: CircularProgressIndicator(
+                                    //         color: Colors.red,
+                                    //       ),
+                                    //     ),
+                                    //   );
+                                    // } else {
+                                    //   return
+                                    //     InkWell(
+                                    //     onTap: () async {
+                                    //       if (assets[index].type ==
+                                    //           AssetType.image) {
+                                    //         print("asset.file");
+                                    //         // print(bytes);
+                                    //         print(snapshot.data);
+                                    //         Uint8List? imageInUnit8List = snapshot
+                                    //             .data; // store unit8List image here ;
+                                    //         final tempDir =
+                                    //             await getTemporaryDirectory();
+                                    //         File file = await File(
+                                    //                 '${tempDir.path}/image.png')
+                                    //             .create();
+                                    //         file.writeAsBytesSync(
+                                    //             imageInUnit8List!);
+                                    //         print(file.path);
+                                    //         _images.add(file);
+                                    //         print(_images.length);
+                                    //         // poster.selected_item.value = 'Image';
+                                    //         // poster.file_selected_image.value = String.fromCharCodes(bytes);
+                                    //         // print(
+                                    //         //     "Uint8List.fromList(_post_screen_controller ${Uint8List.fromList(poster.file_selected_image.codeUnits)}");
+                                    //         // poster.image = bytes;
+                                    //         // setState(() {
+                                    //         //   if (_selectItem == false) {
+                                    //         //     _selectItem = true;
+                                    //         //     print("Item Selected");
+                                    //         //   } else {
+                                    //         //     _selectItem = false;
+                                    //         //     print("Item UnSelected");
+                                    //         //   }
+                                    //         // });
+                                    //       } else {
+                                    //         print("video.file");
+                                    //         print(bytes);
+                                    //         print(assets[index].file);
+                                    //         // poster.selected_item.value = 'Video';
+                                    //
+                                    //         // poster.file_selected_video.value = String.fromCharCodes(bytes);
+                                    //         print("PostScreenState().video()");
+                                    //         // print(poster.file_selected_video.value.toString());
+                                    //         // PostScreenState().video();
+                                    //       }
+                                    //       // Navigator.push(
+                                    //       //   context,
+                                    //       //   MaterialPageRoute(
+                                    //       //     builder: (_) {
+                                    //       //       if (asset.type == AssetType.image) {
+                                    //       //         poster.file_selected.value = asset.file.toString();
+                                    //       //         // return ImageScreen(imageFile: asset.file);
+                                    //       //       } else {
+                                    //       //         return VideoScreen(videoFile: asset.file);
+                                    //       //       }
+                                    //       //     },
+                                    //       //   ),
+                                    //       // );
+                                    //     },
+                                    //     child: Stack(
+                                    //       children: [
+                                    //         Positioned.fill(
+                                    //           child: Container(
+                                    //               color: Colors.white,
+                                    //               child: Image.memory(
+                                    //                   bytes,
+                                    //                   colorBlendMode:
+                                    //                       BlendMode.color,
+                                    //                   fit: BoxFit.cover)),
+                                    //         ),
+                                    //         if (assets[index].type ==
+                                    //             AssetType.video)
+                                    //           Center(
+                                    //             child: Container(
+                                    //               color: Colors.blue,
+                                    //               child: Icon(
+                                    //                 Icons.play_arrow,
+                                    //                 color: Colors.white,
+                                    //               ),
+                                    //             ),
+                                    //           ),
+                                    //       ],
+                                    //     ),
+                                    //   );
+                                    // }
                                     if (bytes == null) {
                                       return const SizedBox(
                                         height: 20,
@@ -374,92 +512,121 @@ class PostScreenState extends State<PostScreen> {
                                         ),
                                       );
                                     } else {
-                                      return InkWell(
-                                        onTap: () async {
-                                          doMultiSelection(
-                                              assets[index].title!);
-
-                                          if (assets[index].type ==
-                                              AssetType.image) {
-                                            print("asset.file");
-                                            // print(bytes);
-                                            print(snapshot.data);
-                                            Uint8List? imageInUnit8List = snapshot
-                                                .data; // store unit8List image here ;
-                                            final tempDir =
-                                                await getTemporaryDirectory();
-                                            File file = await File(
-                                                    '${tempDir.path}/image.png')
-                                                .create();
-                                            file.writeAsBytesSync(
-                                                imageInUnit8List!);
-                                            print(file.path);
-                                            _images.add(file);
-                                            print(_images.length);
-                                            // poster.selected_item.value = 'Image';
-                                            // poster.file_selected_image.value = String.fromCharCodes(bytes);
-                                            // print(
-                                            //     "Uint8List.fromList(_post_screen_controller ${Uint8List.fromList(poster.file_selected_image.codeUnits)}");
-                                            // poster.image = bytes;
-                                            // setState(() {
-                                            //   if (_selectItem == false) {
-                                            //     _selectItem = true;
-                                            //     print("Item Selected");
-                                            //   } else {
-                                            //     _selectItem = false;
-                                            //     print("Item UnSelected");
-                                            //   }
-                                            // });
-                                          } else {
-                                            print("video.file");
-                                            print(bytes);
-                                            print(assets[index].file);
-                                            // poster.selected_item.value = 'Video';
-
-                                            // poster.file_selected_video.value = String.fromCharCodes(bytes);
-                                            print("PostScreenState().video()");
-                                            // print(poster.file_selected_video.value.toString());
-                                            // PostScreenState().video();
-                                          }
-                                          // Navigator.push(
-                                          //   context,
-                                          //   MaterialPageRoute(
-                                          //     builder: (_) {
-                                          //       if (asset.type == AssetType.image) {
-                                          //         poster.file_selected.value = asset.file.toString();
-                                          //         // return ImageScreen(imageFile: asset.file);
-                                          //       } else {
-                                          //         return VideoScreen(videoFile: asset.file);
-                                          //       }
-                                          //     },
-                                          //   ),
-                                          // );
-                                        },
-                                        child: Stack(
-                                          children: [
-                                            Positioned.fill(
-                                              child: Container(
-                                                  color: Colors.white,
-                                                  child: Image.memory(bytes,
-                                                      color:
-                                                      Colors.black.withOpacity(selectItems.contains(assets[index].title!) ? 1 : 0),
-                                                      colorBlendMode: BlendMode.color,
-                                                      fit: BoxFit.cover)),
+                                      if (_selectionMode) {
+                                        return GridTile(
+                                            header: GridTileBar(
+                                              leading: Icon(
+                                                _selectedIndexList
+                                                        .contains(index)
+                                                    ? Icons.check_circle
+                                                    : Icons
+                                                        .radio_button_unchecked,
+                                                color: _selectedIndexList
+                                                        .contains(index)
+                                                    ? Colors.pink
+                                                    : Colors.black,
+                                              ),
                                             ),
-                                            if (assets[index].type ==
-                                                AssetType.video)
-                                              Center(
-                                                child: Container(
-                                                  color: Colors.blue,
-                                                  child: Icon(
-                                                    Icons.play_arrow,
-                                                    color: Colors.white,
-                                                  ),
+                                            child: GestureDetector(
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        color:
+                                                            Colors.transparent,
+                                                        width: 0.0)),
+                                                child: Stack(
+                                                  children: [
+                                                    Positioned.fill(
+                                                      child: Image.memory(
+                                                        bytes,
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    ),
+                                                    if (assets[index].type ==
+                                                        AssetType.video)
+                                                      Center(
+                                                        child: Container(
+                                                          decoration: BoxDecoration(
+                                                              color: Colors.black54,
+                                                              borderRadius: BorderRadius.circular(100)
+                                                          ),
+                                                          child: Icon(
+                                                            Icons.play_arrow,
+                                                            color: Colors.pink,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                  ],
                                                 ),
                                               ),
-                                          ],
-                                        ),
-                                      );
+                                              onLongPress: () {
+                                                setState(() {
+                                                  _changeSelection(
+                                                      enable: false, index: -1);
+                                                });
+                                              },
+                                              onTap: () async {
+                                                // Uint8List imageInUnit8List = assets[index].file;// store unit8List image here ;
+                                                // final tempDir = await getTemporaryDirectory();
+                                                // File file = await File('${tempDir.path}/image.png').create();
+                                                // file.writeAsBytesSync(imageInUnit8List);
+
+                                                // file_ = assets[index].originFile;
+                                                setState(() {
+                                                  if (_selectedIndexList
+                                                      .contains(index)) {
+                                                    _selectedIndexList
+                                                        .remove(index);
+                                                    _selectedList.remove(
+                                                        assets[index].file);
+                                                  } else {
+                                                    _selectedIndexList
+                                                        .add(index);
+                                                    _selectedList.add(
+                                                        assets[index].file);
+                                                  }
+                                                });
+                                              },
+                                            ));
+                                      } else {
+                                        return GridTile(
+                                          child: InkResponse(
+                                            child: Stack(
+                                              children: [
+                                                Positioned.fill(
+                                                  child: Image.memory(
+                                                    bytes,
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                                if (assets[index].type ==
+                                                    AssetType.video)
+                                                  Center(
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                          color: Colors.black54,
+                                                          borderRadius: BorderRadius.circular(100)
+                                                      ),
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.all(5.0),
+                                                        child: Icon(
+                                                          Icons.play_arrow,
+                                                          color: Colors.pink,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                              ],
+                                            ),
+                                            onLongPress: () {
+                                              setState(() {
+                                                _changeSelection(
+                                                    enable: true, index: index);
+                                              });
+                                            },
+                                          ),
+                                        );
+                                      }
                                     }
                                   },
                                 );
@@ -519,76 +686,83 @@ class PostScreenState extends State<PostScreen> {
               },
             ),
           ),
-          bottomNavigationBar: Container(
-            // color: Colors.black,
-            height: 50,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                // stops: [0.1, 0.5, 0.7, 0.9],
-                colors: [
-                  HexColor("#C12265"),
-                  HexColor("#000000"),
-                  HexColor("#000000"),
-                  HexColor("#C12265"),
-                  // HexColor("#FFFFFF").withOpacity(0.67),
-                ],
-              ),
-            ),
-            // margin: EdgeInsets.symmetric(vertical: 2, horizontal: 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Expanded(
-                  child: Container(
-                    alignment: Alignment.center,
-                    child: Text("Library",
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold)),
-                  ),
-                ),
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      data_type = PhotoManager.getImageAsset();
-                      _fetchAssets();
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      child: Text("Photo",
-                          style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold)),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      data_type = PhotoManager.getVideoAsset();
-                      _fetchAssets();
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      child: Text("Video",
-                          style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold)),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          // bottomNavigationBar: Container(
+          //   // color: Colors.black,
+          //   height: 50,
+          //   decoration: BoxDecoration(
+          //     gradient: LinearGradient(
+          //       begin: Alignment.topRight,
+          //       end: Alignment.bottomLeft,
+          //       // stops: [0.1, 0.5, 0.7, 0.9],
+          //       colors: [
+          //         HexColor("#C12265"),
+          //         HexColor("#000000"),
+          //         HexColor("#000000"),
+          //         HexColor("#C12265"),
+          //         // HexColor("#FFFFFF").withOpacity(0.67),
+          //       ],
+          //     ),
+          //   ),
+          //   // margin: EdgeInsets.symmetric(vertical: 2, horizontal: 12),
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.center,
+          //     children: <Widget>[
+          //       Expanded(
+          //         child: Container(
+          //           alignment: Alignment.center,
+          //           child: Text("Library",
+          //               style: TextStyle(
+          //                   fontSize: 14,
+          //                   color: Colors.white,
+          //                   fontWeight: FontWeight.bold)),
+          //         ),
+          //       ),
+          //       Expanded(
+          //         child: GestureDetector(
+          //           onTap: () {
+          //             data_type = PhotoManager.getImageAsset();
+          //             _fetchAssets();
+          //           },
+          //           child: Container(
+          //             alignment: Alignment.center,
+          //             child: Text("Photo",
+          //                 style: TextStyle(
+          //                     fontSize: 14,
+          //                     color: Colors.white,
+          //                     fontWeight: FontWeight.bold)),
+          //           ),
+          //         ),
+          //       ),
+          //       Expanded(
+          //         child: GestureDetector(
+          //           onTap: () {
+          //             data_type = PhotoManager.getVideoAsset();
+          //             _fetchAssets();
+          //           },
+          //           child: Container(
+          //             alignment: Alignment.center,
+          //             child: Text("Video",
+          //                 style: TextStyle(
+          //                     fontSize: 14,
+          //                     color: Colors.white,
+          //                     fontWeight: FontWeight.bold)),
+          //           ),
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
         ),
       ],
     );
   }
+}
+
+class Course {
+  AssetEntity name;
+  bool selected;
+
+  Course(this.name, this.selected);
 }
 
 class AssetThumbnail extends StatelessWidget {
@@ -795,8 +969,7 @@ class _VideoScreenState extends State<VideoScreen> {
   }
 }
 
-class image_grid{
-
+class image_grid {
   final AssetPathEntity assets;
   bool selected = false;
 
