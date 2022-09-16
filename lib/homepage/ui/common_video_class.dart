@@ -162,7 +162,6 @@ class _VideoWidgetState extends State<VideoWidget> {
                   child: Center(
                     child: AspectRatio(
                         aspectRatio: controller_last!.value.aspectRatio,
-
                         child: VideoPlayer(controller_last!)),
                   ),
                 )

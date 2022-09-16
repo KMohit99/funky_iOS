@@ -5,8 +5,11 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_gif_picker/modal_gif_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:video_player/video_player.dart';
 
+import '../../../../../Utils/App_utils.dart';
 import '../../domain/models/editable_items.dart';
+
 // import 'package:stories_editor/src/domain/models/editable_items.dart';
 // import 'package:stories_editor/src/domain/providers/notifiers/control_provider.dart';
 // import 'package:stories_editor/src/domain/providers/notifiers/draggable_widget_notifier.dart';
@@ -35,12 +38,14 @@ import '../widgets/animated_onTap_button.dart';
 import '../widgets/color_selector.dart';
 import '../widgets/file_image_bg.dart';
 import '../widgets/size_slider_selector.dart';
-class DraggableWidget extends StatelessWidget {
+
+class DraggableWidget extends StatefulWidget {
   final EditableItem draggableWidget;
   final Function(PointerDownEvent)? onPointerDown;
   final Function(PointerUpEvent)? onPointerUp;
   final Function(PointerMoveEvent)? onPointerMove;
   final BuildContext context;
+
   const DraggableWidget({
     Key? key,
     required this.context,
@@ -51,15 +56,44 @@ class DraggableWidget extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<DraggableWidget> createState() => _DraggableWidgetState();
+}
+
+class _DraggableWidgetState extends State<DraggableWidget> {
+  VideoPlayerController? controller_last;
+
+  @override
+  void initState() {
+    super.initState();
+
+    var _control = Provider.of<ControlNotifier>(context, listen: false);
+
+    controller_last = VideoPlayerController.file(File(_control.mediaPath));
+
+    controller_last!.setLooping(true);
+    controller_last!.initialize().then((_) {
+      setState(() {});
+    });
+    controller_last!.play();
+  }
+
+  @override
+  void dispose() {
+    // _timer?.cancel();
+    super.dispose();
+    controller_last!.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var _size = MediaQuery.of(context).size;
     var _colorProvider =
-        Provider.of<GradientNotifier>(this.context, listen: false);
+        Provider.of<GradientNotifier>(widget.context, listen: false);
     var _controlProvider =
-        Provider.of<ControlNotifier>(this.context, listen: false);
+        Provider.of<ControlNotifier>(widget.context, listen: false);
     Widget overlayWidget;
 
-    switch (draggableWidget.type) {
+    switch (widget.draggableWidget.type) {
       case ItemType.text:
         overlayWidget = IntrinsicWidth(
           child: IntrinsicHeight(
@@ -69,10 +103,10 @@ class DraggableWidget extends StatelessWidget {
                 minWidth: 50,
                 maxWidth: _size.width - 120,
               ),
-              width: draggableWidget.deletePosition ? 100 : null,
-              height: draggableWidget.deletePosition ? 100 : null,
+              width: widget.draggableWidget.deletePosition ? 100 : null,
+              height: widget.draggableWidget.deletePosition ? 100 : null,
               child: AnimatedOnTapButton(
-                onTap: () => _onTap(context, draggableWidget, _controlProvider),
+                onTap: () => _onTap(context, widget.draggableWidget, _controlProvider),
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
@@ -114,7 +148,7 @@ class DraggableWidget extends StatelessWidget {
       /// image [file_image_gb.dart]
       case ItemType.image:
         if (_controlProvider.mediaPath.isNotEmpty) {
-          overlayWidget = SizedBox(
+          overlayWidget = Container(
             width: _size.width - 72,
             child: FileImageBG(
               filePath: File(_controlProvider.mediaPath),
@@ -145,7 +179,7 @@ class DraggableWidget extends StatelessWidget {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       color: Colors.transparent),
-                  child: GiphyRenderImage.original(gif: draggableWidget.gif),
+                  child: GiphyRenderImage.original(gif: widget.draggableWidget.gif),
                 ),
               ),
             ],
@@ -154,29 +188,37 @@ class DraggableWidget extends StatelessWidget {
         break;
 
       case ItemType.video:
-        overlayWidget = const Center();
+        if (_controlProvider.mediaPath.isNotEmpty) {
+          overlayWidget = SizedBox(
+            width: _size.width - 72,
+            child: VideoPlayer(controller_last!),
+          );
+        } else {
+          overlayWidget = Container();
+        }
+      // overlayWidget = const Center();
     }
 
     /// set widget data position on main screen
     return AnimatedAlignPositioned(
       duration: const Duration(milliseconds: 50),
-      dy: (draggableWidget.deletePosition
+      dy: (widget.draggableWidget.deletePosition
           ? _deleteTopOffset(_size)
-          : (draggableWidget.position.dy * _size.height)),
-      dx: (draggableWidget.deletePosition
+          : (widget.draggableWidget.position.dy * _size.height)),
+      dx: (widget.draggableWidget.deletePosition
           ? 0
-          : (draggableWidget.position.dx * _size.width)),
+          : (widget.draggableWidget.position.dx * _size.width)),
       alignment: Alignment.center,
       child: Transform.scale(
-        scale: draggableWidget.deletePosition
+        scale: widget.draggableWidget.deletePosition
             ? _deleteScale()
-            : draggableWidget.scale,
+            : widget.draggableWidget.scale,
         child: Transform.rotate(
-          angle: draggableWidget.rotation,
+          angle: widget.draggableWidget.rotation,
           child: Listener(
-            onPointerDown: onPointerDown,
-            onPointerUp: onPointerUp,
-            onPointerMove: onPointerMove,
+            onPointerDown: widget.onPointerDown,
+            onPointerUp: widget.onPointerUp,
+            onPointerMove: widget.onPointerMove,
 
             /// show widget
             child: overlayWidget,
@@ -191,9 +233,9 @@ class DraggableWidget extends StatelessWidget {
       {required ControlNotifier controlNotifier,
       required PaintingStyle paintingStyle,
       bool background = false}) {
-    if (draggableWidget.animationType == TextAnimationType.none) {
-      return Text(draggableWidget.text,
-          textAlign: draggableWidget.textAlign,
+    if (widget.draggableWidget.animationType == TextAnimationType.none) {
+      return Text(widget.draggableWidget.text,
+          textAlign: widget.draggableWidget.textAlign,
           style: _textStyle(
               controlNotifier: controlNotifier,
               paintingStyle: paintingStyle,
@@ -206,30 +248,30 @@ class DraggableWidget extends StatelessWidget {
             background: background),
         child: AnimatedTextKit(
           repeatForever: true,
-          onTap: () => _onTap(context, draggableWidget, controlNotifier),
+          onTap: () => _onTap(widget.context, widget.draggableWidget, controlNotifier),
           animatedTexts: [
-            if (draggableWidget.animationType == TextAnimationType.scale)
-              ScaleAnimatedText(draggableWidget.text,
+            if (widget.draggableWidget.animationType == TextAnimationType.scale)
+              ScaleAnimatedText(widget.draggableWidget.text,
                   duration: const Duration(milliseconds: 1200)),
-            if (draggableWidget.animationType == TextAnimationType.fade)
-              ...draggableWidget.textList.map((item) => FadeAnimatedText(item,
+            if (widget.draggableWidget.animationType == TextAnimationType.fade)
+              ...widget.draggableWidget.textList.map((item) => FadeAnimatedText(item,
                   duration: const Duration(milliseconds: 1200))),
-            if (draggableWidget.animationType == TextAnimationType.typer)
-              TyperAnimatedText(draggableWidget.text,
+            if (widget.draggableWidget.animationType == TextAnimationType.typer)
+              TyperAnimatedText(widget.draggableWidget.text,
                   speed: const Duration(milliseconds: 500)),
-            if (draggableWidget.animationType == TextAnimationType.typeWriter)
+            if (widget.draggableWidget.animationType == TextAnimationType.typeWriter)
               TypewriterAnimatedText(
-                draggableWidget.text,
+                widget.draggableWidget.text,
                 speed: const Duration(milliseconds: 500),
               ),
-            if (draggableWidget.animationType == TextAnimationType.wavy)
+            if (widget.draggableWidget.animationType == TextAnimationType.wavy)
               WavyAnimatedText(
-                draggableWidget.text,
+                widget.draggableWidget.text,
                 speed: const Duration(milliseconds: 500),
               ),
-            if (draggableWidget.animationType == TextAnimationType.flicker)
+            if (widget.draggableWidget.animationType == TextAnimationType.flicker)
               FlickerAnimatedText(
-                draggableWidget.text,
+                widget.draggableWidget.text,
                 speed: const Duration(milliseconds: 1200),
               ),
           ],
@@ -243,7 +285,7 @@ class DraggableWidget extends StatelessWidget {
       required PaintingStyle paintingStyle,
       bool background = false}) {
     return TextStyle(
-      fontFamily: controlNotifier.fontList![draggableWidget.fontFamily],
+      fontFamily: controlNotifier.fontList![widget.draggableWidget.fontFamily],
       package: controlNotifier.isCustomFontList ? null : 'stories_editor',
       fontWeight: FontWeight.w500,
       // shadows: <Shadow>[
@@ -255,11 +297,11 @@ class DraggableWidget extends StatelessWidget {
       //           : Colors.black)
       // ]
     ).copyWith(
-        color: background ? Colors.black : draggableWidget.textColor,
-        fontSize: draggableWidget.deletePosition ? 8 : draggableWidget.fontSize,
+        color: background ? Colors.black : widget.draggableWidget.textColor,
+        fontSize: widget.draggableWidget.deletePosition ? 8 : widget.draggableWidget.fontSize,
         background: Paint()
           ..strokeWidth = 20.0
-          ..color = draggableWidget.backGroundColor
+          ..color = widget.draggableWidget.backGroundColor
           ..style = paintingStyle
           ..strokeJoin = StrokeJoin.round
           ..filterQuality = FilterQuality.high
@@ -269,10 +311,10 @@ class DraggableWidget extends StatelessWidget {
 
   _deleteTopOffset(size) {
     double top = 0.0;
-    if (draggableWidget.type == ItemType.text) {
+    if (widget.draggableWidget.type == ItemType.text) {
       top = size.width / 1.3;
       return top;
-    } else if (draggableWidget.type == ItemType.gif) {
+    } else if (widget.draggableWidget.type == ItemType.gif) {
       top = size.width / 1.3;
       return top;
     }
@@ -280,10 +322,10 @@ class DraggableWidget extends StatelessWidget {
 
   _deleteScale() {
     double scale = 0.0;
-    if (draggableWidget.type == ItemType.text) {
+    if (widget.draggableWidget.type == ItemType.text) {
       scale = 0.4;
       return scale;
-    } else if (draggableWidget.type == ItemType.gif) {
+    } else if (widget.draggableWidget.type == ItemType.gif) {
       scale = 0.3;
       return scale;
     }
@@ -293,9 +335,9 @@ class DraggableWidget extends StatelessWidget {
   void _onTap(BuildContext context, EditableItem item,
       ControlNotifier controlNotifier) {
     var _editorProvider =
-        Provider.of<TextEditingNotifier>(this.context, listen: false);
+        Provider.of<TextEditingNotifier>(this.widget.context, listen: false);
     var _itemProvider =
-        Provider.of<DraggableWidgetNotifier>(this.context, listen: false);
+        Provider.of<DraggableWidgetNotifier>(this.widget.context, listen: false);
 
     /// load text attributes
     _editorProvider.textController.text = item.text.trim();

@@ -501,11 +501,11 @@ class PostScreenState extends State<PostScreen> {
                                     //   );
                                     // }
                                     if (bytes == null) {
-                                      return const SizedBox(
-                                        height: 20,
-                                        width: 20,
-                                        child: Padding(
-                                          padding: EdgeInsets.all(25.0),
+                                      return Padding(
+                                        padding: EdgeInsets.all(25.0),
+                                        child: const SizedBox(
+                                          height: 20,
+                                          width: 20,
                                           child: CircularProgressIndicator(
                                             color: Colors.red,
                                           ),

@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:funky_new/custom_widget/page_loader.dart';
-import 'package:funky_new/search_screen/searchModel.dart';
+import 'package:funky_new/search_screen/model/searchModel.dart';
 import 'package:funky_new/search_screen/search__screen_controller.dart';
 
 // import 'package:funky_project/Utils/asset_utils.dart';
@@ -910,6 +910,7 @@ class _SearchUserProfileState extends State<SearchUserProfile>
                                                 searchUserid: widget
                                                     .search_user_data.id!,
                                               ));
+
                                             }),
                                         Text(
                                           '${_search_screen_controller
@@ -1272,12 +1273,13 @@ class _SearchUserProfileState extends State<SearchUserProfile>
                                           // } else {
                                           //   // CommonWidget().showToaster(msg: 'Need to follow the user');
                                           // }
-                                          await Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) => ChatScreen(
-                                                    widget.quickBlox_id, false),
-                                              ));
+                                          ///
+                                          // await Navigator.push(
+                                          //     context,
+                                          //     MaterialPageRoute(
+                                          //       builder: (context) => ChatScreen(
+                                          //           widget.quickBlox_id, false),
+                                          //     ));
                                         },
                                         child: Container(
                                           margin:
@@ -1406,40 +1408,62 @@ class _SearchUserProfileState extends State<SearchUserProfile>
                                                       getStoryModel!
                                                           .data![index].storys!;
 
-                                                      // Get.to(() =>
-                                                      //     StoryScreen(
-                                                      //       // thumbnail: test_thumb[index],
-                                                      //       stories:
-                                                      //       story_info,
-                                                      //       story_no:
-                                                      //       index,
-                                                      //       stories_title: story_,
-                                                      //     ));
+                                                      Get.to(() =>
+                                                          StoryScreen(
+                                                            title: story_[index].title!,
+                                                            // thumbnail:
+                                                            //     test_thumb[index],
+                                                            stories:
+                                                            story_info,
+                                                            story_no:
+                                                            index,
+                                                            stories_title:
+                                                            story_,
+                                                          ));
                                                       // Get.to(StoryScreen(stories: story_info));
                                                     },
                                                     child: SizedBox(
                                                       height: 60,
                                                       width: 60,
                                                       child: ClipRRect(
-                                                          borderRadius:
-                                                          BorderRadius
-                                                              .circular(
-                                                              50),
-                                                          child: Image.file(
-                                                              test_thumb[index])
-                                                        // FadeInImage
-                                                        //     .assetNetwork(
-                                                        //   fit: BoxFit
-                                                        //       .cover,
-                                                        //   image: "${URLConstants.base_data_url}images/${story_[index].storys![0].storyPhoto}",
-                                                        //   placeholder: 'assets/images/Funky_App_Icon.png',
-                                                        //   // color: HexColor(CommonColor.pinkFont),
-                                                        // ),
+                                                        borderRadius:
+                                                        BorderRadius
+                                                            .circular(
+                                                            50),
+                                                        child: (story_[
+                                                        index]
+                                                            .storys![
+                                                        0]
+                                                            .storyPhoto!
+                                                            .isEmpty
+                                                            ? Image.asset(
+                                                          // test_thumb[
+                                                          //     index]
+                                                            'assets/images/Funky_App_Icon.png')
+                                                            : (story_[index]
+                                                            .storys![
+                                                        0]
+                                                            .isVideo ==
+                                                            'false'
+                                                            ? FadeInImage
+                                                            .assetNetwork(
+                                                          fit: BoxFit
+                                                              .cover,
+                                                          image:
+                                                          "${URLConstants.base_data_url}images/${story_[index].storys![0].storyPhoto!}",
+                                                          placeholder:
+                                                          'assets/images/Funky_App_Icon.png',
+                                                          // color: HexColor(CommonColor.pinkFont),
+                                                        )
+                                                            : Image.asset(
+                                                          // test_thumb[
+                                                          //     index]
+                                                            'assets/images/Funky_App_Icon.png'))),
                                                       ),
                                                     ),
                                                   ),
                                                   SizedBox(
-                                                    height: 0,
+                                                    height: 5,
                                                   ),
                                                   // Text(
                                                   //   '${story_info[index].title}',
@@ -1449,36 +1473,64 @@ class _SearchUserProfileState extends State<SearchUserProfile>
                                                   //       fontFamily: 'PR',
                                                   //       fontSize: 14),
                                                   // )
-                                                  Container(
+                                                  (story_[index]
+                                                      .title!
+                                                      .length >=
+                                                      5
+                                                      ? Container(
                                                     height: 20,
                                                     width: 40,
                                                     child: Marquee(
-                                                      text: '${story_[index]
-                                                          .title}',
+                                                      text:
+                                                      '${story_[index].title}',
                                                       style: TextStyle(
-                                                          color:
-                                                          Colors.white,
-                                                          fontFamily: 'PR',
-                                                          fontSize: 14),
+                                                          color: Colors
+                                                              .white,
+                                                          fontFamily:
+                                                          'PR',
+                                                          fontSize:
+                                                          14),
                                                       scrollAxis: Axis
                                                           .horizontal,
-                                                      crossAxisAlignment: CrossAxisAlignment
+                                                      crossAxisAlignment:
+                                                      CrossAxisAlignment
                                                           .start,
-                                                      blankSpace: 20.0,
-                                                      velocity: 30.0,
-                                                      pauseAfterRound: Duration(
-                                                          milliseconds: 100),
-                                                      startPadding: 10.0,
-                                                      accelerationDuration: Duration(
-                                                          seconds: 1),
-                                                      accelerationCurve: Curves
+                                                      blankSpace:
+                                                      20.0,
+                                                      velocity:
+                                                      30.0,
+                                                      pauseAfterRound:
+                                                      Duration(
+                                                          milliseconds:
+                                                          100),
+                                                      startPadding:
+                                                      10.0,
+                                                      accelerationDuration:
+                                                      Duration(
+                                                          seconds:
+                                                          1),
+                                                      accelerationCurve:
+                                                      Curves
                                                           .easeIn,
-                                                      decelerationDuration: Duration(
-                                                          microseconds: 500),
-                                                      decelerationCurve: Curves
+                                                      decelerationDuration:
+                                                      Duration(
+                                                          microseconds:
+                                                          500),
+                                                      decelerationCurve:
+                                                      Curves
                                                           .easeOut,
                                                     ),
                                                   )
+                                                      : Text(
+                                                    '${story_[index].title}',
+                                                    style: TextStyle(
+                                                        color: Colors
+                                                            .white,
+                                                        fontFamily:
+                                                        'PR',
+                                                        fontSize:
+                                                        14),
+                                                  ))
                                                 ],
                                               ),
                                             );

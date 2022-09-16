@@ -168,25 +168,28 @@ class _ViewImageSelectedState extends State<ViewImageSelected> {
                         child: GestureDetector(
                           onTap: () async {
                             print(widget.imageData[index].path);
-                            File editedFile = await Navigator.of(context)
-                                .push(MaterialPageRoute(
-                                    builder: (context) => StoriesEditor(
-                                          // fontFamilyList: font_family,
-                                          giphyKey:
-                                              'https://giphy.com/gifs/congratulations-congrats-xT0xezQGU5xCDJuCPe',
-                                          imageData: File(
-                                              widget.imageData[index].path),
-                                          onDone: (String) {},
-                                          // filePath:
-                                          //     imgFile!.path,
-                                        )));
-                            if (editedFile != null) {
-                              print('editedFile: ${editedFile.path}');
-                              setState(() {
-                                widget.imageData[index] =
-                                    XFile(editedFile.path);
-                              });
+                            if(format[index] == '.jpg'){
+                              File editedFile = await Navigator.of(context)
+                                  .push(MaterialPageRoute(
+                                  builder: (context) => StoriesEditor(
+                                    // fontFamilyList: font_family,
+                                    giphyKey:
+                                    'https://giphy.com/gifs/congratulations-congrats-xT0xezQGU5xCDJuCPe',
+                                    imageData: File(
+                                        widget.imageData[index].path),
+                                    onDone: (String) {},
+                                    // filePath:
+                                    //     imgFile!.path,
+                                  )));
+                              if (editedFile != null) {
+                                print('editedFile: ${editedFile.path}');
+                                setState(() {
+                                  widget.imageData[index] =
+                                      XFile(editedFile.path);
+                                });
+                              }
                             }
+
                           },
                           child: Container(
                               decoration: BoxDecoration(

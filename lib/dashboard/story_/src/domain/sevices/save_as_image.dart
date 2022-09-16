@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
+import 'dart:ui';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:funky_new/dashboard/story_/story_image_preview.dart';
@@ -18,6 +20,9 @@ Future takePicture(
         contentKey.currentContext.findRenderObject();
 
     ui.Image image = await boundary.toImage(pixelRatio: 3);
+    ///
+
+    ///
 
     ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     Uint8List pngBytes = byteData!.buffer.asUint8List();
@@ -27,6 +32,7 @@ Future takePicture(
     String imagePath = '$dir/stories_creator${DateTime.now()}.png';
     File capturedFile = File(imagePath);
     await capturedFile.writeAsBytes(pngBytes);
+    print(capturedFile.path);
     Navigator.pop(context, capturedFile);
 
     // await Get.to(Story_image_preview(ImageFile: capturedFile, isImage: true,));

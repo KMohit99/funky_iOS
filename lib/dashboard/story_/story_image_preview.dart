@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:io' as Io;
+import 'package:http_parser/http_parser.dart';
 
 import 'package:flutter/material.dart';
 import 'package:funky_new/custom_widget/page_loader.dart';
@@ -82,7 +83,7 @@ class _Story_image_previewState extends State<Story_image_preview> {
     var file_format = widget.single_image!.path
         .substring(widget.single_image!.path.lastIndexOf('.'));
     print(file_format);
-    if (file_format == '.mp4' || file_format == '.MP4') {
+    if (file_format == '.mp4' || file_format == '.MP4'|| file_format == '.MOV') {
       final uint8list = await VideoThumbnail.thumbnailFile(
         video: widget.single_image!.path,
         // thumbnailPath: (await getTemporaryDirectory()).path,
@@ -270,8 +271,8 @@ class _Story_image_previewState extends State<Story_image_preview> {
                                   Container(
                                     decoration: BoxDecoration(
                                         color: Colors.black54,
-                                        borderRadius: BorderRadius.circular(100)
-                                    ),
+                                        borderRadius:
+                                            BorderRadius.circular(100)),
                                     child: Padding(
                                       padding: const EdgeInsets.all(5.0),
                                       child: Icon(
@@ -394,9 +395,12 @@ class _Story_image_previewState extends State<Story_image_preview> {
     // print("IIIiiiiIIIIII ${widget.ImageFile!.path}");
     if (widget.single == true) {
       print("sinfle imageee fileee");
-      var files = await http.MultipartFile.fromPath(
-          'story_photo[]', widget.single_image!.path);
-      request.files.add(files);
+      print(widget.single_image!.path);
+      var files2 = await http.MultipartFile.fromPath(
+          'story_photo[]', widget.single_image!.path,
+          contentType: MediaType('video', 'mp4'));
+
+      request.files.add(files2);
     } else {
       for (var i = 0; i < widget.ImageFile!.length; i++) {
         var file_format = widget.ImageFile![i].path
@@ -414,7 +418,7 @@ class _Story_image_previewState extends State<Story_image_preview> {
     // request.fields['uploadVideo'] = '';
     request.fields['userId'] = id_user;
     request.fields['title'] = title_controller.text;
-    request.fields['isVideo'] = 'true';
+    request.fields['isVideo'] = 'false';
     // request.fields['isVideo'] = '';
 
     //userId,tagLine,description,address,postImage,uploadVideo,isVideo
@@ -425,6 +429,7 @@ class _Story_image_previewState extends State<Story_image_preview> {
     var responsed = await http.Response.fromStream(response);
     final responseData = json.decode(responsed.body);
     debugPrint("response.statusCode");
+    debugPrint(response.statusCode.toString());
     debugPrint(response.statusCode.toString());
 
     if (response.statusCode == 200) {

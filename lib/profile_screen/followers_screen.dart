@@ -286,12 +286,17 @@ class _FollowersListState extends State<FollowersList> {
                                       GestureDetector(
                                         onTap: () async {
                                           print('${FollowersData[index].id}');
-                                          await _search_screen_controller.Follow_unfollow_api(
-                                              follow_unfollow: 'follow',
-                                              user_id: FollowersData[index].id,
-                                              user_social: FollowersData[index].socialType,
-                                              context: context
-                                          );
+                                          await _search_screen_controller
+                                              .Follow_unfollow_api(
+                                                  follow_unfollow:(FollowersData[index]
+                                                      .userFollowUnfollow ==
+                                                      'unfollow'? 'follow' : 'unfollow'),
+                                                  user_id:
+                                                      FollowersData[index].id,
+                                                  user_social:
+                                                      FollowersData[index]
+                                                          .socialType,
+                                                  context: context);
                                           await getAllFollowersList();
                                         },
                                         child: Container(
@@ -306,10 +311,17 @@ class _FollowersListState extends State<FollowersList> {
                                                   BorderRadius.circular(17)),
                                           child: Container(
                                               alignment: Alignment.center,
-                                              margin: EdgeInsets.symmetric(
-                                                  vertical: 0, horizontal: 8),
-                                              child: Text(
-                                                'Follow Back',
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 0,
+                                                      horizontal: 8),
+                                              child:
+                                              Text(
+                                                (FollowersData[index]
+                                                            .userFollowUnfollow ==
+                                                        'unfollow'
+                                                    ? 'Follow Back'
+                                                    : "Unfollow"),
                                                 style: TextStyle(
                                                     color: Colors.white,
                                                     fontFamily: 'PR',
@@ -377,7 +389,8 @@ class _FollowersListState extends State<FollowersList> {
   static Future<List<Data_followers>> getFollowersList(String query) async {
     String id_user = await PreferenceManager().getPref(URLConstants.id);
 
-    String url = ('${URLConstants.base_url}${URLConstants.FollowersListApi}?id=$id_user');
+    String url =
+        ('${URLConstants.base_url}${URLConstants.FollowersListApi}?id=$id_user');
     http.Response response = await http.get(Uri.parse(url));
     print(response);
     List books = [];

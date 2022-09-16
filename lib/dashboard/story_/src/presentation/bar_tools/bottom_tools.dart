@@ -149,7 +149,7 @@ class BottomTools extends StatelessWidget {
                                 itemNotifier.draggableWidget.isNotEmpty) {
                               for (var element
                                   in itemNotifier.draggableWidget) {
-                                if (element.type == ItemType.gif ||
+                                if (element.type == ItemType.video ||
                                     element.animationType !=
                                         TextAnimationType.none) {
                                   setState(() {

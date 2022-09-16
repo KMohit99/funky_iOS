@@ -5,6 +5,7 @@ import 'dart:async';
 // import 'dart:html';
 import 'dart:io';
 import 'package:funky_new/dashboard/dashboard_screen.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 import 'package:path/path.dart' as p;
 
 import 'package:flutter/foundation.dart';
@@ -167,12 +168,27 @@ class _MainViewState extends State<MainView> {
 
        _control.mediaPath = widget.imagedata.path;
       if (_control.mediaPath.isNotEmpty) {
-        _item.draggableWidget.insert(
-            0,
-            EditableItem()
-              ..type = ItemType.image
-              ..position = const Offset(0.0, 0));
-        print(_control.mediaPath);
+        final extension = p.extension(
+            _control.mediaPath); // '.dart'
+        print(extension);
+        if (extension == '.MP4' || extension == '.mp4' ) {
+          _item.draggableWidget.insert(
+              0,
+              EditableItem()
+                ..type = ItemType.video
+                ..position = const Offset(0.0, 0));
+
+          print("_control.mediaPath : ${_control.mediaPath}");
+        }else{
+          _item.draggableWidget.insert(
+              0,
+              EditableItem()
+                ..type = ItemType.image
+                ..position = const Offset(0.0, 0));
+          print(_control.mediaPath);
+        }
+
+
         // final extension = p.extension(
         //     controlNotifier.mediaPath); // '.dart'
         // print(extension);
@@ -428,7 +444,7 @@ class _MainViewState extends State<MainView> {
                                     renderWidget: () => startRecording(
                                         controlNotifier: controlNotifier,
                                         renderingNotifier: renderingNotifier,
-                                        saveOnGallery: true),
+                                        saveOnGallery: false),
                                   )),
                             ),
 
@@ -449,7 +465,7 @@ class _MainViewState extends State<MainView> {
                                   renderWidget: () => startRecording(
                                       controlNotifier: controlNotifier,
                                       renderingNotifier: renderingNotifier,
-                                      saveOnGallery: false),
+                                      saveOnGallery: true),
                                   onDone: (bytes) {
                                     setState(() {
                                       widget.onDone!(bytes);
@@ -502,8 +518,13 @@ class _MainViewState extends State<MainView> {
                                   controlNotifier.mediaPath); // '.dart'
                               print(extension);
                               if (extension == '.MP4') {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => Dashboard(page: 0)));
+                                itemProvider.draggableWidget.insert(
+                                    0,
+                                    EditableItem()
+                                      ..type = ItemType.video
+                                      ..position = const Offset(0.0, 0));
+                                // Navigator.of(context).push(MaterialPageRoute(
+                                //     builder: (context) => Dashboard(page: 0)));
                               }
                             }
                             scrollProvider.pageController.animateToPage(0,
@@ -566,6 +587,9 @@ class _MainViewState extends State<MainView> {
     Duration seg = const Duration(seconds: 1);
     _recorderController.start(
         controlNotifier: controlNotifier, renderingNotifier: renderingNotifier);
+    print(controlNotifier.mediaPath);
+    // Navigator.pop(context, File(controlNotifier.mediaPath));
+
     Timer.periodic(seg, (timer) async {
       if (renderingNotifier.recordingDuration == 0) {
         setState(() {
@@ -577,27 +601,29 @@ class _MainViewState extends State<MainView> {
         var path = await _recorderController.export(
             controlNotifier: controlNotifier,
             renderingNotifier: renderingNotifier);
+        print("path['outPath']path['outPath']path['outPath']path['outPath'] ${path['outPath']}");
         if (path['success']) {
           if (saveOnGallery) {
             setState(() {
               renderingNotifier.renderState = RenderState.saving;
             });
-            await ImageGallerySaver.saveFile(path['outPath'],
-                    name: "${DateTime.now()}")
+            await GallerySaver.saveVideo(path['outPath'])
                 .then((value) {
-              if (value['isSuccess']) {
-                debugPrint(value['filePath']);
-                Fluttertoast.showToast(msg: 'Recording successfully saved');
-              } else {
-                debugPrint('Gallery saver error: ${value['errorMessage']}');
-                Fluttertoast.showToast(msg: 'Gallery saver error');
-              }
+              // if (value!['isSuccess']) {
+              //   debugPrint(value['filePath']);
+              //   Fluttertoast.showToast(msg: 'Recording successfully saved');
+              // } else {
+              //   debugPrint('Gallery saver error: ${value['errorMessage']}');
+              //   Fluttertoast.showToast(msg: 'Gallery saver error');
+              // }
             }).whenComplete(() {
               setState(() {
                 controlNotifier.isRenderingWidget = false;
                 renderingNotifier.renderState = RenderState.none;
                 renderingNotifier.recordingDuration = 10;
               });
+              Navigator.pop(context, File(path['outPath']));
+
             });
           } else {
             setState(() {
@@ -606,12 +632,15 @@ class _MainViewState extends State<MainView> {
               renderingNotifier.recordingDuration = 10;
               widget.onDone!(path['outPath']);
             });
+            Navigator.pop(context, File(path['outPath']));
           }
         } else {
           setState(() {
             renderingNotifier.renderState = RenderState.none;
             Fluttertoast.showToast(msg: 'Something was wrong.');
           });
+          Navigator.pop(context, File(path['outPath']));
+
         }
       } else {
         setState(() {

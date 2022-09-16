@@ -13,14 +13,14 @@ class FfmpegProvider with ChangeNotifier {
   bool loading = false, isPlaying = false;
 
   Future<Map<String, dynamic>> mergeIntoVideo(
-      {required RenderType renderType}) async {
+      {required RenderType renderType , required String path}) async {
     loading = true;
     notifyListeners();
 
     if (await Permission.storage.request().isGranted) {
       /// mp4 output
       String mp4Command =
-          '-r 25 -i ${FfmpegPaths.imagesPath} -vf scale=1080:1920 -pix_fmt yuv420p -y ${FfmpegPaths.videoOutputPath}';
+          '-r 25 -i $path/image%d.png -c:v libx265 -crf 25 -c:a copy -y ${path}/output.mp4';
 
       /// 7mb gif output
       String gifCommand =

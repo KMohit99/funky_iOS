@@ -73,6 +73,9 @@ class URLConstants{
   static const Post_Comment_Post_Api = "comments.php";
   static const Post_reply_Comment_Post_Api = "reply.php";
 
+  static const Discover_Search = "discover.php";
+  static const friend_suggestion = "friendSuggestion.php";
+
 
 
   static const postApi = "post.php";
@@ -82,6 +85,11 @@ class URLConstants{
   static const StoryDeleteApi = "deleteStory.php";
   static const StoryViewApi = "view-story.php";
   static const StoryEditApi = "editStory.php";
+
+  static const SearchTag = "hashTag.php";
+  static const SearchTagPosts = "search-posts.php";
+
+
   static String id = "id";
   static String username = "user";
   static String type = "type";

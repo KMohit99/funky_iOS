@@ -2,11 +2,14 @@ import 'dart:convert' as convert;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:funky_new/custom_widget/page_loader.dart';
 import 'package:funky_new/profile_screen/profile_screen.dart';
 
 // import 'package:funky_project/Utils/colorUtils.dart';
 import 'package:get/get.dart';
+import 'package:helpers/helpers.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 
 import '../Utils/App_utils.dart';
@@ -18,7 +21,9 @@ import '../sharePreference.dart';
 import 'model/followersModel.dart';
 
 class FollowingScreen extends StatefulWidget {
-  const FollowingScreen({Key? key}) : super(key: key);
+  final String user_id;
+
+  const FollowingScreen({Key? key, required this.user_id}) : super(key: key);
 
   @override
   State<FollowingScreen> createState() => _FollowingScreenState();
@@ -35,11 +40,14 @@ class _FollowingScreenState extends State<FollowingScreen> {
 
   @override
   void initState() {
-    init();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      init();
+    });
     super.initState();
   }
 
   init() async {
+    await _search_screen_controller.friendSuggestionList(context: context);
     await getAllFollowingList();
   }
 
@@ -76,7 +84,7 @@ class _FollowingScreenState extends State<FollowingScreen> {
               InkWell(
                 child: Padding(
                   padding:
-                  const EdgeInsets.only(right: 20.0, top: 0.0, bottom: 5.0),
+                      const EdgeInsets.only(right: 20.0, top: 0.0, bottom: 5.0),
                   child: ClipRRect(
                     child: Image.asset(
                       AssetUtils.noti_icon,
@@ -90,7 +98,7 @@ class _FollowingScreenState extends State<FollowingScreen> {
               InkWell(
                 child: Padding(
                   padding:
-                  const EdgeInsets.only(right: 20.0, top: 0.0, bottom: 5.0),
+                      const EdgeInsets.only(right: 20.0, top: 0.0, bottom: 5.0),
                   child: ClipRRect(
                     child: Image.asset(
                       AssetUtils.chat_icon,
@@ -112,9 +120,7 @@ class _FollowingScreenState extends State<FollowingScreen> {
               onPressed: () {
                 // Get.to(Profile_Screen());
                 Navigator.pop(context);
-                setState((){
-
-                });
+                setState(() {});
               },
               icon: Icon(
                 Icons.arrow_back,
@@ -123,7 +129,7 @@ class _FollowingScreenState extends State<FollowingScreen> {
         ),
       ),
       body: Container(
-        margin: const EdgeInsets.only(top: 100, left: 23, right: 23),
+        margin: const EdgeInsets.only(top: 100, left: 10, right: 10),
         child: Column(
           children: [
             Row(
@@ -202,52 +208,189 @@ class _FollowingScreenState extends State<FollowingScreen> {
             //         );
             //       }),
             // )),
-            (isFollowingLoading == true
-                ? Material(
-              color: Color(0x66DD4D4),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                      color: Colors.transparent,
-                      height: 80,
-                      width: 200,
-                      child: Container(
-                        color: Colors.black,
-                        child: Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.spaceAround,
+            Obx(() => _search_screen_controller.isSuggestionLoading.value == true ? SizedBox.shrink() :
+            Container(
+              height: MediaQuery.of(context).size.height / 3.1,
+              width: MediaQuery.of(context).size.width,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                padding: EdgeInsets.zero,
+                itemCount: _search_screen_controller
+                    .getFriendSuggestionModel!.data!.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Stack(
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.height / 4.5,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            // stops: [0.1, 0.5, 0.7, 0.9],
+                            colors: [
+                              HexColor("#000000"),
+                              HexColor("#C12265"),
+                              HexColor("#C12265"),
+                              HexColor("#C12265"),
+                              HexColor("#FFFFFF"),
+                            ],
+                          ),
+                        ),
+                        margin: EdgeInsets.all(8),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            CircularProgressIndicator(
-                              color: HexColor(CommonColor.pinkFont),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(100),
+                                child: Container(
+                                    height: 80,
+                                    width: 80,
+                                    child: (_search_screen_controller
+                                            .getFriendSuggestionModel!
+                                            .data![index]
+                                            .image!
+                                            .isNotEmpty
+                                        ?
+                                        // Image.network(
+                                        //         "${URLConstants.base_data_url}images/${_search_screen_controller.getFriendSuggestionModel!.data![index].image!}",
+                                        //         height: 80,
+                                        //         width: 80,
+                                        //         fit: BoxFit.cover,
+                                        //       )
+                                        FadeInImage.assetNetwork(
+                                            fit: BoxFit.cover,
+                                            image:
+                                                "${URLConstants.base_data_url}images/${_search_screen_controller.getFriendSuggestionModel!.data![index].image!}",
+                                            height: 80,
+                                            width: 80,
+
+                                            placeholder:
+                                                'assets/images/Funky_App_Icon.png',
+                                            // color: HexColor(CommonColor.pinkFont),
+                                          )
+                                        : (_search_screen_controller
+                                                .getFriendSuggestionModel!
+                                                .data![index]
+                                                .profileUrl!
+                                                .isNotEmpty
+                                            ? Image.network(
+                                                _search_screen_controller
+                                                    .getFriendSuggestionModel!
+                                                    .data![index]
+                                                    .profileUrl!,
+                                                height: 80,
+                                                width: 80,
+                                                fit: BoxFit.cover,
+                                              )
+                                            : Image.asset(
+                                                AssetUtils.image1,
+                                                height: 80,
+                                                width: 80,
+                                                fit: BoxFit.cover,
+                                              )))),
+                              ),
                             ),
-                            Text(
-                              'Loading...',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontFamily: 'PR'),
-                            )
+                            Container(
+                              child: Text(
+                                _search_screen_controller
+                                    .getFriendSuggestionModel!
+                                    .data![index]
+                                    .fullName!,
+                                // overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'PM',
+                                    fontSize: 14),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Container(
+                              width: 100,
+                              child: Text(
+                                _search_screen_controller
+                                    .getFriendSuggestionModel!
+                                    .data![index]
+                                    .userName!,
+                                textAlign: TextAlign.center,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    color: Colors.white60,
+                                    fontFamily: 'PM',
+                                    fontSize: 12),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            GestureDetector(
+                              onTap: () async {
+                                await _search_screen_controller
+                                    .Follow_unfollow_api(
+                                        follow_unfollow: 'follow',
+                                        user_id: _search_screen_controller
+                                            .getFriendSuggestionModel!
+                                            .data![index]
+                                            .id,
+                                        user_social: _search_screen_controller
+                                            .getFriendSuggestionModel!
+                                            .data![index]
+                                            .socialType,
+                                        context: context);
+                                setState(() {
+                                  init();
+                                });
+                              },
+                              child: Container(
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 25),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(25)),
+                                child: Container(
+                                    alignment: Alignment.center,
+                                    margin: EdgeInsets.symmetric(
+                                        vertical: 8, horizontal: 0),
+                                    child: Text(
+                                      'Follow',
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontFamily: 'PR',
+                                          fontSize: 16),
+                                    )),
+                              ),
+                            ),
                           ],
                         ),
+                      ),
+                      Positioned(
+                        top: 15,
+                        right: 15,
+                        child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _search_screen_controller
+                                    .getFriendSuggestionModel!.data!
+                                    .removeAt(index);
+                              });
+                            },
+                            child: Icon(
+                              Icons.cancel,
+                              color: Colors.white,
+                            )),
                       )
-                    // Material(
-                    //   color: Colors.transparent,
-                    //   child: LoadingIndicator(
-                    //     backgroundColor: Colors.transparent,
-                    //     indicatorType: Indicator.ballScale,
-                    //     colors: _kDefaultRainbowColors,
-                    //     strokeWidth: 4.0,
-                    //     pathBackgroundColor: Colors.yellow,
-                    //     // showPathBackground ? Colors.black45 : null,
-                    //   ),
-                    // ),
-                  ),
-                ],
+                    ],
+                  );
+                },
               ),
-            )
-                : (FollowingData.length > 0
+            )),
+            (FollowingData.isNotEmpty
                 ? Expanded(
               child: ListView.builder(
                 padding: const EdgeInsets.symmetric(vertical: 20),
@@ -258,18 +401,39 @@ class _FollowingScreenState extends State<FollowingScreen> {
                     children: [
                       ListTile(
                         onTap: () {},
-                        visualDensity: VisualDensity(
-                            vertical: 0, horizontal: -4),
-                        leading: Container(
-                            height: 50,
-                            width: 50,
-                            child: IconButton(
-                              icon: Image.asset(
-                                AssetUtils.user_icon3,
-                                fit: BoxFit.fill,
-                              ),
-                              onPressed: () {},
-                            )),
+                        visualDensity:
+                        VisualDensity(vertical: 0, horizontal: 0),
+                        leading: ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: Container(
+                              height: 50,
+                              width: 50,
+                              child: (FollowingData[index]
+                                  .image!
+                                  .isNotEmpty
+                                  ? Image.network(
+                                "${URLConstants.base_data_url}images/${FollowingData[index].image!}",
+                                height: 80,
+                                width: 80,
+                                fit: BoxFit.cover,
+                              )
+                                  : (FollowingData[index]
+                                  .profileUrl!
+                                  .isNotEmpty
+                                  ? Image.network(
+                                FollowingData[index]
+                                    .profileUrl!,
+                                height: 80,
+                                width: 80,
+                                fit: BoxFit.cover,
+                              )
+                                  : Image.asset(
+                                AssetUtils.image1,
+                                height: 80,
+                                width: 80,
+                                fit: BoxFit.cover,
+                              )))),
+                        ),
                         title: Text(
                           '${FollowingData[index].fullName}',
                           style: const TextStyle(
@@ -282,13 +446,19 @@ class _FollowingScreenState extends State<FollowingScreen> {
                             GestureDetector(
                               onTap: () async {
                                 print('${FollowingData[index].id}');
-                                await _search_screen_controller.Follow_unfollow_api(
+                                await _search_screen_controller
+                                    .Follow_unfollow_api(
                                     follow_unfollow: 'unfollow',
-                                    user_id: FollowingData[index].id,
-                                    user_social: FollowingData[index].socialType,
-                                    context: context
-                                );
-                                await getAllFollowingList();
+                                    user_id:
+                                    FollowingData[index].id,
+                                    user_social:
+                                    FollowingData[index]
+                                        .socialType,
+                                    context: context);
+                                setState(() {
+                                  init();
+                                });
+                                // await getAllFollowingList();
                               },
                               child: Container(
                                 margin: const EdgeInsets.symmetric(
@@ -320,10 +490,7 @@ class _FollowingScreenState extends State<FollowingScreen> {
                         margin: EdgeInsets.symmetric(vertical: 5),
                         color: HexColor(CommonColor.borderColor),
                         height: 0.5,
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width,
+                        width: MediaQuery.of(context).size.width,
                       ),
                     ],
                   );
@@ -338,7 +505,7 @@ class _FollowingScreenState extends State<FollowingScreen> {
                       color: Colors.white,
                       fontFamily: 'PR',
                       fontSize: 16),
-                ))))
+                )))
           ],
         ),
       ),
@@ -351,6 +518,7 @@ class _FollowingScreenState extends State<FollowingScreen> {
 
   Future<dynamic> getAllFollowingList() async {
     print('inside following api');
+    showLoader(context);
     setState(() {
       isFollowingLoading = true;
     });
@@ -358,6 +526,7 @@ class _FollowingScreenState extends State<FollowingScreen> {
 
     setState(() => this.FollowingData = books);
     print(FollowingData.length);
+    hideLoader(context);
     setState(() {
       isFollowingLoading = false;
     });
@@ -374,10 +543,11 @@ class _FollowingScreenState extends State<FollowingScreen> {
     });
   }
 
-  static Future<List<Data_followers>> getFollowingList(String query) async {
+   Future<List<Data_followers>> getFollowingList(String query) async {
     String id_user = await PreferenceManager().getPref(URLConstants.id);
 
-    String url = ('${URLConstants.base_url}${URLConstants.followingListApi}?id=$id_user');
+    String url =
+        ('${URLConstants.base_url}${URLConstants.followingListApi}?id=${widget.user_id}');
     http.Response response = await http.get(Uri.parse(url));
     print("response status${response.statusCode}");
     print("response request${response.request}");

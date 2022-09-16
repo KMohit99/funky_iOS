@@ -127,6 +127,7 @@ dependencies:
   grouped_list: ^5.1.1
   connectivity_plus: ^2.3.2
   url_launcher: ^6.1.5
+  mime: ^1.0.2
   # toast
 #  fluttertoast: ^8.0.9
 
@@ -140,7 +141,7 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/images/Funky_App_Icon.png"
+  image_path: "assets/images/App_Icon.jpg.png"
 
 flutter:
 

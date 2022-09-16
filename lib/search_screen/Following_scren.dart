@@ -12,6 +12,8 @@ import '../Utils/App_utils.dart';
 import '../Utils/asset_utils.dart';
 import '../Utils/colorUtils.dart';
 import '../Utils/custom_textfeild.dart';
+import '../dashboard/dashboard_screen.dart';
+import '../homepage/ui/homepage_screen.dart';
 import '../profile_screen/model/followersModel.dart';
 import '../search_screen/search__screen_controller.dart';
 import '../sharePreference.dart';
@@ -37,13 +39,17 @@ class _searchUserFollowingState extends State<searchUserFollowing> {
 
   @override
   void initState() {
-    init();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      init();
+    });
     super.initState();
   }
 
   init() async {
+    await _search_screen_controller.friendSuggestionList(context: context);
     await getAllFollowingList();
   }
+
 
   @override
   void dispose() {
@@ -112,6 +118,7 @@ class _searchUserFollowingState extends State<searchUserFollowing> {
           child: IconButton(
               padding: EdgeInsets.zero,
               onPressed: () {
+                // Get.to(Dashboard(page: 0,));
                 Navigator.pop(context);
               },
               icon: Icon(
@@ -121,7 +128,7 @@ class _searchUserFollowingState extends State<searchUserFollowing> {
         ),
       ),
       body: Container(
-        margin: const EdgeInsets.only(top: 100, left: 23, right: 23),
+        margin: const EdgeInsets.only(top: 100, left: 10, right: 10),
         child: Column(
           children: [
             Row(
@@ -200,6 +207,189 @@ class _searchUserFollowingState extends State<searchUserFollowing> {
             //         );
             //       }),
             // )),
+      Obx(() => _search_screen_controller.isSuggestionLoading.value == true ? SizedBox.shrink() :
+            Container(
+              height: MediaQuery.of(context).size.height / 3.1,
+              width: MediaQuery.of(context).size.width,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                padding: EdgeInsets.zero,
+                itemCount: _search_screen_controller
+                    .getFriendSuggestionModel!.data!.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Stack(
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.height / 4.5,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            // stops: [0.1, 0.5, 0.7, 0.9],
+                            colors: [
+                              HexColor("#000000"),
+                              HexColor("#C12265"),
+                              HexColor("#C12265"),
+                              HexColor("#C12265"),
+                              HexColor("#FFFFFF"),
+                            ],
+                          ),
+                        ),
+                        margin: EdgeInsets.all(8),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(100),
+                                child: Container(
+                                    height: 80,
+                                    width: 80,
+                                    child: (_search_screen_controller
+                                        .getFriendSuggestionModel!
+                                        .data![index]
+                                        .image!
+                                        .isNotEmpty
+                                        ?
+                                    // Image.network(
+                                    //         "${URLConstants.base_data_url}images/${_search_screen_controller.getFriendSuggestionModel!.data![index].image!}",
+                                    //         height: 80,
+                                    //         width: 80,
+                                    //         fit: BoxFit.cover,
+                                    //       )
+                                    FadeInImage.assetNetwork(
+                                      fit: BoxFit.cover,
+                                      image:
+                                      "${URLConstants.base_data_url}images/${_search_screen_controller.getFriendSuggestionModel!.data![index].image!}",
+                                      height: 80,
+                                      width: 80,
+
+                                      placeholder:
+                                      'assets/images/Funky_App_Icon.png',
+                                      // color: HexColor(CommonColor.pinkFont),
+                                    )
+                                        : (_search_screen_controller
+                                        .getFriendSuggestionModel!
+                                        .data![index]
+                                        .profileUrl!
+                                        .isNotEmpty
+                                        ? Image.network(
+                                      _search_screen_controller
+                                          .getFriendSuggestionModel!
+                                          .data![index]
+                                          .profileUrl!,
+                                      height: 80,
+                                      width: 80,
+                                      fit: BoxFit.cover,
+                                    )
+                                        : Image.asset(
+                                      AssetUtils.image1,
+                                      height: 80,
+                                      width: 80,
+                                      fit: BoxFit.cover,
+                                    )))),
+                              ),
+                            ),
+                            Container(
+                              child: Text(
+                                _search_screen_controller
+                                    .getFriendSuggestionModel!
+                                    .data![index]
+                                    .fullName!,
+                                // overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'PM',
+                                    fontSize: 14),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Container(
+                              width: 100,
+                              child: Text(
+                                _search_screen_controller
+                                    .getFriendSuggestionModel!
+                                    .data![index]
+                                    .userName!,
+                                textAlign: TextAlign.center,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    color: Colors.white60,
+                                    fontFamily: 'PM',
+                                    fontSize: 12),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            GestureDetector(
+                              onTap: () async {
+                                await _search_screen_controller
+                                    .Follow_unfollow_api(
+                                    follow_unfollow: 'follow',
+                                    user_id: _search_screen_controller
+                                        .getFriendSuggestionModel!
+                                        .data![index]
+                                        .id,
+                                    user_social: _search_screen_controller
+                                        .getFriendSuggestionModel!
+                                        .data![index]
+                                        .socialType,
+                                    context: context);
+                                setState(() {
+                                  init();
+                                });
+                              },
+                              child: Container(
+                                margin:
+                                const EdgeInsets.symmetric(horizontal: 25),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(25)),
+                                child: Container(
+                                    alignment: Alignment.center,
+                                    margin: EdgeInsets.symmetric(
+                                        vertical: 8, horizontal: 0),
+                                    child: Text(
+                                      'Follow',
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontFamily: 'PR',
+                                          fontSize: 16),
+                                    )),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Positioned(
+                        top: 15,
+                        right: 15,
+                        child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _search_screen_controller
+                                    .getFriendSuggestionModel!.data!
+                                    .removeAt(index);
+                              });
+                            },
+                            child: Icon(
+                              Icons.cancel,
+                              color: Colors.white,
+                            )),
+                      )
+                    ],
+                  );
+                },
+              ),
+            )),
+
             Expanded(
               child: ListView.builder(
                 padding: const EdgeInsets.symmetric(vertical: 20),
@@ -212,16 +402,37 @@ class _searchUserFollowingState extends State<searchUserFollowing> {
                         onTap: () {},
                         visualDensity:
                         VisualDensity(vertical: 0, horizontal: -4),
-                        leading: Container(
-                            height: 50,
-                            width: 50,
-                            child: IconButton(
-                              icon: Image.asset(
-                                AssetUtils.user_icon3,
-                                fit: BoxFit.fill,
-                              ),
-                              onPressed: () {},
-                            )),
+                        leading: ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: Container(
+                              height: 50,
+                              width: 50,
+                              child: (FollowingData[index]
+                                  .image!
+                                  .isNotEmpty
+                                  ? Image.network(
+                                "${URLConstants.base_data_url}images/${FollowingData[index].image!}",
+                                height: 80,
+                                width: 80,
+                                fit: BoxFit.cover,
+                              )
+                                  : (FollowingData[index]
+                                  .profileUrl!
+                                  .isNotEmpty
+                                  ? Image.network(
+                                FollowingData[index]
+                                    .profileUrl!,
+                                height: 80,
+                                width: 80,
+                                fit: BoxFit.cover,
+                              )
+                                  : Image.asset(
+                                AssetUtils.image1,
+                                height: 80,
+                                width: 80,
+                                fit: BoxFit.cover,
+                              )))),
+                        ),
                         title: Text(
                           '${FollowingData[index].fullName}',
                           style: const TextStyle(

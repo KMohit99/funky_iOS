@@ -25,7 +25,7 @@ class WidgetRecorderController extends ChangeNotifier {
   final GlobalKey _containerKey;
 
   /// frame callback
-  final SchedulerBinding _binding = SchedulerBinding.instance!;
+  final SchedulerBinding _binding = SchedulerBinding.instance;
 
   /// save frames
   final List<ui.Image> _frames = [];
@@ -114,11 +114,28 @@ class WidgetRecorderController extends ChangeNotifier {
     String imagePath;
 
     /// get application temp directory
-    Directory appDocDirectory = await getTemporaryDirectory();
+    Directory appDocDirectory = await getApplicationDocumentsDirectory();
     dir = appDocDirectory.path;
+    // final String dirPath = '${extDir.path}/video';
+
 
     /// delete last directory
-    appDocDirectory.deleteSync(recursive: true);
+    // final isExists = await appDocDirectory.exists();
+    // if(isExists){
+    //   appDocDirectory.delete(recursive: true);
+    // }
+///
+//     var tempDir = await getTemporaryDirectory();
+//     var tempDirPath = tempDir.path;
+    final myAppPath = '$dir/Videos';
+    final res = await Directory(myAppPath).create(recursive: true);
+
+    // Directory dir = await getTemporaryDirectory();
+    Directory myDir = Directory("${appDocDirectory.path}/Videos");
+    myDir.deleteSync(recursive: true);
+    // myDir.create();
+    /// \
+    // appDocDirectory.deleteSync(recursive: true);
 
     /// create new directory
     appDocDirectory.create();
@@ -134,14 +151,14 @@ class WidgetRecorderController extends ChangeNotifier {
       Uint8List pngBytes = val!.buffer.asUint8List();
 
       /// create temp path for every frame
-      imagePath = '$dir/$i.png';
+      imagePath = '$dir/image$i.png';
 
       /// create image frame in the temp directory
       File capturedFile = File(imagePath);
       await capturedFile.writeAsBytes(pngBytes);
+      // print(capturedFile.path);
       renderingNotifier.currentFrames = i;
     }
-
     /// clear frame list
     _frames.clear();
     renderingNotifier.renderState = RenderState.rendering;
@@ -149,9 +166,10 @@ class WidgetRecorderController extends ChangeNotifier {
 
     /// render frames.png to video/gif
     var response = await FfmpegProvider()
-        .mergeIntoVideo(renderType: renderingNotifier.renderType);
+        .mergeIntoVideo(path:dir ,renderType: renderingNotifier.renderType);
 
     /// return
+    print("Responssssssseee : ${response}");
     return response;
   }
 }

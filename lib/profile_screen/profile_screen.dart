@@ -42,6 +42,7 @@ import '../sharePreference.dart';
 import '../video_recorder/lib/main.dart';
 import 'edit_profile_screen.dart';
 import 'followers_screen.dart';
+// import 'following_screen.dart';
 import 'following_screen.dart';
 import 'model/galleryModel.dart';
 import 'model/getStoryModel.dart';
@@ -686,7 +687,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                                         ),
                                                         onPressed: () {
                                                           Get.to(
-                                                              EditProfileScreen());
+                                                              const EditProfileScreen());
                                                         }),
                                                   ],
                                                 ),
@@ -783,11 +784,17 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                                     ),
                                                     onPressed: () {
                                                       Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder: (_) =>
-                                                                      FollowingScreen()))
-                                                          .then((_) =>
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (_) =>
+                                                                  FollowingScreen(
+                                                                    user_id: _creator_login_screen_controller
+                                                                        .userInfoModel_email!
+                                                                        .data![
+                                                                            0]
+                                                                        .id!,
+                                                                  ))).then(
+                                                          (_) =>
                                                               setState(() {}));
 
                                                       // Get.to(FollowingScreen());
@@ -998,7 +1005,6 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                                   // }
                                                   // openCamera();
                                                   pop_up();
-
                                                 },
                                                 icon: Icon(
                                                   Icons.add,
@@ -1047,7 +1053,9 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                                             print(story_info);
                                                             Get.to(() =>
                                                                 StoryScreen(
-                                                                  title: story_[index].title!,
+                                                                  title: story_[
+                                                                          index]
+                                                                      .title!,
                                                                   // thumbnail:
                                                                   //     test_thumb[index],
                                                                   stories:
@@ -1082,7 +1090,9 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                                                                   0]
                                                                               .isVideo ==
                                                                           'false'
-                                                                      ? FadeInImage
+                                                                      ?
+                                                              // Image.file(test_thumb[index])
+                                                              FadeInImage
                                                                           .assetNetwork(
                                                                           fit: BoxFit
                                                                               .cover,
@@ -1092,10 +1102,12 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                                                               'assets/images/Funky_App_Icon.png',
                                                                           // color: HexColor(CommonColor.pinkFont),
                                                                         )
-                                                                      : Image.asset(
+                                                                      :
+                                                              Image.asset(
                                                                           // test_thumb[
                                                                           //     index]
-                                                                          'assets/images/Funky_App_Icon.png'))),
+                                                                          'assets/images/Funky_App_Icon.png'
+                                                              ))),
                                                             ),
                                                           ),
                                                         ),
@@ -1690,44 +1702,62 @@ class _Profile_ScreenState extends State<Profile_Screen>
                           Container(
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(30),
-                                  border: Border.all(
-                                      color: HexColor(CommonColor.pinkFont),
-                                      width: 0)),
+                                 ),
                               child: (isvideoLoading == true
                                   ? CircularProgressIndicator(
                                       color: HexColor(CommonColor.pinkFont),
                                     )
-                                  : (_videoModelList!
-                                          .data![index].image!.isEmpty
-                                      ? Image.asset(AssetUtils.logo)
-                                      : GestureDetector(
-                                          onTap: () {
-                                            print('data');
-                                            Get.to(VideoViewer(
-                                              url: _videoModelList!
-                                                  .data![index].uploadVideo!,
-                                            ));
-                                          },
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(30),
+                                  : Stack(
+                                alignment: Alignment.center,
+                                      children: [
+                                        Positioned.fill(
+                                          child: (_videoModelList!
+                                                  .data![index].image!.isEmpty
+                                              ? Image.asset(AssetUtils.logo)
+                                              : GestureDetector(
+                                                  onTap: () {
+                                                    print('data');
+                                                    Get.to(VideoViewer(
+                                                      url: _videoModelList!
+                                                          .data![index]
+                                                          .uploadVideo!,
+                                                    ));
+                                                  },
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            30),
 
-                                            // height: MediaQuery.of(context).size.aspectRatio,
-                                            child: Image.memory(
-                                              imgFile_list[index]
-                                                  .readAsBytesSync(),
-                                              fit: BoxFit.fitHeight,
+                                                    // height: MediaQuery.of(context).size.aspectRatio,
+                                                    child: Image.memory(
+                                                      imgFile_list[index]
+                                                          .readAsBytesSync(),
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  )
+                                                  // Image.network(
+                                                  //   'http://foxyserver.com/funky/images/${_videoModelList!.data![index].uploadVideo}',
+                                                  //   fit: BoxFit.cover,
+                                                  // ),
+                                                  )),
+                                        ),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              color: Colors.black54,
+                                              borderRadius:
+                                                  BorderRadius.circular(100)),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(5.0),
+                                            child: Icon(
+                                              Icons.play_arrow,
+                                              color: Colors.pink,
                                             ),
-                                          )
-                                          // Image.network(
-                                          //   'http://foxyserver.com/funky/images/${_videoModelList!.data![index].uploadVideo}',
-                                          //   fit: BoxFit.cover,
-                                          // ),
-                                          )))),
+                                          ),
+                                        ),
+                                      ],
+                                    ))),
                       staggeredTileBuilder: (int index) =>
-                          const StaggeredTile.fit(
-                        2,
-                      ),
+                          StaggeredTile.count(2, index.isEven ? 3 : 2),
                       mainAxisSpacing: 4.0,
                       crossAxisSpacing: 4.0,
                     )
@@ -1804,8 +1834,8 @@ class _Profile_ScreenState extends State<Profile_Screen>
             // test_thumb.add(File(uint8list!));
             // print(test_thumb[i].path);
           } else if (getStoryModel!.data![i].storys![0].isVideo == 'false') {
-            test_thumb
-                .add(File(getStoryModel!.data![i].storys![0].storyPhoto!));
+            // test_thumb
+            //     .add(File(getStoryModel!.data![i].storys![0].storyPhoto!));
             // print(story_info[i].image);
           }
 
@@ -1982,7 +2012,6 @@ class _Profile_ScreenState extends State<Profile_Screen>
     // }
   }
 
-
   late double screenHeight, screenWidth;
 
   Future pop_up() {
@@ -2104,7 +2133,6 @@ class _Profile_ScreenState extends State<Profile_Screen>
                             // }
                             // image_Gallery();
                             Get.to(PostScreen());
-
                           },
                           child: Column(
                             children: [
