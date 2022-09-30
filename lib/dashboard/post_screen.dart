@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:funky_new/Utils/toaster_widget.dart';
 import 'package:funky_new/custom_widget/page_loader.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -305,12 +306,17 @@ class PostScreenState extends State<PostScreen> {
                         // print(file_list);
                       }
                       // hideLoader(context);
-                      await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ViewImageSelected(
-                                    imageData: file_list,
-                                  )));
+                      print("file_list.length ${file_list.length}");
+                      if(file_list.length > 0 ){
+                        await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ViewImageSelected(
+                                  imageData: file_list,
+                                )));
+                      }else{
+                        CommonWidget().showToaster(msg: 'Please select the image');
+                      }
                     },
                     child: Container(
                       margin: EdgeInsets.only(right: 20),
@@ -507,7 +513,7 @@ class PostScreenState extends State<PostScreen> {
                                           height: 20,
                                           width: 20,
                                           child: CircularProgressIndicator(
-                                            color: Colors.red,
+                                            color: Colors.pink,
                                           ),
                                         ),
                                       );

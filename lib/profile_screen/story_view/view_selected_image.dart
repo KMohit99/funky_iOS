@@ -168,7 +168,7 @@ class _ViewImageSelectedState extends State<ViewImageSelected> {
                         child: GestureDetector(
                           onTap: () async {
                             print(widget.imageData[index].path);
-                            if(format[index] == '.jpg'){
+                            // if(format[index] == '.jpg'){
                               File editedFile = await Navigator.of(context)
                                   .push(MaterialPageRoute(
                                   builder: (context) => StoriesEditor(
@@ -188,7 +188,7 @@ class _ViewImageSelectedState extends State<ViewImageSelected> {
                                       XFile(editedFile.path);
                                 });
                               }
-                            }
+                            // }
 
                           },
                           child: Container(

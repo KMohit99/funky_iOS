@@ -141,7 +141,7 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/images/App_Icon.jpg.png"
+  image_path: "assets/images/Funky_app logo.jpg"
 
 flutter:
 

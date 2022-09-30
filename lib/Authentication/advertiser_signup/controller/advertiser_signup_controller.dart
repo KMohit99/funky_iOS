@@ -164,8 +164,12 @@ class Advertiser_signup_controller extends GetxController {
       if (loginModel!.error == false) {
         if(loginModel!.message == 'User Already Exists'){
           CommonWidget().showErrorToaster(msg: loginModel!.message!);
+          print(loginModel!.message!);
+          await Get.to(Dashboard(page: 0));
+
         }else{
           CommonWidget().showToaster(msg: loginModel!.message!);
+         print(loginModel!.message!);
 
           // print(loginModel!.user![0].id);
           // print(loginModel!.user![0].id);

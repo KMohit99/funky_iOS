@@ -699,6 +699,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                                           .isNotEmpty
                                                       ? '${_creator_login_screen_controller.userInfoModel_email!.data![0].about}'
                                                       : ' '),
+                                                  overflow: TextOverflow.ellipsis,
                                                   style: TextStyle(
                                                       fontSize: 16,
                                                       color: HexColor(
@@ -1080,7 +1081,7 @@ class _Profile_ScreenState extends State<Profile_Screen>
                                                                       .storys![
                                                                           0]
                                                                       .storyPhoto!
-                                                                      .isEmpty
+                                                                      .isEmptys
                                                                   ? Image.asset(
                                                                       // test_thumb[
                                                                       //     index]

@@ -78,11 +78,14 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
             print("object");
           },
           child: Container(
-            margin: const EdgeInsets.only(
-              top: 100,
-            ),
+            // margin: const EdgeInsets.only(
+            //   top: 100,
+            // ),
             child: Column(
               children: [
+                SizedBox(
+                  height: MediaQuery.of(context).size.height/9,
+                ),
                 Container(
                   color: Colors.red,
                 ),

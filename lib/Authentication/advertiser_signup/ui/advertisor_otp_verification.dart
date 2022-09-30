@@ -114,7 +114,7 @@ class Creator_OtpVerification extends State<AdvertisorOtpVerification> {
               colorFilter: new ColorFilter.mode(
                   Colors.black.withOpacity(0.5), BlendMode.dstATop),
               image: new AssetImage(
-                AssetUtils.backgroundImage4,
+                AssetUtils.backgroundImage5 ,
               ),
             ),
           ),

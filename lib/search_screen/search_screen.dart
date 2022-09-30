@@ -100,9 +100,12 @@ class _SearchScreenState extends BaseScreenState<DialogsScreenBloc> {
             print("object");
           },
           child: Container(
-            margin: const EdgeInsets.only(top: 80, left: 23, right: 23),
+            margin: const EdgeInsets.only(top: 0, left: 23, right: 23),
             child: Column(
               children: [
+                SizedBox(
+                  height: MediaQuery.of(context).size.height/9,
+                ),
                 Container(
                   margin: EdgeInsets.only(bottom: 10),
                   child: Row(
